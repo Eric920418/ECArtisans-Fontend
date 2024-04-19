@@ -1,16 +1,19 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import index from '../views/PageIndex.vue'
 
-const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'index',
-      component: index
-    },
+import eric from '../router/eric.ts'
 
-  ]
+
+const routes = [
+  {path: '/',name: 'index',component: index},
+  ...eric
+
+]
+
+
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes
 })
 
 export default router
