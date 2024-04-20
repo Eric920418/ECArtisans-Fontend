@@ -1,6 +1,6 @@
-import IndexFQA from "../views/eric/IndexFAQ.vue"
+import IndexFAQ from "../views/eric/IndexFAQ.vue"
 
 export default [
-    {path: '/FQA', name: 'IndexFQA', component: IndexFQA},
+    {path: '/FAQ', name: 'IndexFQA', component: IndexFAQ},
 
 ]
