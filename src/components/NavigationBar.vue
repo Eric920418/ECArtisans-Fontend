@@ -2,6 +2,7 @@
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#">Navbar scroll</a>
+			<p>isLoggedIn: {{ authStore.isLoggedIn }}</p>
 			<button
 				class="navbar-toggler"
 				type="button"
@@ -13,11 +14,11 @@
 			>
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse" id="navbarScroll">
-				<ul
-					class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
-					style="--bs-scroll-height: 100px"
-				>
+			<div
+				class="collapse navbar-collapse justify-content-between"
+				id="navbarScroll"
+			>
+				<ul class="navbar-nav mb-2 mb-lg-0">
 					<li class="nav-item">
 						<a class="nav-link active" aria-current="page" href="#">Home</a>
 					</li>
@@ -76,23 +77,26 @@
 						</div>
 						<div class="mx-2 dropdown">
 							<!-- 判斷是否登入，未登入則跳轉至登入頁面 -->
-							<button
-								v-if="isLoggedin"
-								class="btn btn-primary rounded-circle"
-								type="button"
-								id="dropdownMenuButton"
-								data-bs-toggle="dropdown"
-								aria-expanded="false"
-							>
-								<i class="bi bi-person-circle"></i>
-							</button>
-							<a v-else @click="toLogin" class="btn btn-primary rounded-circle">
-								<i class="bi bi-person-circle"></i>
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<li><a class="dropdown-item" href="#">會員中心</a></li>
-								<li><a class="dropdown-item" href="#">登出</a></li>
-							</ul>
+							<template v-if="authStore.isLoggedIn">
+								<button
+									class="btn btn-primary rounded-circle"
+									type="button"
+									id="dropdownMenuButton"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+								>
+									<i class="bi bi-person-circle"></i>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<li><a class="dropdown-item" href="#">會員中心</a></li>
+									<li><a class="dropdown-item" @click="toLogout">登出</a></li>
+								</ul>
+							</template>
+							<template v-else>
+								<a @click="toLogin" class="btn btn-primary rounded-circle">
+									<i class="bi bi-person-circle"></i>
+								</a>
+							</template>
 						</div>
 						<div class="mx-2 dropdown">
 							<button
@@ -130,9 +134,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
 
-// 紀錄是否為已登入，應該要以pinia管理
-let isLoggedin = ref(false);
+const authStore = useAuthStore();
+const isLoggedIn = authStore.isLoggedIn;
 
 const router = useRouter();
 
@@ -142,6 +147,12 @@ function toLogin() {
 
 function toShopHome() {
 	router.push('./ShopHome');
+}
+
+async function toLogout() {
+	await authStore.logout(); // 等待登出操作完成
+	console.log(authStore.isLoggedIn); // 打印修改后的登录状态
+	router.push('./');
 }
 </script>
 
