@@ -30,7 +30,7 @@
 						<a href="#" class="nav-link p-0 text-body-secondary">Pricing</a>
 					</li>
 					<li class="nav-item mb-2">
-						<a href="#" class="nav-link p-0 text-body-secondary">FAQs</a>
+						<a href="#/FAQ" class="nav-link p-0 text-body-secondary">FAQs</a>
 					</li>
 					<li class="nav-item mb-2">
 						<a href="#" class="nav-link p-0 text-body-secondary">About</a>
@@ -51,7 +51,7 @@
 						<a href="#" class="nav-link p-0 text-body-secondary">Pricing</a>
 					</li>
 					<li class="nav-item mb-2">
-						<a href="#" class="nav-link p-0 text-body-secondary">FAQs</a>
+						<a href="#/FAQ" class="nav-link p-0 text-body-secondary">FAQs</a>
 					</li>
 					<li class="nav-item mb-2">
 						<a href="#" class="nav-link p-0 text-body-secondary">About</a>
@@ -72,7 +72,7 @@
 						<a href="#" class="nav-link p-0 text-body-secondary">Pricing</a>
 					</li>
 					<li class="nav-item mb-2">
-						<a href="#" class="nav-link p-0 text-body-secondary">FAQs</a>
+						<a href="#/FAQ" class="nav-link p-0 text-body-secondary">FAQ</a>
 					</li>
 					<li class="nav-item mb-2">
 						<a href="#" class="nav-link p-0 text-body-secondary">About</a>

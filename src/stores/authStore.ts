@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+/* 待補賣家登入管理 */
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({

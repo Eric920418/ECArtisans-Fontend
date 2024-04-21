@@ -70,7 +70,6 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import Logo from './Logo.vue';
 const authStore = useAuthStore();
-const isLoggedIn = authStore.isLoggedIn;
 
 const router = useRouter();
 
@@ -89,6 +88,10 @@ function ShopManage() {
 async function ShopLogout() {
 	await authStore.logout();
 	router.push('./ShopHome');
+}
+
+if (authStore.isLoggedIn) {
+	ShopManage();
 }
 </script>
 

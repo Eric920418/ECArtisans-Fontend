@@ -156,7 +156,6 @@ function toShopHome() {
 
 async function toLogout() {
 	await authStore.logout(); // 等待登出操作完成
-	console.log(authStore.isLoggedIn); // 打印修改后的登录状态
 	router.push('./');
 }
 </script>
