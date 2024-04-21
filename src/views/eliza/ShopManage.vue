@@ -1,8 +1,9 @@
+<style scoped></style>
+
 <template>
-	<NavigationBarShop />
+	<OneColumnLayout></OneColumnLayout>
 </template>
 
 <script lang="ts" setup>
-import NavigationBarShop from '../../components/NavigationBarShop.vue';
+import OneColumnLayout from '../../layouts/OneColumnLayout.vue';
 </script>
-<style scoped></style>

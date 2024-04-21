@@ -1,12 +1,17 @@
 <template>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a v-if="authStore.isLoggedIn" class="navbar-brand" @click="ShopManage">
-				<span>Navbar scroll｜商家管理中心</span>
-			</a>
-			<a v-else="authStore.isLoggedIn" class="navbar-brand" @click="ShopHome">
-				<span>Navbar scroll</span>
-			</a>
+			<a class="navbar-brand" href="#"><Logo /></a>
+			<router-link
+				:to="{ name: 'ShopManage' }"
+				v-if="authStore.isLoggedIn"
+				class="navbar-brand"
+			>
+				<span>｜商家管理中心</span>
+			</router-link>
+			<router-link :to="{ name: 'ShopHome' }" v-else class="navbar-brand">
+				<span></span>
+			</router-link>
 			<p>isLoggedIn: {{ authStore.isLoggedIn }}</p>
 			<button
 				class="navbar-toggler"
@@ -63,7 +68,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
-
+import Logo from './Logo.vue';
 const authStore = useAuthStore();
 const isLoggedIn = authStore.isLoggedIn;
 

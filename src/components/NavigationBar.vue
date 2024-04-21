@@ -1,7 +1,7 @@
 <template>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Navbar scroll</a>
+			<router-link to="/" class="nav-link"><Logo /></router-link>
 			<p>isLoggedIn: {{ authStore.isLoggedIn }}</p>
 			<button
 				class="navbar-toggler"
@@ -59,8 +59,7 @@
 								aria-label="Default select example"
 								style="width: 50px"
 							>
-								<option selected>找商品</option>
-								<option value="1">找商品</option>
+								<option selected value="1">找商品</option>
 								<option value="2">找賣家</option>
 							</select>
 							<button class="btn btn-primary" type="submit">
@@ -70,10 +69,10 @@
 					</form>
 					<div class="col navbar-buttons d-flex align-items-center">
 						<div class="mx-2">
-							<button type="button" class="btn btn-link" @click="toShopHome">
+							<router-link :to="{ name: 'ShopHome' }" class="btn btn-link">
 								<i class="bi bi-shop-window"></i>
 								<span>我要開店</span>
-							</button>
+							</router-link>
 						</div>
 						<div class="mx-2 dropdown">
 							<!-- 判斷是否登入，未登入則跳轉至登入頁面 -->
@@ -87,7 +86,10 @@
 								>
 									<i class="bi bi-person-circle"></i>
 								</button>
-								<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<ul
+									class="dropdown-menu dropdown-menu-lg-end"
+									aria-labelledby="dropdownMenuButton"
+								>
 									<li><a class="dropdown-item" href="#">會員中心</a></li>
 									<li><a class="dropdown-item" @click="toLogout">登出</a></li>
 								</ul>
@@ -108,7 +110,10 @@
 							>
 								<i class="bi bi-suit-heart"></i>
 							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<ul
+								class="dropdown-menu dropdown-menu-lg-end"
+								aria-labelledby="dropdownMenuButton"
+							>
 								<li><a class="dropdown-item" href="#">收藏商品</a></li>
 								<li><a class="dropdown-item" href="#">關注賣家</a></li>
 							</ul>
@@ -135,7 +140,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
-
+import Logo from './Logo.vue';
 const authStore = useAuthStore();
 const isLoggedIn = authStore.isLoggedIn;
 

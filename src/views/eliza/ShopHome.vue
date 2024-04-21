@@ -1,10 +1,9 @@
+<style scoped></style>
+
 <template>
-	<NavigationBarShop />
-	<header class="w-100 bg-primary" style="height: 100px">Header</header>
+	<OneColumnLayout></OneColumnLayout>
 </template>
 
-<script setup lang="ts">
-import NavigationBarShop from '../../components/NavigationBarShop.vue';
+<script lang="ts" setup>
+import OneColumnLayout from '../../layouts/OneColumnLayout.vue';
 </script>
-
-<style scoped></style>
