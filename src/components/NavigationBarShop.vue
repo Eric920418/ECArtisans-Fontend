@@ -47,7 +47,11 @@
 									class="dropdown-menu dropdown-menu-lg-end"
 									aria-labelledby="dropdownMenuButton"
 								>
-									<li><a class="dropdown-item" href="#">會員中心</a></li>
+									<li>
+										<router-link :to="{ name: 'seller' }" class="dropdown-item">
+											商家中心
+										</router-link>
+									</li>
 									<li><a class="dropdown-item" @click="ShopLogout">登出</a></li>
 								</ul>
 							</div>
@@ -74,7 +78,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 function ShopLogin() {
-	router.push('./loginShop');
+	router.push('./ShopLogin');
 }
 
 function ShopHome() {

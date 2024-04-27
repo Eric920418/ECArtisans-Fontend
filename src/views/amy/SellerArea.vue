@@ -1,256 +1,265 @@
 <template>
-	<div class="m-5 row">
-		<h1>會員資料</h1>
-		<div>
-			商家 基本資料：{{ shopData }}
-			<br />
-			主要聯絡人資料：{{ sellerData }}
-			<br />
-			上傳：{{ inputField }}
-		</div>
-		<!-- 商家頭像 ---------------------------- START -->
-		<div class="col-2"></div>
-		<div class="col-2">
-			<img
-				:src="img.url"
-				class="card-img-top rounded-circle"
-				alt="..."
-				style="width: 100px; height: 100px"
-			/>
-			<div>
-				<button type="button" class="btn btn-primary" @click="uploadFile">
-					選擇圖片
-				</button>
-				<input
-					class="form-control"
-					type="file"
-					id="formFile"
-					ref="inputField"
-					hidden
-				/>
-				<p>檔案大小最大:1MB</p>
-				<p>檔案限制：JPG.PNG</p>
-			</div>
-		</div>
-		<!-- 商家頭像 ---------------------------- END -->
-		<form>
-			<!-- 商家 基本資料 ---------------------------- START -->
-			<div class="col-sm-10 col-md-8">
-				<div class="mb-3 row">
-					<!-- 品牌名稱 START-->
-					<div class="mb-2 d-flex col-sm-12 align-items-center">
-						<label
-							for="shopName"
-							class="me-2 col-form-label"
-							style="width: 3em"
-						>
-							品牌名稱
-						</label>
-						<input
-							id="shopName"
-							type="text"
-							class="form-control"
-							v-model="shopData.name"
-							style="height: calc(1.5rem + (0.375rem * 2) + 2px)"
-						/>
-					</div>
-					<!-- 品牌名稱 END-->
-
-					<!-- 地址 START-->
-					<div class="mb-2 d-flex col-sm-12">
-						<label for="shopAdd" class="me-2 col-form-label" style="width: 3em">
-							地址
-						</label>
-						<input
-							id="shopAdd"
-							type="text"
-							class="form-control"
-							v-model="shopData.add"
-							autocomplete="off"
-						/>
-					</div>
-					<!-- 地址 END-->
-					{{ shopData.accountStart }} - {{ shopData.accountEnd }}
-					<!-- 收款帳戶 START-->
-					<div class="mb-2 d-flex col-sm-12 align-items-center">
-						<label
-							for="shopAccountStart"
-							class="me-2 col-form-label"
-							style="width: 3em"
-						>
-							收款帳戶
-						</label>
-						<input
-							id="shopAccountStart"
-							ref="shopAccountStartRef"
-							type="text"
-							class="form-control"
-							v-model="shopData.accountStart"
-							@input="handleInputStart"
-							autocomplete="off"
-							style="
-								width: calc(3rem + 6px);
-								height: calc(1.5rem + (0.375rem * 2) + 2px);
-							"
-						/>
-						<div class="mx-2">-</div>
-						<input
-							id="shopAccountEnd"
-							ref="shopAccountEndRef"
-							type="text"
-							class="form-control"
-							v-model="shopData.accountEnd"
-							@input="handleInputEnd"
-							style="height: calc(1.5rem + (0.375rem * 2) + 2px)"
-							autocomplete="off"
-						/>
-					</div>
-					<!-- 收款帳戶 END-->
+	<OneColumnLayout>
+		<template v-slot:main>
+			<div class="m-5 row">
+				<h1>會員資料</h1>
+				<div>
+					商家 基本資料：{{ shopData }}
+					<br />
+					主要聯絡人資料：{{ sellerData }}
+					<br />
+					上傳：{{ inputField }}
 				</div>
-			</div>
-			<!-- 商家 基本資料 ---------------------------- END -->
-
-			<!-- 預設收件人資料 ---------------------------- START -->
-			<div class="col-sm-10 col-md-8">
-				<div class="mb-3 row">
-					<!-- 姓名 START-->
-					<div class="mb-2 d-flex col-sm-6">
-						<label
-							for="sellerName"
-							class="me-2 col-form-label"
-							style="width: 3em"
-						>
-							姓名
-						</label>
+				<!-- 商家頭像 ---------------------------- START -->
+				<div class="col-2"></div>
+				<div class="col-2">
+					<img
+						:src="img.url"
+						class="card-img-top rounded-circle"
+						alt="..."
+						style="width: 100px; height: 100px"
+					/>
+					<div>
+						<button type="button" class="btn btn-primary" @click="uploadFile">
+							選擇圖片
+						</button>
 						<input
-							id="sellerName"
-							type="text"
 							class="form-control"
-							v-model="sellerData.name"
+							type="file"
+							id="formFile"
+							ref="inputField"
+							hidden
 						/>
+						<p>檔案大小最大:1MB</p>
+						<p>檔案限制：JPG.PNG</p>
 					</div>
-					<!-- 姓名 END-->
+				</div>
+				<!-- 商家頭像 ---------------------------- END -->
+				<form>
+					<!-- 商家 基本資料 ---------------------------- START -->
+					<div class="col-sm-10 col-md-8">
+						<div class="mb-3 row">
+							<!-- 品牌名稱 START-->
+							<div class="mb-2 d-flex col-sm-12 align-items-center">
+								<label
+									for="shopName"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									品牌名稱
+								</label>
+								<input
+									id="shopName"
+									type="text"
+									class="form-control"
+									v-model="shopData.name"
+									style="height: calc(1.5rem + (0.375rem * 2) + 2px)"
+								/>
+							</div>
+							<!-- 品牌名稱 END-->
 
-					<!-- 性別 START-->
-					<div class="mb-2 d-flex col-sm-6">
-						<label
-							for="sellerGender"
-							class="me-2 col-form-label"
-							style="width: 3em"
-						>
-							性別
-						</label>
-						<select
-							class="form-select"
-							id="sellerGender"
-							aria-label="請選擇性別"
-							v-model="sellerData.gender"
-						>
-							<option selected>請選擇</option>
-							<option value="男">男</option>
-							<option value="女">女</option>
-						</select>
-					</div>
-					<!-- 性別 END-->
-
-					<!-- 密碼 START-->
-					<div class="mb-2 d-flex col-sm-6">
-						<label
-							for="sellerPw"
-							class="me-2 col-form-label"
-							style="width: 3em"
-						>
-							密碼
-						</label>
-						<input
-							:readonly="!sellerData.rePwShow"
-							id="sellerPw"
-							type="password"
-							class="form-control"
-							v-model="sellerData.pw"
-							ref="pwInputRef"
-							autocomplete="new-password"
-						/>
-					</div>
-					<!-- 密碼 END-->
-
-					<!-- 確認 START-->
-					<div class="mb-2 d-flex col-sm-6">
-						<div v-if="!sellerData.rePwShow" class="">
-							<button type="button" class="btn btn-link" @click="rePW()">
-								更改密碼
-							</button>
+							<!-- 地址 START-->
+							<div class="mb-2 d-flex col-sm-12">
+								<label
+									for="shopAdd"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									地址
+								</label>
+								<input
+									id="shopAdd"
+									type="text"
+									class="form-control"
+									v-model="shopData.add"
+									autocomplete="off"
+								/>
+							</div>
+							<!-- 地址 END-->
+							{{ shopData.accountStart }} - {{ shopData.accountEnd }}
+							<!-- 收款帳戶 START-->
+							<div class="mb-2 d-flex col-sm-12 align-items-center">
+								<label
+									for="shopAccountStart"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									收款帳戶
+								</label>
+								<input
+									id="shopAccountStart"
+									ref="shopAccountStartRef"
+									type="text"
+									class="form-control"
+									v-model="shopData.accountStart"
+									@input="handleInputStart"
+									autocomplete="off"
+									style="
+										width: calc(3rem + 6px);
+										height: calc(1.5rem + (0.375rem * 2) + 2px);
+									"
+								/>
+								<div class="mx-2">-</div>
+								<input
+									id="shopAccountEnd"
+									ref="shopAccountEndRef"
+									type="text"
+									class="form-control"
+									v-model="shopData.accountEnd"
+									@input="handleInputEnd"
+									style="height: calc(1.5rem + (0.375rem * 2) + 2px)"
+									autocomplete="off"
+								/>
+							</div>
+							<!-- 收款帳戶 END-->
 						</div>
-						<label
-							v-if="sellerData.rePwShow"
-							for="sellerRePw"
-							class="me-2 col-form-label"
-							style="width: 3em"
-						>
-							確認
-						</label>
-						<input
-							v-if="sellerData.rePwShow"
-							id="sellerRePw"
-							ref="rePwInput"
-							type="password"
-							class="form-control"
-							v-model="sellerData.rePw"
-							autocomplete="new-password"
-						/>
 					</div>
-					<!-- 確認 END-->
+					<!-- 商家 基本資料 ---------------------------- END -->
 
-					<!-- 手機 START-->
-					<div class="mb-2 d-flex col-sm-12">
-						<label
-							for="sellerCall"
-							class="me-2 col-form-label"
-							style="width: 3em"
-						>
-							手機
-						</label>
-						<input
-							id="sellerCall"
-							type="text"
-							class="form-control"
-							v-model="sellerData.call"
-							autocomplete="off"
-						/>
-					</div>
-					<!-- 手機 END-->
+					<!-- 預設收件人資料 ---------------------------- START -->
+					<div class="col-sm-10 col-md-8">
+						<div class="mb-3 row">
+							<!-- 姓名 START-->
+							<div class="mb-2 d-flex col-sm-6">
+								<label
+									for="sellerName"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									姓名
+								</label>
+								<input
+									id="sellerName"
+									type="text"
+									class="form-control"
+									v-model="sellerData.name"
+								/>
+							</div>
+							<!-- 姓名 END-->
 
-					<!-- 郵件 START-->
-					<div class="mb-2 d-flex col-sm-12">
-						<label
-							for="sellerEmail"
-							class="me-2 col-form-label"
-							style="width: 3em"
-						>
-							郵件
-						</label>
-						<input
-							id="sellerEmail"
-							type="text"
-							class="form-control"
-							v-model="sellerData.email"
-							autocomplete="off"
-						/>
+							<!-- 性別 START-->
+							<div class="mb-2 d-flex col-sm-6">
+								<label
+									for="sellerGender"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									性別
+								</label>
+								<select
+									class="form-select"
+									id="sellerGender"
+									aria-label="請選擇性別"
+									v-model="sellerData.gender"
+								>
+									<option selected>請選擇</option>
+									<option value="男">男</option>
+									<option value="女">女</option>
+								</select>
+							</div>
+							<!-- 性別 END-->
+
+							<!-- 密碼 START-->
+							<div class="mb-2 d-flex col-sm-6">
+								<label
+									for="sellerPw"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									密碼
+								</label>
+								<input
+									:readonly="!sellerData.rePwShow"
+									id="sellerPw"
+									type="password"
+									class="form-control"
+									v-model="sellerData.pw"
+									ref="pwInputRef"
+									autocomplete="new-password"
+								/>
+							</div>
+							<!-- 密碼 END-->
+
+							<!-- 確認 START-->
+							<div class="mb-2 d-flex col-sm-6">
+								<div v-if="!sellerData.rePwShow" class="">
+									<button type="button" class="btn btn-link" @click="rePW()">
+										更改密碼
+									</button>
+								</div>
+								<label
+									v-if="sellerData.rePwShow"
+									for="sellerRePw"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									確認
+								</label>
+								<input
+									v-if="sellerData.rePwShow"
+									id="sellerRePw"
+									ref="rePwInput"
+									type="password"
+									class="form-control"
+									v-model="sellerData.rePw"
+									autocomplete="new-password"
+								/>
+							</div>
+							<!-- 確認 END-->
+
+							<!-- 手機 START-->
+							<div class="mb-2 d-flex col-sm-12">
+								<label
+									for="sellerCall"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									手機
+								</label>
+								<input
+									id="sellerCall"
+									type="text"
+									class="form-control"
+									v-model="sellerData.call"
+									autocomplete="off"
+								/>
+							</div>
+							<!-- 手機 END-->
+
+							<!-- 郵件 START-->
+							<div class="mb-2 d-flex col-sm-12">
+								<label
+									for="sellerEmail"
+									class="me-2 col-form-label"
+									style="width: 3em"
+								>
+									郵件
+								</label>
+								<input
+									id="sellerEmail"
+									type="text"
+									class="form-control"
+									v-model="sellerData.email"
+									autocomplete="off"
+								/>
+							</div>
+							<!-- 郵件 END-->
+						</div>
 					</div>
-					<!-- 郵件 END-->
-				</div>
+					<!-- 預設收件人資料 ---------------------------- END -->
+					<button type="button" class="btn btn-outline-primary">取消</button>
+					<button type="button" class="btn btn-primary">提交</button>
+				</form>
+				<div class="col-2"><p>會員資料已更新</p></div>
 			</div>
-			<!-- 預設收件人資料 ---------------------------- END -->
-			<button type="button" class="btn btn-outline-primary">取消</button>
-			<button type="button" class="btn btn-primary">提交</button>
-		</form>
-		<div class="col-2"><p>會員資料已更新</p></div>
-	</div>
+		</template>
+	</OneColumnLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import axios from 'axios'; // 需要安裝 axios
+import OneColumnLayout from '../../layouts/OneColumnLayout.vue';
 
 // 補 取消 提交 兩個按鈕
 

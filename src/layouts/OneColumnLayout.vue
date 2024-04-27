@@ -9,7 +9,7 @@
 			</template>
 		</header>
 		<main>
-			<slot />
+			<slot name="main"></slot>
 		</main>
 		<!-- <aside>
 			<slot name="aside" />
