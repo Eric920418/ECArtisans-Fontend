@@ -14,6 +14,7 @@
         <input class="d-flex mx-auto form-control mt-2" type="text" placeholder="地址" v-model="address">
       
         <button class="btn btn-primary mt-2" @click="sigup">註冊</button>     
+        <button class="btn btn-primary mt-2 ms-2" @click="goback">返回</button>     
     </div>
 </template>
 
@@ -22,7 +23,7 @@ export default {
     data(){
         return{
             bossName: "",
-            gender: "男",
+            gender: "請選擇",
             phone: "",
             mail: "",
             brand: "",
@@ -47,11 +48,11 @@ export default {
                 address: this.address
             })
             .then( res => { console.log(res); 
-
             })
-
+        },
+        goback(){
+            this.$emit('goback');
         }
-
 
     }
 }
