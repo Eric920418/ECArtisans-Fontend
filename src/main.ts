@@ -13,6 +13,12 @@ import 'element-plus/dist/index.css';
 
 const app = createApp(App)
 
+app.config.globalProperties.$axios = axios.create({
+  baseURL: 'https://ecartisans-backend.onrender.com',
+
+})
+
+
 app.use(createPinia())
 app.use(router)
 app.use(VueAxios, axios)
