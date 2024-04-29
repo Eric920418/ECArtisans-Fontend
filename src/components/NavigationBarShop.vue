@@ -4,7 +4,7 @@
 			<a class="navbar-brand" href="#"><Logo /></a>
 			<router-link
 				:to="{ name: 'ShopManage' }"
-				v-if="authStore.isLoggedIn"
+				v-if="UserStore.isLoggedIn"
 				class="navbar-brand"
 			>
 				<span>｜商家管理中心</span>
@@ -12,7 +12,7 @@
 			<router-link :to="{ name: 'ShopHome' }" v-else class="navbar-brand">
 				<span></span>
 			</router-link>
-			<p>isLoggedIn: {{ authStore.isLoggedIn }}</p>
+			<p>isLoggedIn: {{ UserStore.isLoggedIn }}</p>
 			<button
 				class="navbar-toggler"
 				type="button"
@@ -30,7 +30,7 @@
 			>
 				<div class="row gx-2">
 					<div class="col navbar-buttons d-flex align-items-center">
-						<div v-if="authStore.isLoggedIn" class="mx-2">
+						<div v-if="UserStore.isLoggedIn" class="mx-2">
 							<div class="mx-2 dropdown">
 								<!-- 判斷是否登入，未登入則跳轉至登入頁面 -->
 								<button
@@ -72,9 +72,11 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+import useUserStore from '@/stores/authStore';
+
 import Logo from './Logo.vue';
 const authStore = useAuthStore();
-
+const UserStore = useUserStore();
 const router = useRouter();
 
 function ShopLogin() {
@@ -90,11 +92,11 @@ function ShopManage() {
 }
 
 async function ShopLogout() {
-	await authStore.logout();
+	await UserStore.logout();
 	router.push('./ShopHome');
 }
 
-if (authStore.isLoggedIn) {
+if (UserStore.isLoggedIn) {
 	ShopManage();
 }
 </script>

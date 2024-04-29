@@ -38,7 +38,7 @@
 			></i>
 		</div>
 		<div>
-			<button class="btn btn-primary mt-2 w-50" @click="login">登入</button>
+			<button class="btn btn-primary mt-2 w-50" @click="loginTo">登入</button>
 		</div>
 		<div>
 			<div class="d-flex mt-2">
@@ -50,30 +50,39 @@
 	</div>
 </template>
 
-<script>
-import OneColumnLayout from '../../layouts/OneColumnLayout.vue';
-export default {
-	data() {
-		return {
-			mail: '',
-			password: '',
-		};
-	},
+<script setup lang="ts">
+import useUserStore from '../../stores/authStore';
+const userStore = useUserStore();
+import { ref, defineEmits } from 'vue';
 
-	methods: {
-		login() {
-			this.$axios
-				.post('/auth/shop-login', { mail: this.mail, password: this.password })
-				.then(res => {
-					console.log(res);
-				});
-			this.mail = '';
-			this.password = '';
-		},
-		change() {
-			this.$emit('sigin');
-		},
-	},
+const mail = ref('');
+const password = ref('');
+const eye = ref(false);
+let pas = ref(null);
+const emit = defineEmits(['Sigin']);
+
+const loginTo = async () => {
+	const status = await userStore.login(mail.value, password.value);
+	if (status) {
+		console.log('登入成功');
+	}
+	mail.value = '';
+	password.value = '';
+};
+
+const logoutFrom = () => {
+	userStore.logout();
+};
+
+const change = () => {
+	console.log('傳遞子組件');
+	emit('Sigin', { message: 'sigin' });
+};
+
+const see = () => {
+	eye.value = !eye.value;
+	console.log(pas.value.type);
+	pas.value.type = eye.value ? 'text' : 'password';
 };
 </script>
 

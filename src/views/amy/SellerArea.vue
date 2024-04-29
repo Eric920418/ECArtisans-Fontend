@@ -1,6 +1,6 @@
 <template>
 	<OneColumnLayout>
-		<template v-slot:main>
+		<template #main>
 			<div class="m-5 row">
 				<h1>會員資料</h1>
 				<div>
