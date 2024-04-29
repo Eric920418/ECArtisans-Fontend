@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia';
+import { type UserData } from '../type/userType';
+
 import { logIn,signUp } from '@/api/authApi';
 
 
@@ -17,28 +19,11 @@ export const useAuthStore = defineStore({
   }
 });
 
-interface UserState {
-  bossName: string;
-  gender: string;
-  phone: string;
-  mail: string;
-  brand: string;
-  avatar: string;
-  plan: number;
-  planPeriod: string;
-  password: string;
-  otherPassword: string;
-  address: string;
-  introduce: string;
-  eye: boolean;
-  isLoggedIn: boolean;
-  id: string;
-}
 
 const useUserStore = defineStore({
   id: 'user',
 
-  state: (): UserState => ({
+  state: (): UserData => ({
     bossName: '',
     gender: '',
     phone: '',
@@ -62,8 +47,6 @@ const useUserStore = defineStore({
 
   actions: {
     async login(mail: string, password: string): Promise<void> {
-      console.log("使用login",this.$axios);
-
       try {
         const { status, user } = await logIn(mail, password);
 
@@ -85,14 +68,13 @@ const useUserStore = defineStore({
     },
 
     async signup(userData: UserData): Promise<void> {
-      console.log("signUp", this.$axios);
       console.log(userData)
       
       try {
           const res = await signUp(userData);
           console.log(res.data);
           if (status === 'success'){
-            this.login(userData.email, userData.password)
+            this.login(userData.mail, userData.password)
           }
       } catch (error) {
           console.error('Sign up error:', error);

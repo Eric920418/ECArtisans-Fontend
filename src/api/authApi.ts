@@ -1,5 +1,7 @@
 // authApi.ts
 import { $axios } from './index';
+import { type UserData } from '../type/userType';
+
 
 export async function logIn(mail: string, password: string): Promise<any> {
     console.log("使用login API")
@@ -13,7 +15,7 @@ export async function logIn(mail: string, password: string): Promise<any> {
     }
 }
 
-export async function signUp(userData): Promise<any> {
+export async function signUp(userData:UserData): Promise<any> {
     console.log("使用shop-signUp API")
     try {
         const res = await $axios.post('/auth/shop-signUp',  userData );

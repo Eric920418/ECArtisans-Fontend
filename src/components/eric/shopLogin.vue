@@ -58,16 +58,19 @@ import { ref, defineEmits } from 'vue';
 const mail = ref('');
 const password = ref('');
 const eye = ref(false);
-let pas = ref(null);
+let pas = ref('');
 const emit = defineEmits(['Sigin']);
 
 const loginTo = async () => {
-	const status = await userStore.login(mail.value, password.value);
-	if (status) {
+	try {
+		await userStore.login(mail.value, password.value);
 		console.log('登入成功');
+	} catch (error) {
+		console.error('登入失败：', error);
+	} finally {
+		mail.value = '';
+		password.value = '';
 	}
-	mail.value = '';
-	password.value = '';
 };
 
 const logoutFrom = () => {
@@ -81,8 +84,10 @@ const change = () => {
 
 const see = () => {
 	eye.value = !eye.value;
-	console.log(pas.value.type);
-	pas.value.type = eye.value ? 'text' : 'password';
+	// 取得密碼輸入框的元素
+	const passwordInput = pas.value as unknown as HTMLInputElement;
+	console.log(passwordInput.type);
+	passwordInput.type = eye.value ? 'text' : 'password';
 };
 </script>
 
