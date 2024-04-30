@@ -6,9 +6,10 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import App from './App.vue'
 import router from './router'
+import VueCookies from 'vue-cookies'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import ElementPlus from 'element-plus';
+import VeeValidate from 'vee-validate';
 import 'element-plus/dist/index.css';
 import { $axios } from './api';
 
@@ -21,5 +22,7 @@ app.use(createPinia());
 app.use(router)
 app.use(VueAxios, axios)
 app.use(ElementPlus)
+app.use(VueCookies)
+app.use(VeeValidate)
 
 app.mount('#app')

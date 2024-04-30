@@ -78,7 +78,7 @@ export default {
 
     methods:{
         sigup(){
-            this.$axios.post('/auth/shop-signUp', {
+            this.$axios.post('', {
                 bossName: this.bossName,
                 gender: "男",
                 phone: this.phone,

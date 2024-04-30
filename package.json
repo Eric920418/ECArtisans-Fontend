@@ -25,6 +25,7 @@
 		"vee-validate": "^4.12.6",
 		"vue": "^3.4.21",
 		"vue-axios": "^3.5.2",
+		"vue-cookies": "^1.8.4",
 		"vue-router": "^4.3.0"
 	},
 	"devDependencies": {
