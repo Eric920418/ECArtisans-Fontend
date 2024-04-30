@@ -22,6 +22,7 @@ const emit = defineEmits(['close']); // 定义事件
 const props = defineProps<{
 	message: number; // 消息内容
 }>();
+
 // 使用 props 中的 message
 const message = props.message; // 将属性存入变量，方便使用
 
