@@ -1,5 +1,5 @@
 <template>
-    <v-form class="login" style="width: 600px;">
+    <div class="login" style="width: 600px;">
         <div class=" fs-3 fw-bold d-flex justify-content-center mb-3">立即註冊</div>
         <div class="d-flex justify-content-center">
             <div class=" fw-bold d-flex  mb-3">已經有帳號了?</div>
@@ -57,7 +57,7 @@
         <div class="d-flex justify-content-center">
             <button class=" btn btn-primary mt-2 w-50" @click="sigup">註冊</button>     
         </div>
-    </v-form>
+    </div>
 </template>
 
 <script>

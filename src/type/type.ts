@@ -3,3 +3,4 @@ export interface routerRule {
     name: string;
     component: any;
 }
+

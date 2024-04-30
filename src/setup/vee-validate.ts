@@ -29,14 +29,86 @@ const onSubmit = (values: any) => {
 
 // 其他驗證方法 --------------------------------------------START
 
+// 驗證 姓名
+function isName(value: any): string | boolean {
+  if (!value || value.trim() === '') {
+    return '姓名為必填';
+  }
+
+  const nameRegex = /^([\u4e00-\u9fa5]{1,20}|[a-zA-Z.,_-\s]{1,20})$/; // 中文和英文字符
+  return nameRegex.test(value) ? true : '只能輸入含中文或英文字符';
+}
+
+function isShopName(value: any): string | boolean {
+  if (!value || value.trim() === '') {
+    return '店名為必填';
+  }
+
+  const shopNameRegex = /^[\u4e00-\u9fa5a-zA-Z0-9.,_-\s]{1,20}$/; // 允许中文、英文、数字、逗号、下划线、连字符、空格，最大长度 20 个字符
+  return shopNameRegex.test(value) ? true : '不可輸入特殊符號';
+}
+
+// 驗證 密碼
+function isPassword(value: any): string | boolean {
+  if (!value || value.trim() === '') {
+    return '密碼為必填';
+  }
+
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/; // 至少包含一个字母和一个数字，最少6个字符
+  return passwordRegex.test(value) ? true : '密碼必須包含英文和數字，且長度最少6個字';
+}
+
+// 驗證 密碼不一致
+function isConfirmed(value: any, [target]: any, ctx: { form: { [x: string]: any; }; }): string | boolean {
+  if (value === ctx.form[target]) {
+    return true;
+  }
+
+  return '密碼不一致';
+}
+
+
+// 驗證 電話
 function isPhone(value: any): string | boolean {
+	if (value === null || value === undefined || value.trim() === '') {
+    return '電話為必填'; // 返回自定义消息
+  }
+
 	const phoneNumber = /^(09)[0-9]{8}$/;
 	return phoneNumber.test(value) ? true : '需要正確的電話號碼';
 }
+
+// 驗證 地址
+function isAddress(value: any): string | boolean {
+  if (!value || value.trim() === '') {
+    return '地址為必填';
+  }
+
+  const countyOrCityRegex = /(\d{3}).*(縣|市)/; //驗證是否前三碼郵遞區號，後面包含縣、市的名稱
+  const isValid = countyOrCityRegex.test(value); //符合兩個條件
+
+  return isValid ? true : '請輸入3碼郵遞區號與地址';
+}
+
+// 驗證 性別
+function isGender(value: any): string | boolean {
+  if (!value || value.trim() === '' || value === '請選擇') {
+    return '性別為必選'; 
+  }
+
+  return true; 
+}
+
 // 將自定義規則添加到 vee-validate
+defineRule('name', isName);
 defineRule('phone', isPhone);
+defineRule('address', isAddress);
+defineRule('password', isPassword);
+defineRule('confirmed', isConfirmed);
+defineRule('shopName', isShopName);
+defineRule('gender', isGender);
 
 // 其他驗證方法 --------------------------------------------END
 
 // 匯出元件和配置
-export { VForm, VField, ErrorMessage, onSubmit, isPhone };
+export { VForm, VField, ErrorMessage, onSubmit, isName, isPhone ,isAddress ,isPassword, isGender, isConfirmed, isShopName};

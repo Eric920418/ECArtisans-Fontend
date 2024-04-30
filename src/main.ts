@@ -11,16 +11,14 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import VeeValidate from 'vee-validate';
 import 'element-plus/dist/index.css';
+import { $axios } from './api';
 
 const app = createApp(App)
 
-app.config.globalProperties.$axios = axios.create({
-  baseURL: 'https://ecartisans-backend.onrender.com',
+// 設定全域變數，但其實已經設在api裡面了
+app.config.globalProperties.$axios = $axios;
 
-})
-
-
-app.use(createPinia())
+app.use(createPinia());
 app.use(router)
 app.use(VueAxios, axios)
 app.use(ElementPlus)
