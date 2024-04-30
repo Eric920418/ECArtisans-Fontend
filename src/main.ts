@@ -9,7 +9,8 @@ import router from './router'
 import VueCookies from 'vue-cookies'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import VeeValidate from 'vee-validate';
+import * as VeeValidate from 'vee-validate'
+import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import { $axios } from './api';
 
@@ -23,6 +24,8 @@ app.use(router)
 app.use(VueAxios, axios)
 app.use(ElementPlus)
 app.use(VueCookies)
-app.use(VeeValidate)
+app.component('VForm', VeeValidate.Form);
+app.component('VField', VeeValidate.Field);
+app.component('ErrorMessage', VeeValidate.ErrorMessage);
 
 app.mount('#app')
