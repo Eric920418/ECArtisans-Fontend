@@ -38,7 +38,7 @@ export default {
 
     methods: {
         login() {
-            this.$axios.post('/auth/shop-login', { mail: this.mail, password: this.password })
+            this.$axios.post('', { mail: this.mail, password: this.password })
             .then( res => { 
                 this.token = res.data.user.token;
                 localStorage.setItem('token', this.token);
