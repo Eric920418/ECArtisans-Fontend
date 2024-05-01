@@ -3,7 +3,7 @@
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"><Logo /></a>
 			<router-link
-				:to="{ name: 'ShopManage' }"
+				:to="{ name: 'ShopSeller' }"
 				v-if="UserStore.isLoggedIn"
 				class="navbar-brand"
 			>
@@ -48,7 +48,10 @@
 									aria-labelledby="dropdownMenuButton"
 								>
 									<li>
-										<router-link :to="{ name: 'seller' }" class="dropdown-item">
+										<router-link
+											:to="{ name: 'ShopSeller' }"
+											class="dropdown-item"
+										>
 											商家中心
 										</router-link>
 									</li>
@@ -87,8 +90,8 @@ function ShopHome() {
 	router.push('./ShopHome');
 }
 
-function ShopManage() {
-	router.push('./ShopManage');
+function ShopSeller() {
+	router.push('./ShopSeller');
 }
 
 async function ShopLogout() {
@@ -97,7 +100,7 @@ async function ShopLogout() {
 }
 
 if (UserStore.isLoggedIn) {
-	ShopManage();
+	ShopSeller();
 }
 </script>
 
