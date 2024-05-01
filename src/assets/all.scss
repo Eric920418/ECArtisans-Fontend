@@ -1,9 +1,9 @@
-@import 'bootstrap/scss/functions';
+@import '../../node_modules/bootstrap/scss/functions';
 @import './helpers/variables';
 @import './helpers/variables-dark';
-@import 'bootstrap/scss/maps';
-@import 'bootstrap/scss/mixins/';
+@import '../../node_modules/bootstrap/scss/maps';
+@import '../../node_modules/bootstrap/scss/mixins';
 @import './utils/utilities';
 @import './utils/mixin';
 
-@import 'bootstrap/scss/bootstrap.scss';
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
