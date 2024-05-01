@@ -531,5 +531,8 @@ const send = reactive({
 	add: '100台北市中正區動物街20號',
 });
 
+// 未定義
+const notifyUser = () => {};
+
 // 預設收件人資料------END
 </script>

@@ -57,6 +57,7 @@ const useUserStore = defineStore({
           // 取得payload 也就是id
           this.id = JSON.parse(atob(user.token.split('.')[1]));
           this.isLoggedIn = true;
+          console.log(this.id)
 
           // 待補function登入完要用id去抓資訊
 
@@ -73,9 +74,7 @@ const useUserStore = defineStore({
       try {
           const res = await signUp(userData);
           console.log(res.data);
-          if (status === 'success'){
-            this.login(userData.mail, userData.password)
-          }
+
       } catch (error) {
           console.error('Sign up error:', error);
       }
