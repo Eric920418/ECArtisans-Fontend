@@ -16,7 +16,7 @@ export const useSellerStore = defineStore({
     async getSellerAccount() {
       try {
         const response = await sellerAccount(this.id); 
-        this.sellerInfo = response.data.thisShop; // 存储商家信息
+        this.sellerInfo = response.thisShop; // 存储商家信息
       } catch (error) {
         console.error('讀取訊息失敗');
       }
@@ -36,9 +36,8 @@ export const useSellerStore = defineStore({
           ],
           "collection": "123456789"
         }
-        const response = await sellerAccountEdit(this.id, data);
-        const reData:any = response.data; // 存储商家信息
-        console.log(reData);
+        const reData:any = await sellerAccountEdit(this.id, data);
+        // console.log(reData);
       } catch (error) {
         console.error('更新失敗');
       }
