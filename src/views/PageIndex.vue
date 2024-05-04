@@ -1,7 +1,7 @@
 <template>
-	<OneColumnLayout></OneColumnLayout>
+	<div>
+		<h1>首頁</h1>
+	</div>
 </template>
 
-<script lang="ts" setup>
-import OneColumnLayout from '../layouts/OneColumnLayout.vue';
-</script>
+<script lang="ts" setup></script>

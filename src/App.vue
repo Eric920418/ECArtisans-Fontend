@@ -1,13 +1,13 @@
-<script setup lang="ts">
-
-
-
-</script>
-
 <template>
-  <RouterView />
+	<OneColumnLayout>
+		<template #main>
+			<RouterView />
+		</template>
+	</OneColumnLayout>
 </template>
 
-<style scoped>
+<script setup lang="ts">
+import OneColumnLayout from '@/layouts/OneColumnLayout.vue';
+</script>
 
-</style>
+<style scoped></style>

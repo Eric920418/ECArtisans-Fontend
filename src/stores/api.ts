@@ -124,8 +124,9 @@ export const sellerPayment = () => apiRequest.post(`/shop/payment`);
 // 8	get   /shop/${seller_id}/home	 	 商家導覽	 	賣家端
 export const sellerHome = (seller_id: string) => apiRequest.get(`/shop/${seller_id}/home`);
 // 9	get   /shop/${seller_id}/information	 	 商家資訊	 	 賣家端	 
-export const sellerAccount = (seller_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/information`));
-
+export const sellerAccount = (seller_id: string) => apiRequest.get(`/shop/${seller_id}/information`);
+// 9.1(補)	put   /shop/${seller_id}/information	 	 修改商家資訊	 	 賣家端	 
+export const sellerAccountEdit = (seller_id: string, data: any) => apiRequest.put(`/shop/${seller_id}/information`, data);
 // 10	get   /shop/${seller_id}/users  X	 	 顧客管理	 	 賣家端	 
 // export const seller = (data: any) => apiRequest.get('/login', data);
 // 11	put   /shop/${seller_id}/users  X	 	顧客管理－修改	 	賣家端 
@@ -158,7 +159,7 @@ export const sellerCouponEdit = (coupon_id: string) => apiRequest.put(`/shop/cou
 export const sellerCouponDelete = (coupon_id: string) => apiRequest.delete(`/shop/coupon/${coupon_id}`);
 				
 // 16	put   /users/${user_id}	 編輯會員資料	 	 買家端	 
-export const userEdit = (user_id: string) => apiRequest.put(`/users/${user_id}`);
+export const userEdit = (user_id: string, data: any) => apiRequest.put(`/users/${user_id}`, data);
 // 15	get   /users/${user_id}	 	 查看會員資料	 	買家端
 export const user = (user_id: string) => apiRequest.get(`/users/${user_id}`);
 // 20	get   /users/${user_id}/discounts	 	 折價券紀錄	 	 買家端	 

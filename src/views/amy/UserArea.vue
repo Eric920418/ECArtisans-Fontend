@@ -6,7 +6,11 @@
 			</div>
 			<div class="col-12 col-md-10">
 				<!-- 以上可以刪除 -->
+				<div v-if="!userInfo">
+					<p>加载中...</p>
+				</div>
 				<v-form
+					v-else
 					v-slot="{ errors }"
 					@submit="onSubmit"
 					class="row g-3 justify-content-end"
@@ -14,7 +18,7 @@
 					<!-- 商家頭像 ---------------------------- START -->
 					<div class="col-sm-12 col-md-12 col-lg-4 col-xl-2 text-center">
 						<img
-							:src="img.url"
+							:src="userInfo.avatar ? userInfo.avatar : imageError"
 							class="card-img-top rounded-circle my-2"
 							alt="形象圖"
 							style="width: 100px; height: 100px"
@@ -31,7 +35,8 @@
 								class="form-control"
 								type="file"
 								id="formFile"
-								ref="inputField"
+								@change="getFile"
+								ref="inputFieldRef"
 								hidden
 								autocomplete="photo"
 							/>
@@ -68,7 +73,7 @@
 										type="text"
 										class="form-control"
 										:class="{ 'is-invalid': errors['姓名'] }"
-										v-model="memberData.name"
+										v-model="userInfo.name"
 										autocomplete="name"
 										rules="name"
 									></v-field>
@@ -99,7 +104,7 @@
 										:class="{ 'is-invalid': errors['性別'] }"
 										placeholder="請選擇"
 										rules="required"
-										v-model="memberData.gender"
+										v-model="userInfo.gender"
 										as="select"
 									>
 										<option value="" selected>請選擇</option>
@@ -130,7 +135,7 @@
 										:class="{ 'is-invalid': errors.password }"
 										placeholder="請輸入密碼"
 										rules="password"
-										v-model="memberData.pw"
+										v-model="userInfo.password"
 										ref="passwordRef"
 										autocomplete="password"
 										:readonly="!memberData.rePwShow"
@@ -204,7 +209,7 @@
 										id="date"
 										type="date"
 										class="form-control"
-										v-model="memberData.date"
+										v-model="userInfo.birthday"
 									/>
 								</div>
 							</div>
@@ -231,7 +236,7 @@
 										placeholder="請輸入電話"
 										autocomplete="tel"
 										rules="phone"
-										v-model="memberData.call"
+										v-model="userInfo.phone"
 									></v-field>
 									<error-message
 										name="電話"
@@ -259,7 +264,7 @@
 										type="text"
 										class="form-control"
 										:class="{ 'is-invalid': errors['Email'] }"
-										v-model="memberData.email"
+										v-model="userInfo.mail"
 										autocomplete="email"
 										rules="email|required"
 									></v-field>
@@ -290,7 +295,7 @@
 										class="form-control"
 										:class="{ 'is-invalid': errors['地址'] }"
 										rules="address"
-										v-model="memberData.add"
+										v-model="userInfo.address"
 										autocomplete="street-address"
 									></v-field>
 									<error-message
@@ -422,12 +427,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, provide, computed, watch } from 'vue';
 import axios from 'axios'; // 需要安裝 axios
-import { VForm, VField, ErrorMessage, onSubmit } from '@/setup/vee-validate';
+import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { isPhone } from '@/setup/vee-validate';
 import Msg from '@/components/Message.vue';
+import { useUserStore } from '@/stores/index'; // 引用 Pinia Store
 
+const userStore = useUserStore();
+provide('userStore', userStore);
+const id = userStore.id;
+const imageError = userStore.imageError;
+const userInfo = computed(() => userStore.user);
+
+// 在组件挂载时调用
+onMounted(() => {
+	userStore.getUserAccount(); // 获取商家信息
+});
+// 提交
+function onSubmit(values: any): any {
+	console.log('觸發');
+	userStore.upUserAccount(); // 获取商家信息
+}
 // 通知訊息組件 ------START
 const showMsg = ref(false);
 const msgContent = ref(0);
@@ -440,35 +461,30 @@ const handleClose = () => {
 
 // 會員圖片 ------ START
 
-const img = ref({
-	url: 'https://picsum.photos/id/237/200/280',
-});
+const inputFieldRef = ref<HTMLInputElement | null>(null); //上傳用的input
+const selectedFile = ref<File | null>(null); // 存储选择的文件
 
-// const inputField = ref(); // 需要初始化為 null
-
-// 監聽檔案選擇輸入框的 change 事件
-const inputField = ref<HTMLInputElement | null>(null); // 顯式聲明 ref 的類型
 onMounted(() => {
-	inputField.value!.addEventListener('change', () => {
-		upFile();
+	inputFieldRef.value!.addEventListener('change', () => {
+		getFile();
 	});
 });
 
-const uploadFile = () => {
-	if (inputField.value) {
-		inputField.value.click();
+let uploadFile = () => {
+	if (inputFieldRef.value) {
+		inputFieldRef.value.click();
 	}
 };
 
 // 上傳檔案的函數
-function upFile() {
+function getFile() {
+	let inputField = inputFieldRef.value;
 	// 在這裡處理檔案上傳的邏輯
-	console.log('檔案已選擇');
-	if (inputField.value && inputField.value!.files) {
-		const file = inputField.value.files[0];
+	if (inputField && inputField!.files) {
+		let file = inputField.files[0];
 
 		// 圖片限制邏輯處裡------START
-		const validTypes = ['image/jpeg', 'image/png'];
+		let validTypes = ['image/jpeg', 'image/png'];
 		let checkSize = false;
 		let checkType = false;
 		if (file.size <= 1024 * 1024) checkSize = true;
@@ -476,30 +492,27 @@ function upFile() {
 		// 圖片限制邏輯處裡------END
 
 		if (checkSize && checkType) {
-			let formData = new FormData();
-			formData.append('file', file);
-			console.log('檔案已選擇，準備上傳:', file);
-
-			// 此處添加上傳檔案的程式碼，使用 formData 將檔案發送到後端
+			selectedFile.value = file;
 		} else {
 			if (!checkType) alert('請選擇 .jpg 或 .png 格式上傳圖片。');
 			else alert('請選擇圖片且大小需小於等於1MB。');
 		}
-
-		// let formData = new FormData();
-		// formData.append('file', inputField.value.files[0]);
-		// console.log(inputField.value.files[0]);
-		// axios
-		// 	.post('http://127.0.0.1:8000/api/store-files', formData)
-		// 	.then(response => {
-		// 		console.log('Upload success:', response);
-		// 	})
-		// 	.catch(error => {
-		// 		console.error('Upload error:', error);
-		// 	});
 	}
-	inputField.value = null;
 }
+
+// 當文件被選定的時候，使用 FileReader 读取并转换为 Data URL
+watch(selectedFile, newFile => {
+	if (newFile) {
+		const reader = new FileReader();
+		reader.onload = e => {
+			if (userInfo.value) {
+				userInfo.value.avatar = e.target?.result as string; // 转换为 Data URL
+			}
+		};
+		reader.readAsDataURL(newFile); // 讀取文件並轉換
+	}
+});
+
 // 會員圖片 ------ END
 
 // 會員資料------START
