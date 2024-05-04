@@ -49,7 +49,7 @@ export const useUserStore = defineStore({
             console.log(id)
             const { status, thisShop } = await sellerAccount(id);
             this.user = thisShop;
-            console.log(this.user)
+            // console.log(this.user)
         } catch (error) {
             console.error('Error getting user data:', error);
         }
@@ -58,7 +58,7 @@ export const useUserStore = defineStore({
       async getUserAccount() {
       try {
         const response = await user(this.id); 
-        this.user = response.data.data; // 存储商家信息
+        this.user = response.data; // 存储商家信息
       } catch (error) {
         console.error('讀取訊息失敗');
       }
@@ -77,7 +77,7 @@ export const useUserStore = defineStore({
           "password":  this.user?.password
         };
         const response = await userEdit(this.id, data);
-        const reData:any = response.data; // 存储商家信息
+        const reData:any = response; // 存储商家信息
         console.log('更新成功');
       } catch (error) {
         console.error('更新失敗');
