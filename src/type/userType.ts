@@ -1,17 +1,17 @@
 export interface UserData {
-    bossName: string;
-    gender: string;
-    phone: string;
-    mail: string;
-    brand: string;
-    avatar: string;
-    plan: number;
-    planPeriod: string;
-    password: string;
-    otherPassword: string;
-    address: string;
-    introduce: string;
-    eye: boolean;
-    isLoggedIn: boolean;
-    id: string;
-  }
+  _id: string;
+  name: string | null;
+  gender: string | null;
+  avatar: string | null;
+  birthday: string | null;
+  phone: string | null;
+  mail: string | null;
+  address: string | null;
+  password: string | null;
+  otherPassword: string | null;
+  discount: any | null;
+  spHistory: any | null;
+  likeShop: any | null;
+  collect: any | null;
+  chat: any | null;
+}

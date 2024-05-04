@@ -22,10 +22,6 @@ configure({
 	validateOnInput: true, // 在輸入時驗證開啟
 });
 
-const onSubmit = (values: any) => {
-	// 送出後會再驗證
-	console.log('Submitted values:', values);
-};
 
 // 其他驗證方法 --------------------------------------------START
 
@@ -66,7 +62,6 @@ function isConfirmed(value: any, [target]: any, ctx: { form: { [x: string]: any;
 
   return '密碼不一致';
 }
-
 
 // 驗證 電話
 function isPhone(value: any): string | boolean {
@@ -111,4 +106,4 @@ defineRule('gender', isGender);
 // 其他驗證方法 --------------------------------------------END
 
 // 匯出元件和配置
-export { VForm, VField, ErrorMessage, onSubmit, isName, isPhone ,isAddress ,isPassword, isGender, isConfirmed, isShopName};
+export { VForm, VField, ErrorMessage, isName, isPhone ,isAddress ,isPassword, isGender, isConfirmed, isShopName};
