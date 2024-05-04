@@ -1,9 +1,20 @@
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 
 // 登入相關的 api
 const apiRequest = axios.create({
-  baseURL: 'https://ecartisans-backend.onrender.com/'
+  baseURL: 'https://ecartisans-backend.onrender.com',
 });
+
+// 定義一個函數，用於處理 api 請求並返回res.data部分
+const handleApiResponse = async <T>(req: Promise<AxiosResponse<T>>): Promise<T> => {
+  try {
+    const res = await req;
+    return res.data;
+  } catch (error) {
+    console.error('發生錯誤:', error);
+    throw error;
+  }
+};
 
 // 注意!!!!  使用前請檢查需要使用的 API 規格是否正確。 名稱可自行調整
 // 注意!!!!  使用前請檢查需要使用的 API 規格是否正確。 名稱可自行調整
@@ -43,7 +54,18 @@ export const userAuth = (data: any) => apiRequest.post('/auth/signUp', data);
 // 14 post	  /auth/forget-password	 	請求發送臨時密碼	 	買家端	 
 export const userForget = (data: any) => apiRequest.post('/auth/forget-password', data);
 // 3	post	  /auth/shop-login	 	 賣家登入	 	 賣家端	 
-export const sellerLogin = (data: any) => apiRequest.post('/auth/shop-login', data);
+export const sellerLogin = async(data: any) => handleApiResponse(apiRequest.post('/auth/shop-login', data));
+// export const sellerLogin = async(data: any) => {
+//   try {
+//     const res = await apiRequest.post('/auth/shop-login', data);
+//     // console.log(res)
+//     return res.data;
+//   }catch (error) {
+//     console.error('登入錯誤:', error);
+//     throw error; 
+// }
+// }
+
 // 4	post	  /auth/shop-signup	 	賣家註冊	 	 賣家端	 
 export const sellerAuth = (data: any) => apiRequest.post('/auth/shop-signup', data);
 // 6	post	  /auth/shopForget	 	賣家忘記密碼	 	賣家端
@@ -102,7 +124,8 @@ export const sellerPayment = () => apiRequest.post(`/shop/payment`);
 // 8	get   /shop/${seller_id}/home	 	 商家導覽	 	賣家端
 export const sellerHome = (seller_id: string) => apiRequest.get(`/shop/${seller_id}/home`);
 // 9	get   /shop/${seller_id}/information	 	 商家資訊	 	 賣家端	 
-export const sellerAccount = (seller_id: string) => apiRequest.get(`/shop/${seller_id}/information`);
+export const sellerAccount = (seller_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/information`));
+
 // 10	get   /shop/${seller_id}/users  X	 	 顧客管理	 	 賣家端	 
 // export const seller = (data: any) => apiRequest.get('/login', data);
 // 11	put   /shop/${seller_id}/users  X	 	顧客管理－修改	 	賣家端 
