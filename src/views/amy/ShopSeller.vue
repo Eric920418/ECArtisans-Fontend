@@ -430,6 +430,7 @@ import {
 	isShopName,
 } from '@/setup/vee-validate';
 import Msg from '@/components/Message.vue';
+import { useAuthStore } from '@/stores/index';
 
 // 通知訊息組件 ------START
 const showMsg = ref(false);
@@ -466,6 +467,8 @@ const uploadFile = () => {
 		inputField.value.click();
 	}
 };
+
+const userStore = useAuthStore();
 
 // 上傳檔案的函數
 function upFile() {

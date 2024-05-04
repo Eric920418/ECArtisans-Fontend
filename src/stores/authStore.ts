@@ -1,94 +1,58 @@
 import { defineStore } from 'pinia';
-import { type UserData } from '../type/userType';
-
-import { logIn,signUp } from '@/api/authApi';
+// import { type UserData } from '../type/userType';
+import router from '@/router/index';
+// import { logIn,signUp } from '@/api/authApi';
+import { sellerLogin } from './api'
+import { useUserStore } from './userStore'; // 直接從 userStore 導入 useUserStore
 
 
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
-    isLoggedIn: true
-  }),
-  actions: {
-    login() {
-      this.isLoggedIn = true;
-    },
-    logout() {
-      this.isLoggedIn = false;
-    }
-  }
-});
-
-
-const useUserStore = defineStore({
-  id: 'user',
-
-  state: (): UserData => ({
-    bossName: '',
-    gender: '',
-    phone: '',
-    mail: '',
-    brand: '',
-    avatar: '',
-    plan: 0,
-    planPeriod: '',
-    password: '',
-    otherPassword: '',
-    address: '',
-    introduce: '',
-    eye: false,
-    isLoggedIn: false,
+    // userName: '',
+    token: '',
     id: '',
+    isLoggedIn: false
   }),
-
-  getters: {
-    hello: (state) => 'Hello!' + state.bossName,
-  },
-
   actions: {
-    async login(mail: string, password: string): Promise<void> {
+    async login(data: { mail: string; password: string; }): Promise<void> {
       try {
-        const { status, user } = await logIn(mail, password);
+        const { status, user } = await sellerLogin(data);
 
         if (status === 'success') {
-          this.mail = user.mail;
-          this.password = user.password;
+          // this.userName = user.name;
+          this.token = user.token;
 
           // 取得payload 也就是id
-          this.id = JSON.parse(atob(user.token.split('.')[1]));
+          this.id = (JSON.parse(atob(this.token.split('.')[1]))).id;
           this.isLoggedIn = true;
-          console.log(this.id)
+          console.log('登入成功')
 
-          // 待補function登入完要用id去抓資訊
-
-          return status
+          // 登入成功就更新個人資料
+          const userStore = useUserStore();
+          await userStore.updateUserData(this.id)
+          // 返回首頁，尚須判斷user身份為賣家還是買家
+          router.push('/ShopHome');
         }
       } catch (error) {
         console.error('Login error:', error);
       }
     },
-
-    async signup(userData: UserData): Promise<void> {
-      console.log(userData)
-      
-      try {
-          const res = await signUp(userData);
-          console.log(res.data);
-
-      } catch (error) {
-          console.error('Sign up error:', error);
-      }
-  },
-
     logout(): void {
       this.isLoggedIn = false;
       this.reset();
+      // 返回登入畫面，尚須判斷user身份為賣家還是買家
+      router.push('/');
+
     },
 
     reset(): void {
       Object.assign(this, this.$state);
     },
   },
+  // 持久化，讓用戶不會每次重登
+  persist: true
+
 });
 
-export default useUserStore;
+

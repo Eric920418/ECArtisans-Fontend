@@ -134,8 +134,4 @@
 import { ref, reactive, onMounted, nextTick } from 'vue';
 import Msg from '@/components/Message.vue';
 import OneColumnLayout from '../../layouts/OneColumnLayout.vue';
-
-// 待補狀態，判斷頁面呈現
-import useUserStore from '../../stores/authStore';
-const userStore = useUserStore();
 </script>
