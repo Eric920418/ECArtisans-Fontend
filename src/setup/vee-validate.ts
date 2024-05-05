@@ -75,7 +75,7 @@ function isPhone(value: any): string | boolean {
 
 // 驗證 地址
 function isAddress(value: any): string | boolean {
-  if (value || value.trim() !== '') {
+  if (value.trim() !== '') {
     const countyOrCityRegex = /(\d{3}).*(縣|市)/; //驗證是否前三碼郵遞區號，後面包含縣、市的名稱
     const isValid = countyOrCityRegex.test(value); //符合兩個條件
   
