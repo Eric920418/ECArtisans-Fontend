@@ -294,7 +294,7 @@
 										type="text"
 										class="form-control"
 										:class="{ 'is-invalid': errors['地址'] }"
-										rules="address"
+										rules="address|required"
 										v-model="userInfo.address"
 										autocomplete="street-address"
 									></v-field>
@@ -391,7 +391,7 @@
 										type="text"
 										class="form-control"
 										:class="{ 'is-invalid': errors['收件人地址'] }"
-										rules="address"
+										rules="address|required"
 										v-model="send.add"
 										autocomplete="street-address"
 									></v-field>

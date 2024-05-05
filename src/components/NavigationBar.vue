@@ -69,7 +69,7 @@
 					</form>
 					<div class="col navbar-buttons d-flex align-items-center">
 						<div class="mx-2">
-							<router-link :to="{ name: 'ShopHome' }" class="btn btn-link">
+							<router-link :to="{ name: 'ShopLogin' }" class="btn btn-link">
 								<i class="bi bi-shop-window"></i>
 								<span>我要開店</span>
 							</router-link>
