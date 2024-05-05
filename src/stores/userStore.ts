@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
-import { sellerAuth, sellerAccount } from './api'
+import { sellerAuth, sellerAccount, user, userEdit } from './api'
 import { type UserData } from '../type/userType';
-import { user, userEdit } from "./api"; 
 
 // interface UserData {
 //     [key: string]: any;
@@ -35,34 +34,25 @@ export const useUserStore = defineStore({
   },
 
   actions: {
-    async register(userData: UserData): Promise<void> {
-      console.log(userData)
+    async updateUserData(id: string): Promise<void> {
       try {
-        const res = await sellerAuth(userData);
-        console.log(res.data);
+        const { thisShop } = await sellerAccount(id);
+        this.$patch({ user: thisShop });
       } catch (error) {
-          console.error('Sign up error:', error);
+        console.error('Error getting user data:', error);
       }
     },
-    async updateUserData(id: string): Promise<void> {
-        try {
-            console.log(id)
-            const { status, thisShop } = await sellerAccount(id);
-            this.user = thisShop;
-            console.log(this.user)
-        } catch (error) {
-            console.error('Error getting user data:', error);
-        }
-    },
+
     // 获取商家信息
-      async getUserAccount() {
+    async getUserAccount() {
       try {
         const response = await user(this.id); 
-        this.user = response.data.data; // 存储商家信息
+        this.user = response.data; // 存储商家信息
       } catch (error) {
         console.error('讀取訊息失敗');
       }
     },
+
     // 更新資料
     async upUserAccount() {
       try {
@@ -77,7 +67,7 @@ export const useUserStore = defineStore({
           "password":  this.user?.password
         };
         const response = await userEdit(this.id, data);
-        const reData:any = response.data; // 存储商家信息
+        const reData:any = response; // 存储商家信息
         console.log('更新成功');
       } catch (error) {
         console.error('更新失敗');

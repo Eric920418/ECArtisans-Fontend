@@ -124,7 +124,7 @@ export const sellerPayment = () => apiRequest.post(`/shop/payment`);
 // 8	get   /shop/${seller_id}/home	 	 商家導覽	 	賣家端
 export const sellerHome = (seller_id: string) => apiRequest.get(`/shop/${seller_id}/home`);
 // 9	get   /shop/${seller_id}/information	 	 商家資訊	 	 賣家端	 
-export const sellerAccount = (seller_id: string) => apiRequest.get(`/shop/${seller_id}/information`);
+export const sellerAccount = (seller_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/information`));
 // 9.1(補)	put   /shop/${seller_id}/information	 	 修改商家資訊	 	 賣家端	 
 export const sellerAccountEdit = (seller_id: string, data: any) => apiRequest.put(`/shop/${seller_id}/information`, data);
 // 10	get   /shop/${seller_id}/users  X	 	 顧客管理	 	 賣家端	 
