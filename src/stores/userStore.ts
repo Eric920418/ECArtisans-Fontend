@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
-import { sellerAuth, sellerAccount, user, userEdit } from './api'
+import { sellerAuth, sellerAccount } from './api'
 import { type UserData } from '../type/userType';
+import { user, userEdit } from "./api"; 
 
 // interface UserData {
 //     [key: string]: any;
@@ -34,6 +35,15 @@ export const useUserStore = defineStore({
   },
 
   actions: {
+    async register(userData: UserData): Promise<void> {
+      console.log(userData)
+      try {
+        const res = await sellerAuth(userData);
+        console.log(res.data);
+      } catch (error) {
+          console.error('Sign up error:', error);
+      }
+    },
     async updateUserData(id: string): Promise<void> {
       try {
         const { thisShop } = await sellerAccount(id);
@@ -42,9 +52,8 @@ export const useUserStore = defineStore({
         console.error('Error getting user data:', error);
       }
     },
-
     // 获取商家信息
-    async getUserAccount() {
+      async getUserAccount() {
       try {
         const response = await user(this.id); 
         this.user = response.data; // 存储商家信息
@@ -52,7 +61,6 @@ export const useUserStore = defineStore({
         console.error('讀取訊息失敗');
       }
     },
-
     // 更新資料
     async upUserAccount() {
       try {

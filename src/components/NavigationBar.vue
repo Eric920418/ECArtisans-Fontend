@@ -147,7 +147,7 @@ const isLoggedIn = authStore.isLoggedIn;
 const router = useRouter();
 
 function toLogin() {
-	router.push('./login');
+	router.push('./UserLogin');
 }
 
 function toShopHome() {
