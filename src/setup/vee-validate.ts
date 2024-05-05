@@ -75,14 +75,13 @@ function isPhone(value: any): string | boolean {
 
 // 驗證 地址
 function isAddress(value: any): string | boolean {
-  if (!value || value.trim() === '') {
-    return '地址為必填';
+  if (value || value.trim() !== '') {
+    const countyOrCityRegex = /(\d{3}).*(縣|市)/; //驗證是否前三碼郵遞區號，後面包含縣、市的名稱
+    const isValid = countyOrCityRegex.test(value); //符合兩個條件
+  
+    return isValid ? true : '請輸入3碼郵遞區號與地址';
   }
-
-  const countyOrCityRegex = /(\d{3}).*(縣|市)/; //驗證是否前三碼郵遞區號，後面包含縣、市的名稱
-  const isValid = countyOrCityRegex.test(value); //符合兩個條件
-
-  return isValid ? true : '請輸入3碼郵遞區號與地址';
+  return true;
 }
 
 // 驗證 性別
@@ -94,6 +93,14 @@ function isGender(value: any): string | boolean {
   return true; 
 }
 
+// 驗證 勾選
+function isPolicy(value: any): string | boolean {
+  if (value === 'on') {
+    return false; 
+  }
+  return true; // 如果value为true，表示复选框被勾选
+}
+
 // 將自定義規則添加到 vee-validate
 defineRule('name', isName);
 defineRule('phone', isPhone);
@@ -102,8 +109,8 @@ defineRule('password', isPassword);
 defineRule('confirmed', isConfirmed);
 defineRule('shopName', isShopName);
 defineRule('gender', isGender);
-
+defineRule('policy', isPolicy);
 // 其他驗證方法 --------------------------------------------END
 
 // 匯出元件和配置
-export { VForm, VField, ErrorMessage, isName, isPhone ,isAddress ,isPassword, isGender, isConfirmed, isShopName};
+export { VForm, VField, ErrorMessage, isName, isPhone ,isAddress ,isPassword, isGender, isConfirmed, isShopName, isPolicy};
