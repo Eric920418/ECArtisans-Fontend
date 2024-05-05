@@ -45,14 +45,12 @@ export const useUserStore = defineStore({
       }
     },
     async updateUserData(id: string): Promise<void> {
-        try {
-            console.log(id)
-            const { status, thisShop } = await sellerAccount(id);
-            this.user = thisShop;
-            // console.log(this.user)
-        } catch (error) {
-            console.error('Error getting user data:', error);
-        }
+      try {
+        const { thisShop } = await sellerAccount(id);
+        this.$patch({ user: thisShop });
+      } catch (error) {
+        console.error('Error getting user data:', error);
+      }
     },
     // 获取商家信息
       async getUserAccount() {
