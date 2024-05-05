@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { type SellerData } from '../type/sellerType';
-import { sellerAccount, sellerAccountEdit } from "./api"; 
+import { sellerAccount, sellerAccountEdit, sellerAuth } from "./api"; 
+// import { useRouter } from 'vue-router';
 
 export const useSellerStore = defineStore({
   id: 'seller',
@@ -9,10 +10,12 @@ export const useSellerStore = defineStore({
     sellerInfo: {} as SellerData | null, // 初始商家信息
     id: "661e0d13e8992a1bd4b86cae",
     imageError: './public/images/user-img.svg',
+    auth: false,
+    errorMessage: '',
   }),
   // Methods
   actions: {
-    // 获取商家信息
+    // 查看 9 商家資訊
     async getSellerAccount() {
       try {
         const response = await sellerAccount(this.id); 
@@ -21,7 +24,7 @@ export const useSellerStore = defineStore({
         console.error('讀取訊息失敗');
       }
     },
-    // 更新資料
+    // 更新/編輯商家資訊
     async upSellerAccount() {
       try {
         const data:any = {
@@ -37,9 +40,22 @@ export const useSellerStore = defineStore({
           "collection": "123456789"
         }
         const reData:any = await sellerAccountEdit(this.id, data);
-        // console.log(reData);
       } catch (error) {
         console.error('更新失敗');
+      }
+    },
+    // 註冊/新增 會員
+    async addSellerAuth(router:any, data:any) {
+      try {
+        await sellerAuth(data)
+        .then(res=> {
+          router.push({ name: 'ShopLogin' }); // 使用路由名称进行跳转
+        })
+        .catch(err=> {
+          alert(err.response.data.message);
+        })
+      } catch (error:any) {
+        console.log('Eerror:', error);
       }
     },
     

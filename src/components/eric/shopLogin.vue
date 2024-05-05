@@ -9,7 +9,7 @@
 				class="d-flex form-control mb-2 position-relative ps-5 w-50"
 				type="text"
 				placeholder="郵件"
-				v-model="mail"
+				v-model="data.mail"
 				name="Email"
 				:class="{ 'is-invalid': errors['Email'] }"
 				rules="email|required"
@@ -25,7 +25,7 @@
 				class="d-flex form-control mt-2 position-relative ps-5 w-50"
 				type="password"
 				placeholder="密碼"
-				v-model="password"
+				v-model="data.password"
 				ref="pas"
 				name="password"
 				:class="{ 'is-invalid': errors.password }"
@@ -51,7 +51,9 @@
 		<div>
 			<div class="d-flex mt-2">
 				<p class="mt-2">還不是會員?</p>
-				<a class="mt-2 mx-1" @click.prevent="change">註冊</a>
+				<router-link :to="{ name: 'SellerSigup' }" class="mt-2 mx-1">
+					註冊
+				</router-link>
 				<a class="mt-2 ms-5" @click.prevent="change">忘記密碼</a>
 			</div>
 		</div>
@@ -62,6 +64,7 @@
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { isPassword } from '@/setup/vee-validate';
 import { useAuthStore } from '@/stores/index';
+import { useRouter } from 'vue-router'; // 引入Vue Router
 
 export default {
 	components: {
@@ -71,33 +74,37 @@ export default {
 	},
 	data() {
 		return {
-			mail: '',
-			password: '',
+			data: {
+				mail: '',
+				password: '',
+			},
 			eye: false,
 			token: '',
 		};
 	},
-
+	created() {
+		this.authStore = useAuthStore(); // 创建Pinia Store实例
+		this.router = useRouter(); // 创建Router实例
+	},
 	methods: {
 		login() {
-			const authStore = useAuthStore(); // 使用 useStore 函数获取 store 实例
-			authStore.login({ mail: this.mail, password: this.password });
-			this.$axios
-				.post('/auth/shop-login', { mail: this.mail, password: this.password })
-				.then(res => {
-					this.token = res.data.user.token;
-					localStorage.setItem('token', this.token);
-				});
-			this.mail = '';
-			this.password = '';
-			var storedToken = localStorage.getItem('token');
-			if (storedToken) {
-				const jwtParts = storedToken.split('.');
-				const payload = JSON.parse(atob(jwtParts[1]));
-				this.$cookies.set('id', payload.id);
-			} else {
-				console.log('No token stored in localStorage.');
-			}
+			this.authStore.login(this.router, this.data);
+			// this.$axios
+			// 	.post('/auth/shop-login', { mail: this.mail, password: this.password })
+			// 	.then(res => {
+			// 		this.token = res.data.user.token;
+			// 		localStorage.setItem('token', this.token);
+			// 	});
+			// this.mail = '';
+			// this.password = '';
+			// var storedToken = localStorage.getItem('token');
+			// if (storedToken) {
+			// 	const jwtParts = storedToken.split('.');
+			// 	const payload = JSON.parse(atob(jwtParts[1]));
+			// 	this.$cookies.set('id', payload.id);
+			// } else {
+			// 	console.log('No token stored in localStorage.');
+			// }
 		},
 		change() {
 			this.$emit('sigin');
