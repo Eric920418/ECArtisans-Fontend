@@ -1,5 +1,10 @@
 <template>
 	<div class="login">
+		<loading v-model:active="isLoading"
+                 :can-cancel="true"
+                 :color="color"
+                 :on-cancel="onCancel"
+                 :is-full-page="fullPage"/>
 		<div class="position-relative">
 			<i
 				class="bi bi-envelope-fill position-absolute z-3 fs-5"
@@ -37,6 +42,7 @@
 				@click="see"
 			></i>
 		</div>
+
 		<div>
 			<button class="btn btn-primary mt-2 w-50" @click="login">登入</button>
 		</div>
@@ -55,6 +61,7 @@
 <script>
 import { useAuthStore } from '@/stores/index';
 import { useRouter } from 'vue-router'; // 引入Vue Router
+import Loading from 'vue-loading-overlay';
 
 export default {
 	data() {
@@ -63,33 +70,38 @@ export default {
 			password: '',
 			eye: false,
 			token: '',
+			isLoading: false
 		};
 	},
+	components: {
+        Loading
+    },
 	created() {
 		this.authStore = useAuthStore();
 		this.router = useRouter();
 	},
-
 	methods: {
 		login() {
+			this.isLoading = true
 			this.authStore.login({ mail: this.mail, password: this.password });
 
-			this.$axios
-				.post('/auth/shop-login', { mail: this.mail, password: this.password })
-				.then(res => {
-					this.token = res.data.user.token;
-					localStorage.setItem('token', this.token);
-				});
-			this.mail = '';
-			this.password = '';
-			var storedToken = localStorage.getItem('token');
-			if (storedToken) {
-				const jwtParts = storedToken.split('.');
-				const payload = JSON.parse(atob(jwtParts[1]));
-				this.$cookies.set('id', payload.id);
-			} else {
-				console.log('No token stored in localStorage.');
-			}
+			// this.$axios
+			// 	.post('/auth/shop-login', { mail: this.mail, password: this.password })
+			// 	.then(res => {
+			// 		this.token = res.data.user.token;
+			// 		localStorage.setItem('token', this.token);
+			// 		this.isLoading = false
+			// 	});
+			// this.mail = '';
+			// this.password = '';
+			// var storedToken = localStorage.getItem('token');
+			// if (storedToken) {
+			// 	const jwtParts = storedToken.split('.');
+			// 	const payload = JSON.parse(atob(jwtParts[1]));
+			// 	this.$cookies.set('id', payload.id);
+			// } else {
+			// 	console.log('No token stored in localStorage.');
+			// }
 		},
 		change() {
 			this.$emit('sigin');

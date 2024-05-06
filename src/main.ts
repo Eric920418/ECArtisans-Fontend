@@ -13,6 +13,8 @@ import * as VeeValidate from './setup/vee-validate'
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import {LoadingPlugin} from 'vue-loading-overlay';
+
 
 
 const app = createApp(App)
@@ -32,5 +34,5 @@ app.use(router)
 app.use(VueAxios, axios)
 app.use(ElementPlus)
 app.use(VueCookies)
-
+app.use(LoadingPlugin);
 app.mount('#app')
