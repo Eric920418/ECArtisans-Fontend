@@ -14,7 +14,12 @@
 				v-slot="{ errors }"
 				@submit="sigup"
 			>
-				<div class="mb-3 row">
+			<loading v-model:active="isLoading"
+                 :can-cancel="true"
+                 :color="color"
+                 :on-cancel="onCancel"
+                 :is-full-page="fullPage"/>	
+			<div class="mb-3 row">
 					<!-- 姓名 START-->
 					<div class="mb-2 d-flex col-sm-12 col-md-6">
 						<div>
@@ -291,12 +296,14 @@ import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { isPhone, isAddress, isPolicy } from '@/setup/vee-validate';
 import { useSellerStore } from '@/stores/index';
 import { useRouter } from 'vue-router'; // 引入Vue Router
+import Loading from 'vue-loading-overlay';
 
 export default {
 	components: {
 		VForm,
 		VField,
 		ErrorMessage,
+		Loading
 	},
 	data() {
 		return {
@@ -311,6 +318,7 @@ export default {
 				address: '',
 			},
 			policy: 'on',
+			isLoading:false
 		};
 	},
 	created() {
@@ -319,6 +327,7 @@ export default {
 	},
 	methods: {
 		sigup() {
+			this.isLoading = true
 			console.log('Seller觸發成功');
 			this.sellerStore.addSellerAuth(this.router, this.data); // 将 Router 实例传递给 Store
 		},
