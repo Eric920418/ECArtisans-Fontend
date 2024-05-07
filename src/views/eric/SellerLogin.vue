@@ -25,7 +25,7 @@
 				</div>
 				<div class="col-4 my-auto">
 					<div class="fs-3 fw-bold">登入</div>
-					<SellerLogin class="mt-3" @Sigin="handleClick"></SellerLogin>
+					<sellerLogin class="mt-3" @Sigin="handleClick"></sellerLogin>
 				</div>
 			</div>
 		</div>
@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import SellerLogin from '/src/components/eric/sellerLogin.vue';
+import sellerLogin from '/src/components/eric/sellerLogin.vue';
 import shopSigup from '/src/components/eric/shopSigup.vue';
 export default {
 	components: {
-		SellerLogin,
+		sellerLogin,
 		shopSigup,
 	},
 	data() {

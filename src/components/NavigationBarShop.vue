@@ -60,7 +60,11 @@
 							</div>
 						</div>
 						<div v-else class="mx-2">
-							<button type="button" class="btn btn-primary" @click="ShopLogin">
+							<button
+								type="button"
+								class="btn btn-primary"
+								@click="SellerLogin"
+							>
 								登入
 							</button>
 						</div>
@@ -82,8 +86,8 @@ const authStore = useAuthStore();
 // const UserStore = useUserStore();
 const router = useRouter();
 
-function ShopLogin() {
-	router.push('./ShopLogin');
+function SellerLogin() {
+	router.push('./SellerLogin');
 }
 
 function ShopHome() {

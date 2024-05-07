@@ -50,8 +50,8 @@ function isPassword(value: any): string | boolean {
     return '密碼為必填';
   }
 
-  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$/; // 至少包含一个字母和一个数字，最少6个字符
-  return passwordRegex.test(value) ? true : '密碼必須包含英文和數字，且長度最少6個字';
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/; // 至少包含一个字母和一个数字，最少8个字符
+  return passwordRegex.test(value) ? true : '密碼必須包含英文和數字，且長度最少8個字';
 }
 
 // 驗證 密碼不一致

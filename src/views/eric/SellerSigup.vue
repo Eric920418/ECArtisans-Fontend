@@ -6,7 +6,7 @@
 				<div class="fs-3 fw-bold">賣家立即註冊</div>
 				<div class="mt-1 d-flex justify-content-center">
 					<div class="fw-bold d-flex">已經有帳號了?</div>
-					<a class="ms-2" @click.prevent="goback">返回</a>
+					<a class="ms-2" @click="goback">返回</a>
 				</div>
 			</div>
 			<v-form
@@ -14,12 +14,14 @@
 				v-slot="{ errors }"
 				@submit="sigup"
 			>
-			<loading v-model:active="isLoading"
-                 :can-cancel="true"
-                 :color="color"
-                 :on-cancel="onCancel"
-                 :is-full-page="fullPage"/>	
-			<div class="mb-3 row">
+				<loading
+					v-model:active="this.sellerStore.isLoading"
+					:can-cancel="true"
+					:color="color"
+					:on-cancel="onCancel"
+					:is-full-page="fullPage"
+				/>
+				<div class="mb-3 row">
 					<!-- 姓名 START-->
 					<div class="mb-2 d-flex col-sm-12 col-md-6">
 						<div>
@@ -303,7 +305,7 @@ export default {
 		VForm,
 		VField,
 		ErrorMessage,
-		Loading
+		Loading,
 	},
 	data() {
 		return {
@@ -318,7 +320,6 @@ export default {
 				address: '',
 			},
 			policy: 'on',
-			isLoading:false
 		};
 	},
 	created() {
@@ -327,12 +328,11 @@ export default {
 	},
 	methods: {
 		sigup() {
-			this.isLoading = true
 			console.log('Seller觸發成功');
 			this.sellerStore.addSellerAuth(this.router, this.data); // 将 Router 实例传递给 Store
 		},
 		goback() {
-			this.$emit('goback');
+			this.$router.go(-1);
 		},
 	},
 };

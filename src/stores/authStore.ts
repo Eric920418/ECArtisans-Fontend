@@ -12,10 +12,12 @@ export const useAuthStore = defineStore({
     // userName: '',
     token: '',
     id: '',
-    isLoggedIn: false
+    isLoggedIn: false,
+    isLoading: false
   }),
   actions: {
     async login(data: { mail: string; password: string; }): Promise<void> {
+      this.isLoading = true
       try {
         await sellerLogin(data)
           .then(({ user }) => {
@@ -45,8 +47,9 @@ export const useAuthStore = defineStore({
           });
       } catch (error) {
         console.error('Login error:', error);
-        
-      }    
+      } finally {
+        this.isLoading = false; 
+      }
     },
     logout(): void {
       this.isLoggedIn = false;
