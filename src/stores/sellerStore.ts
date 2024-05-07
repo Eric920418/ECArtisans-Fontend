@@ -12,6 +12,7 @@ export const useSellerStore = defineStore({
     imageError: './public/images/user-img.svg',
     auth: false,
     errorMessage: '',
+    isLoading: false
   }),
   // Methods
   actions: {
@@ -46,16 +47,21 @@ export const useSellerStore = defineStore({
     },
     // 註冊/新增 會員
     async addSellerAuth(router:any, data:any) {
+      this.isLoading = true
       try {
         await sellerAuth(data)
         .then(res=> {
-          router.push({ name: 'ShopLogin' }); // 使用路由名称进行跳转
+          alert('註冊成功，返回登入頁')
+          router.push({ name: 'SellerLogin' }); // 使用路由器名稱跳轉
+
         })
         .catch(err=> {
           alert(err.response.data.message);
         })
       } catch (error:any) {
         console.log('Eerror:', error);
+      } finally {
+        this.isLoading = false;
       }
     },
     

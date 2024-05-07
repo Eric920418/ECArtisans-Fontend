@@ -1,10 +1,12 @@
 <template>
 	<div class="login">
-		<loading v-model:active="isLoading"
-                 :can-cancel="true"
-                 :color="color"
-                 :on-cancel="onCancel"
-                 :is-full-page="fullPage"/>
+		<loading
+			v-model:active="this.authStore.isLoading"
+			:can-cancel="true"
+			:color="color"
+			:on-cancel="onCancel"
+			:is-full-page="fullPage"
+		/>
 		<div class="position-relative">
 			<i
 				class="bi bi-envelope-fill position-absolute z-3 fs-5"
@@ -70,19 +72,17 @@ export default {
 			password: '',
 			eye: false,
 			token: '',
-			isLoading: false
 		};
 	},
 	components: {
-        Loading
-    },
+		Loading,
+	},
 	created() {
 		this.authStore = useAuthStore();
 		this.router = useRouter();
 	},
 	methods: {
 		login() {
-			this.isLoading = true
 			this.authStore.login({ mail: this.mail, password: this.password });
 
 			// this.$axios
