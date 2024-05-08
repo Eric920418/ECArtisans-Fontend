@@ -3,10 +3,10 @@
 		<div class="row g-3 py-4 d-flex justify-content-center">
 			<div class="col-12 my-3 text-center">
 				<!-- d-flex justify-content-center -->
-				<div class="fs-3 fw-bold">賣家立即註冊</div>
+				<div class="fs-3 fw-bold">買家立即註冊</div>
 				<div class="mt-1 d-flex justify-content-center">
 					<div class="fw-bold d-flex">已經有帳號了?</div>
-					<a class="ms-2" @click="goback">返回</a>
+					<router-link class="ms-2" to="userLogin">返回</router-link>
 				</div>
 			</div>
 			<v-form
@@ -15,7 +15,7 @@
 				@submit="sigup"
 			>
 				<loading
-					v-model:active="this.sellerStore.isLoading"
+					v-model:active="this.userStore.isLoading"
 					:can-cancel="true"
 					:color="color"
 					:on-cancel="onCancel"
@@ -172,6 +172,7 @@
 						</div>
 					</div>
 					<!-- 店名 END-->
+
 					<!-- 手機 START-->
 					<div class="mb-2 d-flex col-sm-12">
 						<div>
@@ -296,7 +297,7 @@
 <script>
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { isPhone, isAddress, isPolicy } from '@/setup/vee-validate';
-import { useSellerStore } from '@/stores/index';
+import { useUserStore } from '@/stores/index';
 import { useRouter } from 'vue-router';
 import Loading from 'vue-loading-overlay';
 
@@ -323,13 +324,13 @@ export default {
 		};
 	},
 	created() {
-		this.sellerStore = useSellerStore();
+		this.userStore = useUserStore();
 		this.router = useRouter();
 	},
 	methods: {
 		sigup() {
-			console.log('Seller觸發成功');
-			this.sellerStore.addSellerAuth(this.router, this.data);
+			console.log('User觸發成功');
+			this.userStore.addUserAuth(this.router, this.data);
 		},
 		goback() {
 			this.$router.go(-1);

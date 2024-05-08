@@ -31,7 +31,7 @@ const route = useRoute();
 const isShopRoute = ref(false);
 
 watchEffect(() => {
-	isShopRoute.value = route.path.startsWith('/Shop');
+	isShopRoute.value = route.path.startsWith('/Seller');
 });
 </script>
 <style scoped lang="scss">

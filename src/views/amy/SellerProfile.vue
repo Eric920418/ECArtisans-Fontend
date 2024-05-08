@@ -147,7 +147,7 @@
 										:class="{
 											'is-invalid': isAccount(),
 										}"
-										v-model="shopData.accountStart"
+										v-model="sellerData.accountStart"
 										@input="handleInputStart"
 										autocomplete="off"
 										style="
@@ -165,7 +165,7 @@
 										:class="{
 											'is-invalid': isAccount(),
 										}"
-										v-model="shopData.accountEnd"
+										v-model="sellerData.accountEnd"
 										@input="handleInputEnd"
 										style="height: calc(1.5rem + (0.375rem * 2) + 2px)"
 										autocomplete="off"
@@ -181,8 +181,8 @@
 								{{ isAccount() }}
 							</span>
 							<!-- 收款帳戶 END-->
-							<!-- 收款帳戶 START-->
-							<div
+							<!-- 介紹 START-->
+							<!-- <div
 								class="d-flex col-sm-12"
 								:class="{
 									'mb-1': isAccount(),
@@ -207,8 +207,8 @@
 										style="height: 6.5em; resize: none"
 									></textarea>
 								</div>
-							</div>
-							<!-- 收款帳戶 END-->
+							</div> -->
+							<!-- 介紹 END-->
 						</div>
 					</div>
 					<!-- 商家 基本資料 ---------------------------- END -->
@@ -290,11 +290,13 @@
 										密碼
 									</label>
 								</div>
-								<div class="w-100">
+								<div class="w-100 position-relative">
 									<v-field
 										id="password"
 										name="password"
-										type="password"
+										:type="
+											sellerStore.updatePassword && eye ? 'text' : 'password'
+										"
 										ref="passwordRef"
 										class="form-control"
 										:class="{ 'is-invalid': errors.password }"
@@ -302,9 +304,21 @@
 										rules="password"
 										v-model="sellerData.pw"
 										autocomplete="password"
-										:readonly="!sellerData.rePwShow"
+										:readonly="!sellerStore.updatePassword"
 										aria-label="密碼"
 									></v-field>
+									<i
+										v-if="eye == false"
+										class="bi bi-eye-fill position-absolute z-3 fs-5 px-1"
+										style="top: 4px; right: 8px; background-color: #fff"
+										@click="see"
+									></i>
+									<i
+										v-else-if="eye == true"
+										class="bi bi-eye-slash-fill position-absolute z-3 fs-5 px-1"
+										style="top: 4px; right: 8px; background-color: #fff"
+										@click="see"
+									></i>
 									<error-message
 										name="password"
 										class="invalid-feedback"
@@ -316,7 +330,7 @@
 							<!-- 確認 START-->
 							<div class="mb-2 d-flex col-sm-12 col-md-6">
 								<div
-									v-if="!sellerData.rePwShow"
+									v-if="!sellerStore.updatePassword"
 									class="text-sm-end text-md-start w-100"
 								>
 									<button
@@ -327,7 +341,7 @@
 										更改密碼
 									</button>
 								</div>
-								<div v-if="sellerData.rePwShow">
+								<div v-if="sellerStore.updatePassword">
 									<label
 										for="rePassword"
 										class="me-2 col-form-label"
@@ -336,17 +350,16 @@
 										密碼
 									</label>
 								</div>
-								<div v-if="sellerData.rePwShow" class="w-100">
+								<div v-if="sellerStore.updatePassword" class="w-100">
 									<v-field
 										id="rePassword"
 										name="確認密碼"
 										type="password"
-										ref="repasswordRef"
 										class="form-control"
 										:class="{ 'is-invalid': errors['確認密碼'] }"
 										placeholder="請輸入密碼"
-										rules="required|confirmed:password"
 										v-model="sellerData.rePw"
+										rules="required|confirmed:password"
 										autocomplete="current-password"
 										aria-label="確認密碼"
 									></v-field>
@@ -412,6 +425,7 @@
 										autocomplete="email"
 										rules="email|required"
 										aria-label="email"
+										readonly
 									></v-field>
 									<error-message
 										name="Email"
@@ -428,7 +442,7 @@
 					>
 						<button
 							type="button"
-							@click="notifyUser"
+							@click="cancel"
 							class="btn btn-outline-primary me-2"
 						>
 							取消
@@ -449,36 +463,37 @@
 import { ref, reactive, onMounted, provide, computed, watch } from 'vue';
 import axios from 'axios'; // 需要安裝 axios
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
-import {
-	isPhone,
-	isAddress,
-	isPassword,
-	isGender,
-	isName,
-	isConfirmed,
-	isShopName,
-} from '@/setup/vee-validate';
+import { isPhone } from '@/setup/vee-validate';
 import Msg from '@/components/Message.vue';
-import { useSellerStore } from '@/stores/index';
+import { useSellerStore, useAuthStore } from '@/stores/index';
 
+const authStore = useAuthStore();
 const sellerStore = useSellerStore();
 provide('sellerStore', sellerStore);
-const id = sellerStore.id;
+const id = authStore.id;
 const imageError = sellerStore.imageError;
 const sellerInfo = computed(() => sellerStore.sellerInfo);
 
-// 在组件挂载时调用
+// 在組件掛載時調用
 onMounted(() => {
-	sellerStore.getSellerAccount(); // 获取商家信息
+	sellerStore.getSellerAccount(id);
 });
 // 提交
 function onSubmit(values: any): any {
-	console.log('觸發');
-	sellerStore?.upSellerAccount(); // 使用 `?` 以防 `sellerStore` 为 `undefined`
+	console.log('獲取資料');
+	let data = {
+		password: sellerData.value.pw,
+		confirmPassword: sellerData.value.rePw,
+	};
+	sellerStore?.upSellerAccount(data);
 }
-// async function onSubmit() {
-// 	await sellerStore.upSellerAccount(); // 调用更新方法
-// }
+
+function cancel(): any {
+	sellerStore.updatePassword = false;
+	sellerData.value.pw = 'aa123456';
+	sellerStore.getSellerAccount(id);
+}
+
 // 提交
 // 通知訊息組件 ------START
 const showMsg = ref(false);
@@ -492,11 +507,11 @@ const notifyUser = () => {
 // 在 Msg 關閉時，將 showMsg 設為 false
 const handleClose = () => {
 	showMsg.value = false;
+	eye.value = false;
 };
 // 通知訊息組件 ------END
 
 // 會員圖片 ------START
-
 const inputFieldRef = ref<HTMLInputElement | null>(null); //上傳用的input
 const selectedFile = ref<File | null>(null); // 存储选择的文件
 
@@ -564,13 +579,13 @@ const formatAccountEnd = (value: string) => {
 
 // 清空 shopAccountStartRef 的內容
 const clearInput = () => {
-	shopData.accountStart = '';
+	sellerData.value.accountStart = '';
 };
 
 // 驗證 帳戶
 function isAccount(): string | boolean {
-	let start: string = shopData.accountStart;
-	let end: string = shopData.accountEnd;
+	let start: string = sellerData.value.accountStart;
+	let end: string = sellerData.value.accountEnd;
 	if (
 		start === null ||
 		start === undefined ||
@@ -596,11 +611,11 @@ shopAccountStartRef.value?.addEventListener('focus', clearInput);
 
 // handleInputStart 輸入3碼後 focus 到 shopAccountEnd
 const handleInputStart = () => {
-	if (shopData.accountStart.length >= 4) {
-		let aSdata = shopData.accountStart.slice(0, 3); // 取出前三個字符
-		let aEdata = shopData.accountStart.charAt(3); // 取出第四個字符
-		shopData.accountStart = aSdata;
-		shopData.accountEnd = aEdata;
+	if (sellerData.value.accountStart.length >= 4) {
+		let aSdata = sellerData.value.accountStart.slice(0, 3); // 取出前三個字符
+		let aEdata = sellerData.value.accountStart.charAt(3); // 取出第四個字符
+		sellerData.value.accountStart = aSdata;
+		sellerData.value.accountEnd = aEdata;
 		shopAccountEndRef.value?.focus();
 	}
 };
@@ -608,11 +623,11 @@ const handleInputStart = () => {
 // 輸入帳戶用
 const handleInputEnd = () => {
 	// 限制 shopAccountEnd 最多 19 個數字
-	if (shopData.accountEnd.length > 19) {
-		shopData.accountEnd = shopData.accountEnd.slice(0, 19);
+	if (sellerData.value.accountEnd.length > 19) {
+		sellerData.value.accountEnd = sellerData.value.accountEnd.slice(0, 19);
 	}
 	// 每 4 個數字插入空格
-	shopData.accountEnd = formatAccountEnd(shopData.accountEnd); // 套用格式化邏輯
+	sellerData.value.accountEnd = formatAccountEnd(sellerData.value.accountEnd); // 套用格式化邏輯
 };
 // 確保在 Vue 組件加載後執行
 onMounted(() => {
@@ -626,20 +641,29 @@ onMounted(() => {
 
 // 顯示 密碼確認
 function rePW() {
-	sellerData.value.rePwShow = true;
+	sellerStore.updatePassword = true;
 	sellerData.value.pw = '';
+	sellerData.value.rePw = '';
 	document.getElementById('password')!.focus();
 }
 
+// const repasswordRef = ref<HTMLInputElement | null>(null); //上傳用的input
+
+// 用于控制眼睛图标的状态
+const eye = ref(false);
+
+// 控制密码可见性
+function see() {
+	if (sellerStore.updatePassword) {
+		eye.value = !eye.value;
+	} else {
+		eye.value = false;
+	}
+}
 // 假資料 ------START
 const sellerData = ref({
-	email: 'aa@aa.com',
-	pw: '1234aa56',
-	rePw: null,
-	rePwShow: false,
-});
-
-const shopData = reactive({
+	pw: 'aa123456',
+	rePw: '',
 	// 虛擬帳戶(14~16碼) 實體帳戶(10~12碼) 差2~3碼
 	accountStart: '123',
 	accountEnd: formatAccountEnd('1234567890123456'),
