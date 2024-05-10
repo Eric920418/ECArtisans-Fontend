@@ -52,11 +52,11 @@ export const useUserStore = defineStore({
         console.error('Error getting user data:', error);
       }
     },
-    // 获取商家信息
+    // 獲取使用者資訊
       async getUserAccount() {
       try {
         const response = await user(this.id); 
-        this.user = response.data; // 存储商家信息
+        this.user = response.data; // 儲存使用者資訊
       } catch (error) {
         console.error('讀取訊息失敗');
       }

@@ -1,5 +1,5 @@
 <template>
-	<div class="login">
+	<div class="row m-0 p-0">
 		<loading
 			v-model:active="this.authStore.isLoading"
 			:can-cancel="true"
@@ -7,25 +7,25 @@
 			:on-cancel="onCancel"
 			:is-full-page="fullPage"
 		/>
-		<div class="position-relative">
+		<div class="col-md-12 p-0 m-0 position-relative mb-3">
 			<i
 				class="bi bi-envelope-fill position-absolute z-3 fs-5"
-				style="top: 5px; right: 467px"
+				style="transform: translate(12px, 4px)"
 			></i>
 			<input
-				class="d-flex form-control mb-2 position-relative ps-5 w-50"
+				class="d-flex form-control position-relative ps-5"
 				type="text"
 				placeholder="郵件"
 				v-model="mail"
 			/>
 		</div>
-		<div class="position-relative">
+		<div class="col-12 p-0 m-0 position-relative mb-3">
 			<i
 				class="bi bi-lock-fill position-absolute z-3 fs-5"
-				style="top: 5px; right: 467px"
+				style="transform: translate(12px, 4px)"
 			></i>
 			<input
-				class="d-flex form-control mt-2 position-relative ps-5 w-50"
+				class="d-flex form-control position-relative ps-5"
 				type="password"
 				placeholder="密碼"
 				v-model="password"
@@ -34,7 +34,7 @@
 			<i
 				v-if="eye == false"
 				class="bi bi-eye-fill position-absolute z-3 fs-5"
-				style="top: 5px; right: 260px"
+				style="top: 0px; right: 0px; transform: translate(-12px, 4px)"
 				@click="see"
 			></i>
 			<i
@@ -44,18 +44,17 @@
 				@click="see"
 			></i>
 		</div>
-
-		<div>
-			<button class="btn btn-primary mt-2 w-50" @click="login">登入</button>
+		<div class="col-12 p-0 m-0">
+			<button class="btn btn-primary mt-2 w-100" @click="login">登入</button>
 		</div>
-		<div>
-			<div class="d-flex mt-2">
-				<p class="mt-2">還不是會員?</p>
-				<router-link :to="{ name: 'SellerSigup' }" class="mt-2 mx-1">
+		<div class="mt-2 p-0 d-flex justify-content-between">
+			<div class="mt-2 p-0 d-flex">
+				<p>還不是會員?</p>
+				<router-link :to="{ name: 'SellerSigup' }" class="mx-2">
 					註冊
 				</router-link>
-				<a class="mt-2 ms-5" @click.prevent="change">忘記密碼</a>
 			</div>
+			<a class="mt-2 ms-5" @click.prevent="change">忘記密碼</a>
 		</div>
 	</div>
 </template>
@@ -113,9 +112,3 @@ export default {
 	},
 };
 </script>
-
-<style scoped>
-.login {
-	width: 500px;
-}
-</style>

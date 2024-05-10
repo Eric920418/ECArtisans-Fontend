@@ -7,40 +7,45 @@ export const useSellerStore = defineStore({
   id: 'seller',
   // Date
   state: () => ({ 
-    sellerInfo: {} as SellerData | null, // 初始商家信息
-    id: "661e0d13e8992a1bd4b86cae",
+    sellerInfo: {} as SellerData, // 初始商家信息
     imageError: './public/images/user-img.svg',
-    auth: false,
     errorMessage: '',
-    isLoading: false
+    isLoading: false,
+    updatePassword: false, //確認是否要傳送密碼修改
   }),
   // Methods
   actions: {
     // 查看 9 商家資訊
-    async getSellerAccount() {
+    async getSellerAccount(id:string) {
       try {
-        const response = await sellerAccount(this.id); 
+        const response = await sellerAccount(id); 
         this.sellerInfo = response.thisShop; // 存储商家信息
       } catch (error) {
         console.error('讀取訊息失敗');
       }
     },
     // 更新/編輯商家資訊
-    async upSellerAccount() {
+    async upSellerAccount(pwData:object) {
       try {
-        const data:any = {
+        let data:object = {};
+        data = {
           "bossName": this.sellerInfo?.bossName,
           "phone": this.sellerInfo?.phone,
           "brand": this.sellerInfo?.brand,
           "address": this.sellerInfo?.address,
           "introduce": this.sellerInfo?.introduce,
-          "salesType": [
-              5,
-              9
-          ],
-          "collection": "123456789"
         }
-        const reData:any = await sellerAccountEdit(this.id, data);
+        if(this.updatePassword){ //更新包含密碼
+          data = { ...data, ...pwData };
+        }
+        const id = this.sellerInfo?._id;
+        await sellerAccountEdit(id, data)
+        .then(res=> {
+          alert('更新成功'); // 使用路由名称进行跳转
+        })
+        .catch(err=> {
+          alert(err.response.data.message);
+        })
       } catch (error) {
         console.error('更新失敗');
       }
