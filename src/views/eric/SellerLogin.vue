@@ -1,50 +1,40 @@
 <template>
-	<div>
-		<div
-			v-if="state === 'login'"
-			class="container d-flex justify-content-center align-items-center px-0"
-			style="margin-top: 200px"
-		>
-			<div class="row">
-				<div class="col-8 p-0">
-					<div class="position-relative">
-						<h1
-							class="z-3 position-absolute display-3 fw-bold"
-							style="bottom: 350px; left: -50px"
+	<div class="container">
+		<div class="row g-3 py-4 justify-content-center">
+			<div
+				class="col-12 col-md-6 col-lg-7 col-xl-8 d-flex pt-4 ps-5 pe-4 px-md-4 m-4 mt-md-6 justify-content-center align-items-center"
+			>
+				<div class="card box w-100 h-100">
+					<!-- <img src="..." class="card-img" alt="..." /> -->
+					<div class="position-relativ" style="height: 50vh">
+						<div
+							class="position-absolute"
+							style="transform: translate(-13.5%, -30%)"
 						>
-							ECArtisans
-						</h1>
-						<h3
-							class="z-3 position-absolute fw-bold"
-							style="bottom: 300px; left: -50px"
-						>
-							探索無限購物樂趣
-						</h3>
-						<div class="box"></div>
+							<h2 class="z-3 fw-bold display-3">ECArtisans</h2>
+							<h3 class="z-3 fw-bold">探索無限購物樂趣</h3>
+						</div>
 					</div>
 				</div>
-				<div class="col-4 my-auto">
-					<div class="fs-3 fw-bold">登入</div>
+			</div>
+			<div
+				class="col-12 col-md-5 col-lg-4 col-xl-3 d-flex align-items-center px-4 px-md-0"
+			>
+				<div>
+					<div class="fs-3 fw-bold">商家登入</div>
 					<sellerLogin class="mt-3" @Sigin="handleClick"></sellerLogin>
 				</div>
 			</div>
-		</div>
-		<div
-			v-else-if="state === 'sigin'"
-			class="container vh-100 d-flex justify-content-center align-items-center"
-		>
-			<shopSigup @goback="handleClick2"></shopSigup>
 		</div>
 	</div>
 </template>
 
 <script>
 import sellerLogin from '/src/components/eric/sellerLogin.vue';
-import shopSigup from '/src/components/eric/shopSigup.vue';
+
 export default {
 	components: {
 		sellerLogin,
-		shopSigup,
 	},
 	data() {
 		return {
@@ -64,8 +54,8 @@ export default {
 
 <style scoped>
 .box {
-	width: 600px;
-	height: 400px;
+	/* width: 600px;
+	height: 400px; */
 	background-color: #d1c4c4;
 }
 </style>
