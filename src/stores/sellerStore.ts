@@ -12,6 +12,37 @@ export const useSellerStore = defineStore({
     errorMessage: '',
     isLoading: false,
     updatePassword: false, //確認是否要傳送密碼修改
+    sellerMenu: [
+      {
+        title: '商家中心',
+        path: 'SellerOverview',
+      },
+      {
+        title: '商家資訊',
+        path: 'SellerProfile',
+      },
+      // {
+      // 	title: '活動管理',
+      // 	path: 'SellerActivity',
+      // },
+      // {
+      // 	title: '優惠劵',
+      // 	path: 'SellerCoupon',
+      // },
+      // {
+      // 	title: '業績分析',
+      // 	path: 'SellerPerformance',
+      // },
+      // {
+      // 	title: '訂單管理',
+      // 	path: 'SellerProduct',
+      // },
+      // {
+      // 	title: '聊聊',
+      // 	path: 'SellerMessage',
+      // },
+    ],
+
   }),
   // Methods
   actions: {
@@ -57,7 +88,7 @@ export const useSellerStore = defineStore({
         await sellerAuth(data)
         .then(res=> {
           alert('註冊成功，返回登入頁')
-          router.push({ name: 'SellerLogin' }); // 使用路由器名稱跳轉
+          router.push('/SellerLogin'); // 使用路由器名稱跳轉
 
         })
         .catch(err=> {
