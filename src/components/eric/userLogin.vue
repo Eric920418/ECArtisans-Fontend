@@ -50,7 +50,7 @@
 		<div class="mt-2 p-0 d-flex justify-content-between">
 			<div class="mt-2 p-0 d-flex">
 				<p>還不是會員?</p>
-				<router-link :to="{ name: 'UserSigup' }" class="mx-2">註冊</router-link>
+				<router-link to="/UserSigup" class="mx-2">註冊</router-link>
 			</div>
 			<a class="mt-2 ms-5" @click.prevent="change">忘記密碼</a>
 		</div>

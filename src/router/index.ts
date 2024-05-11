@@ -14,6 +14,7 @@ import UserSigup from "../views/eric/UserSigup.vue"
 // 登入註冊相關頁面 ---------------------------------END
 
 // seller 商家所有頁面 ---------------------------------START
+// import Seller from "../views/amy/Seller.vue"
 import SellerOverview from "../views/amy/SellerOverview.vue"
 import SellerProfile from "../views/amy/SellerProfile.vue"
 
@@ -41,12 +42,9 @@ const routes = [
   // seller 商家所有頁面 ------------------------- seller 商家所有頁面 --------START
   {
     path: '/seller',
-    // component: SellerBase, 
+    name: "Seller",
+    component: () => import('../views/amy/Seller.vue'), 
     children: [
-      // {
-      //   path: 'home', // 開店推薦主頁
-      //   component: SellerHome,
-      // },
       {
         path: 'profile', // 商家資訊
         name: "SellerProfile",

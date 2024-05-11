@@ -6,7 +6,7 @@
 				<div class="fs-3 fw-bold">買家立即註冊</div>
 				<div class="mt-1 d-flex justify-content-center">
 					<div class="fw-bold d-flex">已經有帳號了?</div>
-					<router-link class="ms-2" to="userLogin">返回</router-link>
+					<a class="ms-2" @click="goback">返回</a>
 				</div>
 			</div>
 			<v-form

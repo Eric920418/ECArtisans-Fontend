@@ -35,7 +35,7 @@ export const useAuthStore = defineStore({
           })
           .then(() => {
             // 返回首頁，尚須判斷user身份為賣家還是買家
-            router.push('/SellerProfile');
+            router.push('/Seller/Profile');
           })
           .catch((error) => {
             console.error('Login error:', error);
@@ -55,8 +55,12 @@ export const useAuthStore = defineStore({
       this.isLoggedIn = false;
       this.reset();
       // 返回登入畫面，尚須判斷user身份為賣家還是買家
-      router.push('/');
-
+      const routerName = router.currentRoute.value.matched[0].name;
+      let path = '/';
+      if(routerName === 'Seller') path = '/SellerLogin';
+      else if (routerName === 'User') path = '/UserLogin';
+     
+      router.push(path);
     },
 
     reset(): void {
