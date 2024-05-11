@@ -8,7 +8,7 @@ export const useSellerStore = defineStore({
   // Date
   state: () => ({ 
     sellerInfo: {} as SellerData, // 初始商家信息
-    imageError: './public/images/user-img.svg',
+    imageError: 'public/images/user-img.svg',
     errorMessage: '',
     isLoading: false,
     updatePassword: false, //確認是否要傳送密碼修改

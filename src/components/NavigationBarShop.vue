@@ -87,15 +87,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 function SellerLogin() {
-	router.push('./SellerLogin');
-}
-
-function SellerHome() {
-	router.push('./SellerOverview');
-}
-
-function SellerProfile() {
-	router.push('./SellerProfile');
+	router.push({ name: 'SellerLogin' });
 }
 
 async function ShopLogout() {

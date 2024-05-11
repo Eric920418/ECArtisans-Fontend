@@ -40,7 +40,7 @@
 			<i
 				v-else-if="eye == true"
 				class="bi bi-eye-slash-fill position-absolute z-3 fs-5"
-				style="top: 5px; right: 260px"
+				style="top: 0px; right: 0px; transform: translate(-12px, 4px)"
 				@click="see"
 			></i>
 		</div>
@@ -103,7 +103,7 @@ export default {
 			// }
 		},
 		change() {
-			this.$emit('sigin');
+			this.$emit('login');
 		},
 		see() {
 			this.eye = !this.eye;
