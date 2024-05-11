@@ -68,8 +68,17 @@
 						</div>
 					</form>
 					<div class="col navbar-buttons d-flex align-items-center">
-						<div class="mx-2">
-							<router-link :to="{ name: 'ShopHome' }" class="btn btn-link">
+						<div v-if="authStore.isLoggedIn" class="mx-2">
+							<router-link
+								:to="{ name: 'SellerOverview' }"
+								class="btn btn-link"
+							>
+								<i class="bi bi-shop-window"></i>
+								<span>我要開店</span>
+							</router-link>
+						</div>
+						<div v-else class="mx-2">
+							<router-link :to="{ name: 'SellerLogin' }" class="btn btn-link">
 								<i class="bi bi-shop-window"></i>
 								<span>我要開店</span>
 							</router-link>
@@ -142,16 +151,15 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import Logo from './Logo.vue';
 const authStore = useAuthStore();
-const isLoggedIn = authStore.isLoggedIn;
 
 const router = useRouter();
 
 function toLogin() {
-	router.push('./login');
+	router.push('./UserLogin');
 }
 
-function toShopHome() {
-	router.push('./ShopHome');
+function toSellerHome() {
+	router.push('./SellerHome');
 }
 
 async function toLogout() {

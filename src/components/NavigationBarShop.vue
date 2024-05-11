@@ -3,13 +3,13 @@
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"><Logo /></a>
 			<router-link
-				:to="{ name: 'ShopSeller' }"
+				to="/Seller/Profile"
 				v-if="authStore.isLoggedIn"
 				class="navbar-brand"
 			>
 				<span>｜商家管理中心</span>
 			</router-link>
-			<router-link :to="{ name: 'ShopHome' }" v-else class="navbar-brand">
+			<router-link to="/Seller/Overview" v-else class="navbar-brand">
 				<span></span>
 			</router-link>
 			<p>isLoggedIn: {{ authStore.isLoggedIn }}</p>
@@ -48,10 +48,7 @@
 									aria-labelledby="dropdownMenuButton"
 								>
 									<li>
-										<router-link
-											:to="{ name: 'ShopSeller' }"
-											class="dropdown-item"
-										>
+										<router-link to="/Seller/Profile" class="dropdown-item">
 											商家中心
 										</router-link>
 									</li>
@@ -60,7 +57,11 @@
 							</div>
 						</div>
 						<div v-else class="mx-2">
-							<button type="button" class="btn btn-primary" @click="ShopLogin">
+							<button
+								type="button"
+								class="btn btn-primary"
+								@click="SellerLogin"
+							>
 								登入
 							</button>
 						</div>
@@ -82,16 +83,16 @@ const authStore = useAuthStore();
 // const UserStore = useUserStore();
 const router = useRouter();
 
-function ShopLogin() {
-	router.push('./ShopLogin');
+function SellerLogin() {
+	router.push('./SellerLogin');
 }
 
-function ShopHome() {
-	router.push('./ShopHome');
+function SellerHome() {
+	router.push('./Seller/Overview');
 }
 
-function ShopSeller() {
-	router.push('./ShopSeller');
+function SellerProfile() {
+	router.push('./Seller/Profile');
 }
 
 async function ShopLogout() {
@@ -99,7 +100,7 @@ async function ShopLogout() {
 }
 
 // if (UserStore.isLoggedIn) {
-// 	ShopSeller();
+// 	SellerProfile();
 // }
 </script>
 

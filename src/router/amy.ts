@@ -1,9 +1,10 @@
-import ShopHome from "../views/amy/ShopHome.vue"
-import ShopSeller from "../views/amy/ShopSeller.vue"
-import user from "../views/amy/UserArea.vue"
+// import SellerHome from "../views/amy/SellerHome.vue"
+// import SellerArea from "../views/amy/SellerArea.vue"
+// import user from "../views/amy/UserArea.vue"
 
-export default [
-    {path: '/ShopHome', name: 'ShopHome', component: ShopHome},
-    {path: '/ShopSeller', name: 'ShopSeller', component: ShopSeller},
-    {path: '/user', name: 'user', component: user},
-]
+// export default [
+//     {path: '/SellerHome', name: 'SellerHome', component: SellerHome},
+//     {path: '/Seller', name: 'SellerArea', component: SellerArea},
+//     {path: '/user', name: 'user', component: user},
+// ]
+

@@ -5,6 +5,7 @@
 				class="col-12 col-md-6 col-lg-7 col-xl-8 d-flex pt-4 ps-5 pe-4 px-md-4 m-4 mt-md-6 justify-content-center align-items-center"
 			>
 				<div class="card box w-100 h-100">
+					<!-- <img src="..." class="card-img" alt="..." /> -->
 					<div class="position-relativ" style="height: 50vh">
 						<div
 							class="position-absolute"
@@ -20,8 +21,8 @@
 				class="col-12 col-md-5 col-lg-4 col-xl-3 d-flex align-items-center px-4 px-md-0"
 			>
 				<div>
-					<div class="fs-3 fw-bold">會員登入</div>
-					<userLogin class="mt-3" @Sigin="handleClick"></userLogin>
+					<div class="fs-3 fw-bold">商家登入</div>
+					<sellerLogin class="mt-3" @Sigin="handleClick"></sellerLogin>
 				</div>
 			</div>
 		</div>
@@ -29,11 +30,11 @@
 </template>
 
 <script>
-import userLogin from '/src/components/eric/userLogin.vue';
+import sellerLogin from '/src/components/eric/sellerLogin.vue';
 
 export default {
 	components: {
-		userLogin,
+		sellerLogin,
 	},
 	data() {
 		return {

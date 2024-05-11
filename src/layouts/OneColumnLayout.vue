@@ -21,13 +21,18 @@
 	</div>
 </template>
 <script setup lang="ts">
+import { ref, watchEffect } from 'vue';
 import NavigationBar from '../components/NavigationBar.vue';
 import NavigationBarShop from '../components/NavigationBarShop.vue';
 import Footer from '../components/Footer.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const isShopRoute = route.path.startsWith('/Shop'); //
+const isShopRoute = ref(false);
+
+watchEffect(() => {
+	isShopRoute.value = route.path.startsWith('/Seller');
+});
 </script>
 <style scoped lang="scss">
 .one-column-layout {
