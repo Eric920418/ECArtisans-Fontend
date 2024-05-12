@@ -20,7 +20,7 @@
 						<img
 							:src="userInfo.avatar ? userInfo.avatar : imageError"
 							class="card-img-top rounded-circle my-2"
-							alt="形象圖"
+							alt="頭像"
 							style="width: 100px; height: 100px"
 						/>
 						<div>
@@ -126,20 +126,35 @@
 										密碼
 									</label>
 								</div>
-								<div class="w-100">
+								<div class="w-100 position-relative">
 									<v-field
 										id="password"
 										name="password"
-										type="password"
+										:type="
+											userStore.updatePassword && eye ? 'text' : 'password'
+										"
+										ref="passwordRef"
 										class="form-control"
 										:class="{ 'is-invalid': errors.password }"
 										placeholder="請輸入密碼"
 										rules="password"
-										v-model="userInfo.password"
-										ref="passwordRef"
+										v-model="userData.pw"
 										autocomplete="password"
-										:readonly="!memberData.rePwShow"
+										:readonly="!userStore.updatePassword"
+										aria-label="密碼"
 									></v-field>
+									<i
+										v-if="eye == false"
+										class="bi bi-eye-fill position-absolute z-3 fs-5 px-1"
+										style="top: 4px; right: 8px; background-color: #fff"
+										@click="see"
+									></i>
+									<i
+										v-else-if="eye == true"
+										class="bi bi-eye-slash-fill position-absolute z-3 fs-5 px-1"
+										style="top: 4px; right: 8px; background-color: #fff"
+										@click="see"
+									></i>
 									<error-message
 										name="password"
 										class="invalid-feedback"
@@ -151,7 +166,7 @@
 							<!-- 確認 START-->
 							<div class="mb-2 d-flex col-sm-12 col-md-6">
 								<div
-									v-if="!memberData.rePwShow"
+									v-if="!userStore.updatePassword"
 									class="text-sm-end text-md-start w-100"
 								>
 									<button
@@ -162,7 +177,7 @@
 										更改密碼
 									</button>
 								</div>
-								<div v-if="memberData.rePwShow">
+								<div v-if="userStore.updatePassword">
 									<label
 										for="rePassword"
 										class="me-2 col-form-label"
@@ -171,17 +186,16 @@
 										密碼
 									</label>
 								</div>
-								<div v-if="memberData.rePwShow" class="w-100">
+								<div v-if="userStore.updatePassword" class="w-100">
 									<v-field
 										id="rePassword"
 										name="確認密碼"
 										type="password"
-										ref="repasswordRef"
 										class="form-control"
 										:class="{ 'is-invalid': errors['確認密碼'] }"
 										placeholder="請輸入密碼"
+										v-model="userData.rePw"
 										rules="required|confirmed:password"
-										v-model="memberData.rePw"
 										autocomplete="current-password"
 										aria-label="確認密碼"
 									></v-field>
@@ -219,7 +233,7 @@
 							<div class="mb-2 d-flex col-sm-12">
 								<div>
 									<label
-										for="sellerCall"
+										for="call"
 										class="me-2 col-form-label"
 										style="width: 3em"
 									>
@@ -347,7 +361,7 @@
 							<div class="mb-2 d-flex col-sm-12">
 								<div>
 									<label
-										for="sellerCall"
+										for="sendCall"
 										class="me-2 col-form-label"
 										style="width: 3em"
 									>
@@ -410,7 +424,7 @@
 					>
 						<button
 							type="button"
-							@click="notifyUser"
+							@click="cancel"
 							class="btn btn-outline-primary me-2"
 						>
 							取消
@@ -418,9 +432,6 @@
 						<button type="submit" class="btn btn-primary">提交</button>
 					</div>
 				</v-form>
-				<!-- 显示 Msg 组件，传递消息和自动关闭时间 -->
-				<Msg v-if="showMsg" :message="msgContent" @close="handleClose" />
-				<!-- 以下可以刪除 -->
 			</div>
 		</div>
 	</div>
@@ -428,41 +439,41 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, provide, computed, watch } from 'vue';
-import axios from 'axios'; // 需要安裝 axios
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
-import { isPhone } from '@/setup/vee-validate';
-import Msg from '@/components/Message.vue';
-import { useUserStore } from '@/stores/index'; // 引用 Pinia Store
+import { useUserStore, useAuthStore } from '@/stores/index';
+import { alertStore } from '@/main'; // 導入實例
 
+const authStore = useAuthStore();
 const userStore = useUserStore();
 provide('userStore', userStore);
-const id = userStore.id;
+const id = authStore.id;
 const imageError = userStore.imageError;
 const userInfo = computed(() => userStore.user);
 
-// 在组件挂载时调用
+// 在組件掛載時調用
 onMounted(() => {
-	userStore.getUserAccount(); // 获取商家信息
+	userStore.getUserAccount(id);
 });
+
 // 提交
 function onSubmit(values: any): any {
-	console.log('觸發');
-	userStore.upUserAccount(); // 获取商家信息
+	console.log('獲取資料');
+	let data = {
+		password: userData.value.pw,
+		confirmPassword: userData.value.rePw,
+	};
+	userStore?.upUserAccount(data);
 }
-// 通知訊息組件 ------START
-const showMsg = ref(false);
-const msgContent = ref(0);
 
-// 在 Msg 關閉時，將 showMsg 設為 false
-const handleClose = () => {
-	showMsg.value = false;
-};
-// 通知訊息組件 ------END
+//清除
+function cancel(): any {
+	userStore.updatePassword = false;
+	userData.value.pw = 'aa123456';
+	userStore.getUserAccount(id);
+}
 
 // 會員圖片 ------ START
-
 const inputFieldRef = ref<HTMLInputElement | null>(null); //上傳用的input
-const selectedFile = ref<File | null>(null); // 存储选择的文件
 
 onMounted(() => {
 	inputFieldRef.value!.addEventListener('change', () => {
@@ -485,67 +496,73 @@ function getFile() {
 
 		// 圖片限制邏輯處裡------START
 		let validTypes = ['image/jpeg', 'image/png'];
+		let checkSizeKB = false;
 		let checkSize = false;
 		let checkType = false;
-		if (file.size <= 1024 * 1024) checkSize = true;
+		if (file.size <= 300 * 1024) checkSizeKB = true;
 		if (validTypes.includes(file.type)) checkType = true;
-		// 圖片限制邏輯處裡------END
-
-		if (checkSize && checkType) {
-			selectedFile.value = file;
-		} else {
-			if (!checkType) alert('請選擇 .jpg 或 .png 格式上傳圖片。');
-			else alert('請選擇圖片且大小需小於等於1MB。');
-		}
-	}
-}
-
-// 當文件被選定的時候，使用 FileReader 读取并转换为 Data URL
-watch(selectedFile, newFile => {
-	if (newFile) {
+		// 讀取尺寸圖案尺寸
 		const reader = new FileReader();
 		reader.onload = e => {
-			if (userInfo.value) {
-				userInfo.value.avatar = e.target?.result as string; // 转换为 Data URL
-			}
+			const img = new Image();
+			img.onload = () => {
+				if (img.width <= 400 && img.height <= 400) checkSize = true;
+				if (!checkSize || !checkType || !checkSizeKB) {
+					let errorText = '請確認圖片，為';
+					if (!checkType) errorText += ' .jpg 或 .png 格式';
+					if (!checkType && !checkSizeKB) errorText += ',';
+					if (!checkSizeKB) errorText += '檔案大小 300k 以內';
+					if ((!checkType || !checkSizeKB) && !checkSize) errorText += ',';
+					if (!checkSize) errorText += '檔案尺寸 300x300';
+					errorText += '。';
+					alertStore.error(errorText);
+					return;
+				}
+			};
+			// img.src = e.target?.result as string;
+			userInfo.value.avatar = e.target?.result as string;
 		};
-		reader.readAsDataURL(newFile); // 讀取文件並轉換
+		reader.readAsDataURL(file);
+		// 圖片限制邏輯處裡------END
 	}
-});
-
+}
 // 會員圖片 ------ END
 
 // 會員資料------START
 
-const memberData = reactive({
-	name: '杰倫',
-	gender: '男',
-	pw: '123456',
-	date: '2001-09-09',
-	call: '0912345678',
-	email: 'aa@aa.com',
-	add: '100台北市中正區動物街20號',
-	rePw: null,
-	rePwShow: false,
-});
 // 顯示 密碼確認
 function rePW() {
-	memberData.rePwShow = true;
-	memberData.pw = '';
+	userStore.updatePassword = true;
+	userData.value.pw = '';
+	userData.value.rePw = '';
 	document.getElementById('password')!.focus();
+}
+
+const eye = ref(false);
+
+// 顯示密碼
+function see() {
+	if (userStore.updatePassword) {
+		eye.value = !eye.value;
+	} else {
+		eye.value = false;
+	}
 }
 // 會員資料------END
 
 // 預設收件人資料------START
-
 const send = reactive({
-	name: '杰倫',
+	name: '預設收件人姓名',
 	call: '0912345678',
-	add: '100台北市中正區動物街20號',
+	add: '100預設收件人地址',
 });
 
-// 未定義
-const notifyUser = () => {};
-
 // 預設收件人資料------END
+
+// 假資料 ------START
+const userData = ref({
+	pw: 'aa123456',
+	rePw: '',
+});
+// 假資料 ------END
 </script>

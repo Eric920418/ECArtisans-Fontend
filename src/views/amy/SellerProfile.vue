@@ -428,21 +428,15 @@
 				</button>
 				<button type="submit" class="btn btn-primary">提交</button>
 			</div>
-			<!-- @submit="onSubmit" -->
 		</v-form>
-		<!-- 显示 Msg 组件，传递消息和自动关闭时间 -->
-		<Msg v-if="showMsg" :message="msgContent" @close="handleClose" />
-		<!-- 以下可以刪除 -->
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, provide, computed, watch } from 'vue';
-import axios from 'axios'; // 需要安裝 axios
+import { ref, onMounted, provide, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
-import { isPhone } from '@/setup/vee-validate';
-import Msg from '@/components/Message.vue';
 import { useSellerStore, useAuthStore } from '@/stores/index';
+import { alertStore } from '@/main'; // 導入實例
 
 const authStore = useAuthStore();
 const sellerStore = useSellerStore();
@@ -464,33 +458,15 @@ function onSubmit(values: any): any {
 	};
 	sellerStore?.upSellerAccount(data);
 }
-
+//清除
 function cancel(): any {
 	sellerStore.updatePassword = false;
 	sellerData.value.pw = 'aa123456';
 	sellerStore.getSellerAccount(id);
 }
 
-// 提交
-// 通知訊息組件 ------START
-const showMsg = ref(false);
-const msgContent = ref(0);
-
-const notifyUser = () => {
-	showMsg.value = true; // 確保顯示資料
-	msgContent.value = 1; // 判斷呼叫第幾則訊息
-};
-
-// 在 Msg 關閉時，將 showMsg 設為 false
-const handleClose = () => {
-	showMsg.value = false;
-	eye.value = false;
-};
-// 通知訊息組件 ------END
-
 // 會員圖片 ------START
 const inputFieldRef = ref<HTMLInputElement | null>(null); //上傳用的input
-const selectedFile = ref<File | null>(null); // 存储选择的文件
 
 onMounted(() => {
 	inputFieldRef.value!.addEventListener('change', () => {
@@ -513,33 +489,36 @@ function getFile() {
 
 		// 圖片限制邏輯處裡------START
 		let validTypes = ['image/jpeg', 'image/png'];
+		let checkSizeKB = false;
 		let checkSize = false;
 		let checkType = false;
-		if (file.size <= 1024 * 1024) checkSize = true;
+		if (file.size <= 300 * 1024) checkSizeKB = true;
 		if (validTypes.includes(file.type)) checkType = true;
-		// 圖片限制邏輯處裡------END
-
-		if (checkSize && checkType) {
-			selectedFile.value = file;
-		} else {
-			if (!checkType) alert('請選擇 .jpg 或 .png 格式上傳圖片。');
-			else alert('請選擇圖片且大小需小於等於1MB。');
-		}
-	}
-}
-
-// 當文件被選定的時候，使用 FileReader 读取并转换为 Data URL
-watch(selectedFile, newFile => {
-	if (newFile) {
+		// 讀取尺寸圖案尺寸
 		const reader = new FileReader();
 		reader.onload = e => {
-			if (sellerInfo.value) {
-				sellerInfo.value.avatar = e.target?.result as string; // 转换为 Data URL
-			}
+			const img = new Image();
+			img.onload = () => {
+				if (img.width <= 400 && img.height <= 400) checkSize = true;
+				if (!checkSize || !checkType || !checkSizeKB) {
+					let errorText = '請確認圖片，為';
+					if (!checkType) errorText += ' .jpg 或 .png 格式';
+					if (!checkType && !checkSizeKB) errorText += ',';
+					if (!checkSizeKB) errorText += '檔案大小 300k 以內';
+					if ((!checkType || !checkSizeKB) && !checkSize) errorText += ',';
+					if (!checkSize) errorText += '檔案尺寸 300x300';
+					errorText += '。';
+					alertStore.error(errorText);
+					return;
+				}
+			};
+			// img.src = e.target?.result as string;
+			sellerInfo.value.avatar = e.target?.result as string;
 		};
-		reader.readAsDataURL(newFile); // 讀取文件並轉換
+		reader.readAsDataURL(file);
+		// 圖片限制邏輯處裡------END
 	}
-});
+}
 // 會員圖片 ------END
 
 // 會員資料------START
@@ -626,10 +605,9 @@ function rePW() {
 
 // const repasswordRef = ref<HTMLInputElement | null>(null); //上傳用的input
 
-// 用于控制眼睛图标的状态
 const eye = ref(false);
 
-// 控制密码可见性
+// 顯示密碼
 function see() {
 	if (sellerStore.updatePassword) {
 		eye.value = !eye.value;

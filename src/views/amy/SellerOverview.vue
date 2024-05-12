@@ -110,7 +110,4 @@
 	</div>
 </template>
 
-<script setup lang="ts">
-import { ref, reactive, onMounted, nextTick } from 'vue';
-import Msg from '@/components/Message.vue';
-</script>
+<script setup lang="ts"></script>
