@@ -12,7 +12,7 @@ export const useUserStore = defineStore({
   state: () => ({
     user: {} as UserData | null, // 初始信息
     id: "66192dd5086e59cce8f7704d",
-    imageError: './public/images/user-img.svg',
+    imageError: 'images/user-img.svg',
     // bossName: '',
     // gender: '',
     // phone: '',

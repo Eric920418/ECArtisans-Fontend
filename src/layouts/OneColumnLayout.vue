@@ -31,7 +31,7 @@ const route = useRoute();
 const isShopRoute = ref(false);
 
 watchEffect(() => {
-	isShopRoute.value = route.path.startsWith('/Seller');
+	isShopRoute.value = route.path.toLowerCase().startsWith('/seller');
 });
 </script>
 <style scoped lang="scss">

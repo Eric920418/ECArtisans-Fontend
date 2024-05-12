@@ -93,11 +93,11 @@
 								*密碼
 							</label>
 						</div>
-						<div class="w-100">
+						<div class="w-100 position-relative">
 							<v-field
 								class="d-flex mx-auto form-control my-auto"
 								id="password"
-								type="password"
+								:type="eye ? 'text' : 'password'"
 								placeholder="密碼"
 								v-model="data.password"
 								name="密碼"
@@ -105,12 +105,24 @@
 								autocomplete="password"
 								:class="{ 'is-invalid': errors['密碼'] }"
 							></v-field>
+							<i
+								class="bi position-absolute z-3 fs-5"
+								:class="{ 'bi-eye-fill': eye, 'bi-eye-slash-fill': !eye }"
+								style="
+									top: 0%;
+									right: 10%;
+									transform: translate(-12px, 4px);
+									cursor: pointer;
+								"
+								@click="see"
+							></i>
 							<error-message
 								name="密碼"
 								class="invalid-feedback"
 							></error-message>
 						</div>
 					</div>
+
 					<!-- 密碼 END-->
 					<!-- 確認密碼 START-->
 					<div class="mb-2 d-flex col-sm-12 col-md-6">
@@ -123,11 +135,11 @@
 								*確認密碼
 							</label>
 						</div>
-						<div class="w-100">
+						<div class="w-100 position-relative">
 							<v-field
 								class="d-flex mx-auto form-control my-auto"
 								id="confirmPassword"
-								type="password"
+								:type="eye ? 'text' : 'password'"
 								placeholder="確認密碼"
 								v-model="data.confirmPassword"
 								name="確認密碼"
@@ -135,6 +147,17 @@
 								:class="{ 'is-invalid': errors['確認密碼'] }"
 								rules="required|confirmed:密碼"
 							></v-field>
+							<i
+								class="bi position-absolute z-3 fs-5"
+								:class="{ 'bi-eye-fill': eye, 'bi-eye-slash-fill': !eye }"
+								style="
+									top: 0%;
+									right: 10%;
+									transform: translate(-12px, 4px);
+									cursor: pointer;
+								"
+								@click="see"
+							></i>
 							<error-message
 								name="確認密碼"
 								class="invalid-feedback"
@@ -321,6 +344,7 @@ export default {
 				address: '',
 			},
 			policy: 'on',
+			eye: false,
 		};
 	},
 	created() {
@@ -334,6 +358,10 @@ export default {
 		},
 		goback() {
 			this.$router.go(-1);
+		},
+		see() {
+			this.eye = !this.eye;
+			this.$refs.pas.type = this.eye ? 'text' : 'password';
 		},
 	},
 };
