@@ -135,11 +135,11 @@
 								*確認密碼
 							</label>
 						</div>
-						<div class="w-100">
+						<div class="w-100 position-relative">
 							<v-field
 								class="d-flex mx-auto form-control my-auto"
 								id="confirmPassword"
-								type="password"
+								:type="eye ? 'text' : 'password'"
 								placeholder="確認密碼"
 								v-model="data.confirmPassword"
 								name="確認密碼"
@@ -147,6 +147,17 @@
 								:class="{ 'is-invalid': errors['確認密碼'] }"
 								rules="required|confirmed:密碼"
 							></v-field>
+							<i
+								class="bi position-absolute z-3 fs-5"
+								:class="{ 'bi-eye-fill': eye, 'bi-eye-slash-fill': !eye }"
+								style="
+									top: 0%;
+									right: 10%;
+									transform: translate(-12px, 4px);
+									cursor: pointer;
+								"
+								@click="see"
+							></i>
 							<error-message
 								name="確認密碼"
 								class="invalid-feedback"
