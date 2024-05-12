@@ -15,18 +15,30 @@ import 'element-plus/dist/index.css';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import {LoadingPlugin} from 'vue-loading-overlay';
 
+import { useAlertStore } from '@/stores'; 
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {fas} from '@fortawesome/free-solid-svg-icons'
+import {fab} from '@fortawesome/free-brands-svg-icons'
+import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText} from "@fortawesome/vue-fontawesome";
+
+library.add(fab);
+library.add(fas);
 
 const app = createApp(App)
+app.component('font-awesome-layers', FontAwesomeLayers)
+app.component('font-awesome-layers-text', FontAwesomeLayersText)
+app.component("font-awesome-icon", FontAwesomeIcon);
 
 app.config.globalProperties.$axios = axios.create({
-    baseURL: 'https://ecartisans-backend.onrender.com',
-  
-  })
+  baseURL: 'https://ecartisans-backend.onrender.com',
+})
 
-// 
+
 const pinia = createPinia();
-// Pinia加上持久化插件取代直接使用localStorage儲存狀態
+export const alertStore = useAlertStore(pinia);
+
+// Pini 使用localStorage儲存狀態
 pinia.use(piniaPluginPersistedstate);
 
 app.use(pinia);

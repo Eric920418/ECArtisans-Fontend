@@ -99,7 +99,14 @@
 									class="dropdown-menu dropdown-menu-lg-end"
 									aria-labelledby="dropdownMenuButton"
 								>
-									<li><a class="dropdown-item" href="#">會員中心</a></li>
+									<li>
+										<router-link
+											class="dropdown-item"
+											:to="{ name: 'UserProfile' }"
+										>
+											會員中心
+										</router-link>
+									</li>
 									<li><a class="dropdown-item" @click="toLogout">登出</a></li>
 								</ul>
 							</template>
@@ -155,16 +162,15 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 function toLogin() {
-	router.push('./UserLogin');
+	router.push({ name: 'UserLogin' });
 }
 
 function toSellerHome() {
-	router.push('./SellerHome');
+	router.push({ name: 'SellerHome' });
 }
 
 async function toLogout() {
 	await authStore.logout(); // 等待登出操作完成
-	router.push('./');
 }
 </script>
 

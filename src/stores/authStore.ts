@@ -4,6 +4,7 @@ import router from '@/router/index';
 // import { logIn,signUp } from '@/api/authApi';
 import { sellerLogin, userLogin } from './api'
 // import { sellerAccount } from './sellerStore';  // 直接從 userStore 導入 useUserStore
+import { alertStore } from '@/main'; // 導入實例
 
 
 interface UserData {
@@ -31,7 +32,6 @@ export const useAuthStore = defineStore({
           res  = await sellerLogin(data);
         } else if (this.accountType === 'user') {
           res  = await userLogin(data);
-
         }
         const { user } = res;
         await this.handleLoginSuccess(user);
