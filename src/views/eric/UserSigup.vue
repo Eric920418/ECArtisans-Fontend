@@ -93,7 +93,7 @@
 								*密碼
 							</label>
 						</div>
-						<div class="w-100">
+						<div class="w-100 position-relative">
 							<v-field
 								class="d-flex mx-auto form-control my-auto"
 								id="password"

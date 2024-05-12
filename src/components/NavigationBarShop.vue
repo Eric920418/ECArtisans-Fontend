@@ -95,7 +95,7 @@ async function ShopLogout() {
 }
 
 // if (UserStore.isLoggedIn) {
-// 	SellerProfile();
+// 	ShopSeller();
 // }
 </script>
 

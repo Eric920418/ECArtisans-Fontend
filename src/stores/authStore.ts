@@ -31,7 +31,6 @@ export const useAuthStore = defineStore({
           res  = await sellerLogin(data);
         } else if (this.accountType === 'user') {
           res  = await userLogin(data);
-          console.log(res)
 
         }
         const { user } = res;
@@ -67,7 +66,12 @@ export const useAuthStore = defineStore({
     },
     async handleLoginError(error: any): Promise<void> {
       console.error('Login error:', error);
-      const errorMessage = error.response && error.response.data && error.response.data.message ? error.response.data.message : '登入失敗';
+      let errorMessage = '登入失敗';
+      if (error.response && error.response.status === 500) {
+        errorMessage = '伺服器錯誤，請稍後再試;信箱不正確';
+      } else if (error.response && error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message;
+      }
       alert(errorMessage);
     },
     logout(): void {
