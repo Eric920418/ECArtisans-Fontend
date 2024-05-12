@@ -3,7 +3,7 @@
 		<div class="row g-3 py-4 d-flex justify-content-center">
 			<div class="col-12 my-3 text-center">
 				<!-- d-flex justify-content-center -->
-				<div class="fs-3 fw-bold">賣家立即註冊</div>
+				<div class="fs-3 fw-bold">商家立即註冊</div>
 				<div class="mt-1 d-flex justify-content-center">
 					<div class="fw-bold d-flex">已經有帳號了?</div>
 					<a class="ms-2" @click="goback">返回</a>

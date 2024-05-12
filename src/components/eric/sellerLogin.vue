@@ -40,7 +40,7 @@
 			<i
 				v-else-if="eye == true"
 				class="bi bi-eye-slash-fill position-absolute z-3 fs-5"
-				style="top: 5px; right: 260px"
+				style="top: 0px; right: 0px; transform: translate(-12px, 4px)"
 				@click="see"
 			></i>
 		</div>
@@ -50,7 +50,9 @@
 		<div class="mt-2 p-0 d-flex justify-content-between">
 			<div class="mt-2 p-0 d-flex">
 				<p>還不是會員?</p>
-				<router-link to="/SellerSigup" class="mx-2">註冊</router-link>
+				<router-link :to="{ name: 'SellerSigup' }" class="mx-2">
+					註冊
+				</router-link>
 			</div>
 			<a class="mt-2 ms-5" @click.prevent="change">忘記密碼</a>
 		</div>
@@ -101,7 +103,7 @@ export default {
 			// }
 		},
 		change() {
-			this.$emit('sigin');
+			this.$emit('login');
 		},
 		see() {
 			this.eye = !this.eye;

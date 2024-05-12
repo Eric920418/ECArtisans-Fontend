@@ -3,13 +3,13 @@
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"><Logo /></a>
 			<router-link
-				to="/Seller/Profile"
+				:to="{ name: 'SellerProfile' }"
 				v-if="authStore.isLoggedIn"
 				class="navbar-brand"
 			>
 				<span>｜商家管理中心</span>
 			</router-link>
-			<router-link to="/Seller/Overview" v-else class="navbar-brand">
+			<router-link :to="{ name: 'SellerOverview' }" v-else class="navbar-brand">
 				<span></span>
 			</router-link>
 			<p>isLoggedIn: {{ authStore.isLoggedIn }}</p>
@@ -48,7 +48,10 @@
 									aria-labelledby="dropdownMenuButton"
 								>
 									<li>
-										<router-link to="/Seller/Profile" class="dropdown-item">
+										<router-link
+											:to="{ name: 'SellerProfile' }"
+											class="dropdown-item"
+										>
 											商家中心
 										</router-link>
 									</li>
@@ -84,15 +87,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 function SellerLogin() {
-	router.push('./SellerLogin');
-}
-
-function SellerHome() {
-	router.push('./Seller/Overview');
-}
-
-function SellerProfile() {
-	router.push('./Seller/Profile');
+	router.push({ name: 'SellerLogin' });
 }
 
 async function ShopLogout() {

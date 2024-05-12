@@ -27,7 +27,7 @@
 			</div>
 			<div class="row">
 				<div class="col-2 mt-5">
-					<div class="text-center fs-4 my-3 menu">我是賣家</div>
+					<div class="text-center fs-4 my-3 menu">我是商家</div>
 					<div class="text-center fs-4 my-3 menu">我是買家</div>
 					<div class="text-center fs-4 my-3 menu">訂單與物流</div>
 					<div class="text-center fs-4 my-3 menu">支付與付費問題</div>
@@ -35,7 +35,7 @@
 				</div>
 				<div class="col-8">
 					<div class="mt-5 ms-6">
-						<h2 style="font-weight: bold">我是賣家</h2>
+						<h2 style="font-weight: bold">我是商家</h2>
 						<div class="accordion accordion-flush" id="accordionFlushExample  ">
 							<div class="accordion-item mt-3" style="margin-left: 110px">
 								<h2 class="accordion-header" id="flush-headingOne">
@@ -157,7 +157,7 @@
 						</div>
 					</div>
 					<div class="mt-5 ms-6">
-						<h2 style="font-weight: bold">我是賣家</h2>
+						<h2 style="font-weight: bold">我是商家</h2>
 						<div class="accordion accordion-flush" id="accordionFlushExample  ">
 							<div class="accordion-item mt-3" style="margin-left: 110px">
 								<h2 class="accordion-header" id="flush-headingOne">
@@ -279,7 +279,7 @@
 						</div>
 					</div>
 					<div class="mt-5 ms-6">
-						<h2 style="font-weight: bold">我是賣家</h2>
+						<h2 style="font-weight: bold">我是商家</h2>
 						<div class="accordion accordion-flush" id="accordionFlushExample  ">
 							<div class="accordion-item mt-3" style="margin-left: 110px">
 								<h2 class="accordion-header" id="flush-headingOne">

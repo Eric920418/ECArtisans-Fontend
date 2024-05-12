@@ -60,7 +60,7 @@
 								style="width: 50px"
 							>
 								<option selected value="1">找商品</option>
-								<option value="2">找賣家</option>
+								<option value="2">找商家</option>
 							</select>
 							<button class="btn btn-primary" type="submit">
 								<i class="bi bi-search"></i>
@@ -78,7 +78,7 @@
 							</router-link>
 						</div>
 						<div v-else class="mx-2">
-							<router-link :to="{ name: 'SellerLogin' }" class="btn btn-link">
+							<router-link :to="{ name: 'SellerHome' }" class="btn btn-link">
 								<i class="bi bi-shop-window"></i>
 								<span>我要開店</span>
 							</router-link>
@@ -124,7 +124,7 @@
 								aria-labelledby="dropdownMenuButton"
 							>
 								<li><a class="dropdown-item" href="#">收藏商品</a></li>
-								<li><a class="dropdown-item" href="#">關注賣家</a></li>
+								<li><a class="dropdown-item" href="#">關注商家</a></li>
 							</ul>
 						</div>
 						<div class="mx-2 position-relative">
