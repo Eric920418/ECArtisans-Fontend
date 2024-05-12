@@ -51,11 +51,6 @@ const routes = [
         component: SellerHome,
       },
       {
-        path: 'home', // 開店推薦主頁
-        name: "SellerHome",
-        component: SellerHome,
-      },
-      {
         path: 'profile', // 商家資訊
         name: "SellerProfile",
         component: SellerProfile,

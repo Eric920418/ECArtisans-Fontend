@@ -1,18 +1,19 @@
 import { defineStore } from 'pinia';
+import { alertStore } from '@/main'; // 導入實例
 import { type SellerData } from '../type/sellerType';
 import { sellerAccount, sellerAccountEdit, sellerAuth } from "./api"; 
-// import { useRouter } from 'vue-router';
 
+
+// import { useRouter } from 'vue-router';
 export const useSellerStore = defineStore({
   id: 'seller',
   // Date
   state: () => ({ 
     sellerInfo: {} as SellerData, // 初始商家信息
     imageError: 'images/user-img.svg',
-    errorMessage: '',
     isLoading: false,
     updatePassword: false, //確認是否要傳送密碼修改
-    sellerMenu: [
+    sellerMenu: [ //商家頁面的目錄
       {
         title: '商家中心',
         path: 'SellerOverview',
@@ -72,10 +73,10 @@ export const useSellerStore = defineStore({
         const id = this.sellerInfo?._id;
         await sellerAccountEdit(id, data)
         .then(res=> {
-          alert('更新成功'); // 使用路由名称进行跳转
+          alertStore.success('renewOK');
         })
         .catch(err=> {
-          alert(err.response.data.message);
+          alertStore.error(err.response.data.message);
         })
       } catch (error) {
         console.error('更新失敗');
@@ -87,15 +88,15 @@ export const useSellerStore = defineStore({
       try {
         await sellerAuth(data)
         .then(res=> {
-          alert('註冊成功，返回登入頁')
+          alertStore.success('registerOK'); 
           router.push('/SellerLogin'); // 使用路由器名稱跳轉
 
         })
         .catch(err=> {
-          alert(err.response.data.message);
+          alertStore.error(err.response.data.message);
         })
       } catch (error:any) {
-        console.log('Eerror:', error);
+        alertStore.error(error.response.data.message);
       } finally {
         this.isLoading = false;
       }

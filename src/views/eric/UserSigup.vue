@@ -40,7 +40,7 @@
 								name="姓名"
 								type="text"
 								placeholder="名稱"
-								v-model="data.bossName"
+								v-model="data.name"
 								:class="{ 'is-invalid': errors['姓名'] }"
 								rules="name"
 								autocomplete="name"
@@ -82,6 +82,7 @@
 						</div>
 					</div>
 					<!-- 性別 END-->
+
 					<!-- 密碼 START-->
 					<div class="mb-2 d-flex col-sm-12 col-md-6">
 						<div>
@@ -122,8 +123,8 @@
 							></error-message>
 						</div>
 					</div>
-
 					<!-- 密碼 END-->
+
 					<!-- 確認密碼 START-->
 					<div class="mb-2 d-flex col-sm-12 col-md-6">
 						<div>
@@ -166,38 +167,40 @@
 					</div>
 					<!-- 確認密碼 END-->
 
-					<!-- 店名 START-->
-					<div class="mb-2 d-flex col-sm-12">
+					<!-- 生日 START-->
+					<div class="mb-2 d-flex col-sm-12 col-md-6">
 						<div>
 							<label
-								for="brand"
-								class="col-form-label text-nowrap my-auto"
-								style="width: 3.5em"
+								for="birthday"
+								class="col-form-label text-nowrap my-auto me-2"
+								style="width: 3em"
 							>
-								*店名
+								*生日
 							</label>
 						</div>
 						<div class="w-100">
 							<v-field
 								class="d-flex mx-auto form-control my-auto"
-								id="brand"
-								type="text"
-								placeholder="店名"
-								v-model="data.brand"
-								:class="{ 'is-invalid': errors['店名'] }"
-								name="店名"
-								rules="shopName"
+								id="birthday"
+								name="生日"
+								type="date"
+								placeholder="生日"
+								v-model="data.birthday"
+								:class="{ 'is-invalid': errors['生日'] }"
+								rules="required"
+								:max="getToday()"
+								required
 							></v-field>
 							<error-message
-								name="店名"
+								name="生日"
 								class="invalid-feedback"
 							></error-message>
 						</div>
 					</div>
-					<!-- 店名 END-->
+					<!-- 生日 END-->
 
 					<!-- 手機 START-->
-					<div class="mb-2 d-flex col-sm-12">
+					<div class="mb-2 d-flex col-sm-12 col-md-6">
 						<div>
 							<label
 								for="phone"
@@ -262,9 +265,9 @@
 							<label
 								for="address"
 								class="col-form-label text-nowrap my-auto"
-								style="width: 5em"
+								style="width: 3.5em"
 							>
-								實體地址
+								*地址
 							</label>
 						</div>
 						<div class="w-100">
@@ -276,7 +279,7 @@
 								v-model="data.address"
 								name="地址"
 								:class="{ 'is-invalid': errors['地址'] }"
-								rules="address"
+								rules="address|required"
 								autocomplete="street-address"
 							></v-field>
 							<error-message
@@ -312,6 +315,7 @@
 						<button class="btn btn-primary mt-2 w-50">註冊</button>
 					</div>
 				</div>
+				{{ data }}
 			</v-form>
 		</div>
 	</div>
@@ -334,14 +338,15 @@ export default {
 	data() {
 		return {
 			data: {
-				bossName: '',
+				name: '',
 				gender: '請選擇',
-				phone: '',
+				birthday: '',
 				mail: '',
 				brand: '',
 				password: '',
 				confirmPassword: '',
 				address: '',
+				phone: '',
 			},
 			policy: 'on',
 			eye: false,
@@ -362,6 +367,9 @@ export default {
 		see() {
 			this.eye = !this.eye;
 			this.$refs.pas.type = this.eye ? 'text' : 'password';
+		},
+		getToday() {
+			return new Date().toISOString().split('T')[0];
 		},
 	},
 };

@@ -16,6 +16,7 @@
 				class="d-flex form-control position-relative ps-5"
 				type="text"
 				placeholder="郵件"
+				autocomplete="email"
 				v-model="mail"
 			/>
 		</div>
@@ -29,6 +30,7 @@
 				type="password"
 				placeholder="密碼"
 				v-model="password"
+				autocomplete="password"
 				ref="pas"
 			/>
 			<i
