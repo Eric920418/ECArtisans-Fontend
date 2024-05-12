@@ -24,7 +24,7 @@ export const useAlertStore = defineStore({
         toasts: [] as Array<toast>,
         message:{ // icon = null 就是不要 icon
             logIn: { icon: 'icon', text: '登入成功', },
-            logError: { icon: 'icon', text: '登入成功', },
+            logError: { icon: 'icon', text: '登入失敗', },
             logOut: { icon: 'icon', text: '登出成功', },
             renewOK: { icon: 'icon', text: '更新成功', },
             renewError: { icon: 'icon', text: '更新失敗', },
