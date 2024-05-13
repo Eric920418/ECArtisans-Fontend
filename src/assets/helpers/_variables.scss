@@ -7,15 +7,15 @@
 
 // scss-docs-start gray-color-variables
 $white: #fff !default;
-$gray-100: #f8f9fa !default;
-$gray-200: #e9ecef !default;
-$gray-300: #dee2e6 !default;
-$gray-400: #ced4da !default;
-$gray-500: #adb5bd !default;
-$gray-600: #6c757d !default;
-$gray-700: #495057 !default;
-$gray-800: #343a40 !default;
-$gray-900: #212529 !default;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #454545; //212529
 $black: #000 !default;
 // scss-docs-end gray-color-variables
 
@@ -60,10 +60,10 @@ $colors: (
 	'green': $green,
 	'teal': $teal,
 	'cyan': $cyan,
-	'black': #2d2d2d,
+	'black': $black,
 	'white': $white,
 	'gray': $gray-600,
-	'gray-dark': #4f4f4f,
+	'gray-dark': $gray-800,
 ) !default;
 // scss-docs-end colors-map
 
@@ -298,14 +298,31 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
-$primary: #14b2be !default;
-$secondary: #f1eee9 !default;
-$success: $green !default;
-$info: $cyan !default;
-$warning: $yellow !default;
-$danger: $red !default;
-$light: $gray-100 !default;
-$dark: #a86a46 !default;
+$red: #ff0405;
+$yellow: #fde48e;
+$primary: #14b2be !default; //主要顏色
+$secondary: $yellow !default; //次要
+$success: $green !default; //成功後顯示顏色
+$info: $cyan !default; //額外提供的訊息
+$warning: $yellow !default; //警告顏色
+$danger: $red !default; //危險顏色
+
+$light: #e3f6f8 !default; //淺色的背景
+$dark: #565e6c !default; //深色背景 同 Neutral-01
+
+$Neutral-01: #565e6c !default; //同深色背景
+$Neutral-02: #6b768c !default; //深色背景
+$Neutral-03: #e4e9f2 !default; //深色背景
+$Neutral-04: #f0f4f7 !default; //深色背景
+$Neutral-05: #f7f7f7 !default; //深色背景
+
+// $Linear: linear-gradient(top, #fde48e, #14b2be); //漸層背景
+
+// $danger: ;//危險
+/* 備註：
+	文字顏色 直接調整 $gray-900 因為壓不過去。
+	input::placeholder 另外調整。
+*/
 // scss-docs-end theme-color-variables
 
 // scss-docs-start theme-colors-map
@@ -318,6 +335,12 @@ $theme-colors: (
 	'danger': $danger,
 	'light': $light,
 	'dark': $dark,
+	'neutral-01': $Neutral-01,
+	'neutral02': $Neutral-02,
+	'neutral03': $Neutral-03,
+	'neutral04': $Neutral-04,
+	'neutral05': $Neutral-05,
+	// 'linear': $Linear,
 ) !default;
 // scss-docs-end theme-colors-map
 

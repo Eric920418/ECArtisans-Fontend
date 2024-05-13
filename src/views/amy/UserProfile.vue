@@ -1,439 +1,412 @@
 <template>
-	<div class="isClose container">
-		<div class="row g-3 m-5">
-			<div class="col-md-2">
-				<p>這是預計的標題欄位</p>
-			</div>
-			<div class="col-12 col-md-10">
-				<!-- 以上可以刪除 -->
-				<div v-if="!userInfo">
-					<p>加载中...</p>
+	<div class="col-12 col-md-10">
+		<!-- 以上可以刪除 -->
+		<div v-if="!userInfo">
+			<p>加载中...</p>
+		</div>
+		<v-form
+			v-else
+			v-slot="{ errors }"
+			@submit="onSubmit"
+			class="row g-3 justify-content-end"
+		>
+			<!-- 商家頭像 ---------------------------- START -->
+			<div class="col-sm-12 col-md-12 col-lg-4 col-xl-2 text-center">
+				<img
+					:src="userInfo.avatar ? userInfo.avatar : imageError"
+					class="card-img-top rounded-circle my-2"
+					alt="頭像"
+					style="width: 100px; height: 100px"
+				/>
+				<div>
+					<button
+						type="button"
+						class="btn btn-primary my-2"
+						@click="uploadFile"
+					>
+						選擇圖片
+					</button>
+					<input
+						class="form-control"
+						type="file"
+						id="formFile"
+						@change="getFile"
+						ref="inputFieldRef"
+						hidden
+						autocomplete="photo"
+					/>
+					<div>
+						<span class="form-text">
+							檔案大小最大:1MB
+							<br />
+							檔案限制：JPG.PNG
+						</span>
+					</div>
 				</div>
-				<v-form
-					v-else
-					v-slot="{ errors }"
-					@submit="onSubmit"
-					class="row g-3 justify-content-end"
-				>
-					<!-- 商家頭像 ---------------------------- START -->
-					<div class="col-sm-12 col-md-12 col-lg-4 col-xl-2 text-center">
-						<img
-							:src="userInfo.avatar ? userInfo.avatar : imageError"
-							class="card-img-top rounded-circle my-2"
-							alt="頭像"
-							style="width: 100px; height: 100px"
-						/>
+			</div>
+			<!-- 商家頭像 ---------------------------- END -->
+
+			<!-- 會員 基本資料 ---------------------------- START -->
+			<div class="col-sm-12 col-md-12 col-lg-8 col-xl-5 ps-xl-4">
+				<h2>基本資料</h2>
+				<div class="mb-3 row">
+					<!-- 姓名 START-->
+					<div class="mb-2 d-flex col-sm-12 col-md-6">
 						<div>
+							<label for="name" class="me-2 col-form-label" style="width: 3em">
+								姓名
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="name"
+								name="姓名"
+								type="text"
+								class="form-control"
+								:class="{ 'is-invalid': errors['姓名'] }"
+								v-model="userInfo.name"
+								autocomplete="name"
+								rules="name"
+							></v-field>
+							<error-message
+								name="姓名"
+								class="invalid-feedback"
+							></error-message>
+						</div>
+					</div>
+					<!-- 姓名 END-->
+
+					<!-- 性別 START-->
+					<div class="mb-2 d-flex col-sm-12 col-md-6">
+						<div>
+							<label
+								for="gender"
+								class="me-2 col-form-label"
+								style="width: 3em"
+							>
+								性別
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="gender"
+								name="性別"
+								class="form-select"
+								:class="{ 'is-invalid': errors['性別'] }"
+								placeholder="請選擇"
+								rules="required"
+								v-model="userInfo.gender"
+								as="select"
+							>
+								<option value="" selected>請選擇</option>
+								<option value="男">男</option>
+								<option value="女">女</option>
+							</v-field>
+						</div>
+					</div>
+					<!-- 性別 END-->
+
+					<!-- 密碼 START-->
+					<div class="mb-2 d-flex col-sm-12 col-md-6">
+						<div>
+							<label
+								for="password"
+								class="me-2 col-form-label"
+								style="width: 3em"
+							>
+								密碼
+							</label>
+						</div>
+						<div class="w-100 position-relative">
+							<v-field
+								id="password"
+								name="password"
+								:type="userStore.updatePassword && eye ? 'text' : 'password'"
+								ref="passwordRef"
+								class="form-control"
+								:class="{ 'is-invalid': errors.password }"
+								placeholder="請輸入密碼"
+								rules="password"
+								v-model="userData.pw"
+								autocomplete="password"
+								:readonly="!userStore.updatePassword"
+								aria-label="密碼"
+							></v-field>
+							<i
+								v-if="eye == false"
+								class="bi bi-eye-fill position-absolute z-3 fs-5 px-1"
+								style="top: 4px; right: 8px; background-color: #fff"
+								@click="see"
+							></i>
+							<i
+								v-else-if="eye == true"
+								class="bi bi-eye-slash-fill position-absolute z-3 fs-5 px-1"
+								style="top: 4px; right: 8px; background-color: #fff"
+								@click="see"
+							></i>
+							<error-message
+								name="password"
+								class="invalid-feedback"
+							></error-message>
+						</div>
+					</div>
+					<!-- 密碼 END-->
+
+					<!-- 確認 START-->
+					<div class="mb-2 d-flex col-sm-12 col-md-6">
+						<div
+							v-if="!userStore.updatePassword"
+							class="text-sm-end text-md-start w-100"
+						>
 							<button
 								type="button"
-								class="btn btn-primary my-2"
-								@click="uploadFile"
+								class="btn btn-link px-md-0"
+								@click="rePW()"
 							>
-								選擇圖片
+								更改密碼
 							</button>
-							<input
+						</div>
+						<div v-if="userStore.updatePassword">
+							<label
+								for="rePassword"
+								class="me-2 col-form-label"
+								style="width: 3em"
+							>
+								密碼
+							</label>
+						</div>
+						<div v-if="userStore.updatePassword" class="w-100">
+							<v-field
+								id="rePassword"
+								name="確認密碼"
+								type="password"
 								class="form-control"
-								type="file"
-								id="formFile"
-								@change="getFile"
-								ref="inputFieldRef"
-								hidden
-								autocomplete="photo"
+								:class="{ 'is-invalid': errors['確認密碼'] }"
+								placeholder="請輸入密碼"
+								v-model="userData.rePw"
+								rules="required|confirmed:password"
+								autocomplete="current-password"
+								aria-label="確認密碼"
+							></v-field>
+							<error-message
+								name="確認密碼"
+								class="invalid-feedback"
+							></error-message>
+						</div>
+					</div>
+					<!-- 確認 END-->
+
+					<!-- 生日 START-->
+					<div class="mb-2 d-flex col-sm-12">
+						<div>
+							<label for="date" class="me-2 col-form-label" style="width: 3em">
+								生日
+							</label>
+						</div>
+						<div class="w-100">
+							<input
+								id="date"
+								type="date"
+								class="form-control"
+								v-model="userInfo.birthday"
 							/>
-							<div>
-								<span class="form-text">
-									檔案大小最大:1MB
-									<br />
-									檔案限制：JPG.PNG
-								</span>
-							</div>
 						</div>
 					</div>
-					<!-- 商家頭像 ---------------------------- END -->
+					<!-- 生日 END-->
 
-					<!-- 會員 基本資料 ---------------------------- START -->
-					<div class="col-sm-12 col-md-12 col-lg-8 col-xl-5 ps-xl-4">
-						<h2>基本資料</h2>
-						<div class="mb-3 row">
-							<!-- 姓名 START-->
-							<div class="mb-2 d-flex col-sm-12 col-md-6">
-								<div>
-									<label
-										for="name"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										姓名
-									</label>
-								</div>
-								<div class="w-100">
-									<v-field
-										id="name"
-										name="姓名"
-										type="text"
-										class="form-control"
-										:class="{ 'is-invalid': errors['姓名'] }"
-										v-model="userInfo.name"
-										autocomplete="name"
-										rules="name"
-									></v-field>
-									<error-message
-										name="姓名"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 姓名 END-->
-
-							<!-- 性別 START-->
-							<div class="mb-2 d-flex col-sm-12 col-md-6">
-								<div>
-									<label
-										for="gender"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										性別
-									</label>
-								</div>
-								<div class="w-100">
-									<v-field
-										id="gender"
-										name="性別"
-										class="form-select"
-										:class="{ 'is-invalid': errors['性別'] }"
-										placeholder="請選擇"
-										rules="required"
-										v-model="userInfo.gender"
-										as="select"
-									>
-										<option value="" selected>請選擇</option>
-										<option value="男">男</option>
-										<option value="女">女</option>
-									</v-field>
-								</div>
-							</div>
-							<!-- 性別 END-->
-
-							<!-- 密碼 START-->
-							<div class="mb-2 d-flex col-sm-12 col-md-6">
-								<div>
-									<label
-										for="password"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										密碼
-									</label>
-								</div>
-								<div class="w-100 position-relative">
-									<v-field
-										id="password"
-										name="password"
-										:type="
-											userStore.updatePassword && eye ? 'text' : 'password'
-										"
-										ref="passwordRef"
-										class="form-control"
-										:class="{ 'is-invalid': errors.password }"
-										placeholder="請輸入密碼"
-										rules="password"
-										v-model="userData.pw"
-										autocomplete="password"
-										:readonly="!userStore.updatePassword"
-										aria-label="密碼"
-									></v-field>
-									<i
-										v-if="eye == false"
-										class="bi bi-eye-fill position-absolute z-3 fs-5 px-1"
-										style="top: 4px; right: 8px; background-color: #fff"
-										@click="see"
-									></i>
-									<i
-										v-else-if="eye == true"
-										class="bi bi-eye-slash-fill position-absolute z-3 fs-5 px-1"
-										style="top: 4px; right: 8px; background-color: #fff"
-										@click="see"
-									></i>
-									<error-message
-										name="password"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 密碼 END-->
-
-							<!-- 確認 START-->
-							<div class="mb-2 d-flex col-sm-12 col-md-6">
-								<div
-									v-if="!userStore.updatePassword"
-									class="text-sm-end text-md-start w-100"
-								>
-									<button
-										type="button"
-										class="btn btn-link px-md-0"
-										@click="rePW()"
-									>
-										更改密碼
-									</button>
-								</div>
-								<div v-if="userStore.updatePassword">
-									<label
-										for="rePassword"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										密碼
-									</label>
-								</div>
-								<div v-if="userStore.updatePassword" class="w-100">
-									<v-field
-										id="rePassword"
-										name="確認密碼"
-										type="password"
-										class="form-control"
-										:class="{ 'is-invalid': errors['確認密碼'] }"
-										placeholder="請輸入密碼"
-										v-model="userData.rePw"
-										rules="required|confirmed:password"
-										autocomplete="current-password"
-										aria-label="確認密碼"
-									></v-field>
-									<error-message
-										name="確認密碼"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 確認 END-->
-
-							<!-- 生日 START-->
-							<div class="mb-2 d-flex col-sm-12">
-								<div>
-									<label
-										for="date"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										生日
-									</label>
-								</div>
-								<div class="w-100">
-									<input
-										id="date"
-										type="date"
-										class="form-control"
-										v-model="userInfo.birthday"
-									/>
-								</div>
-							</div>
-							<!-- 生日 END-->
-
-							<!-- 手機 START-->
-							<div class="mb-2 d-flex col-sm-12">
-								<div>
-									<label
-										for="call"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										手機
-									</label>
-								</div>
-								<div class="w-100">
-									<v-field
-										id="call"
-										name="電話"
-										type="text"
-										class="form-control"
-										:class="{ 'is-invalid': errors['電話'] }"
-										placeholder="請輸入電話"
-										autocomplete="tel"
-										rules="phone"
-										v-model="userInfo.phone"
-									></v-field>
-									<error-message
-										name="電話"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 手機 END-->
-
-							<!-- 郵件 START-->
-							<div class="mb-2 d-flex col-sm-12">
-								<div>
-									<label
-										for="email"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										郵件
-									</label>
-								</div>
-								<div class="w-100">
-									<v-field
-										id="email"
-										name="Email"
-										type="text"
-										class="form-control"
-										:class="{ 'is-invalid': errors['Email'] }"
-										v-model="userInfo.mail"
-										autocomplete="email"
-										rules="email|required"
-									></v-field>
-									<error-message
-										name="Email"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 郵件 END-->
-
-							<!-- 地址 START-->
-							<div class="mb-2 d-flex col-sm-12">
-								<div>
-									<label
-										for="shopAdd"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										地址
-									</label>
-								</div>
-								<div class="w-100">
-									<v-field
-										id="shopAdd"
-										name="地址"
-										type="text"
-										class="form-control"
-										:class="{ 'is-invalid': errors['地址'] }"
-										rules="address|required"
-										v-model="userInfo.address"
-										autocomplete="street-address"
-									></v-field>
-									<error-message
-										name="地址"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 地址 END-->
+					<!-- 手機 START-->
+					<div class="mb-2 d-flex col-sm-12">
+						<div>
+							<label for="call" class="me-2 col-form-label" style="width: 3em">
+								手機
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="call"
+								name="電話"
+								type="text"
+								class="form-control"
+								:class="{ 'is-invalid': errors['電話'] }"
+								placeholder="請輸入電話"
+								autocomplete="tel"
+								rules="phone"
+								v-model="userInfo.phone"
+							></v-field>
+							<error-message
+								name="電話"
+								class="invalid-feedback"
+							></error-message>
 						</div>
 					</div>
-					<!-- 會員 基本資料 ---------------------------- END -->
+					<!-- 手機 END-->
 
-					<!-- 預設收件人資料 ---------------------------- START -->
-					<div class="col-sm-12 col-md-12 col-lg-8 col-xl-5 ps-xl-4">
-						<h2>預設收件人資料</h2>
-						<div class="mb-3 row">
-							<!-- 姓名 START-->
-							<div class="mb-2 d-flex col-sm-12 col-md-6">
-								<div>
-									<label
-										for="sendName"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										姓名
-									</label>
-								</div>
-								<div class="w-100">
-									<v-field
-										id="sendName"
-										name="收件人姓名"
-										type="text"
-										class="form-control"
-										:class="{ 'is-invalid': errors['收件人姓名'] }"
-										v-model="send.name"
-										autocomplete="name"
-										rules="name"
-									></v-field>
-									<error-message
-										name="收件人姓名"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 姓名 END-->
-
-							<!-- 手機 START-->
-							<div class="mb-2 d-flex col-sm-12">
-								<div>
-									<label
-										for="sendCall"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										手機
-									</label>
-								</div>
-								<div class="w-100">
-									<v-field
-										id="sendCall"
-										name="收件人電話"
-										type="text"
-										class="form-control"
-										:class="{ 'is-invalid': errors['收件人電話'] }"
-										placeholder="請輸入收件人電話"
-										autocomplete="tel"
-										rules="phone"
-										v-model="send.call"
-									></v-field>
-									<error-message
-										name="收件人電話"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 手機 END-->
-							<!-- 地址 START-->
-							<div class="mb-2 d-flex col-sm-12">
-								<div>
-									<label
-										for="sendAdd"
-										class="me-2 col-form-label"
-										style="width: 3em"
-									>
-										地址
-									</label>
-								</div>
-								<div class="w-100">
-									<v-field
-										id="sendAdd"
-										name="收件人地址"
-										type="text"
-										class="form-control"
-										:class="{ 'is-invalid': errors['收件人地址'] }"
-										rules="address|required"
-										v-model="send.add"
-										autocomplete="street-address"
-									></v-field>
-									<error-message
-										name="收件人地址"
-										class="invalid-feedback"
-									></error-message>
-								</div>
-							</div>
-							<!-- 地址 END-->
+					<!-- 郵件 START-->
+					<div class="mb-2 d-flex col-sm-12">
+						<div>
+							<label for="email" class="me-2 col-form-label" style="width: 3em">
+								郵件
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="email"
+								name="Email"
+								type="text"
+								class="form-control"
+								:class="{ 'is-invalid': errors['Email'] }"
+								v-model="userInfo.mail"
+								autocomplete="email"
+								rules="email|required"
+							></v-field>
+							<error-message
+								name="Email"
+								class="invalid-feedback"
+							></error-message>
 						</div>
 					</div>
-					<!-- 預設收件人資料 ---------------------------- END -->
-					<div
-						class="col-sm-12 col-md-12 text-center text-lg-end text-xl-center"
-					>
-						<button
-							type="button"
-							@click="cancel"
-							class="btn btn-outline-primary me-2"
-						>
-							取消
-						</button>
-						<button type="submit" class="btn btn-primary">提交</button>
+					<!-- 郵件 END-->
+
+					<!-- 地址 START-->
+					<div class="mb-2 d-flex col-sm-12">
+						<div>
+							<label
+								for="shopAdd"
+								class="me-2 col-form-label"
+								style="width: 3em"
+							>
+								地址
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="shopAdd"
+								name="地址"
+								type="text"
+								class="form-control"
+								:class="{ 'is-invalid': errors['地址'] }"
+								rules="address|required"
+								v-model="userInfo.address"
+								autocomplete="street-address"
+							></v-field>
+							<error-message
+								name="地址"
+								class="invalid-feedback"
+							></error-message>
+						</div>
 					</div>
-				</v-form>
+					<!-- 地址 END-->
+				</div>
 			</div>
-		</div>
+			<!-- 會員 基本資料 ---------------------------- END -->
+
+			<!-- 預設收件人資料 ---------------------------- START -->
+			<div class="col-sm-12 col-md-12 col-lg-8 col-xl-5 ps-xl-4">
+				<h2>預設收件人資料</h2>
+				<div class="mb-3 row">
+					<!-- 姓名 START-->
+					<div class="mb-2 d-flex col-sm-12 col-md-6">
+						<div>
+							<label
+								for="sendName"
+								class="me-2 col-form-label"
+								style="width: 3em"
+							>
+								姓名
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="sendName"
+								name="收件人姓名"
+								type="text"
+								class="form-control"
+								:class="{ 'is-invalid': errors['收件人姓名'] }"
+								v-model="send.name"
+								autocomplete="name"
+								rules="name"
+							></v-field>
+							<error-message
+								name="收件人姓名"
+								class="invalid-feedback"
+							></error-message>
+						</div>
+					</div>
+					<!-- 姓名 END-->
+
+					<!-- 手機 START-->
+					<div class="mb-2 d-flex col-sm-12">
+						<div>
+							<label
+								for="sendCall"
+								class="me-2 col-form-label"
+								style="width: 3em"
+							>
+								手機
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="sendCall"
+								name="收件人電話"
+								type="text"
+								class="form-control"
+								:class="{ 'is-invalid': errors['收件人電話'] }"
+								placeholder="請輸入收件人電話"
+								autocomplete="tel"
+								rules="phone"
+								v-model="send.call"
+							></v-field>
+							<error-message
+								name="收件人電話"
+								class="invalid-feedback"
+							></error-message>
+						</div>
+					</div>
+					<!-- 手機 END-->
+					<!-- 地址 START-->
+					<div class="mb-2 d-flex col-sm-12">
+						<div>
+							<label
+								for="sendAdd"
+								class="me-2 col-form-label"
+								style="width: 3em"
+							>
+								地址
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="sendAdd"
+								name="收件人地址"
+								type="text"
+								class="form-control"
+								:class="{ 'is-invalid': errors['收件人地址'] }"
+								rules="address|required"
+								v-model="send.add"
+								autocomplete="street-address"
+							></v-field>
+							<error-message
+								name="收件人地址"
+								class="invalid-feedback"
+							></error-message>
+						</div>
+					</div>
+					<!-- 地址 END-->
+				</div>
+			</div>
+			<!-- 預設收件人資料 ---------------------------- END -->
+			<div class="col-sm-12 col-md-12 text-center text-lg-end text-xl-center">
+				<button
+					type="button"
+					@click="cancel"
+					class="btn btn-outline-primary me-2"
+				>
+					取消
+				</button>
+				<button type="submit" class="btn btn-primary">提交</button>
+			</div>
+		</v-form>
 	</div>
 </template>
 
