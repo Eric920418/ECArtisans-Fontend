@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/seller',
     name: "Seller",
-    component: () => import('../views/amy/Seller.vue'), 
+    component: () => import('../views/amy/SellerMenu.vue'), 
     children: [
       {
         path: 'home', // 開店推薦主頁
@@ -69,7 +69,8 @@ const routes = [
   // user 買家所有頁面 ------------------------- user 買家所有頁面 --------START
   {
     path: '/user',
-    // component: UserBase, 
+    name: "User",
+    component: () => import('../views/amy/UserMenu.vue'), 
     children: [
       // {
       //   path: 'home', // 
