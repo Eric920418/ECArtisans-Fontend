@@ -7,4 +7,57 @@
 @import './utils/mixin';
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
-@import '../../node_modules/vue-loading-overlay/dist/css/index.css'
+@import '../../node_modules/vue-loading-overlay/dist/css/index.css';
+
+// 漸層自己增加，只有按鈕有漸層樣式，其他的會出錯。
+$border: 5px; //粗細
+$radius-8: 0.5rem; //弧度
+
+.card-line {
+	position: relative;
+	width: auto;
+	padding: 0;
+	background: #fff;
+	background-clip: padding-box; /* !importanté */
+	border-bottom: solid $border transparent; /* !importanté */
+	border-radius: $radius-8;
+	margin: $border;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		bottom: 0;
+		left: 5px;
+		z-index: -1;
+		margin: -$border; /* !importanté */
+		border-radius: $radius-8; /* !importanté */
+		background: linear-gradient(to right, $yellow, $primary);
+	}
+}
+
+.card-line:hover,
+.card-line:focus {
+	position: relative;
+	width: auto;
+	padding: 0;
+	background: #fff;
+	background-clip: padding-box; /* !importanté */
+	border-bottom: solid $border transparent; /* !importanté */
+	border-radius: $radius-8;
+	margin: $border;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: -1;
+		margin: -$border; /* !importanté */
+		border-radius: $radius-8; /* !importanté */
+		background: linear-gradient(to right, $yellow, $primary);
+	}
+}

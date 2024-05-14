@@ -316,12 +316,11 @@ $Neutral-03: #e4e9f2 !default; //深色背景
 $Neutral-04: #f0f4f7 !default; //深色背景
 $Neutral-05: #f7f7f7 !default; //深色背景
 
-// $Linear: linear-gradient(top, #fde48e, #14b2be); //漸層背景
-
-// $danger: ;//危險
-/* 備註：
-	文字顏色 直接調整 $gray-900 因為壓不過去。
-	input::placeholder 另外調整。
+/* 	備註：
+			文字顏色 直接調整 $gray-900 因為壓不過去。
+			input::placeholder 另外調整。
+			漸層顏色需另外處理
+			linear-gradient(top, $yellow, $primary); //漸層背景
 */
 // scss-docs-end theme-color-variables
 
@@ -340,7 +339,6 @@ $theme-colors: (
 	'neutral03': $Neutral-03,
 	'neutral04': $Neutral-04,
 	'neutral05': $Neutral-05,
-	// 'linear': $Linear,
 ) !default;
 // scss-docs-end theme-colors-map
 
@@ -419,11 +417,12 @@ $prefix: $variable-prefix !default;
 //
 // The gradient which is added to components if `$enable-gradients` is `true`
 // This gradient is also added to elements with `.bg-gradient`
-// scss-docs-start variable-gradient
+// scss-docs-start variable-gradient )
+// 這裡有修改 唯一的漸層
 $gradient: linear-gradient(
 	180deg,
-	rgba($white, 0.15),
-	rgba($white, 0)
+	rgba($yellow, 0.15),
+	rgba($primary, 0)
 ) !default;
 // scss-docs-end variable-gradient
 

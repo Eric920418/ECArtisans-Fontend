@@ -13,7 +13,10 @@
 		<button class="btn btn-neutral03">neutral03 Button</button>
 		<button class="btn btn-neutral04">neutral04 Button</button>
 		<button class="btn btn-neutral05">neutral05 Button</button>
-		<!-- <button class="btn btn-linear">linear Button</button> -->
+		<dir class="row m-2 p-2">
+			<router-link class="col-4 card-line" to="/">RRR123</router-link>
+			<router-link class="col-4 card-line" to="/">RRR123</router-link>
+		</dir>
 
 		<font-awesome-icon :icon="['fas', 'triangle-exclamation']" class="me-2" />
 	</div>
