@@ -37,15 +37,28 @@
 
 					<div
 						v-if="toast.type === 'error'"
-						class="alert alert-danger d-flex align-items-center"
+						class="toast toast-info align-items-center text-danger-emphasis bg-danger-subtle border-0 opacity-75"
+						:class="{ show: toast.show }"
 						role="alert"
+						aria-live="assertive"
+						aria-atomic="true"
 					>
-						<!-- 錯誤先統一使用 triangle-exclamation icon -->
-						<font-awesome-icon
-							:icon="['fas', 'triangle-exclamation']"
-							class="me-2"
-						/>
-						<div>{{ toast.message }}</div>
+						<div class="d-flex">
+							<div class="toast-body h6 p-3 m-0 d-flex">
+								<font-awesome-icon
+									:icon="['fas', 'circle-exclamation']"
+									class="me-2"
+								/>
+								{{ toast.message }}
+							</div>
+							<button
+								type="button"
+								class="btn-close text-danger-emphasis me-2 me-3 m-auto"
+								data-bs-dismiss="toast"
+								aria-label="Close"
+								@click="remove(toast.timestamp)"
+							></button>
+						</div>
 					</div>
 				</div>
 
