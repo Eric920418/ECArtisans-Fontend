@@ -57,6 +57,7 @@ export const useAuthStore = defineStore({
         this.reset();
       } else {
         this.isLoggedIn = true;
+        alertStore.success('logIn')
       }
       this.token = user.token;
       this.id = JSON.parse(atob(user.token.split('.')[1])).id;
@@ -72,7 +73,7 @@ export const useAuthStore = defineStore({
       } else if (error.response && error.response.data && error.response.data.message) {
         errorMessage = error.response.data.message;
       }
-      alert(errorMessage);
+      alertStore.error(errorMessage);
     },
     logout(): void {
       this.isLoggedIn = false;

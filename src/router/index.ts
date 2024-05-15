@@ -19,6 +19,7 @@ import UserSigup from "../views/eric/UserSigup.vue"
 import SellerOverview from "../views/amy/SellerOverview.vue"
 import SellerProfile from "../views/amy/SellerProfile.vue"
 import SellerHome from "../views/eliza/SellerHome.vue"
+import SellerOrderList from "../views/eliza/SellerOrderList.vue"
 // seller 商家所有頁面 ---------------------------------END
 
 
@@ -60,6 +61,12 @@ const routes = [
         path: 'overview', // 商家總覽
         name: "SellerOverview",
         component: SellerOverview,
+        meta: { requiresSellerAuth: true } // 商家身份登入後才能訪問
+      },
+      {
+        path: 'orderlist', // 商家總覽
+        name: "SellerOrderList",
+        component: SellerOrderList,
         meta: { requiresSellerAuth: true } // 商家身份登入後才能訪問
       },
     ],
