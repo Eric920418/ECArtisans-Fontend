@@ -23,23 +23,29 @@ export const useAuthStore = defineStore({
   }),
   actions: {
     async login(data: UserData): Promise<void> {
-      this.isLoading = true;
-      try {
-        await this.setAccountType();
-        // const { user } = await sellerLogin(data);
-        let res;
-        if (this.accountType === 'seller') {
-          res  = await sellerLogin(data);
-        } else if (this.accountType === 'user') {
-          res  = await userLogin(data);
+      if(data.mail !== '' && data.password !== '' ){
+        this.isLoading = true;
+        try {
+          await this.setAccountType();
+          // const { user } = await sellerLogin(data);
+          let res;
+          if (this.accountType === 'seller') {
+            res  = await sellerLogin(data);
+          } else if (this.accountType === 'user') {
+            res  = await userLogin(data);
+          }
+          const { user } = res;
+          await this.handleLoginSuccess(user);
+        } catch (error) {
+          console.log(error)
+          await this.handleLoginError(error);
+        } finally {
+          this.isLoading = false;
         }
-        const { user } = res;
-        await this.handleLoginSuccess(user);
-      } catch (error) {
-        console.log(error)
-        await this.handleLoginError(error);
-      } finally {
-        this.isLoading = false;
+      }else{
+        // this.isLoggedIn = false;
+        alertStore.success('registerOK'); 
+        alertStore.error('密碼不可為空');
       }
     },
     async setAccountType(): Promise<void> {
