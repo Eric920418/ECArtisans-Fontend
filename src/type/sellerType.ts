@@ -12,5 +12,5 @@ export interface SellerData {
   address: string | null;
   introduce: string | null;
   salesType: any | null,
-  collection: number | null;
+  collection: string | null;
 }
