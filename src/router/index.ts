@@ -19,7 +19,10 @@ import UserSigup from "../views/eric/UserSigup.vue"
 import SellerOverview from "../views/amy/SellerOverview.vue"
 import SellerProfile from "../views/amy/SellerProfile.vue"
 import SellerHome from "../views/eliza/SellerHome.vue"
-import SellerOrderList from "../views/eliza/SellerOrderList.vue"
+import SellerOrder from "../views/eliza/SellerOrderList.vue"
+import SellerOneOrder from "../views/eliza/SellerOneOrder.vue"
+import SellerChat from "../views/eliza/SellerChat.vue"
+
 // seller 商家所有頁面 ---------------------------------END
 
 
@@ -64,10 +67,24 @@ const routes = [
         meta: { requiresSellerAuth: true } // 商家身份登入後才能訪問
       },
       {
-        path: 'orderlist', // 商家總覽
-        name: "SellerOrderList",
-        component: SellerOrderList,
+        path: 'order', // 訂單管理
+        name: "SellerOrder",
+        component: SellerOrder,
         meta: { requiresSellerAuth: true } // 商家身份登入後才能訪問
+      },
+      {
+        path: 'order/:orderId', // 單筆訂單管理
+        name: "SellerOneOrder",
+        component: SellerOneOrder,
+        meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+        props: true // 將orderID參數作為'props'傳遞給其他組件
+      },
+      {
+        path: 'chat', // 單筆訂單管理
+        name: "SellerChat",
+        component: SellerChat,
+        meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+        props: true // 將orderID參數作為'props'傳遞給其他組件
       },
     ],
   },

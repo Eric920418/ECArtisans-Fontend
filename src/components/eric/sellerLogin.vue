@@ -4,7 +4,7 @@
 			v-model:active="this.authStore.isLoading"
 			:can-cancel="true"
 			:color="color"
-			:on-cancel="onCancel"
+			:on-cancel="this.authStore.cancel"
 			:is-full-page="fullPage"
 		/>
 		<div class="col-md-12 p-0 m-0 position-relative mb-3">

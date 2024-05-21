@@ -91,6 +91,10 @@ export const useAuthStore = defineStore({
     reset(): void {
       Object.assign(this, this.$state);
     },
+    cancel(): void{
+      this.isLoggedIn = false;
+      alertStore.success('取消登入'); 
+    }
   },
   persist: true
 });

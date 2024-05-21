@@ -23,6 +23,10 @@ export const useSellerStore = defineStore({
         path: 'SellerProfile',
       },
       // {
+      // 	title: '商品管理',
+      // 	path: 'SellerProduct',
+      // },
+      // {
       // 	title: '活動管理',
       // 	path: 'SellerActivity',
       // },
@@ -34,10 +38,10 @@ export const useSellerStore = defineStore({
       // 	title: '業績分析',
       // 	path: 'SellerPerformance',
       // },
-      // {
-      // 	title: '訂單管理',
-      // 	path: 'SellerProduct',
-      // },
+      {
+      	title: '訂單管理',
+      	path: 'SellerOrder',
+      },
       // {
       // 	title: '聊聊',
       // 	path: 'SellerMessage',
