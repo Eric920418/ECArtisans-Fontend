@@ -2,7 +2,7 @@
 	<OneColumnLayout>
 		<template #main>
 			<Alert />
-			<RouterView />
+			<RouterView class="wrapper" />
 		</template>
 	</OneColumnLayout>
 </template>

@@ -1,17 +1,29 @@
 export interface UserData {
-  _id: string;
-  name: string | null;
-  gender: string | null;
-  avatar: string | null;
-  birthday: string | null;
-  phone: string | null;
-  mail: string | null;
-  address: string | null;
-  password: string | null;
-  otherPassword: string | null;
-  discount: any | null;
-  spHistory: any | null;
-  likeShop: any | null;
-  collect: any | null;
-  chat: any | null;
+	_id?: string;
+	name: string | undefined | null;
+	gender: string | undefined | null;
+	avatar?: string | undefined | null;
+	phone: string | undefined | null;
+	mail: string | undefined | null;
+	address: string | undefined | null;
+	password?: string | undefined | null;
+	confirmPassword?: string | undefined | null;
+	otherPassword?: string | undefined | null;
+
+	// 會員
+	birthday?: string | undefined | null;
+	discount?: any | undefined | null;
+	spHistory?: any | undefined | null;
+	likeShop?: any | undefined | null;
+	collect?: any | undefined | null;
+	chat?: any | undefined | null;
+
+	// 商家
+	bossName?: string | undefined | null;
+	brand?: string | undefined | null;
+	plan?: string | undefined | null;
+	planPeriod?: string | undefined | null;
+	introduce?: string | undefined | null;
+	salesType?: any | undefined | null;
+	collection?: string | undefined | null;
 }

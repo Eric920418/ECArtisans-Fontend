@@ -9,10 +9,94 @@
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 @import '../../node_modules/vue-loading-overlay/dist/css/index.css';
 
+// Noto Sans TC
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@100;900&family=Noto+Sans+TC:wght@100..900&family=Pacifico&display=swap');
+// 改變按鈕配色
+// 基礎設訂
+#app{
+	background-color: $Neutral-05 !important;
+	font-family: "Noto Sans TC","微軟正黑體","sans-serif";
+	min-height: 100vh;
+}
+.wrapper {
+  flex-grow: 1; //撐開中間
+	min-height: 100%;
+}
+.neutral-01{
+	color: $Neutral-01;
+}
+.neutral-02{
+	color: $Neutral-02;
+}
+.neutral-03{
+	color: $Neutral-03;
+}
+.neutral-04{
+	color: $Neutral-04;
+}
+.neutral-05{
+	color: $Neutral-05;
+}
+.card{
+	border: none;
+	padding: 16px;
+}
+
+// 按鈕設定
+.btn-primary{
+ color: #fff !important;
+}
+.btn{
+	border-radius: 50rem !important;
+	&:hover{
+		color: #fff !important;
+	}
+}
+
+// input
+.form-control,
+.form-select{
+	background: #FFFFFF;
+	border: 1px solid $Neutral-04;
+	&::placeholder,
+	:disabled {
+		color: $Neutral-03;
+	}
+}
+
+
+.form-disabled{
+	--bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  display: block;
+  width: 100%;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: $Neutral-03;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: var(--bs-body-bg);
+  background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	&:focus,
+	&:focus-within,
+	&:focus-visible{
+		color: $gray-900;
+	}
+}
+
+
+// card漸層外框
 // 漸層自己增加，只有按鈕有漸層樣式，其他的會出錯。
 $border: 5px; //粗細
 $radius-8: 0.5rem; //弧度
-
 .card-line {
 	position: relative;
 	width: auto;

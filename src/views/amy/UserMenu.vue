@@ -1,37 +1,44 @@
 <template>
-	<div class="isClose container">
-		<div class="row g-3 m-5">
-			<div
-				v-if="route.currentRoute.value.name !== 'SellerHome'"
-				class="col-md-2"
-			>
+	<div class="container">
+		<div class="row g-3 m-0 flex-grow-1">
+			<div v-if="route.name !== 'SellerHome'" class="col-md-2 py-5">
 				<ul class="list-group">
 					<router-link
-						v-for="(menu, menuIndex) in userMenu"
+						v-for="(menu, menuIndex) in menu"
 						:key="menuIndex"
 						:to="{ name: menu.path }"
 						class="list-group-item"
-						:class="{ active: menu.path === route.currentRoute.value.name }"
-						:aria-current="menu.path === route.currentRoute.value.name"
+						:class="{ active: menu.path === route.name }"
+						:aria-current="menu.path === route.name"
 					>
 						{{ menu.title }}
 					</router-link>
 				</ul>
 			</div>
 			<!-- 右側 -->
-			<router-view></router-view>
+			<router-view class="col-md-10 py-5"></router-view>
 			<!-- 右側 -->
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/index';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useAuthStore, useUserStore } from '@/stores/index';
 
-const route = useRouter();
+const route = useRoute();
 
-const userStore = useUserStore();
-const userMenu = userStore.userMenu;
+let menu = ref([]) as any;
+
+onMounted(() => {
+	// 根據當前路由加載資料
+	if (route.path.startsWith('/seller')) {
+		const userStore = useUserStore();
+		menu.value = userStore.sellerMenu;
+	} else if (route.path.startsWith('/user')) {
+		const userStore = useUserStore();
+		menu.value = userStore.userMenu;
+	}
+});
 </script>
