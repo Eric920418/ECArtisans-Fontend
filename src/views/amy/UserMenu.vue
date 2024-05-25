@@ -4,14 +4,14 @@
 			<div v-if="route.name !== 'SellerHome'" class="col-md-2 py-5">
 				<ul class="list-group">
 					<router-link
-						v-for="(menu, menuIndex) in menu"
+						v-for="(menuItem, menuIndex) in menu"
 						:key="menuIndex"
-						:to="{ name: menu.path }"
+						:to="{ name: menuItem.path }"
 						class="list-group-item"
-						:class="{ active: menu.path === route.name }"
-						:aria-current="menu.path === route.name"
+						:class="{ active: menuItem.path === route.name }"
+						:aria-current="menuItem.path === route.name"
 					>
-						{{ menu.title }}
+						{{ menuItem.title }}
 					</router-link>
 				</ul>
 			</div>

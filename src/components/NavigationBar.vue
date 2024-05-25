@@ -81,7 +81,7 @@
 							</router-link>
 						</div>
 						<div v-else class="mx-2">
-							<router-link :to="{ name: 'SellerHome' }" class="btn btn-link">
+							<router-link :to="{ name: 'SellerProfile' }" class="btn btn-link">
 								<i class="bi bi-shop-window"></i>
 								<span>我要開店</span>
 							</router-link>

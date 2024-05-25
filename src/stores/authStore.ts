@@ -97,6 +97,10 @@ export const useAuthStore = defineStore({
 		reset(): void {
 			Object.assign(this, this.$state);
 		},
+		cancel(): void {
+			this.reset();
+			alertStore.success('取消動作')
+		},
 	},
 	persist: true,
 });
