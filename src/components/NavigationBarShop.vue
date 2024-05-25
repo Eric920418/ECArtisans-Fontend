@@ -58,7 +58,7 @@
 											商家中心
 										</router-link>
 									</li>
-									<li><a class="dropdown-item" @click="ShopLogout">登出</a></li>
+									<li><a class="dropdown-item" @click="shopLogout">登出</a></li>
 								</ul>
 							</div>
 						</div>
@@ -66,7 +66,7 @@
 							<button
 								type="button"
 								class="btn btn-primary"
-								@click="SellerLogin"
+								@click="sellerlogin"
 							>
 								登入
 							</button>
@@ -89,11 +89,11 @@ const authStore = useAuthStore();
 // const UserStore = useUserStore();
 const router = useRouter();
 
-function SellerLogin() {
+function sellerlogin() {
 	router.push({ name: 'SellerLogin' });
 }
 
-async function ShopLogout() {
+async function shopLogout() {
 	authStore.logout();
 }
 

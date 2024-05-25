@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
 import { sellerOrderAll, sellerOrder } from './api'
+import { type Order } from '@/type/orderType';
 
 // /:order_id 
 // 單一訂單用這隻
@@ -8,47 +9,6 @@ import { sellerOrderAll, sellerOrder } from './api'
 // /:seller_id/orders
 
 // 指定賣家的所有訂單 
-
-interface Product {
-	_id: string;
-	sellerCategory: any[];
-	category: any[];
-	isOnshelf: boolean;
-	reviews: any[];
-	sold: number;
-	productName: string;
-	type: number[];
-	sellerType: any[];
-	origin: string;
-	ingredient: string;
-	format: {
-			_id: string;
-			title: string;
-			price: number;
-			cost: number;
-			stock: number;
-			color: string[];
-	}[];
-	introduce: string;
-	production: string;
-	state: boolean;
-	evaluate: any[];
-	haveStore: string;
-	fare: number;
-	pay: string[];
-	keyword: any[];
-	image: string[];
-}
-
-interface Order {
-	_id: string;
-	orderNumber: string;
-	date: string;
-	products: Product[];
-	state: number;
-	price: number;
-	pay: number;
-}
 
 interface ApiResponse {
 	status: string;
@@ -59,8 +19,8 @@ interface ApiResponse {
 export const useOrderStore = defineStore({
     id: 'order',
     state: () => ({
-      allOrders: [], // 賣家所有訂單
-      oneOrder: null, // 賣家單筆訂單詳情
+			allOrders: [] as Order[], // 賣家所有訂單
+			oneOrder: null as Order | null, // 賣家單筆訂單詳情
       isLoading: false // 請求狀態
     }),
     getters: {
@@ -70,7 +30,6 @@ export const useOrderStore = defineStore({
       },
       // 獲取單筆訂單
       gettingSingleOrder(state) {
-				console.log('getting，被取資料')
         return state.oneOrder;
       }
     },
@@ -110,7 +69,6 @@ export const useOrderStore = defineStore({
           const res = await this.handleApiCall(() => sellerOrderAll(seller_id), '所有訂單取得成功');
           const { thisShop } = res as { thisShop: any };
 					this.allOrders = thisShop.flatMap((shop: { order: any; }) => shop.order); // 提取商店所有訂單
-					console.log(this.allOrders)
         } catch (error) {
           // 錯誤已處理
         }

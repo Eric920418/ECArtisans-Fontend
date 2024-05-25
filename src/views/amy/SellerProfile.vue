@@ -110,9 +110,37 @@
 						</div>
 					</div>
 					<!-- 地址 END-->
-
+					{{ sellerInfo }}
 					<!-- 收款帳戶 START-->
-					<div
+					<div class="mb-2 d-flex col-sm-12">
+						<div>
+							<label
+								for="shopCollection"
+								class="me-2 col-form-label"
+								style="width: 2.5em"
+							>
+								帳戶
+							</label>
+						</div>
+						<div class="w-100">
+							<v-field
+								id="shopCollection"
+								name="帳戶"
+								type="text"
+								class="form-control"
+								:class="{ 'is-invalid': errors['帳戶'] }"
+								rules="numeric|min:10|max:16"
+								v-model="sellerInfo.collection"
+								autocomplete="cc-name"
+								aria-label="帳戶"
+							></v-field>
+							<error-message
+								name="帳戶"
+								class="invalid-feedback"
+							></error-message>
+						</div>
+					</div>
+					<!-- <div
 						class="d-flex col-sm-12"
 						:class="{
 							'mb-1': isAccount(),
@@ -174,7 +202,7 @@
 						style="font-size: 14px; color: rgb(220, 53, 69)"
 					>
 						{{ isAccount() }}
-					</span>
+					</span> -->
 					<!-- 收款帳戶 END-->
 					<!-- 介紹 START-->
 					<!-- <div
@@ -204,6 +232,20 @@
 								</div>
 							</div> -->
 					<!-- 介紹 END-->
+					<!-- 合約到期日 START-->
+					<div class="mb-2 d-flex col-sm-12 justify-content-between">
+						<p>
+							合約到期日:
+							<span :class="{ 'text-danger': sellerInfo.planPeriod }">
+								{{ sellerInfo.planPeriod ? sellerInfo.planPeriod : '尚未購買' }}
+							</span>
+						</p>
+
+						<button type="button" class="btn btn-outline-primary me-2">
+							續約
+						</button>
+					</div>
+					<!-- 合約到期日 END-->
 				</div>
 			</div>
 			<!-- 商家 基本資料 ---------------------------- END -->
@@ -296,18 +338,16 @@
 								:readonly="!sellerStore.updatePassword"
 								aria-label="密碼"
 							></v-field>
-							<i
-								v-if="eye == false"
-								class="bi bi-eye-fill position-absolute z-3 fs-5 px-1"
-								style="top: 4px; right: 8px; background-color: #fff"
-								@click="see"
-							></i>
-							<i
-								v-else-if="eye == true"
-								class="bi bi-eye-slash-fill position-absolute z-3 fs-5 px-1"
-								style="top: 4px; right: 8px; background-color: #fff"
-								@click="see"
-							></i>
+							<font-awesome-icon
+								:icon="['fas', eye ? 'eye' : 'eye-slash']"
+								class="position-absolute z-3 fs-5"
+								:class="{
+									'neutral-03': !eye,
+									'neutral-02': eye,
+								}"
+								style="top: 0px; right: 0px; transform: translate(-12px, 9px)"
+								@click="eye = !eye"
+							/>
 							<error-message
 								name="password"
 								class="invalid-feedback"
@@ -397,6 +437,7 @@
 						</div>
 						<div class="w-100">
 							<v-field
+								disabled
 								id="email"
 								name="Email"
 								type="text"
@@ -523,76 +564,76 @@ function getFile() {
 
 // 會員資料------START
 // 輸入帳戶用
-const shopAccountStartRef = ref<HTMLInputElement | null>(null);
-const shopAccountEndRef = ref<HTMLInputElement | null>(null);
-// 每 4 個數字插入空格
-const formatAccountEnd = (value: string) => {
-	return value
-		.replace(/\s/g, '')
-		.replace(/(.{4})/g, '$1 ')
-		.trim();
-};
+// const shopAccountStartRef = ref<HTMLInputElement | null>(null);
+// const shopAccountEndRef = ref<HTMLInputElement | null>(null);
+// // 每 4 個數字插入空格
+// const formatAccountEnd = (value: string) => {
+// 	return value
+// 		.replace(/\s/g, '')
+// 		.replace(/(.{4})/g, '$1 ')
+// 		.trim();
+// };
 
-// 清空 shopAccountStartRef 的內容
-const clearInput = () => {
-	sellerData.value.accountStart = '';
-};
+// // 清空 shopAccountStartRef 的內容
+// const clearInput = () => {
+// 	sellerData.value.accountStart = '';
+// };
 
-// 驗證 帳戶
-function isAccount(): string | boolean {
-	let start: string = sellerData.value.accountStart;
-	let end: string = sellerData.value.accountEnd;
-	if (
-		start === null ||
-		start === undefined ||
-		start.trim() === '' ||
-		end === null ||
-		end === undefined ||
-		end.trim() === ''
-	) {
-		return '帳戶為必填'; // 返回自定义消息
-	}
+// // 驗證 帳戶
+// function isAccount(): string | boolean {
+// 	let start: string = sellerData.value.accountStart;
+// 	let end: string = sellerData.value.accountEnd;
+// 	if (
+// 		start === null ||
+// 		start === undefined ||
+// 		start.trim() === '' ||
+// 		end === null ||
+// 		end === undefined ||
+// 		end.trim() === ''
+// 	) {
+// 		return '帳戶為必填'; // 返回自定义消息
+// 	}
 
-	const startBoolean = /^\d+$/;
-	const endBoolean = /^[\d\s]{12,20}$/;
+// 	const startBoolean = /^\d+$/;
+// 	const endBoolean = /^[\d\s]{12,20}$/;
 
-	return startBoolean.test(start) && endBoolean.test(end)
-		? false
-		: '請輸入數字';
-}
+// 	return startBoolean.test(start) && endBoolean.test(end)
+// 		? false
+// 		: '請輸入數字';
+// }
 
-// 在點擊事件處理函數中調用 clearInput()
-shopAccountStartRef.value?.addEventListener('click', clearInput);
-shopAccountStartRef.value?.addEventListener('focus', clearInput);
+// // 在點擊事件處理函數中調用 clearInput()
+// shopAccountStartRef.value?.addEventListener('click', clearInput);
+// shopAccountStartRef.value?.addEventListener('focus', clearInput);
 
-// handleInputStart 輸入3碼後 focus 到 shopAccountEnd
-const handleInputStart = () => {
-	if (sellerData.value.accountStart.length >= 4) {
-		let aSdata = sellerData.value.accountStart.slice(0, 3); // 取出前三個字符
-		let aEdata = sellerData.value.accountStart.charAt(3); // 取出第四個字符
-		sellerData.value.accountStart = aSdata;
-		sellerData.value.accountEnd = aEdata;
-		shopAccountEndRef.value?.focus();
-	}
-};
+// // handleInputStart 輸入3碼後 focus 到 shopAccountEnd
+// const handleInputStart = () => {
+// 	if (sellerData.value.accountStart.length >= 4) {
+// 		let aSdata = sellerData.value.accountStart.slice(0, 3); // 取出前三個字符
+// 		let aEdata = sellerData.value.accountStart.charAt(3); // 取出第四個字符
+// 		sellerData.value.accountStart = aSdata;
+// 		sellerData.value.accountEnd = aEdata;
+// 		shopAccountEndRef.value?.focus();
+// 	}
+// };
 
-// 輸入帳戶用
-const handleInputEnd = () => {
-	// 限制 shopAccountEnd 最多 19 個數字
-	if (sellerData.value.accountEnd.length > 19) {
-		sellerData.value.accountEnd = sellerData.value.accountEnd.slice(0, 19);
-	}
-	// 每 4 個數字插入空格
-	sellerData.value.accountEnd = formatAccountEnd(sellerData.value.accountEnd); // 套用格式化邏輯
-};
-// 確保在 Vue 組件加載後執行
-onMounted(() => {
-	// 確保 shopAccountStartRef 不是 null 或 undefined
-	if (shopAccountStartRef.value) {
-		// 添加點擊事件監聽器
-		shopAccountStartRef.value.addEventListener('click', clearInput);
-	}
-});
+// // 輸入帳戶用
+// const handleInputEnd = () => {
+// 	// 限制 shopAccountEnd 最多 19 個數字
+// 	if (sellerData.value.accountEnd.length > 19) {
+// 		sellerData.value.accountEnd = sellerData.value.accountEnd.slice(0, 19);
+// 	}
+// 	// 每 4 個數字插入空格
+// 	sellerData.value.accountEnd = formatAccountEnd(sellerData.value.accountEnd); // 套用格式化邏輯
+// };
+// // 確保在 Vue 組件加載後執行
+// onMounted(() => {
+// 	// 確保 shopAccountStartRef 不是 null 或 undefined
+// 	if (shopAccountStartRef.value) {
+// 		// 添加點擊事件監聽器
+// 		shopAccountStartRef.value.addEventListener('click', clearInput);
+// 	}
+// });
 // 會員資料 ------END
 
 // 顯示 密碼確認
@@ -621,7 +662,7 @@ const sellerData = ref({
 	rePw: '',
 	// 虛擬帳戶(14~16碼) 實體帳戶(10~12碼) 差2~3碼
 	accountStart: '123',
-	accountEnd: formatAccountEnd('1234567890123456'),
+	// accountEnd: formatAccountEnd('1234567890123456'),
 	contractDate: '2001-09-09',
 });
 

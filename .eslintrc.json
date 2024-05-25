@@ -2,7 +2,8 @@
 	"root": true,
 	"env": {
 		"browser": true,
-		"es2021": true
+		"es2021": true,
+		"node": true
 	},
 	"extends": [
 		"eslint:recommended",
@@ -35,6 +36,7 @@
 			}
 		],
 		"@typescript-eslint/explicit-module-boundary-types": "off",
+		"vue/no-v-model-argument": "off",
 		"no-multi-assign": "error"
 	},
 	"editor.codeActionsOnSave": {

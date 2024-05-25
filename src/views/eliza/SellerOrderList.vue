@@ -31,11 +31,12 @@
 import { onMounted, computed } from 'vue';
 import { useOrderStore } from '@/stores/index';
 import router from '@/router/index';
+import { type Order } from '@/type/orderType';
 
 const orderStore = useOrderStore();
 
 const isLoading = computed(() => orderStore.isLoading); // 從 store 中獲取加載狀態
-const orders = computed(() => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
+const orders = computed((): Order[] | [] => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
 
 const handleOrderClick = (orderId: string) => {
 	orderStore.getOneOrderByOrderID(orderId).then(() => {

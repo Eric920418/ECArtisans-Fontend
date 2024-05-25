@@ -33,6 +33,7 @@
 import { onMounted, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useOrderStore } from '@/stores/index';
+import { type Order } from '@/type/orderType';
 
 // 接收'props'
 const props = defineProps<{
@@ -41,7 +42,8 @@ const props = defineProps<{
 
 const orderStore = useOrderStore();
 const isLoading = computed(() => orderStore.isLoading); // 從 store 中獲取加載狀態
-const { gettingSingleOrder: order } = storeToRefs(orderStore);
+const { gettingSingleOrder } = storeToRefs(orderStore);
+const order = computed((): Order | null => gettingSingleOrder.value); // 將從computed gettingSingleOrder取出的值定義好型態
 
 onMounted(async () => {
 	// pinia沒有這筆資料，就重新呼叫function
