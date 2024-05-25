@@ -17,16 +17,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'pnpm'
+          cache: 'npm'
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Install npm
+        run: npm install -g npm
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Build the project
-        run: pnpm run build
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
