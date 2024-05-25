@@ -64,6 +64,7 @@ export const useAuthStore = defineStore({
 				this.reset();
 			} else {
 				this.isLoggedIn = true;
+				alertStore.success('logIn')
 			}
 			this.token = user.token;
 			this.id = JSON.parse(atob(user.token.split('.')[1])).id;
@@ -95,6 +96,10 @@ export const useAuthStore = defineStore({
 		},
 		reset(): void {
 			Object.assign(this, this.$state);
+		},
+		cancel(): void {
+			this.reset();
+			alertStore.success('取消動作')
 		},
 	},
 	persist: true,

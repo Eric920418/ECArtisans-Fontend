@@ -9,7 +9,7 @@ lerna-debug.log*
 
 node_modules
 .DS_Store
-dist
+# dist
 dist-ssr
 coverage
 *.local
@@ -28,3 +28,10 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Ignore all .env.* files
+.env
+.env.*
+
+# Ignore CI/CD yml
+# .github/workflows/

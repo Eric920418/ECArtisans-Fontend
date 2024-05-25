@@ -18,7 +18,7 @@
 					v-model:active="this.userStore.isLoading"
 					:can-cancel="true"
 					:color="color"
-					:on-cancel="onCancel"
+					:on-cancel="this.authStore.cancel"
 					:is-full-page="fullPage"
 				/>
 				<div class="mb-3 row">

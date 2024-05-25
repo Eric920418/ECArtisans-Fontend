@@ -134,7 +134,8 @@ export const sellerAccountEdit = (seller_id: string, data: any) => handleApiResp
 // 12	get   /shop/${seller_id}/orders	 	 訂單管理	 	 賣家端	 
 export const sellerOrderAll = (seller_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/orders`));
 // 13	get   /shop/${seller_id}/order/${order_id}	 	 單一訂單管理	 	賣家端
-export const sellerOrder = (seller_id: string, order_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/order/${order_id}`));
+// export const sellerOrder = (seller_id: string, order_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/order/${order_id}`));
+export const sellerOrder = (order_id: string) => handleApiResponse(apiRequest.get(`/orders/${order_id}`));
 // 31	get   /shop/${seller_id}/products/all	 	 賣家顯示所有商品管理	 	 賣家端	 
 export const sellerProductAll = (seller_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/products/all`));
 // 32	get   /shop/${seller_id}/products?page&qty&category	 	 賣家商品管理(數量)	 	賣家端

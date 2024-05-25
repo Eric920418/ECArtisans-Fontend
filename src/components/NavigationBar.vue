@@ -68,7 +68,10 @@
 						</div>
 					</form>
 					<div class="col navbar-buttons d-flex align-items-center">
-						<div v-if="authStore.isLoggedIn" class="mx-2">
+						<div
+							v-if="authStore.isLoggedIn && authStore.accountType === 'user'"
+							class="mx-2"
+						>
 							<router-link
 								:to="{ name: 'SellerOverview' }"
 								class="btn btn-link"
@@ -85,7 +88,9 @@
 						</div>
 						<div class="mx-2 dropdown">
 							<!-- 判斷是否登入，未登入則跳轉至登入頁面 -->
-							<template v-if="authStore.isLoggedIn">
+							<template
+								v-if="authStore.isLoggedIn && authStore.accountType === 'user'"
+							>
 								<button
 									class="btn btn-primary rounded-circle"
 									type="button"

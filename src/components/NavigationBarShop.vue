@@ -30,7 +30,10 @@
 			>
 				<div class="row gx-2">
 					<div class="col navbar-buttons d-flex align-items-center">
-						<div v-if="authStore.isLoggedIn" class="mx-2">
+						<div
+							v-if="authStore.isLoggedIn && authStore.accountType === 'seller'"
+							class="mx-2"
+						>
 							<div class="mx-2 dropdown">
 								<!-- 判斷是否登入，未登入則跳轉至登入頁面 -->
 								<button
