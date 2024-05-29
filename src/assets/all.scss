@@ -11,6 +11,7 @@
 
 // Noto Sans TC
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@100;900&family=Noto+Sans+TC:wght@100..900&family=Pacifico&display=swap');
+
 // 改變按鈕配色
 // 基礎設訂
 #app{
@@ -19,7 +20,7 @@
 	min-height: 100vh;
 }
 .wrapper {
-  flex-grow: 1; //撐開中間
+  flex-grow: 1 ; //撐開中間
 	min-height: 100%;
 }
 .neutral-01{
@@ -145,3 +146,86 @@ $radius-8: 0.5rem; //弧度
 		background: linear-gradient(to right, $yellow, $primary);
 	}
 }
+
+
+// 首頁---------CSS
+// Banner
+.btn-eca-s,
+.btn-eca-l,
+.btn-eca {
+	z-index: 99;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	color: #454545;
+	border-radius: 99em;
+	width: 48px;
+	height: 48px;
+	svg {
+		width: 12px;
+		height: 12px;
+	}
+}
+.btn-eca-s{
+	width: 40px;
+	height: 40px;
+}
+.btn-eca-l{
+	width: 64px;
+	height: 64px;
+	svg {
+		width: 24px;
+		height: 24px;
+	}
+}
+.btn-eca-s:hover,
+.btn-eca-l:hover,
+.btn-eca:hover {
+	background-color: $primary;
+	color: white ;
+}
+
+// 分頁器設定  $secondary 我設定這個不理我
+.swiper {
+	--swiper-pagination-color: #fde48e;
+	--swiper-pagination-bullet-inactive-color: #ffffff;
+	--swiper-pagination-bullet-inactive-opacity: 1;
+	--swiper-pagination-bullet-size: 12px ;
+	--swiper-pagination-bullet-horizontal-gap: 8px;
+}
+
+
+
+// fun區
+.funCard {
+	overflow: hidden;
+	padding: 12px;
+	img{
+		width: fit-content;
+		max-width: 100%;
+		height: fit-content;
+		transform:scale(1,1);transition: all 1s ease-out;
+	}
+	&:hover img{
+		transform:scale(1.2,1.2);
+	}
+	.clean{
+		width: fit-content;
+		max-width: 100%;
+		height: fit-content;
+		@media (min-width: 768px) {
+			max-width: 200%;
+		}
+		@media (min-width: 992px) {
+			max-width: 200%;
+		}
+		// @media (min-width: 1200px) {
+		// 	max-width: 200%;
+		// }
+	}
+}
+
+
+
+

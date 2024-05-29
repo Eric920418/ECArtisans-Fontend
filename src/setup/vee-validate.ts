@@ -106,7 +106,7 @@ function isPolicy(value: any): string | boolean {
 	return true; // 如果value为true，表示复选框被勾选
 }
 
-// 驗證 性別
+// 驗證 生日
 function isBirthday(value: any): string | boolean {
 	const today = new Date().setHours(0, 0, 0, 0);
 	const birthday = new Date(value).setHours(0, 0, 0, 0);
