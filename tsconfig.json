@@ -81,7 +81,10 @@
 
     /* 進階選項 */
     "skipLibCheck": true,                    //不會檢查引入的函式庫檔案
-    "forceConsistentCasingInFileNames": true // 確保檔案的大小寫一致
+    "forceConsistentCasingInFileNames": true, // 確保檔案的大小寫一致
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
   }
 
 }

@@ -34,4 +34,4 @@ coverage
 .env.*
 
 # Ignore CI/CD yml
-# .github/workflows/
+.github/workflows/
