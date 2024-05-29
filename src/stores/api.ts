@@ -2,7 +2,7 @@ import axios, { type AxiosResponse } from 'axios';
 
 // 登入相關的 handleApiResponse(api
 const apiRequest = axios.create({
-  baseURL: 'https://ecartisans-backend.onrender.com',
+  baseURL: 'https://ecartisans-backend-9evi.onrender.com',
 });
 
 // 定義一個函數，用於處理 handleApiResponse(api 請求並返回res.data部分
