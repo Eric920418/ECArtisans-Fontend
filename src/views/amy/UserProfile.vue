@@ -69,6 +69,7 @@
 									hidden
 									@change="getFile"
 									autocomplete="photo"
+									accept="image/*"
 								/>
 								<p class="form-text lh-sm mt-2" style="font-size: 12px">
 									圖片限制
@@ -495,6 +496,7 @@ import 'vue-loading-overlay/dist/css/index.css';
 
 const route = useRoute();
 const authStore = useAuthStore();
+
 const id = authStore.id;
 const userStore = useUserStore();
 const data = computed(() => userStore.user);
@@ -578,37 +580,38 @@ function getFile() {
 	// 在這裡處理檔案上傳的邏輯
 	if (inputField && inputField!.files) {
 		let file = inputField.files[0];
-
-		// 圖片限制邏輯處裡------START
-		let validTypes = ['image/jpeg', 'image/png'];
-		let checkSizeKB = false;
-		let checkSize = false;
-		let checkType = false;
-		if (file.size <= 300 * 1024) checkSizeKB = true;
-		if (validTypes.includes(file.type)) checkType = true;
-		// 讀取尺寸圖案尺寸
-		const reader = new FileReader();
-		reader.onload = e => {
-			const img = new Image();
-			img.onload = () => {
-				if (img.width <= 400 && img.height <= 400) checkSize = true;
-				if (!checkSize || !checkType || !checkSizeKB) {
-					let errorText = '請確認圖片，為';
-					if (!checkType) errorText += ' .jpg 或 .png 格式';
-					if (!checkType && !checkSizeKB) errorText += ',';
-					if (!checkSizeKB) errorText += '檔案大小 300k 以內';
-					if ((!checkType || !checkSizeKB) && !checkSize) errorText += ',';
-					if (!checkSize) errorText += '檔案尺寸 300x300';
-					errorText += '。';
-					alertStore.error(errorText);
-					return;
-				}
-			};
-			// img.src = e.target?.result as string;
-			data.value.avatar = e.target?.result as string;
-		};
-		reader.readAsDataURL(file);
-		// 圖片限制邏輯處裡------END
+		// 發api 傳回去 +token
+		userStore.getImgUrl(file, authStore.token);
+		// // 圖片限制邏輯處裡------START
+		// let validTypes = ['image/jpeg', 'image/png'];
+		// let checkSizeKB = false;
+		// let checkSize = false;
+		// let checkType = false;
+		// if (file.size <= 300 * 1024) checkSizeKB = true;
+		// if (validTypes.includes(file.type)) checkType = true;
+		// // 讀取尺寸圖案尺寸
+		// const reader = new FileReader();
+		// reader.onload = e => {
+		// 	const img = new Image();
+		// 	img.onload = () => {
+		// 		if (img.width <= 400 && img.height <= 400) checkSize = true;
+		// 		if (!checkSize || !checkType || !checkSizeKB) {
+		// 			let errorText = '請確認圖片，為';
+		// 			if (!checkType) errorText += ' .jpg 或 .png 格式';
+		// 			if (!checkType && !checkSizeKB) errorText += ',';
+		// 			if (!checkSizeKB) errorText += '檔案大小 300k 以內';
+		// 			if ((!checkType || !checkSizeKB) && !checkSize) errorText += ',';
+		// 			if (!checkSize) errorText += '檔案尺寸 300x300';
+		// 			errorText += '。';
+		// 			alertStore.error(errorText);
+		// 			return;
+		// 		}
+		// 	};
+		// 	// img.src = e.target?.result as string;
+		// 	data.value.avatar = e.target?.result as string;
+		// };
+		// reader.readAsDataURL(file);
+		// // 圖片限制邏輯處裡------END
 	}
 }
 </script>
