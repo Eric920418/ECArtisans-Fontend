@@ -1,7 +1,13 @@
 <template>
 	<div>
-		<Banner></Banner>
-		<h1>首頁</h1>
+		<Banner :data="funData" />
+		<div class="container">
+			<Fun :data="funData" />
+		</div>
+		<Shop :data="shopData" />
+		<Focus :data="shopData" />
+
+		<!-- <h1>首頁</h1>
 		<div class="container">
 			<button class="btn btn-primary">primary Button</button>
 			<button class="btn btn-secondary">secondary Button</button>
@@ -22,17 +28,105 @@
 			123
 			<div class="block" ref="block"></div>
 			<div class="box" ref="box">一次</div>
-		</div>
+		</div> -->
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, getCurrentInstance } from 'vue';
+import Focus from '@/components/IndexFocus.vue';
+import Fun from '@/components/IndexFun.vue';
+import Shop from '@/components/IndexShop.vue';
 import Banner from '@/components/Banner.vue';
 import { gsap } from 'gsap';
-
+// const { proxy } = getCurrentInstance();
+// console.log(proxy.$axios);
 const block = ref();
 const box = ref();
+const shopData = ref([]);
+
+const funData = ref([
+	{
+		cols: 6,
+		cols_sm: 6,
+		cols_md: 3,
+		cols_lg: 2,
+		name: '娛樂',
+		url: './public/images/index/01-clothing.png',
+	},
+	{
+		cols: 6,
+		cols_sm: 6,
+		cols_md: 3,
+		cols_lg: 2,
+		name: '運動',
+		url: './public/images/index/02-sports.png',
+	},
+	{
+		cols: 12,
+		cols_sm: 12,
+		cols_md: 6,
+		cols_lg: 3,
+		data: [
+			{
+				cols: 4,
+				cols_sm: 4,
+				cols_md: 4,
+				cols_lg: 4,
+				name: '食品',
+				url: './public/images/index/03-food.png',
+			},
+			{
+				cols: 4,
+				cols_sm: 4,
+				cols_md: 4,
+				cols_lg: 4,
+				name: '生活用品',
+				url: './public/images/index/04-DailyNecessities.png',
+			},
+			{
+				cols: 4,
+				cols_sm: 4,
+				cols_md: 4,
+				cols_lg: 4,
+				name: '娛樂',
+				url: './public/images/index/05-entertainment.png',
+			},
+			{
+				cols: 12,
+				cols_sm: 12,
+				cols_md: 12,
+				cols_lg: 12,
+				name: '家具',
+				url: './public/images/index/06-furniture.png',
+			},
+		],
+	},
+	{
+		cols: 4,
+		cols_sm: 4,
+		cols_md: 4,
+		cols_lg: 2,
+		name: '3C電器',
+		url: './public/images/index/07-3C.png',
+	},
+	{
+		cols: 4,
+		cols_sm: 4,
+		cols_md: 4,
+		cols_lg: 2,
+		name: '寵物',
+		url: './public/images/index/08-pet.png',
+	},
+	{
+		cols: 4,
+		cols_sm: 4,
+		cols_md: 4,
+		cols_lg: 1,
+		name: '清潔用品',
+		url: './public/images/index/09-clean.png',
+	},
+]);
 
 onMounted(() => {
 	gsap.to(box.value, { rotation: '+=360' });
