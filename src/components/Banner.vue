@@ -22,10 +22,8 @@
 				:freeMode="false"
 				:mousewheel="false"
 				:keyboard="{ enabled: true }"
-				class=""
 			>
 				<SwiperSlide
-					class=""
 					v-for="(item, index) in bannerList"
 					:key="index"
 					:virtualIndex="index"
@@ -67,9 +65,6 @@
 import { onMounted, ref } from 'vue';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-// import 'swiper/css';
-// import 'swiper/css/pagination';
-// import 'swiper/css/navigation';
 
 const bannerList = ref([
 	{ src: 'https://picsum.photos/id/117/1296/650' },
@@ -85,86 +80,18 @@ const navigation = ref({
 });
 const modules = [Autoplay, Pagination, Navigation, Scrollbar];
 
-const prevEl = () => {
-	// console.log('上一张');
-};
-const nextEl = () => {
-	// console.log('下一张');
-};
-// 更改当前活动swiper
-// const onSlideChange = (swiper: { activeIndex: any }) => {
-// 	console.log(swiper.activeIndex);
-// };
+const prevEl = () => {};
+const nextEl = () => {};
 </script>
 <style lang="scss" scoped>
 .banner {
 	height: 52.609vh;
-	// @media (min-width: 650px) {
-	// 	height: 56vh;
-	// }
 	@media (min-width: 768px) {
 		height: 60vh;
 	}
 }
-// .swiper-button-next::after,
-// .swiper-button-prev::after {
-// 	content: '';
-// }
-// .swiper-button-prev {
-// 	display: none;
-// 	top: 30vh;
-// 	left: 0px;
-// 	translate: (-50%, -50%);
-// 	@media (min-width: 650px) {
-// 		position: absolute;
-// 		display: flex;
-// 		left: -5%;
-// 	}
-// 	@media (min-width: 768px) {
-// 		left: -2%;
-// 	}
-// }
-// .swiper-button-next {
-// 	display: none;
-// 	top: 30vh;
-// 	right: 0px;
-// 	translate: (-50%, -50%);
-// 	@media (min-width: 650px) {
-// 		position: absolute;
-// 		display: flex;
-// 		right: -5%;
-// 	}
-// 	@media (min-width: 768px) {
-// 		right: -2%;
-// 	}
-// }
-// .btn-swiper {
-// 	background-color: white;
-// 	border-radius: 99em;
-// 	width: 64px;
-// 	height: 64px;
-// 	svg {
-// 		width: 32px;
-// 		height: 32px;
-// 	}
-// }
+
 .swiper-backface-hidden {
 	overflow: initial !important;
 }
-// .banner,
-// .swiperBox {
-// 	width: 100%;
-// 	height: 60vh;
-// }
-// .swiper-slide {
-// 	object-fit: cover;
-// }
-// // 分頁器設定
-// .swiper {
-// 	--swiper-pagination-color: #fde48e;
-// 	--swiper-pagination-bullet-inactive-color: #ffffff;
-// 	--swiper-pagination-bullet-inactive-opacity: 1;
-// 	--swiper-pagination-bullet-size: 12px;
-// 	--swiper-pagination-bullet-horizontal-gap: 8px;
-// }
 </style>

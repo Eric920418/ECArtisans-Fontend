@@ -36,7 +36,7 @@ watchEffect(() => {
 </script>
 <style scoped lang="scss">
 .one-column-layout {
-	display: grid;
+	//display: grid;
 	grid-template-rows: auto 1fr auto; // 3 row，header footer自動填滿
 }
 </style>
