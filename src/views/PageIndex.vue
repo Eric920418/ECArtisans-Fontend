@@ -55,7 +55,7 @@ const funData = ref([
 		cols_md: 3,
 		cols_lg: 2,
 		name: '娛樂',
-		url: './public/images/index/01-clothing.png',
+		url: 'images/index/01-clothing.png',
 	},
 	{
 		cols: 6,
@@ -63,7 +63,7 @@ const funData = ref([
 		cols_md: 3,
 		cols_lg: 2,
 		name: '運動',
-		url: './public/images/index/02-sports.png',
+		url: 'images/index/02-sports.png',
 	},
 	{
 		cols: 12,
@@ -77,7 +77,7 @@ const funData = ref([
 				cols_md: 4,
 				cols_lg: 4,
 				name: '食品',
-				url: './public/images/index/03-food.png',
+				url: 'images/index/03-food.png',
 			},
 			{
 				cols: 4,
@@ -85,7 +85,7 @@ const funData = ref([
 				cols_md: 4,
 				cols_lg: 4,
 				name: '生活用品',
-				url: './public/images/index/04-DailyNecessities.png',
+				url: 'images/index/04-DailyNecessities.png',
 			},
 			{
 				cols: 4,
@@ -93,7 +93,7 @@ const funData = ref([
 				cols_md: 4,
 				cols_lg: 4,
 				name: '娛樂',
-				url: './public/images/index/05-entertainment.png',
+				url: 'images/index/05-entertainment.png',
 			},
 			{
 				cols: 12,
@@ -101,7 +101,7 @@ const funData = ref([
 				cols_md: 12,
 				cols_lg: 12,
 				name: '家具',
-				url: './public/images/index/06-furniture.png',
+				url: 'images/index/06-furniture.png',
 			},
 		],
 	},
@@ -111,7 +111,7 @@ const funData = ref([
 		cols_md: 4,
 		cols_lg: 2,
 		name: '3C電器',
-		url: './public/images/index/07-3C.png',
+		url: 'images/index/07-3C.png',
 	},
 	{
 		cols: 4,
@@ -119,7 +119,7 @@ const funData = ref([
 		cols_md: 4,
 		cols_lg: 2,
 		name: '寵物',
-		url: './public/images/index/08-pet.png',
+		url: 'images/index/08-pet.png',
 	},
 	{
 		cols: 4,
@@ -127,7 +127,7 @@ const funData = ref([
 		cols_md: 4,
 		cols_lg: 1,
 		name: '清潔用品',
-		url: './public/images/index/09-clean.png',
+		url: 'images/index/09-clean.png',
 	},
 ]);
 
