@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<Title :data="titleData" />
+		<div style="height: 225px"></div>
 		<div
 			id="carouselExampleIndicators"
 			class="carousel slide container"
@@ -100,8 +100,6 @@
 </template>
 
 <script lang="ts" setup>
-import Title from '@/components/IndexTitle.vue';
-
 import { onMounted, computed, ref } from 'vue';
 
 interface Comment {
@@ -215,11 +213,6 @@ const chunkedComments = computed(() => {
 	}
 	return chunks;
 });
-// 傳遞方法，一定要在最後面
-const titleData = {
-	title: '熱銷商品',
-	titleEn: 'hot',
-};
 </script>
 <style lang="scss" scoped>
 .wrapper {
