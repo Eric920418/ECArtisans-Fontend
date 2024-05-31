@@ -14,13 +14,13 @@
 		<div class="d-flex position-absolute bottom-0 end-0" v-if="data.openBtn">
 			<div
 				class="prev btn-eca d-none d-sm-flex me-3"
-				@click.stop="data.openBtn.prev"
+				@click.stop="data.openBtn.prev()"
 			>
 				<font-awesome-icon :icon="['fas', 'angle-left']" />
 			</div>
 			<div
 				class="next btn-eca d-none d-sm-flex"
-				@click.stop="data.openBtn.next"
+				@click.stop="data.openBtn.next()"
 			>
 				<font-awesome-icon :icon="['fas', 'angle-right']" />
 			</div>
