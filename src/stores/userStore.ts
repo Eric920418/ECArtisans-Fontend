@@ -9,6 +9,7 @@ import {
 	sellerAccount,
 	sellerAccountEdit,
 	sellerAuth,
+	uploadImage,
 } from './api';
 
 export const useUserStore = defineStore({
@@ -103,7 +104,8 @@ export const useUserStore = defineStore({
 				}
 				if (
 					this.user.avatar === '' ||
-					(this.user.avatar && !this.user.avatar.includes('base64'))
+					(this.user.avatar &&
+						!this.user.avatar.includes('https://storage.googleapis.com'))
 				) {
 					this.user.avatar = this.imageError;
 				}
@@ -162,6 +164,7 @@ export const useUserStore = defineStore({
 							alertStore.error(err.response.data.message);
 						});
 				}
+				this.updateStatus = false;
 			} catch (error) {
 				alertStore.error('renewError');
 			}
@@ -194,6 +197,29 @@ export const useUserStore = defineStore({
 						});
 				}
 				this.isLoading = false;
+			} catch (error) {
+				this.isLoading = false;
+				alertStore.error('renewError');
+			}
+		},
+		// 註冊/新增 會員
+		async getImgUrl(data: any, token: string) {
+			try {
+				if (data && token && data !== null && token !== null) {
+					this.isLoading = true;
+					const formData = new FormData();
+					formData.append('image', data);
+					await uploadImage(formData, token)
+						.then(res => {
+							this.user.avatar = res.fileUrl;
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+					this.isLoading = false;
+				} else {
+					alertStore.error('找不到資料或登入過期');
+				}
 			} catch (error) {
 				this.isLoading = false;
 				alertStore.error('renewError');
