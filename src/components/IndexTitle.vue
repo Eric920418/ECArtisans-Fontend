@@ -32,8 +32,8 @@ export interface indexTitle {
 	title: string;
 	titleEn: string;
 	openBtn?: {
-		prev: any; //getPrev()
-		next: any; //getNext()
+		prev: () => void; // Function type for prev
+		next: () => void; // Function type for next
 	};
 }
 // 接收傳入的值
