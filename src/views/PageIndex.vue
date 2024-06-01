@@ -4,8 +4,9 @@
 		<div class="container">
 			<Fun :data="funData" />
 		</div>
-		<!-- <Hot :data="shopData" /> -->
+		<Hot :data="shopData" />
 		<Shop :data="shopData" />
+		<New :data="shopData" />
 		<Focus :data="shopData" />
 
 		<!-- <h1>首頁</h1>
@@ -40,7 +41,7 @@ import Fun from '@/components/IndexFun.vue';
 import Shop from '@/components/IndexShop.vue';
 import Banner from '@/components/Banner.vue';
 import Hot from '@/components/IndexHot.vue';
-
+import New from '@/components/IndexNew.vue';
 import { gsap } from 'gsap';
 // const { proxy } = getCurrentInstance();
 // console.log(proxy.$axios);
