@@ -1,49 +1,36 @@
 <template>
-	<div class="outer">
-		<div class="inner">
-			<div class="card-content">
-				<img :src="item.avatar" class="card-img-top img-frame" alt="..." />
-
-				<div class="card-footer bg-transparent">
-					<h5 class="card-product-name">{{ item.comment }}</h5>
-					<div class="card-product-body">
-						<p class="card-product-seller">{{ item.company }}</p>
-						<p class="card-product-sold">已售出 {{ item.sold }}</p>
-					</div>
-					<div class="card-product-bottom">
-						<p class="card-product-price">NT${{ item.price }}</p>
-						<div class="d-flex justify-content-between card-others">
-							<div class="card-product-cupon">
-								<div class="coupon-background"></div>
-								<div class="coupon-text">免運券</div>
-							</div>
-							<div class="card-rate">
-								<div class="card-rate-number">
-									{{ item.stars.toFixed(1) }}
-								</div>
-								<ul class="list-unstyled d-flex lh-1 icon-star-group">
-									<li
-										class="px-1"
-										v-for="(star, starIndex) in filledStars"
-										:key="'filled-' + starIndex"
-									>
-										<img :src="starIcon" alt="Filled Star" class="icon-star" />
-									</li>
-									<li
-										class="px-1"
-										v-for="(star, starIndex) in emptyStars"
-										:key="'emptied-' + starIndex"
-									>
-										<img
-											:src="emptyStarIcon"
-											alt="Emptied Star"
-											class="icon-star"
-										/>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
+	<div class="card card-line">
+		<!-- overflow-hidden 雖然可以超出隱藏，但線條會不見，所以直接對圖片導圓角 -->
+		<!-- 使用 圖片 的寫法 img-eca 是為了讓內容滿版置中，外層 card-top 限制圖片高度跟大小 -->
+		<div class="card-top overflow-hidden">
+			<img :src="item.avatar" class="img-eca" alt="..." />
+		</div>
+		<!-- 使用 背景圖 的寫法 img-eca 是為了讓內容滿版置中，外層 div 限制圖片高度跟大小 -->
+		<!-- <div
+				class="bg-img-eca card-top"
+				:style="{
+					'background-image': `url(${item.avatar})`,
+				}"
+			></div> -->
+		<div class="card-body m-0">
+			<h3 class="title mb-1">{{ item.comment }}</h3>
+			<div
+				class="d-flex align-items-center justify-content-between mb-1 p-0 neutral-02 text-card-shop"
+			>
+				<p class="text-shop mb-0">
+					{{ item.company }}
+				</p>
+				<p class="text-sold mb-0">&emsp;已售出 {{ item.sold }}</p>
+			</div>
+			<p class="text-card-price">NT${{ item.price }}</p>
+			<div class="row align-items-center justify-content-between m-0 p-0">
+				<div class="col-12 col-sm-3 p-0 mb-1 mb-sm-0 d-flex">
+					<p class="text-card-coupon btn-Bg-active rounded-1 text-primary mb-0">
+						免運券
+					</p>
+				</div>
+				<div class="col-12 col-sm-9 p-0 d-flex justify-content-sm-end">
+					<Star :stars="item.stars" />
 				</div>
 			</div>
 		</div>
@@ -52,9 +39,7 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import starIcon from '@/assets/icons/iconStar.svg';
-import emptyStarIcon from '@/assets/icons/iconStarOutline.svg';
-
+import Star from './Star.vue';
 // 定義從父組件接收的props
 const props = defineProps<{
 	item: {
@@ -66,211 +51,76 @@ const props = defineProps<{
 		stars: number;
 	};
 }>();
-
-const filledStars = Math.floor(props.item.stars);
-const emptyStars = 5 - filledStars; // 計算空星數量
 </script>
 
-<style scoped>
-.card-content {
-	position: relative;
-	width: 306px;
-	height: 403px; /* 加上边框的高度 */
-	border-radius: 8px; /* 底部边框是圆弧形状 */
-	background: white;
+<style lang="scss" scoped>
+.card-top {
+	border-top-left-radius: 0.5rem;
+	border-top-right-radius: 0.5rem;
+	transition: all 1s ease-out; //效果滑順
+	height: 120px;
+	@media (min-width: 768px) {
+		//依照 Breakpoints md以上 高度是 204px
+		height: 204px;
+	}
+}
+.card-body {
+	padding: 8px 8px 12px 8px;
+	height: 176px;
+	@media (min-width: 768px) {
+		//依照 Breakpoints md以上 高度是 204px
+		padding: 12px 12px 20px 12px;
+		height: 196px;
+	}
+}
+.text-shop,
+.title {
+	display: -webkit-box;
+	-webkit-line-clamp: 2; //超出兩行隱藏
+	-webkit-box-orient: vertical;
 	overflow: hidden;
 }
 
-.outer {
-	position: relative;
-	display: flex;
-	justify-content: center;
+.text-shop {
+	-webkit-line-clamp: 1; //超出兩行隱藏
+}
+.text-sold {
+	flex-shrink: 0; //禁止擠壓
 }
 
-.inner::after {
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 5px;
-	background: linear-gradient(90deg, #fde48e 9.5%, #14b2be 100%);
-	border-radius: 0 0 8px 8px; /* 底部左右圆角 */
-	transition: height 0.3s ease; /* 添加过渡效果 */
+// 所有文字大小
+.title {
+	font-size: 1rem;
+	font-weight: bold;
+	@media (min-width: 768px) {
+		//依照 Breakpoints md以上 高度是 204px
+		font-size: 1.25rem;
+	}
 }
 
-.outer:hover {
-	box-shadow: 0px 4px 40px 0px #0000000d;
+.text-card-shop {
+	font-size: 0.75rem;
+	@media (min-width: 768px) {
+		//依照 Breakpoints md以上 高度是 204px
+		font-size: 1rem;
+	}
 }
-.img-frame {
-	object-fit: cover;
-	width: 100%;
-	height: 204px;
+.text-card-price {
+	font-size: 1.25rem;
+	font-weight: bold;
+	margin-bottom: 8px;
+	@media (min-width: 768px) {
+		//依照 Breakpoints md以上 高度是 204px
+		font-size: 1.5rem;
+	}
 }
-
-.card-product-body {
-	/* layout */
-	width: 282px;
-	height: 24px;
-	gap: 0px;
-	justify-content: space-between;
-	opacity: 0px;
-	display: flex;
-	align-items: center;
-}
-
-.card-product-seller {
-	/* layout */
-	height: 24px;
-	gap: 0px;
-	opacity: 0px;
-	width: 70%;
-
-	/* typography */
-	font-family: Noto Sans TC;
-	font-size: 16px;
-	font-weight: 400;
-	line-height: 24px;
-	text-align: left;
-	/* Neutral 02 */
-	color: #6b768c;
-}
-
-.card-product-sold {
-	/* layout */
-	height: 24px;
-	gap: 0px;
-	opacity: 0px;
-	width: 30%;
-
-	/* typography */
-	font-family: Noto Sans TC;
-	font-size: 16px;
-	font-weight: 400;
-	line-height: 24px;
-	text-align: left;
-
-	/* Neutral 02 */
-	color: #6b768c;
-}
-
-.card-product-bottom {
-	/* layout */
-	width: 282px;
-	height: 74px;
-	gap: 16px;
-	flex-direction: column;
-}
-
-.card-product-price {
-	/* layout */
-	width: 282px;
-	height: 29px;
-	gap: 8px;
-	opacity: 0px;
-	/* typography */
-	font-family: Noto Sans TC;
-	font-size: 24px;
-	font-weight: 700;
-	line-height: 28.8px;
-	text-align: left;
-	/* text */
-	color: #454545;
-}
-
-.card-product-cupon {
-	/* layout */
-	position: relative; /* 讓子元素可以使用定位 */
-}
-
-.coupon-background {
-	/* layout */
-	position: relative;
-
-	width: 58px;
-	height: 29px;
-	padding: 4px 8px 4px 8px;
-	gap: 10px;
-	border-radius: 4px 4px 4px 4px;
-	opacity: 0px;
-	/* text */
-	background-color: #e3f6f8;
-	/* 控制层叠顺序 */
-}
-
-.coupon-text {
-	/* layout */
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 42px;
-	height: 29px;
-	gap: 0px;
-	opacity: 0px;
-	/* typography */
-	font-family: Noto Sans TC;
-	font-size: 14px;
-	font-weight: 400;
-	line-height: 29px; /* 和 .coupon-background 的高度相同 */
-	text-align: center; /* 讓文字居中 */
-	/* text */
-	color: #14b2be;
-}
-.card-footer {
-	height: 194px;
-	padding: 12px 12px 20px 12px;
-	gap: 8px;
-}
-
-.card-product-name {
-	/* layout */
-	width: 282px;
-	height: 48px;
-	gap: 0px;
-	opacity: 0px;
-	/* typography */
-	font-family: 'Noto Sans TC', sans-serif;
-	font-weight: 500;
-	font-size: 20px;
-	line-height: 24px;
-	/* text */
-	color: #454545;
-}
-
-.card-others {
-	width: 82px;
-	height: 29px;
-	gap: 70%;
-	justify-content: space-between;
-	opacity: 0px;
-}
-
-.card-rate {
-	width: 127px;
-	height: 4px;
-	gap: 8px;
-	opacity: 0px;
-	display: flex;
-}
-
-.card-rate-number {
-	/* typography */
-	font-family: Noto Sans TC;
-	font-size: 16px;
-	font-weight: 400;
-	line-height: 24px;
-	text-align: left;
-}
-
-.icon-star-group {
-	width: 96px;
-	height: 16px;
-	gap: 4px;
-	opacity: 0px;
-}
-.icon-star {
-	width: 16px;
-	height: 16px;
+.text-card-coupon {
+	padding: 2px 4px;
+	flex-shrink: 0; //禁止擠壓
+	font-size: 0.75rem; //12
+	@media (min-width: 768px) {
+		//依照 Breakpoints md以上 高度是 204px
+		font-size: 0.875rem; //14
+	}
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div
 		v-if="data"
-		class="container mb-5 mt-7 d-flex justify-content-center align-items-end position-relative"
+		class="container indexTitle d-flex justify-content-center align-items-end position-relative"
 	>
 		<h2 class="text-center mb-0">
 			<span class="title-top">{{ data.titleEn }}</span>
@@ -41,3 +41,11 @@ const props = defineProps<{
 	data: indexTitle; // 消息内容
 }>();
 </script>
+<style lang="scss" scoped>
+.indexTitle {
+	margin-bottom: 32px;
+	@media (min-width: 768px) {
+		margin-bottom: 64px;
+	}
+}
+</style>

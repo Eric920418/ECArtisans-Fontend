@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
 import { type UserData } from '../type/userType';
 import { type SellerData } from '../type/sellerType';
+import { userMenu, sellerMenu } from './menuStore';
+
 import {
 	user,
 	userEdit,
@@ -22,46 +24,8 @@ export const useUserStore = defineStore({
 		accountType: '',
 		updateStatus: false, //確認是否要傳送密碼修改
 		addUserStatus: false, //會員註冊的狀態
-		userMenu: [
-			//會員頁面的目錄
-			{
-				title: '會員資訊',
-				path: 'UserProfile',
-			},
-		],
-		sellerMenu: [
-			//商家頁面的目錄
-			{
-				title: '商家中心',
-				path: 'SellerOverview',
-			},
-			{
-				title: '商家資訊',
-				path: 'SellerProfile',
-			},
-			/*
-				{
-					title: '活動管理',
-					path: 'SellerActivity',
-				},
-				{
-					title: '優惠劵',
-					path: 'SellerCoupon',
-				},
-				{
-					title: '業績分析',
-					path: 'SellerPerformance',
-				},
-				{
-					title: '訂單管理',
-					path: 'SellerProduct',
-				},
-				{
-					title: '聊聊',
-					path: 'SellerMessage',
-				},
-			*/
-		],
+		userMenu: userMenu,
+		sellerMenu: sellerMenu,
 	}),
 
 	getters: {

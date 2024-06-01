@@ -1,5 +1,5 @@
 <template>
-	<div class="row">
+	<div class="row mb-8 m-index-title">
 		<Title :data="titleData" />
 		<div class="col-12">
 			<h1>待調整 寬度變化</h1>
@@ -101,4 +101,3 @@ const props = defineProps<{
 	}
 }
 </style>
->

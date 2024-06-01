@@ -28,3 +28,72 @@
         @content;
     }
 }
+
+// ms-eca-...
+@mixin margin-eca($size, $value) {
+	// 優先級順序 m < mx my < mt...
+  .m-eca#{$size}-#{$value} {
+    margin: #{$value}px !important;
+  }
+	.my-eca#{$size}-#{$value} {
+    margin-top: #{$value}px !important;
+    margin-bottom: #{$value}px !important;
+  }
+  .mx-eca#{$size}-#{$value} {
+    margin-right: #{$value}px !important;
+    margin-left: #{$value}px !important;
+  }
+  .mt-eca#{$size}-#{$value} {
+    margin-top: #{$value}px !important;
+  }
+  .mb-eca#{$size}-#{$value} {
+    margin-bottom: #{$value}px !important;
+  }
+  .ms-eca#{$size}-#{$value} {
+    margin-left: #{$value}px !important;
+  }
+  .me-eca#{$size}-#{$value} {
+    margin-right: #{$value}px !important;
+  }
+	// 優先級順序 p < px py < pt...
+	.p-eca#{$size}-#{$value} {
+		padding: #{$value}px !important;
+	}
+  .py-eca#{$size}-#{$value} {
+    padding-top: #{$value}px !important;
+    padding-bottom: #{$value}px !important;
+  }
+  .px-eca#{$size}-#{$value} {
+    padding-right: #{$value}px !important;
+    padding-left: #{$value}px !important;
+  }
+  .pt-eca#{$size}-#{$value} {
+    padding-top: #{$value}px !important;
+  }
+  .pb-eca#{$size}-#{$value} {
+    padding-bottom: #{$value}px !important;
+  }
+  .ps-eca#{$size}-#{$value} {
+    padding-left: #{$value}px !important;
+  }
+  .pe-eca#{$size}-#{$value} {
+    padding-right: #{$value}px !important;
+  }
+}
+
+
+@include margin-eca("", 12);
+
+
+$breakpoints: (
+  '-sm': 576px,
+  '-md': 768px,
+  '-lg': 992px,
+  '-xl': 1200px
+);
+
+@each $breakpoint, $breakpoint-value in $breakpoints {
+  @media (min-width: #{$breakpoint-value}) {
+    @include margin-eca($breakpoint, 12);
+  }
+}
