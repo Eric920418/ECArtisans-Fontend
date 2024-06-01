@@ -199,16 +199,16 @@ const recommendSellerList = ref([
 	{
 		seller_id: 1,
 		seller_name: '古早味蜜餞',
-		seller_image: './public/images/shop/1-banner.png',
+		seller_image: 'images/shop/1-banner.png',
 		product: [
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 		],
 		star: 0,
@@ -217,16 +217,16 @@ const recommendSellerList = ref([
 	{
 		seller_id: 2,
 		seller_name: '魔法能量商店',
-		seller_image: './public/images/shop/2-banner.png',
+		seller_image: 'images/shop/2-banner.png',
 		product: [
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 		],
 		star: 1,
@@ -235,16 +235,16 @@ const recommendSellerList = ref([
 	{
 		seller_id: 3,
 		seller_name: '333',
-		seller_image: './public/images/shop/3-banner.png',
+		seller_image: 'images/shop/3-banner.png',
 		product: [
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 		],
 		star: 4.3,
@@ -253,16 +253,16 @@ const recommendSellerList = ref([
 	{
 		seller_id: 4,
 		seller_name: 'lex jewelry',
-		seller_image: './public/images/shop/2-2-product.png',
+		seller_image: 'images/shop/2-2-product.png',
 		product: [
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 		],
 		star: 4.3,
@@ -271,16 +271,16 @@ const recommendSellerList = ref([
 	{
 		seller_id: 5,
 		seller_name: '444',
-		seller_image: './public/images/shop/2-2-product.png',
+		seller_image: 'images/shop/2-2-product.png',
 		product: [
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 		],
 		star: 2.5,
@@ -289,16 +289,16 @@ const recommendSellerList = ref([
 	{
 		seller_id: 6,
 		seller_name: '555',
-		seller_image: './public/images/shop/2-2-product.png',
+		seller_image: 'images/shop/2-2-product.png',
 		product: [
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 			{
-				src: './public/images/shop/2-2-product.png',
+				src: 'images/shop/2-2-product.png',
 			},
 		],
 		star: 4.3,

@@ -21,13 +21,26 @@
 			</div>
 			<div class="carousel-indicators">
 				<button
-					v-for="(chunk, index) in chunkedProducts"
-					:key="'indicator-' + index"
 					type="button"
-					:data-bs-target="'#carouselExampleIndicators'"
-					:data-bs-slide-to="index"
-					:class="['indicator-dot', { active: index === 0 }]"
-					:aria-label="'Slide ' + (index + 1)"
+					data-bs-target="#carouselExampleIndicators"
+					data-bs-slide-to="0"
+					class="active indicator-dot"
+					aria-current="true"
+					aria-label="Slide 1"
+				></button>
+				<button
+					type="button"
+					data-bs-target="#carouselExampleIndicators"
+					data-bs-slide-to="1"
+					class="indicator-dot"
+					aria-label="Slide 2"
+				></button>
+				<button
+					type="button"
+					data-bs-target="#carouselExampleIndicators"
+					data-bs-slide-to="2"
+					class="indicator-dot"
+					aria-label="Slide 3"
 				></button>
 			</div>
 			<div class="carousel-control-indicators">
@@ -159,7 +172,7 @@ const ProductList = ref<Product[]>([
 		stars: 3.6,
 	},
 ]);
-const chunkSize = ref<number>(4); // 将 chunkSize 定义为 ref
+const chunkSize = ref<number>(8); // 将 chunkSize 定义为 ref
 
 const chunkedProducts = computed(() => {
 	const chunks: Product[][] = [];
@@ -199,8 +212,8 @@ onMounted(() => {
 
 // 傳遞方法，一定要在最後面
 const titleData = {
-	title: '新品上市',
-	titleEn: 'new',
+	title: '熱銷商品',
+	titleEn: 'hot',
 };
 </script>
 <style lang="scss" scoped>
@@ -219,7 +232,7 @@ const titleData = {
 
 .carousel-container {
 	width: 100%;
-	height: 450px; /* 保持固定高度 */
+	height: 860px; /* 保持固定高度 */
 	gap: 24px;
 	display: flex;
 	flex-wrap: wrap;
@@ -325,7 +338,8 @@ const titleData = {
 
 @media (max-width: 960px) {
 	.card-grid {
-		grid-template-columns: repeat(2, 1fr); /* 每排2个卡片 */
+		display: grid;
+		grid-template-columns: repeat(2, 1fr); /* 每排4个卡片 */
 		grid-gap: 16px; /* 设置卡片之间的间隔 */
 	}
 }
