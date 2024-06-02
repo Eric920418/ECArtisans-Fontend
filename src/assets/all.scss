@@ -141,6 +141,8 @@ $radius-8: 0.5rem; //弧度
 	border-bottom: solid $border transparent; /* !importanté */
 	border-radius: $radius-8;
 	margin: $border;
+	box-shadow: 0px 4px 40px 0px #0000000D !important; 
+
 
 	&:before {
 		content: '';
@@ -153,6 +155,8 @@ $radius-8: 0.5rem; //弧度
 		margin: -$border; /* !importanté */
 		border-radius: $radius-8; /* !importanté */
 		background: linear-gradient(to right, $yellow, $primary);
+		box-shadow: 0px 4px 40px 0px #0000000D !important; 
+
 	}
 }
 

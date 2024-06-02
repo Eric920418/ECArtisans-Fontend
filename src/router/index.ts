@@ -13,10 +13,10 @@ import SignUp from '../views/SignUp.vue';
 
 // seller 商家所有頁面 ---------------------------------START
 import SellerOverview from '../views/SellerOverview.vue';
-import SellerHome from '../views/eliza/SellerHome.vue';
-import SellerOrder from '../views/eliza/SellerOrderList.vue';
-import SellerOneOrder from '../views/eliza/SellerOneOrder.vue';
-import SellerChat from '../views/eliza/SellerChat.vue';
+import SellerHome from '../views/SellerHome.vue';
+import SellerOrder from '../views/SellerOrderList.vue';
+import SellerOneOrder from '../views/SellerOneOrder.vue';
+import SellerChat from '../views/SellerChat.vue';
 
 // seller 商家所有頁面 ---------------------------------END
 
