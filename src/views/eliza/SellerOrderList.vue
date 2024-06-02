@@ -5,7 +5,7 @@
 		<div v-else>
 			<p v-if="orders.length === 0">没有訂單</p>
 			<ul v-else>
-				<li v-for="order in orders as any[]" :key="order._id">
+				<li v-for="order in orders" :key="order._id">
 					資料庫編號: {{ order._id }},訂單編號: {{ order.orderNumber }}, 金額:
 					{{ order.price }}, 訂單狀態: {{ order.state }}, 支付方式:
 					{{ order.pay }}, 交易日期: {{ order.date }}, 產品編號:

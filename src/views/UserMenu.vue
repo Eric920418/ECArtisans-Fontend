@@ -1,0 +1,54 @@
+<template>
+	<div class="container">
+		<div class="row g-3 m-0 flex-grow-1">
+			<div
+				v-if="route.name !== 'SellerHome'"
+				class="d-none d-lg-block col-lg-2 py-5"
+			>
+				<ul class="list-group userMenu">
+					<router-link
+						v-for="(menuItem, menuIndex) in menu"
+						:key="menuIndex"
+						:to="menuItem.path"
+						class="list-group-item btn btn-Bg rounded-2 text-start p-3"
+						:class="{ 'btn-Bg-active': menuItem.path.name === route.name }"
+						:aria-current="menuItem.path.name === route.name"
+					>
+						{{ menuItem.title }}
+					</router-link>
+				</ul>
+			</div>
+			<!-- 右側 -->
+			<router-view class="col py-5"></router-view>
+			<!-- 右側 -->
+		</div>
+	</div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useAuthStore, useUserStore } from '@/stores/index';
+
+const route = useRoute();
+const userStore = useUserStore();
+
+const menu = ref([]) as any;
+const getData = () => {
+	if (route.matched[0].path === '/seller') {
+		menu.value = userStore.sellerMenu;
+	} else if (route.matched[0].path === '/user') {
+		menu.value = userStore.userMenu;
+	}
+};
+onMounted(() => {
+	getData();
+});
+</script>
+<style lang="scss" scoped>
+.userMenu {
+	// max-width: 196px;
+	padding: 16px;
+	background-color: #fff;
+}
+</style>

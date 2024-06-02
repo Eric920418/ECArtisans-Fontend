@@ -8,9 +8,10 @@
 			@cancel="loadingClose"
 		/>
 		<div class="col-12 m-0 p-0">
-			<h2 class="fs-4 text-primary" style="height: fit-content">
-				{{ init.title }}資訊
-			</h2>
+			<NavTabs
+				:data="{ title: [`${init.title}資訊`], schedule: `${init.title}資訊` }"
+				@update-schedule="updateSchedule"
+			/>
 			<div class="my-0 px-4 px-sm-5 card">
 				<div class="row">
 					<div
@@ -492,6 +493,11 @@ import { type UserData } from '@/type/userType';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 
+import NavTabs from '../components/NavTabs.vue';
+const updateSchedule = (newSchedule: string) => {
+	init.value.schedule = newSchedule;
+};
+
 // 頁面用到的資料
 
 const route = useRoute();
@@ -582,36 +588,6 @@ function getFile() {
 		let file = inputField.files[0];
 		// 發api 傳回去 +token
 		userStore.getImgUrl(file, authStore.token);
-		// // 圖片限制邏輯處裡------START
-		// let validTypes = ['image/jpeg', 'image/png'];
-		// let checkSizeKB = false;
-		// let checkSize = false;
-		// let checkType = false;
-		// if (file.size <= 300 * 1024) checkSizeKB = true;
-		// if (validTypes.includes(file.type)) checkType = true;
-		// // 讀取尺寸圖案尺寸
-		// const reader = new FileReader();
-		// reader.onload = e => {
-		// 	const img = new Image();
-		// 	img.onload = () => {
-		// 		if (img.width <= 400 && img.height <= 400) checkSize = true;
-		// 		if (!checkSize || !checkType || !checkSizeKB) {
-		// 			let errorText = '請確認圖片，為';
-		// 			if (!checkType) errorText += ' .jpg 或 .png 格式';
-		// 			if (!checkType && !checkSizeKB) errorText += ',';
-		// 			if (!checkSizeKB) errorText += '檔案大小 300k 以內';
-		// 			if ((!checkType || !checkSizeKB) && !checkSize) errorText += ',';
-		// 			if (!checkSize) errorText += '檔案尺寸 300x300';
-		// 			errorText += '。';
-		// 			alertStore.error(errorText);
-		// 			return;
-		// 		}
-		// 	};
-		// 	// img.src = e.target?.result as string;
-		// 	data.value.avatar = e.target?.result as string;
-		// };
-		// reader.readAsDataURL(file);
-		// // 圖片限制邏輯處裡------END
 	}
 }
 </script>

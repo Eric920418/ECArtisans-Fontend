@@ -3,36 +3,36 @@ import { useAuthStore } from '@/stores/authStore';
 
 // 前台商場頁面(非會員中心) ---------------------------------START
 import Index from '../views/PageIndex.vue';
-import FAQ from '../views/eric/IndexFAQ.vue';
+// import FAQ from '../views/eric/IndexFAQ.vue';
 import CardTest from '../views/eliza/CardTest.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
 
 // 登入註冊相關頁面 ---------------------------------START
-import Login from '../views/amy/Login.vue';
-import SignUp from '../views/amy/SignUp.vue';
+import Login from '../views/Login.vue';
+import SignUp from '../views/SignUp.vue';
 // 登入註冊相關頁面 ---------------------------------END
 
 // seller 商家所有頁面 ---------------------------------START
-import SellerOverview from "../views/amy/SellerOverview.vue"
-import SellerProfile from "../views/amy/SellerProfile.vue"
-import SellerHome from "../views/eliza/SellerHome.vue"
-import SellerOrder from "../views/eliza/SellerOrderList.vue"
-import SellerOneOrder from "../views/eliza/SellerOneOrder.vue"
-import SellerChat from "../views/eliza/SellerChat.vue"
+import SellerOverview from '../views/SellerOverview.vue';
+import SellerHome from '../views/eliza/SellerHome.vue';
+import SellerOrder from '../views/eliza/SellerOrderList.vue';
+import SellerOneOrder from '../views/eliza/SellerOneOrder.vue';
+import SellerChat from '../views/eliza/SellerChat.vue';
 
 // seller 商家所有頁面 ---------------------------------END
 
-
 // user
-import UserProfile from '../views/amy/UserProfile.vue';
+import UserProfile from '../views/UserProfile.vue';
+import UserProduct from '../views/UserProduct.vue';
+import UserCoupon from '../views/UserCoupon.vue';
 import Component from 'vue-loading-overlay';
 
 // 會員所有頁面 ---------------------------------END
 
 const routes = [
 	{ path: '/', name: 'Index', component: Index },
-	{ path: '/faq', name: 'FAQ', component: FAQ },
-	{ path: '/card', name: 'CardTest', component: CardTest},
+	// { path: '/faq', name: 'FAQ', component: FAQ },
+	{ path: '/card', name: 'CardTest', component: CardTest },
 
 	{ path: '/user-login', name: 'UserLogin', component: Login },
 	{ path: '/seller-login', name: 'SellerLogin', component: Login },
@@ -43,7 +43,7 @@ const routes = [
 	{
 		path: '/seller',
 		name: 'Seller',
-		component: () => import('../views/amy/UserMenu.vue'),
+		component: () => import('../views/UserMenu.vue'),
 		children: [
 			{
 				path: 'home', // 開店推薦主頁
@@ -62,27 +62,33 @@ const routes = [
 				component: SellerOverview,
 				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
 			},
-      {
-        path: 'order', // 訂單管理
-        name: "SellerOrder",
-        component: SellerOrder,
-        meta: { requiresSellerAuth: true } // 商家身份登入後才能訪問
-      },
-      {
-        path: 'order/:orderId', // 單筆訂單管理
-        name: "SellerOneOrder",
-        component: SellerOneOrder,
-        meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
-        props: true // 將orderID參數作為'props'傳遞給其他組件
-      },
-      {
-        path: 'chat', // 單筆訂單管理
-        name: "SellerChat",
-        component: SellerChat,
-        meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
-        props: true // 將orderID參數作為'props'傳遞給其他組件
-      },
-			
+			{
+				path: 'order', // 訂單管理
+				name: 'SellerOrder',
+				component: SellerOrder,
+				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+			},
+			{
+				path: 'order/:orderId', // 單筆訂單管理
+				name: 'SellerOneOrder',
+				component: SellerOneOrder,
+				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+				props: true, // 將orderID參數作為'props'傳遞給其他組件
+			},
+			{
+				path: 'chat', // 單筆訂單管理
+				name: 'SellerChat',
+				component: SellerChat,
+				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+				props: true, // 將orderID參數作為'props'傳遞給其他組件
+			},
+			{
+				path: 'coupon/:page', // 優惠劵
+				name: 'SellerCoupon',
+				component: UserCoupon,
+				meta: { requiresSellerAuth: true },
+				// props: true,
+			},
 		],
 	},
 	// seller 商家所有頁面 ------------------------- seller 商家所有頁面 --------END
@@ -91,7 +97,7 @@ const routes = [
 	{
 		path: '/user',
 		name: 'User',
-		component: () => import('../views/amy/UserMenu.vue'),
+		component: () => import('../views/UserMenu.vue'),
 		children: [
 			// {
 			//   path: 'home', //
@@ -101,6 +107,12 @@ const routes = [
 				path: 'profile', // 會員中心
 				name: 'UserProfile',
 				component: UserProfile,
+				meta: { requiresUserAuth: true }, // 買家身份登入後才能訪問
+			},
+			{
+				path: 'product', // 收藏商品
+				name: 'UserProduct',
+				component: UserProduct,
 				meta: { requiresUserAuth: true }, // 買家身份登入後才能訪問
 			},
 		],

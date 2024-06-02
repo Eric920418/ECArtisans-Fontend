@@ -300,7 +300,10 @@ $cyans: (
 // scss-docs-start theme-color-variables
 $red: #ff0405;
 $yellow: #fde48e;
+
 $primary: #14b2be !default; //主要顏色
+$Bg: #E3F6F8 !default; //同深色背景
+
 $secondary: $yellow !default; //次要
 $success: $green !default; //成功後顯示顏色
 $info: $cyan !default; //額外提供的訊息
@@ -309,6 +312,7 @@ $danger: $red !default; //危險顏色
 
 $light: #e3f6f8 !default; //淺色的背景
 $dark: #565e6c !default; //深色背景 同 Neutral-01
+
 
 $Neutral-01: #565e6c !default; //同深色背景
 $Neutral-02: #6b768c !default; //深色背景
@@ -327,6 +331,7 @@ $Neutral-05: #f7f7f7 !default; //深色背景
 // scss-docs-start theme-colors-map
 $theme-colors: (
 	'primary': $primary,
+	'Bg': $Bg,
 	'secondary': $secondary,
 	'success': $success,
 	'info': $info,

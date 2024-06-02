@@ -1,8 +1,8 @@
 <template>
-	<div class="w-100 p-0 m-0 mb-4">
+	<div class="w-100 m-index-title mb-7">
 		<Title :data="titleData" />
 		<div class="m-0 p-0">
-			<div class="container">
+			<div class="container px-eca-12 px-sm-0">
 				<swiper
 					:slidesPerView="resize && resize >= 992 ? 3 : 1"
 					:watchSlidesProgress="true"
@@ -16,7 +16,7 @@
 					}"
 					:pagination="{
 						el: '.swiper-pagination',
-						dynamicBullets: false,
+						type: 'bullets',
 						clickable: true,
 					}"
 					:modules="modules"
@@ -58,7 +58,9 @@
 						</div>
 						<div class="row m-0 p-0 justify-content-center"></div>
 					</SwiperSlide>
-					<div class="swiper-pagination d-flex-column d-sm-none" />
+					<div
+						class="swiper-pagination d-flex-column d-sm-none swiper-page-bottom"
+					/>
 					<!-- position-absolute top-100 start-50 translate-middle -->
 					<div
 						class="swiper-button-prev btn-eca-s btn-eca-s-prev d-none"
@@ -205,6 +207,7 @@ const navigation = ref({
 const modules = [Autoplay, Pagination, Navigation, Scrollbar];
 const prevEl = () => {};
 const nextEl = () => {};
+
 const btnPrevRef = ref<HTMLDivElement | null>(null);
 const btnNextRef = ref<HTMLDivElement | null>(null);
 const getPrev = () => {
@@ -231,9 +234,5 @@ const titleData = {
 }
 .productCard {
 	height: 81px;
-}
-.swiper-pagination {
-	position: inherit; //禁止 position 對位往上移動
-	padding: 12px;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
-	<div class="w-100">
+	<div class="w-100 m-index-title">
 		<Title :data="titleData" />
 		<div class="m-0 p-0 overflow-x-hidden">
-			<div class="container indexShop position-relative">
+			<div class="container indexShop position-relative p-0">
 				<swiper
 					slidesPerView="auto"
 					:watchSlidesProgress="true"
@@ -29,7 +29,9 @@
 						:key="index"
 						:virtualIndex="index"
 					>
-						<div class="card overflow-hidden indexShopCard m-3 m-sm-2 d-flex">
+						<div
+							class="card p-0 indexShopCard overflow-x-hidden mx-eca-12 mx-sm-2 d-flex"
+						>
 							<div
 								class="indexShopCard-top col-12 d-flex justify-content-center align-items-center bg-img-eca-dack"
 								:style="{
@@ -44,21 +46,7 @@
 								></div>
 								<div class="text-white ma-12">
 									<h3 class="mb-2">{{ item.seller_name }}</h3>
-									<div
-										class="d-flex justify-content-center align-items-center fs-h6"
-									>
-										4.2
-										<div class="mx-2">
-											<img
-												v-for="(starItem, starIndex) in 5"
-												:key="starIndex"
-												src="https://raw.githubusercontent.com/hexschool/webLayoutTraining1st/f70f00178a7f0baa31e9c01634303d8562cfe93a/chatTalker_images/icon_star.svg"
-												alt="評價星星"
-												style="width: 18px; padding: 2px"
-											/>
-										</div>
-										(20)
-									</div>
+									<Star :stars="item.star" />
 								</div>
 							</div>
 							<div class="row m-0 p-2">
@@ -72,7 +60,9 @@
 							</div>
 						</div>
 					</SwiperSlide>
-					<div class="swiper-pagination d-flex-column d-sm-none" />
+					<div
+						class="swiper-pagination d-flex-column d-sm-none swiper-page-bottom"
+					/>
 					<div
 						class="swiper-button-prev btn-eca d-none d-sm-flex start-0 translate-middle + 6px"
 						@click.stop="prevEl()"
@@ -89,7 +79,7 @@
 			</div>
 		</div>
 		<div
-			class="m-0 p-0 d-flex justify-content-center align-items-center px-2 p-md-6"
+			class="d-flex justify-content-center align-items-center mt-4 mt-md-5 mt-xl-6 mx-eca-12 mx-sm-0 mx-md-5"
 		>
 			<div class="container px-0 m-0 position-relative">
 				<swiper
@@ -107,7 +97,7 @@
 					}"
 					:pagination="{
 						el: '.swiper-pagination',
-						dynamicBullets: false,
+						type: 'bullets',
 						clickable: true,
 					}"
 					:modules="modules"
@@ -128,10 +118,14 @@
 									'background-image': `url(${item.src})`,
 								}"
 							></div>
-							<p class="indexShopTitle text-center">{{ item.name }}</p>
+							<p class="indexShopTitle text-center mb-0">
+								{{ item.name }}
+							</p>
 						</div>
 					</SwiperSlide>
-					<div class="swiper-pagination d-flex-column d-md-none" />
+					<div
+						class="swiper-pagination d-flex-column d-md-none swiper-page-bottom"
+					/>
 					<div
 						class="swiper-button-prev btn-eca-s btn-eca-s-prev d-none"
 						ref="btnPrevRef"
@@ -170,6 +164,7 @@ import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { useResize } from './../setup/useResize';
 import Title from './IndexTitle.vue';
+import Star from './Star.vue';
 const { resize } = useResize();
 
 const shopList = ref([
@@ -211,7 +206,7 @@ const recommendSellerList = ref([
 				src: 'images/shop/2-2-product.png',
 			},
 		],
-		star: 0,
+		star: 0.5,
 		total_comments: 0,
 	},
 	{
@@ -351,8 +346,9 @@ const titleData = {
 }
 
 .indexShopCard {
-	padding: 0px;
-	transition: all 1s ease-out;
+	// padding: 0px !important;
+	// overflow: hidden;
+	// transition: all 1s ease-out;
 	height: 298px;
 	@media (min-width: 1200px) {
 		height: 392px; //392px
@@ -372,9 +368,9 @@ const titleData = {
 	}
 }
 .indexShopCard-top {
-	padding: 0px;
+	// padding: 0px;
 	height: 176px;
-	transition: all 1s ease-out;
+	// transition: all 1s ease-out;
 	@media (min-width: 1200px) {
 		height: 240px;
 	}
@@ -386,10 +382,7 @@ const titleData = {
 .swiper-backface-hidden {
 	overflow: initial !important;
 }
-.swiper-pagination {
-	position: inherit; //禁止 position 對位往上移動
-	padding: 12px;
-}
+
 .indexShopSwiperSlide {
 	display: flex;
 	align-items: center;
