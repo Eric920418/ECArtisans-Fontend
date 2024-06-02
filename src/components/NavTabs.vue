@@ -22,8 +22,6 @@
 	</ul>
 </template>
 <script lang="ts" setup>
-import { defineProps, defineEmits } from 'vue';
-
 export interface navTabs {
 	title: Array<string>;
 	schedule: string;

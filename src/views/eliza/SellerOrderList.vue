@@ -10,7 +10,7 @@
 					{{ order.price }}, 訂單狀態: {{ order.state }}, 支付方式:
 					{{ order.pay }}, 交易日期: {{ order.date }}, 產品編號:
 					<ul>
-						<li v-for="product in order.products" :key="product">
+						<li v-for="product in order.products" :key="product._id">
 							產品編號: {{ product }}
 						</li>
 					</ul>

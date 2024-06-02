@@ -38,7 +38,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue';
 import Star from './Star.vue';
 // 定義從父組件接收的props
 const props = defineProps<{
