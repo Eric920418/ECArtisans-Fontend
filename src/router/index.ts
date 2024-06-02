@@ -4,7 +4,6 @@ import { useAuthStore } from '@/stores/authStore';
 // 前台商場頁面(非會員中心) ---------------------------------START
 import Index from '../views/PageIndex.vue';
 // import FAQ from '../views/eric/IndexFAQ.vue';
-import CardTest from '../views/eliza/CardTest.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
 
 // 登入註冊相關頁面 ---------------------------------START
@@ -32,7 +31,6 @@ import Component from 'vue-loading-overlay';
 const routes = [
 	{ path: '/', name: 'Index', component: Index },
 	// { path: '/faq', name: 'FAQ', component: FAQ },
-	{ path: '/card', name: 'CardTest', component: CardTest },
 
 	{ path: '/user-login', name: 'UserLogin', component: Login },
 	{ path: '/seller-login', name: 'SellerLogin', component: Login },
