@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/authStore';
 
 // 前台商場頁面(非會員中心) ---------------------------------START
 import Index from '../views/PageIndex.vue';
+import TestPage from '../views/TestPage.vue';
 // import FAQ from '../views/eric/IndexFAQ.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
 
@@ -30,6 +31,7 @@ import Component from 'vue-loading-overlay';
 
 const routes = [
 	{ path: '/', name: 'Index', component: Index },
+	{ path: '/test-page', name: 'TestPage', component: TestPage },
 	// { path: '/faq', name: 'FAQ', component: FAQ },
 
 	{ path: '/user-login', name: 'UserLogin', component: Login },

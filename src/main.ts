@@ -28,6 +28,7 @@ import {
 	FontAwesomeLayers,
 	FontAwesomeLayersText,
 } from '@fortawesome/vue-fontawesome';
+import {createBootstrap} from 'bootstrap-vue-next'
 
 library.add(fab);
 library.add(fas);
@@ -53,4 +54,6 @@ app.use(VueAxios, axios);
 app.use(ElementPlus);
 app.use(VueCookies);
 app.use(LoadingPlugin);
+app.use(createBootstrap({components: true, directives: true})) // Change this line
+
 app.mount('#app');
