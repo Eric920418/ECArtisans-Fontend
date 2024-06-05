@@ -15749,6 +15749,10 @@ textarea.form-control-lg {
   color: #e4e9f2;
 }
 
+.btn-outline-primary {
+  border: 1px solid #14b2be;
+}
+
 .form-disabled {
   --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
   display: block;
@@ -15807,6 +15811,7 @@ textarea.form-control-lg {
   border-bottom: solid 5px transparent; /* !importanté */
   border-radius: 0.5rem;
   margin: 5px;
+  box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.0509803922) !important;
 }
 .card-line:hover:before,
 .card-line:focus:before {
@@ -15820,6 +15825,7 @@ textarea.form-control-lg {
   margin: -5px; /* !importanté */
   border-radius: 0.5rem; /* !importanté */
   background: linear-gradient(to right, #fde48e, #14b2be);
+  box-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.0509803922) !important;
 }
 
 .btn-eca-s,
@@ -15974,4 +15980,43 @@ textarea.form-control-lg {
 
 .nav-link:hover {
   cursor: pointer;
+}
+
+.text-card-coupon {
+  padding: 2px 4px;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+@media (min-width: 768px) {
+  .text-card-coupon {
+    font-size: 0.875rem;
+  }
+}
+
+.card-hover:hover .card-text-hover {
+  color: #14b2be;
+}
+
+.page-link {
+  width: 2em;
+  height: 2em;
+  padding: 0px;
+  display: flex;
+  margin: 1px !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 99em !important;
+  border: none;
+  color: #565e6c;
+  cursor: pointer;
+}
+
+.page-link:hover {
+  color: #14b2be;
+  background-color: #E3F6F8;
+}
+
+.page-item:active .page-link {
+  color: #fff;
+  background-color: #14b2be;
 }/*# sourceMappingURL=all.css.map */

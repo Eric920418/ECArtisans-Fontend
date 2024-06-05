@@ -1,28 +1,29 @@
 <template>
-	<v-form class="row g-3 mx-0 mb-0 pb-0" v-slot="{ errors }" @submit="onSubmit">
-		<Loading
+	<v-form
+		class="row g-3 mx-0 mb-0 pb-0 p-0"
+		v-slot="{ errors }"
+		@submit="onSubmit"
+	>
+		<!-- //有點想拿掉，data出現的速度感覺變慢
+			<Loading
 			v-model:active="isLoading"
 			:can-cancel="true"
 			:is-full-page="true"
 			v-if="data.name === undefined"
 			@cancel="loadingClose"
-		/>
+		/> -->
 		<div class="col-12 m-0 p-0">
 			<NavTabs
 				:data="{ title: [`${init.title}資訊`], schedule: `${init.title}資訊` }"
 				@update-schedule="updateSchedule"
 			/>
-			<div class="my-0 px-4 px-sm-5 card">
+			<div class="mb-0 m-3 px-4 px-sm-5 card">
 				<div class="row">
-					<div
-						class="col-12 mb-4"
-						style="padding: 12px"
-						v-if="init.title === '商家'"
-					>
+					<div class="col-12 mb-4 p-eca-12 pt-0" v-if="init.title === '商家'">
 						<div class="w-100 border-bottom pb-4" style="padding: 12px">
 							<div class="row m-0 p-0 justify-content-end align-items-center">
 								<div
-									class="col-12 col-sm-5 d-flex justify-content-end align-items-center m-0 p-0 me-sm-4"
+									class="col-12 col-md-8 d-flex justify-content-center justify-content-md-end align-items-center m-0 p-0 me-sm-4"
 								>
 									<h3 class="fs-5 neutral-01 fw-medium me-4 my-0">
 										合約到期日
@@ -36,7 +37,9 @@
 										{{ init.planPeriod ? init.planPeriod : '尚未購買' }}
 									</p>
 								</div>
-								<div class="col-12 col-sm-2 m-0 p-0 d-flex justify-content-end">
+								<div
+									class="col-12 col-md-3 mt-3 mt-md-0 p-0 d-flex justify-content-center justify-content-md-end flex-shrink"
+								>
 									<button type="button" class="btn btn-primary px-5" disabled>
 										續約
 									</button>
@@ -467,7 +470,7 @@
 			</div>
 		</div>
 		<div
-			class="col-12 bg-white p-3 px-sm-5 rounded-0 sticky-bottom d-flex justify-content-end"
+			class="col bg-white p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end"
 		>
 			<button
 				type="button"
@@ -591,3 +594,8 @@ function getFile() {
 	}
 }
 </script>
+<style lang="scss" scoped>
+.flex-shrink {
+	flex-shrink: 0; //禁止擠壓
+}
+</style>

@@ -10,7 +10,7 @@ export const sellerMenu = [
 	},
 	{
 		title: '優惠劵',
-		path: { name: 'SellerCoupon', params: { page: 1 } },
+		path: { name: 'SellerCoupon', query: { page: 1 } },
 	},
 	/*
     {

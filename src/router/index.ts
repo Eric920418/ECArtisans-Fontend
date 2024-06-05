@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/authStore';
 
 // 前台商場頁面(非會員中心) ---------------------------------START
 import Index from '../views/PageIndex.vue';
+import TestPage from '../views/TestPage.vue';
 // import FAQ from '../views/eric/IndexFAQ.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
 
@@ -24,12 +25,14 @@ import SellerChat from '../views/SellerChat.vue';
 import UserProfile from '../views/UserProfile.vue';
 import UserProduct from '../views/UserProduct.vue';
 import UserCoupon from '../views/UserCoupon.vue';
+import UserCouponNew from '../views/UserCouponNew.vue';
 import Component from 'vue-loading-overlay';
 
 // 會員所有頁面 ---------------------------------END
 
 const routes = [
 	{ path: '/', name: 'Index', component: Index },
+	{ path: '/test-page', name: 'TestPage', component: TestPage },
 	// { path: '/faq', name: 'FAQ', component: FAQ },
 
 	{ path: '/user-login', name: 'UserLogin', component: Login },
@@ -81,11 +84,23 @@ const routes = [
 				props: true, // 將orderID參數作為'props'傳遞給其他組件
 			},
 			{
-				path: 'coupon/:page', // 優惠劵
+				path: 'coupon', // 優惠劵
 				name: 'SellerCoupon',
 				component: UserCoupon,
 				meta: { requiresSellerAuth: true },
-				// props: true,
+			},
+			{
+				path: 'coupon-new', // 新增優惠劵
+				name: 'SellerCouponNew',
+				component: UserCouponNew,
+				meta: { requiresSellerAuth: true },
+			},
+			{
+				path: 'coupon/:id', // 修改/查看優惠劵
+				name: 'SellerCouponCheck',
+				component: UserCouponNew,
+				meta: { requiresSellerAuth: true },
+				props: true,
 			},
 		],
 	},

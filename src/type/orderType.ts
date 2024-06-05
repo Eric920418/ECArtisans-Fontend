@@ -1,6 +1,6 @@
 export interface Product {
 	_id: string;
-	sellerCategory: any[];
+	sellerCategory: Array<number>; //商品主要類別
 	category: any[];
 	isOnshelf: boolean;
 	reviews: any[];
@@ -11,12 +11,12 @@ export interface Product {
 	origin: string;
 	ingredient: string;
 	format: {
-			_id: string;
-			title: string;
-			price: number;
-			cost: number;
-			stock: number;
-			color: string[];
+		_id: string;
+		title: string;
+		price: number;
+		cost: number;
+		stock: number;
+		color: string[];
 	}[];
 	introduce: string;
 	production: string;
@@ -24,7 +24,7 @@ export interface Product {
 	evaluate: any[];
 	haveStore: string;
 	fare: number;
-	pay: string[];
+	pay: Array<number>; //1:信用卡付款 2.ATM匯款 3.店到店付費
 	keyword: any[];
 	image: string[];
 }
