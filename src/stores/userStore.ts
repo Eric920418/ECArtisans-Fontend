@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
 import { type UserData } from '../type/userType';
-import { type SellerData } from '../type/sellerType';
 import { userMenu, sellerMenu } from './menuStore';
 
 import {
@@ -18,7 +17,7 @@ export const useUserStore = defineStore({
 	id: 'user',
 	state: () => ({
 		user: {} as UserData, // 初始信息
-		sellerData: {} as SellerData, // 初始商家信息
+		sellerData: {} as UserData, // 初始商家信息
 		imageError: 'images/user-img.svg',
 		isLoading: false,
 		accountType: '',

@@ -10,10 +10,10 @@
 				<!-- spaceBetween: SwiperSlide裡面的每個項目 間距 要多少 -->
 				<swiper
 					:slidesPerView="
-						resize <= 576 ? 2 : resize <= 768 ? 2 : resize <= 1200 ? 3 : 4
+						resize <= 576 ? 2 : resize <= 768 ? 2 : resize <= 1200 ? 2 : 4
 					"
 					:slidesPerGroup="
-						resize <= 576 ? 2 : resize <= 768 ? 2 : resize <= 1200 ? 3 : 4
+						resize <= 576 ? 2 : resize <= 768 ? 2 : resize <= 1200 ? 2 : 4
 					"
 					:freeMode="false"
 					:loop="true"

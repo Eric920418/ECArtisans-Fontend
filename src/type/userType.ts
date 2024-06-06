@@ -22,7 +22,7 @@ export interface UserData {
 	bossName?: string | undefined | null;
 	brand?: string | undefined | null;
 	plan?: string | undefined | null;
-	planPeriod?: string | undefined | null;
+	planPeriod?: Date | undefined | null; //方案到期日|string
 	introduce?: string | undefined | null;
 	salesType?: any | undefined | null;
 	collection?: string | undefined | null;

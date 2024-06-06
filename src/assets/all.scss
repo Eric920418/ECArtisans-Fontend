@@ -75,7 +75,10 @@
 		color: $Neutral-03;
 	}
 }
-
+.btn-outline-primary {
+	// 不知道什麼東西蓋過去了，補一下
+	border: 1px solid $primary;
+}
 
 .form-disabled{
 	--bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
@@ -306,8 +309,97 @@ $radius-8: 0.5rem; //弧度
 	cursor: pointer; //變手掌
 }
 
+.text-card-coupon {
+	padding: 2px 4px;
+	flex-shrink: 0; //禁止擠壓
+	font-size: 0.75rem; //12
+	@media (min-width: 768px) {
+		//依照 Breakpoints md以上 高度是 204px
+		font-size: 0.875rem; //14
+	}
+}
+
+.card-hover:hover {
+	.card-text-hover{
+		color:  $primary;
+	}
+}
+
+
+// 原本要做 頁碼，但還沒有製作，CSS 可以參考或整個改掉
+// 圓的 或 方(圓角) 的都可以，樣式未修 做到一半 還在看感覺~
+.page-link{
+	width: 2em;
+	height: 2em;
+	padding: 0px;
+	display: flex;
+	margin: 1px !important;
+	align-items: center;
+	justify-content: center;
+	border-radius: 99em !important;
+	border: none;
+	// background-color: inherit;
+	color: $Neutral-01;
+	cursor: pointer;
+}
+
+.page-link:hover{
+	color: $primary;
+	background-color: $Bg;
+}
+
+.page-item:active { //點擊
+	.page-link{
+		color: #fff;
+		background-color: $primary;
+	}
+}
+
+
+// input 標籤 下拉選單，標籤(注意HTML上也有 class)。
+.input-badge{
+	padding: 4px 8px 4px 16px;
+	font-size: 0.875rem; //14
+	color: $primary;
+	background-color: $Bg;
+	border-radius: 99em !important;
+	margin: 6px 8px 6px 0px;
+	display: flex;
+  align-items: center; 
+	p{
+		margin-right: 4px;
+	}
+	.btn-close {
+		color: $Neutral-04 !important;
+		padding: 4px 4px;
+		font-size: 0.75rem;
+	}
+}
 
 
 
+// 畫面卷軸 更新
+.scrollbar {
+	&::-webkit-scrollbar {
+		width: 5px; //scroll寬度
+	}
+	&::-webkit-scrollbar-track {
+		background-color: $Neutral-03; //背景
+		border-radius: 10px;
+		margin: 2px 0px;
+	}
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background-color: $primary;//scroll顏色
+	}
+}
+
+// sticky 降 z-index 避免 其他的無法蓋過
+.sticky-bottom{
+	z-index: 5;
+}
 
 
+.flex-shrink {
+	flex-shrink: 0; //禁止擠壓
+}

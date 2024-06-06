@@ -8,17 +8,30 @@
 		/>
 		<div class="row g-3 py-4 justify-content-center">
 			<div
-				class="col-12 col-md-6 col-lg-7 col-xl-8 d-flex pt-4 ps-5 pe-4 px-md-4 my-4 mt-md-6 justify-content-center align-items-center order-last order-sm-first"
+				class="col-12 col-md-6 col-lg-6 col-xl-6 d-flex ps-5 pe-4 px-md-4 my-4 mt-md-6 justify-content-center align-items-center order-last order-sm-first"
 			>
-				<div class="card box w-100 h-100">
-					<div class="position-relativ" style="height: 50vh">
+				<div
+					class="card w-100 h-100 bg-login"
+					:style="{
+						'background-image': 'url(./images/imgLogin.svg)',
+					}"
+				>
+					<div class="position-relativ" style="height: 60vh">
 						<div
 							class="position-absolute"
-							style="transform: translate(-13.5%, -30%)"
+							:style="{
+								transform:
+									resize < 576
+										? 'translate(0%, -15%)'
+										: resize < 992
+											? 'translate(-10%, 20%)'
+											: 'translate(-50%, 30%)',
+							}"
 						>
-							<h2 class="z-3 fw-bold display-3">{{ init.title }}</h2>
+							<h2 class="z-3 fw-bold display-3">
+								<img src="/images/ECArtisans.svg" />
+							</h2>
 							<h3 class="z-3 fw-bold">{{ init.subtitle }}</h3>
-							<p>{{ init.img }}</p>
 						</div>
 					</div>
 				</div>
@@ -104,7 +117,8 @@ import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/index';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
-
+import { useResize } from './../setup/useResize';
+const { resize } = useResize();
 // 頁面用到的資料
 const authStore = useAuthStore();
 
@@ -123,7 +137,7 @@ const eye = ref(false);
 const userTitleData = {
 	img: 'imgSrc',
 	title: 'ECArtisans',
-	subtitle: '探索無限購物樂趣',
+	subtitle: '探索無限的購物樂趣',
 	loginTitle: '會員登入',
 	routerLink: 'UserSignUp',
 };
@@ -168,7 +182,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.box {
-	background-color: #d1c4c4;
+.bg-login {
+	background-repeat: no-repeat;
+	/* background-attachment: fixed; */
+	background-position: center;
+	background-size: contain;
+	background-color: inherit;
 }
 </style>

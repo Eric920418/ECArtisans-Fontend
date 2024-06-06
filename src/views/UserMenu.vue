@@ -1,11 +1,11 @@
 <template>
-	<div class="container">
-		<div class="row g-3 m-0 flex-grow-1">
+	<div class="container p-0">
+		<div class="row g-3 m-0 p-0 flex-grow-1">
 			<div
 				v-if="route.name !== 'SellerHome'"
-				class="d-none d-lg-block col-lg-2 py-5"
+				class="d-none d-lg-block col-lg-2 p-0 m-0"
 			>
-				<ul class="list-group userMenu">
+				<ul class="list-group userMenu mt-5">
 					<router-link
 						v-for="(menuItem, menuIndex) in menu"
 						:key="menuIndex"
@@ -19,7 +19,7 @@
 				</ul>
 			</div>
 			<!-- 右側 -->
-			<router-view class="col py-5"></router-view>
+			<router-view class="col p-0 mt-5"></router-view>
 			<!-- 右側 -->
 		</div>
 	</div>

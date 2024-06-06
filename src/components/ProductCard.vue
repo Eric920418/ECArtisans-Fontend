@@ -113,13 +113,4 @@ const props = defineProps<{
 		font-size: 1.5rem;
 	}
 }
-.text-card-coupon {
-	padding: 2px 4px;
-	flex-shrink: 0; //禁止擠壓
-	font-size: 0.75rem; //12
-	@media (min-width: 768px) {
-		//依照 Breakpoints md以上 高度是 204px
-		font-size: 0.875rem; //14
-	}
-}
 </style>

@@ -461,13 +461,29 @@
 							</label>
 						</div>
 						<div class="w-100">
-							<textarea
+							<v-field
+								v-slot="{ field, errors }"
+								v-model="data.introduce"
+								name="comment"
+								rules="required"
+							>
+								<textarea
+									v-bind="field"
+									placeholder="請輸入..."
+									id="introduce"
+									class="form-control"
+									style="height: 6.5em; resize: none"
+									:class="{ 'is-invalid': errors[0] }"
+									name="comment"
+								/>
+							</v-field>
+							<!-- <textarea
 								class="form-control"
 								placeholder="請輸入..."
 								id="introduce"
 								v-model="data.introduce"
 								style="height: 6.5em; resize: none"
-							></textarea>
+							></textarea> -->
 						</div>
 					</div>
 					<!-- 介紹 END-->
