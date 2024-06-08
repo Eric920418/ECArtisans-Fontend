@@ -355,6 +355,14 @@ $radius-8: 0.5rem; //弧度
 	}
 }
 
+.page-item-bottom {
+	position: initial !important;
+	margin-bottom: 32px;
+	width: 100%;
+	@media (min-width: 768px) {
+		margin-bottom: 64px;
+	}
+}
 
 // input 標籤 下拉選單，標籤(注意HTML上也有 class)。
 .input-badge{
