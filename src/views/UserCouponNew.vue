@@ -212,8 +212,9 @@
 									class="form-control py-0"
 									:class="{
 										'justify-content-between':
-											newData.productChoose.length === 0,
-										'justify-content-start': newData.productChoose.length !== 0,
+											newData.productChoose?.length === 0,
+										'justify-content-start':
+											newData.productChoose?.length !== 0,
 									}"
 									ref="dropdownBtn"
 									type="button"
@@ -221,7 +222,7 @@
 									data-bs-auto-close="outside"
 								>
 									<div
-										v-if="newData.productChoose.length === 0"
+										v-if="newData.productChoose?.length === 0"
 										class="text-start d-flex justify-content-between align-items-center"
 									>
 										<p class="mb-0 neutral-03" style="padding: 6px 0px">
@@ -360,10 +361,15 @@ const dropdownBtn = ref<HTMLButtonElement | null>(null);
 const dropdown = ref<HTMLDivElement | null>(null);
 
 // 刪除
+// function inputBadgeClose(id: string) {
+// 	newData.value.productChoose = newData.value.productChoose.filter(
+// 		item => item !== id
+// 	);
+// }
+
+// 刪除，待檢查
 function inputBadgeClose(id: string) {
-	newData.value.productChoose = newData.value.productChoose.filter(
-		item => item !== id
-	);
+	newData.value.productChoose?.filter(item => item !== id);
 }
 
 // 回傳的假資料格式
@@ -371,7 +377,7 @@ export interface couponNewData {
 	couponName: string | null;
 	start_date: number | null;
 	due_date: number | null;
-	type: number | null;
+	type: string | null; //待檢查，原本為number但上面使用跳錯誤說number跟string沒有關聯，故改為string，參考118行
 	priceOver: number | null;
 	percentage: number | null;
 	productType: number | null;
