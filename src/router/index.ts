@@ -18,12 +18,14 @@ import SellerHome from '../views/SellerHome.vue';
 import SellerOrder from '../views/SellerOrderList.vue';
 import SellerOneOrder from '../views/SellerOneOrder.vue';
 import SellerChat from '../views/SellerChat.vue';
+import SellerActivity from '../views/SellerActivity.vue';
+import SellerActivityNew from '../views/SellerActivityNew.vue';
 
 // seller 商家所有頁面 ---------------------------------END
 
 // user
 import UserProfile from '../views/UserProfile.vue';
-import UserProduct from '../views/UserProduct.vue';
+import UserCollect from '../views/UserCollect.vue';
 import UserCoupon from '../views/UserCoupon.vue';
 import UserCouponNew from '../views/UserCouponNew.vue';
 import Component from 'vue-loading-overlay';
@@ -102,6 +104,25 @@ const routes = [
 				meta: { requiresSellerAuth: true },
 				props: true,
 			},
+			{
+				path: 'activity', // 活動管理
+				name: 'SellerActivity',
+				component: SellerActivity,
+				meta: { requiresSellerAuth: true },
+			},
+			{
+				path: 'activity-new', // 新增活動
+				name: 'SellerActivityNew',
+				component: SellerActivityNew,
+				meta: { requiresSellerAuth: true },
+			},
+			{
+				path: 'activity/:id', // 修改/查看活動
+				name: 'SellerActivityCheck',
+				component: SellerActivityNew,
+				meta: { requiresSellerAuth: true },
+				props: true,
+			},
 		],
 	},
 	// seller 商家所有頁面 ------------------------- seller 商家所有頁面 --------END
@@ -123,9 +144,9 @@ const routes = [
 				meta: { requiresUserAuth: true }, // 買家身份登入後才能訪問
 			},
 			{
-				path: 'product', // 收藏商品
-				name: 'UserProduct',
-				component: UserProduct,
+				path: 'collect', // 收藏商品
+				name: 'UserCollect',
+				component: UserCollect,
 				meta: { requiresUserAuth: true }, // 買家身份登入後才能訪問
 			},
 		],

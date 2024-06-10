@@ -97,12 +97,12 @@ const paginationData = ref({
 
 const userTitleData = {
 	routeName: 'UserCoupon',
-	title: ['未結束', '結束', '停用'],
+	title: ['未結束', '結束', '停止'],
 	schedule: '未結束', //目前頁面
 };
 const sellerTitleData = {
 	routeName: 'SellerCoupon',
-	title: ['未結束', '結束', '停用'],
+	title: ['未結束', '結束', '停止'],
 	schedule: '未結束', //目前頁面
 };
 

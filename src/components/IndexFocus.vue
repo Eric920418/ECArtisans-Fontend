@@ -61,7 +61,6 @@
 					<div
 						class="swiper-pagination d-flex-column d-sm-none swiper-page-bottom"
 					/>
-					<!-- position-absolute top-100 start-50 translate-middle -->
 					<div
 						class="swiper-button-prev btn-eca-s btn-eca-s-prev d-none"
 						ref="btnPrevRef"

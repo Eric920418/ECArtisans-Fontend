@@ -36,6 +36,7 @@
 		"vue": "^3.4.21",
 		"vue-axios": "^3.5.2",
 		"vue-cookies": "^1.8.4",
+		"vue-draggable-plus": "^0.5.0",
 		"vue-loading-overlay": "^6.0",
 		"vue-router": "^4.3.0"
 	},

@@ -8,23 +8,26 @@ export const sellerMenu = [
 		title: '商家資訊',
 		path: { name: 'SellerProfile' },
 	},
+	// {
+	// 	title: '商品管理',
+	// 	path: { name: 'SellerProduct', query: { page: 1 } },
+	// },
 	{
-		title: '優惠劵',
+		title: '訂單管理',
+		path: { name: 'SellerOrder', query: { page: 1 } },
+	},
+	{
+		title: '優惠劵管理',
 		path: { name: 'SellerCoupon', query: { page: 1 } },
+	},
+	{
+		title: '活動管理',
+		path: { name: 'SellerActivity', query: { page: 1 } },
 	},
 	/*
     {
-      title: '活動管理',
-      path: 'SellerActivity',
-    },
-   
-    {
       title: '業績分析',
       path: 'SellerPerformance',
-    },
-    {
-      title: '訂單管理',
-      path: 'SellerProduct',
     },
     {
       title: '聊聊',

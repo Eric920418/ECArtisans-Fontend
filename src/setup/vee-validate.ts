@@ -49,7 +49,7 @@ function isPassword(value: any): string | boolean {
 		return '密碼為必填';
 	}
 
-	const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/; // 至少包含一个字母和一个数字，最少8个字符
+	const passwordRegex = /^(?=.*[0-9]).{8,}$/; // (?=.*[a-zA-Z]) 至少包含一个字母和一个数字，最少8个字符
 	return passwordRegex.test(value)
 		? true
 		: '密碼必須包含英文和數字，且長度最少8個字';
@@ -133,6 +133,34 @@ function isCollection(value: any): string | boolean {
 		: '請填入正確的帳戶 10 ~ 16 位數字';
 }
 
+// 驗證 起訖日期
+function isStartDate(value: string): string | boolean {
+	const sDate = new Date(value);
+	const today = new Date();
+	sDate.setHours(0, 0, 0, 0);
+	today.setHours(0, 0, 0, 0);
+	if (sDate <= today) {
+		return '起始日期請大於今天';
+	}
+	return true;
+}
+
+// 驗證 起訖日期
+function isEndDate(
+	value: string,
+	[target]: string,
+	ctx: { form: { [x: string]: any } }
+): string | boolean {
+	const sDate = new Date(ctx.form[target]);
+	const eDate = new Date(value);
+	sDate.setHours(0, 0, 0, 0);
+	eDate.setHours(23, 59, 59, 999); //設置為當天的 23:59:59.999
+	if (sDate >= eDate) {
+		return '起始日期必須小於結束日期';
+	}
+	return true;
+}
+
 // 將自定義規則添加到 vee-validate
 defineRule('name', isName);
 defineRule('phone', isPhone);
@@ -144,6 +172,8 @@ defineRule('gender', isGender);
 defineRule('policy', isPolicy);
 defineRule('birthday', isBirthday);
 defineRule('collection', isCollection);
+defineRule('startDate', isStartDate);
+defineRule('endDate', isEndDate);
 // 其他驗證方法 --------------------------------------------END
 
 // 匯出元件和配置
@@ -161,4 +191,6 @@ export {
 	isPolicy,
 	isBirthday,
 	isCollection,
+	isStartDate,
+	isEndDate,
 };
