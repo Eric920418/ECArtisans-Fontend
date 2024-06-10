@@ -1,5 +1,5 @@
 <template>
-	<div class="m-0 p-0 d-flex align-items-center justify-content-between">
+	<div class="m-0 p-0 d-sm-flex align-items-center justify-content-sm-between">
 		<ul class="nav nav-tabs m-0" v-if="data.title">
 			<li
 				class="nav-item mb-0 p-0 d-flex align-items-center justify-content-center"
@@ -32,13 +32,15 @@
 				/>
 			</li>
 		</ul>
-		<router-link
-			v-if="data.btn"
-			:to="data.btn.path"
-			class="btn btn-outline-primary px-4 me-3"
-		>
-			{{ data.btn.title }}
-		</router-link>
+		<div class="text-end">
+			<router-link
+				v-if="data.btn"
+				:to="data.btn.path"
+				class="btn btn-outline-primary px-4 me-3"
+			>
+				{{ data.btn.title }}
+			</router-link>
+		</div>
 	</div>
 </template>
 <script lang="ts" setup>

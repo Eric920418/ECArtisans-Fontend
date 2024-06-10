@@ -49,27 +49,27 @@
 										type="date"
 										class="form-control col-2"
 										:class="{ 'is-invalid': errors['起始日'] }"
-										rules="required"
+										rules="startDate|required"
 										v-model="newData.start_date"
 										aria-label="起始日"
 										placeholder="請輸入優惠卷使用期限"
 									></v-field>
-									<!-- <error-message
+									<error-message
 										name="起始日"
 										class="invalid-feedback"
-									></error-message> -->
+									></error-message>
 								</div>
 								<p class="mx-3 fs-3">~</p>
-								{{ newData.due_date }}
+								{{ newData.end_date }}
 								<div>
 									<v-field
-										id="due_date"
+										id="end_date"
 										name="到期日"
 										type="date"
 										class="form-control col-2"
 										:class="{ 'is-invalid': errors['到期日'] }"
-										rules="isPeriod|confirmed:起始日|required"
-										v-model="newData.due_date"
+										rules="endDate:起始日|required"
+										v-model="newData.end_date"
 										aria-label="到期日"
 										placeholder="請輸入優惠卷使用期限"
 									></v-field>
@@ -104,7 +104,7 @@
 									v-model="newData.type"
 									:class="{ 'is-invalid': errors['type'] }"
 									id="discount"
-									name="type "
+									name="type"
 									rules="policy|required"
 									value="折扣"
 									as="input"
@@ -376,35 +376,23 @@ function inputBadgeClose(id: string) {
 export interface couponNewData {
 	couponName: string | null;
 	start_date: number | null;
-	due_date: number | null;
+	end_date: number | null;
 	type: string | null; //待檢查，原本為number但上面使用跳錯誤說number跟string沒有關聯，故改為string，參考118行
 	priceOver: number | null;
 	percentage: number | null;
 	productType: number | null;
-	productChoose: Array<string> | null;
+	productChoose: Array<string>;
 	isEnabled: boolean | null;
 }
 const data = ref({
 	introduce: '',
 });
 
-// // 回傳的假資料
-// const newData = ref<couponNewData>({
-// 	couponName: '情人節優惠',
-// 	start_date: 1694705214,
-// 	due_date: 1713705214,
-// 	type: 0,
-// 	priceOver: 300,
-// 	percentage: 80,
-// 	productType: 0,
-// 	productChoose: [],
-// 	isEnabled: true,
-// });
 // 回傳的假資料
 const newData = ref<couponNewData>({
 	couponName: '',
 	start_date: null,
-	due_date: null,
+	end_date: null,
 	type: null,
 	priceOver: null,
 	percentage: null,

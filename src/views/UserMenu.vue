@@ -11,8 +11,16 @@
 						:key="menuIndex"
 						:to="menuItem.path"
 						class="list-group-item btn btn-Bg rounded-2 text-start p-3"
-						:class="{ 'btn-Bg-active': menuItem.path.name === route.name }"
-						:aria-current="menuItem.path.name === route.name"
+						:class="{
+							'btn-Bg-active': route.name
+								.split('er')[1]
+								.includes(menuItem.path.name.split('er')[1]),
+						}"
+						:aria-current="
+							route.name
+								.split('er')[1]
+								.includes(menuItem.path.name.split('er')[1])
+						"
 					>
 						{{ menuItem.title }}
 					</router-link>

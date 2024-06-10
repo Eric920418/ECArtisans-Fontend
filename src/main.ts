@@ -20,6 +20,9 @@ import { LoadingPlugin } from 'vue-loading-overlay';
 
 import { useAlertStore } from '@/stores';
 
+// 翻譯插件: 全域 t 、 to 兩種功能
+import global from '@/setup/globalFunction';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -28,7 +31,7 @@ import {
 	FontAwesomeLayers,
 	FontAwesomeLayersText,
 } from '@fortawesome/vue-fontawesome';
-import {createBootstrap} from 'bootstrap-vue-next'
+import { createBootstrap } from 'bootstrap-vue-next';
 
 library.add(fab);
 library.add(fas);
@@ -48,12 +51,13 @@ export const alertStore = useAlertStore(pinia);
 // Pini 使用localStorage儲存狀態
 pinia.use(piniaPluginPersistedstate);
 
+app.use(global);
 app.use(pinia);
 app.use(router);
 app.use(VueAxios, axios);
 app.use(ElementPlus);
 app.use(VueCookies);
 app.use(LoadingPlugin);
-app.use(createBootstrap({components: true, directives: true})) // Change this line
+app.use(createBootstrap({ components: true, directives: true })); // Change this line
 
 app.mount('#app');
