@@ -66,7 +66,7 @@ import { Grid, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import 'swiper/css/grid';
 // import 'swiper/css/navigation';
 
-import { useResize } from './../setup/useResize';
+import { useResize } from '@/stores/index';
 const { resize } = useResize();
 
 interface Product {

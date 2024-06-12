@@ -160,7 +160,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthStore } from '@/stores/index';
 import Logo from './Logo.vue';
 const authStore = useAuthStore();
 

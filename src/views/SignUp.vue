@@ -538,7 +538,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
-import { isPhone } from '@/setup/vee-validate';
 import { useRoute } from 'vue-router';
 import { useAuthStore, useUserStore } from '@/stores/index';
 import Loading from 'vue-loading-overlay';

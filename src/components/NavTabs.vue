@@ -45,6 +45,9 @@
 </template>
 <script lang="ts" setup>
 import router from '@/router';
+import { go } from '@/stores/index';
+import { useRoute } from 'vue-router';
+const route = useRoute();
 
 export interface navTabsTitle {
 	title: String;
@@ -54,8 +57,7 @@ export interface navTabsTitle {
 }
 
 export interface navTabs {
-	title: Array<string | navTabsTitle>;
-	// array ['頁面名稱','頁面名稱',]
+	title: Array<navTabsTitle>;
 	// navTabsTitle [ {...資料 } , { ...資料 } ]
 	schedule: string; // '預設頁面名稱'
 	breadcrumb?: boolean; // '是否為 麵包屑 例如：優惠劵 > 新增優惠劵 '
@@ -72,11 +74,10 @@ const props = defineProps<{
 
 const emit = defineEmits(['update-schedule']);
 
-const handleClick = (titleItem: string | navTabsTitle) => {
-	if (typeof titleItem !== 'string') {
-		if (titleItem.goBack) router.go(-1);
-		else if (titleItem.path) router.push(titleItem.path);
-	}
+const handleClick = (titleItem: navTabsTitle) => {
+	if (Object.hasOwn(titleItem, 'goBack') && titleItem.goBack) router.go(-1);
+	if (Object.hasOwn(titleItem, 'path') && titleItem.path) go(titleItem.path);
+
 	emit('update-schedule', titleItem);
 };
 </script>

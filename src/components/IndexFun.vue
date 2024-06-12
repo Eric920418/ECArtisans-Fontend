@@ -59,7 +59,7 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue';
 import Title from './IndexTitle.vue';
-import { useResize } from './../setup/useResize';
+import { useResize } from '@/stores/index';
 const { resize } = useResize();
 // 偵測 螢幕寬、高
 

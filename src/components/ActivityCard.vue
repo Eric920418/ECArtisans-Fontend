@@ -21,21 +21,30 @@
 						</p>
 					</div>
 				</div>
-				<div class="d-flex" v-if="data.type || data.id">
+
+				<div class="d-flex" v-if="data.type !== undefined || data.id">
+					<!-- 如果數字 0 會當 false -->
 					<p
-						v-if="data.type"
-						class="text-card-Activity btn-Bg-active rounded-1 text-primary mb-0 me-2"
+						v-if="data.type !== undefined"
+						class="text-card-coupon btn-Bg-active rounded-1 text-primary mb-0 me-2"
 					>
-						{{ data.type }}
+						<!-- {{ data.percentage ? parseInt(data.percentage) >= 1 : '' }} -->
+						{{
+							data.percentage !== undefined && parseInt(data.percentage) >= 1
+								? getCoupon(parseInt(data.type), parseInt(data.percentage))
+								: getCoupon(parseInt(data.type))
+						}}
 					</p>
 					<p v-if="data.id" class="mb-0 mt-1 text-no neutral-02">
 						編號：{{ data.id }}
 					</p>
 				</div>
 				<p v-if="data.date" class="text-date mb-0 mt-1">
-					有效日期：{{ data.date.sDate ? getDate(data.date.sDate) : '' }}
+					有效日期： {{ $getDate(data.date.sDate) }}
+					<!-- 有效日期：{{ data.date.sDate ? getDate(data.date.sDate) : '' }} -->
 					<span v-if="data.date.sDate && data.date.eDate">~</span>
-					{{ data.date.eDate ? getDate(data.date.eDate) : '' }}
+					{{ $getDate(data.date.eDate) }}
+					<!-- {{ data.date.eDate ? getDate(data.date.eDate) : '' }} -->
 				</p>
 				<div v-if="data.btn" class="d-flex p-0 d-flex justify-content-end mt-2">
 					<button
@@ -54,8 +63,9 @@
 </template>
 
 <script setup lang="ts">
-import { getDate } from '../setup/getDate';
+// import { getDate } from '@/stores/index';
 import router from '@/router';
+import { getCoupon } from '@/stores/index';
 
 export interface btn {
 	title: String;
@@ -68,11 +78,12 @@ export interface activityCard {
 	title: string;
 	state?: string; // 狀態：啟用中
 	type?: string; //優惠劵 型態 Ex:免運劵、優惠劵
+	percentage?: string; //優惠劵 型態 Ex:免運劵、優惠劵
 	id?: string; //編號
 	date?: {
 		//有效日期
-		sDate: number;
-		eDate: number;
+		sDate: string;
+		eDate: string;
 	};
 	btn?: Array<btn>;
 }
@@ -104,7 +115,6 @@ const props = defineProps<{
 	-webkit-line-clamp: 1;
 	overflow: hidden;
 }
-
 .productCard-img-100 {
 	width: 8rem;
 	height: 8rem;
