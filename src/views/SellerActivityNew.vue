@@ -207,13 +207,11 @@
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
-import { useCoupon, useAuthStore } from '@/stores/index';
+import { useCoupon, useAuthStore, getDate, useResize } from '@/stores/index';
 import NavTabs from '../components/NavTabs.vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
-import { getDate } from './../setup/getDate';
 
-import { useResize } from './../setup/useResize';
 const { resize } = useResize();
 
 const route = useRoute();

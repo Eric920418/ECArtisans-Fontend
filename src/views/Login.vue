@@ -114,10 +114,10 @@
 <script lang="ts" setup>
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores/index';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
-import { useResize } from './../setup/useResize';
+
+import { useAuthStore, useResize } from '@/stores/index';
 const { resize } = useResize();
 // 頁面用到的資料
 const authStore = useAuthStore();

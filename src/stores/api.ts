@@ -2,7 +2,7 @@ import axios, { type AxiosResponse } from 'axios';
 
 // 登入相關的 handleApiResponse(api
 const apiRequest = axios.create({
-	baseURL: 'https://ecartisans-backend-9evi.onrender.com',
+	baseURL: 'https://ecartisans-backend-1.onrender.com',
 });
 
 function headers(token: string) {
@@ -156,14 +156,16 @@ export const sellerProductDelete = (product_id: string) =>
 
 // 商家 ■ 優惠劵 ■
 // 42	get   /shop/${seller_id}/coupons?page	 	賣家顯示所有優惠劵	 	賣家端
-export const sellerCouponAll = (
-	seller_id: string,
-	page: string,
-	token: string
-) =>
-	handleApiResponse(
-		apiRequest.get(`/shop/${seller_id}/coupons?page=${page}`, headers(token))
-	);
+export const sellerCouponAll = (token: string) =>
+	handleApiResponse(apiRequest.get('/shop/coupons/all', headers(token)));
+// export const sellerCouponAll = (
+// 	seller_id: string,
+// 	page: string,
+// 	token: string
+// ) =>
+// 	handleApiResponse(
+// 		apiRequest.get(`/shop/${seller_id}/coupons?page=${page}`, headers(token))
+// 	);
 // 43	get   /shop/${seller_id}/coupon/${coupon_id}	 	賣家顯示單一優惠劵	 	賣家端
 export const sellerCoupon = (seller_id: string, coupon_id: string) =>
 	handleApiResponse(apiRequest.get(`/shop/${seller_id}/coupon/${coupon_id}`));

@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useResize } from './../setup/useResize';
+import { useResize } from '@/stores/index';
 const { resize } = useResize();
 // 使用方式可以參考'test-page'
 

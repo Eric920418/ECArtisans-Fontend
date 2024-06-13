@@ -162,7 +162,7 @@
 import { onMounted, ref } from 'vue';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { useResize } from './../setup/useResize';
+import { useResize } from '@/stores/index';
 import Title from './IndexTitle.vue';
 import Star from './Star.vue';
 const { resize } = useResize();

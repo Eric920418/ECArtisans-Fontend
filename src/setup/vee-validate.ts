@@ -49,7 +49,7 @@ function isPassword(value: any): string | boolean {
 		return '密碼為必填';
 	}
 
-	const passwordRegex = /^(?=.*[0-9]).{8,}$/; // (?=.*[a-zA-Z]) 至少包含一个字母和一个数字，最少8个字符
+	const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/; // (?=.*[a-zA-Z]) 至少包含一个字母和一个数字，最少8个字符
 	return passwordRegex.test(value)
 		? true
 		: '密碼必須包含英文和數字，且長度最少8個字';

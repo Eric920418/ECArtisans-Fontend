@@ -336,13 +336,10 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { useRoute } from 'vue-router';
-import { useCoupon, useAuthStore } from '@/stores/index';
+import { useCoupon, useAuthStore, useResize, getDate } from '@/stores/index';
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
-import path from 'path';
-import { useResize } from './../setup/useResize';
 const { resize } = useResize();
-import { getDate } from './../setup/getDate';
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -369,7 +366,9 @@ const dropdown = ref<HTMLDivElement | null>(null);
 
 // 刪除，待檢查
 function inputBadgeClose(id: string) {
-	newData.value.productChoose?.filter(item => item !== id);
+	newData.value.productChoose = newData.value.productChoose?.filter(
+		item => item !== id
+	);
 }
 
 // 回傳的假資料格式
@@ -407,7 +406,7 @@ const sellerTitleNewData = {
 	title: [
 		{
 			title: '優惠劵',
-			path: { name: 'SellerCoupon', query: { page: 1 } },
+			path: { name: 'SellerCoupon', query: { page: 1, filter: '未結束' } },
 		},
 		{
 			title: '新增優惠劵',
