@@ -20,6 +20,8 @@ import SellerOneOrder from '../views/SellerOneOrder.vue';
 import SellerChat from '../views/SellerChat.vue';
 import SellerActivity from '../views/SellerActivity.vue';
 import SellerActivityNew from '../views/SellerActivityNew.vue';
+import SellerProduct from '../views/SellerProduct.vue';
+import SellerProductNew from '../views/SellerProductNew.vue';
 
 // seller 商家所有頁面 ---------------------------------END
 
@@ -120,6 +122,25 @@ const routes = [
 				path: 'activity/:id', // 修改/查看活動
 				name: 'SellerActivityCheck',
 				component: SellerActivityNew,
+				meta: { requiresSellerAuth: true },
+				props: true,
+			},
+			{
+				path: 'product', // 商品總覽
+				name: 'SellerProduct',
+				component: SellerProduct,
+				meta: { requiresSellerAuth: true },
+			},
+			{
+				path: 'product-new', // 新增商品
+				name: 'SellerProductNew',
+				component: SellerProductNew,
+				meta: { requiresSellerAuth: true },
+			},
+			{
+				path: 'product/:id', // 修改/查看商品
+				name: 'SellerProductCheck',
+				component: SellerProductNew,
 				meta: { requiresSellerAuth: true },
 				props: true,
 			},

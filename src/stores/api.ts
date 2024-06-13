@@ -155,20 +155,14 @@ export const sellerProductDelete = (product_id: string) =>
 	handleApiResponse(apiRequest.delete(`/shop/product/${product_id}`));
 
 // 商家 ■ 優惠劵 ■
-// 42	get   /shop/${seller_id}/coupons?page	 	賣家顯示所有優惠劵	 	賣家端
+// 42	get 賣家顯示所有優惠劵	 	賣家端
 export const sellerCouponAll = (token: string) =>
 	handleApiResponse(apiRequest.get('/shop/coupons/all', headers(token)));
-// export const sellerCouponAll = (
-// 	seller_id: string,
-// 	page: string,
-// 	token: string
-// ) =>
-// 	handleApiResponse(
-// 		apiRequest.get(`/shop/${seller_id}/coupons?page=${page}`, headers(token))
-// 	);
-// 43	get   /shop/${seller_id}/coupon/${coupon_id}	 	賣家顯示單一優惠劵	 	賣家端
-export const sellerCoupon = (seller_id: string, coupon_id: string) =>
-	handleApiResponse(apiRequest.get(`/shop/${seller_id}/coupon/${coupon_id}`));
+// 43	get 賣家顯示單一優惠劵	 	賣家端
+export const sellerCoupon = (coupon_id: string, token: string) =>
+	handleApiResponse(
+		apiRequest.get(`/shop/coupon/${coupon_id}`, headers(token))
+	);
 // 44	post  /shop/coupon	 	賣家新增優惠劵	 	賣家端
 export const sellerCouponNew = (data: any) =>
 	handleApiResponse(apiRequest.post('/shop/coupon', data));

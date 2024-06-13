@@ -134,7 +134,7 @@
 											class="invalid-feedback"
 										></error-message>
 									</div>
-									<!-- <div
+									<div
 										class="col-12 p-0 m-0 mb-2"
 										style="min-height: calc(6.5em + 55px)"
 									>
@@ -149,7 +149,7 @@
 											v-model="data.introduce"
 											style="height: 6.5em; resize: none"
 										></textarea>
-									</div> -->
+									</div>
 									<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
 										<label for="collection" class="mb-1">
 											收款帳戶
@@ -264,7 +264,7 @@
 										<v-field
 											id="password"
 											name="密碼"
-											:type="eye ? 'text' : 'password'"
+											:type="eye && updateStatus ? 'text' : 'password'"
 											ref="passwordRef"
 											class="form-control"
 											:class="{ 'is-invalid': errors['密碼'] }"
@@ -462,7 +462,7 @@
 								</div>
 							</div>
 							<!-- <div class="col-12" style="width: 100%; word-break: break-all">
-								{{ data }}
+								{{ authStore.token }}
 							</div> -->
 						</div>
 					</div>

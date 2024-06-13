@@ -4,6 +4,7 @@ export * from './userStore';
 export * from './orderStore';
 export * from './couponStore';
 export * from './activityStore';
+export * from './productStore';
 
 // setup 引入資料
 export * from '../setup/globalFunction';

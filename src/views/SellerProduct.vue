@@ -3,13 +3,13 @@
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" @update-schedule="updateSchedule" />
 			<div class="my-0">
-				<div class="row m-0 p-0">
+				<div class="row m-0 p-0" v-if="data">
 					<div
 						v-for="couponItem in data"
 						:key="couponItem._id"
 						class="col-12 col-md-6 p-3 m-0"
 					>
-						<Card
+						<!-- <Card
 							:data="{
 								title: couponItem.couponName,
 								state: '啟用中', // 狀態：啟用中
@@ -38,11 +38,13 @@
 									},
 								],
 							}"
-						/>
+						/> -->
 					</div>
 				</div>
 				<div class="col-12">
-					{{ data }}123
+					<p>
+						{{ data }}
+					</p>
 					<!-- <Page :data="paginationData" :path="path" /> -->
 				</div>
 			</div>
@@ -54,7 +56,7 @@ import { onMounted, ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 
-import { useCoupon, useAuthStore, getDate } from '@/stores/index';
+import { useProduct, useAuthStore, getDate } from '@/stores/index';
 import { type navTabsTitle } from '@/type/navTabsTitle';
 
 // 組件
@@ -63,7 +65,7 @@ import Card from '../components/ActivityCard.vue';
 
 const route = useRoute();
 const authStore = useAuthStore();
-const userStore = useCoupon();
+const userStore = useProduct();
 // 基本
 const data = computed(() => userStore.allData);
 
@@ -101,9 +103,8 @@ const getData = () => {
 		navTabs.value = {
 			title: sellerTitleData.title,
 			schedule: sellerTitleData.schedule,
-			btn: { title: '新增優惠劵', path: { name: 'SellerCouponNew' } },
+			btn: { title: '新增優惠劵', path: { name: 'SellerProductNew' } },
 		};
-		userStore.getCouponAll(authStore.token);
 	}
 	//  else if (route.matched[0].path === '/user') {
 	// 	init.value = userTitleData;
