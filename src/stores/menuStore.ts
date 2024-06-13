@@ -8,10 +8,10 @@ export const sellerMenu = [
 		title: '商家資訊',
 		path: { name: 'SellerProfile' },
 	},
-	// {
-	// 	title: '商品管理',
-	// 	path: { name: 'SellerProduct', query: { page: 1 } },
-	// },
+	{
+		title: '商品管理',
+		path: { name: 'SellerProduct', query: { page: 1 } },
+	},
 	{
 		title: '訂單管理',
 		path: { name: 'SellerOrder', query: { page: 1, filter: '未結束' } },

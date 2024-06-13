@@ -11,6 +11,8 @@
 							class="d-flex justify-content-between align-items-center mb-4 p-0"
 						>
 							<h3 class="fs-5 p-0 neutral-01 mb-0">{{ init.schedule }}</h3>
+							<p>編號：{{ data._id }}</p>
+
 							<a class="mb-0" v-if="route.name === 'SellerCouponCheck'">
 								立即停止
 							</a>
@@ -27,7 +29,7 @@
 								class="form-control"
 								:class="{ 'is-invalid': errors['優惠卷名稱'] }"
 								rules="required"
-								v-model="newData.couponName"
+								v-model="data.couponName"
 								aria-label="優惠卷名稱"
 								placeholder="請輸入優惠卷名稱"
 							></v-field>
@@ -50,7 +52,7 @@
 										class="form-control col-2"
 										:class="{ 'is-invalid': errors['起始日'] }"
 										rules="startDate|required"
-										v-model="newData.start_date"
+										v-model="data.startDate"
 										aria-label="起始日"
 										placeholder="請輸入優惠卷使用期限"
 									></v-field>
@@ -60,7 +62,6 @@
 									></error-message>
 								</div>
 								<p class="mx-3 fs-3">~</p>
-								{{ newData.end_date }}
 								<div>
 									<v-field
 										id="end_date"
@@ -69,7 +70,7 @@
 										class="form-control col-2"
 										:class="{ 'is-invalid': errors['到期日'] }"
 										rules="endDate:起始日|required"
-										v-model="newData.end_date"
+										v-model="data.endDate"
 										aria-label="到期日"
 										placeholder="請輸入優惠卷使用期限"
 									></v-field>
@@ -89,24 +90,24 @@
 								<v-field
 									class="form-check-input me-2"
 									type="radio"
-									v-model="newData.type"
+									v-model="data.type"
 									:class="{ 'is-invalid': errors['type'] }"
 									id="delivery"
 									name="type"
 									rules="policy|required"
-									value="免運"
+									:value="1"
 									as="input"
 								></v-field>
 								<label class="form-check-label me-4" for="delivery">免運</label>
 								<v-field
 									class="form-check-input me-2"
 									type="radio"
-									v-model="newData.type"
+									v-model="data.type"
 									:class="{ 'is-invalid': errors['type'] }"
 									id="discount"
 									name="type"
 									rules="policy|required"
-									value="折扣"
+									:value="0"
 									as="input"
 								></v-field>
 								<label class="form-check-label" for="discount">折扣</label>
@@ -115,7 +116,7 @@
 						<div
 							class="col-12 col-sm-6 col-md-5 col-xl-3 p-0 m-0 mb-2"
 							:style="{
-								'min-height': newData.type === '折扣' ? '50px' : '100px',
+								'min-height': data.type === 0 ? '50px' : '100px',
 							}"
 						>
 							<div
@@ -130,18 +131,18 @@
 								<v-field
 									id="priceOver"
 									name="低消金額"
-									type="num"
-									class="form-control text-end me-0"
+									type="number"
+									class="form-control text-end me-0 hide-arrows"
 									:class="{ 'is-invalid': errors['低消金額'] }"
 									rules="numeric|required"
-									v-model="newData.priceOver"
+									v-model="data.discountConditions"
 									aria-label="低消金額"
 									placeholder="請輸入金額"
 								></v-field>
 							</div>
 						</div>
 						<div
-							v-if="newData.type === '折扣'"
+							v-if="data.type === 0"
 							class="col-12 col-sm-6 col-md-4 col-xl-3 p-0 m-0 mb-2"
 							style="min-height: 100px"
 						>
@@ -158,7 +159,7 @@
 										class="form-control text-end me-2"
 										:class="{ 'is-invalid': errors['優惠折數'] }"
 										rules="numeric|required"
-										v-model="newData.percentage"
+										v-model="data.percentage"
 										aria-label="優惠折數"
 										placeholder="請輸入折數"
 									></v-field>
@@ -169,7 +170,7 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
+						<!-- <div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
 							<p>
 								活動範圍
 								<span class="text-danger">*</span>
@@ -177,7 +178,7 @@
 							<v-field
 								class="form-check-input me-2"
 								type="radio"
-								v-model="newData.productType"
+								v-model="data.productType"
 								:class="{ 'is-invalid': errors['productType'] }"
 								id="all"
 								name="productType"
@@ -189,7 +190,7 @@
 							<v-field
 								class="form-check-input me-2"
 								type="radio"
-								v-model="newData.productType"
+								v-model="data.productType"
 								:class="{ 'is-invalid': errors['productType'] }"
 								id="part"
 								name="productType"
@@ -203,18 +204,16 @@
 						<div
 							class="col-12 p-0 m-0 mb-2"
 							v-if="
-								typeof newData.productType === 'string' &&
-								newData.productType === '部分商品'
+								typeof data.productType === 'string' &&
+								data.productType === '部分商品'
 							"
 						>
 							<div class="dropdown">
 								<button
 									class="form-control py-0"
 									:class="{
-										'justify-content-between':
-											newData.productChoose?.length === 0,
-										'justify-content-start':
-											newData.productChoose?.length !== 0,
+										'justify-content-between': data.productChoose?.length === 0,
+										'justify-content-start': data.productChoose?.length !== 0,
 									}"
 									ref="dropdownBtn"
 									type="button"
@@ -222,7 +221,7 @@
 									data-bs-auto-close="outside"
 								>
 									<div
-										v-if="newData.productChoose?.length === 0"
+										v-if="data.productChoose?.length === 0"
 										class="text-start d-flex justify-content-between align-items-center"
 									>
 										<p class="mb-0 neutral-03" style="padding: 6px 0px">
@@ -236,7 +235,7 @@
 									</div>
 									<div v-else class="row m-0 p-0">
 										<div
-											v-for="item in newData.productChoose"
+											v-for="item in data.productChoose"
 											:key="item"
 											class="input-badge w-auto"
 										>
@@ -259,7 +258,7 @@
 											<input
 												class="form-check-input me-2"
 												type="checkbox"
-												v-model="newData.productChoose"
+												v-model="data.productChoose"
 												:id="stt"
 												:name="stt"
 												:value="stt"
@@ -275,7 +274,8 @@
 									</li>
 								</ul>
 							</div>
-						</div>
+						</div> -->
+
 						<div class="col-12 p-0 m-0 mb-2">
 							<label class="mb-1 me-3">
 								注意事項
@@ -291,7 +291,7 @@
 								rules="required"
 								style="height: 6.5em; resize: none"
 							></v-field> -->
-							<v-field
+							<!-- <v-field
 								v-slot="{ field, errors }"
 								v-model="data.introduce"
 								name="comment"
@@ -303,7 +303,7 @@
 									:class="{ 'is-invalid': errors[0] }"
 									name="comment"
 								/>
-							</v-field>
+							</v-field> -->
 							<!-- <textarea
 								class="form-control"
 								placeholder="請輸入..."
@@ -328,6 +328,9 @@
 						{{ init.btn }}
 					</button>
 				</div>
+
+				<br />
+				{{ userStore.data }}
 			</v-form>
 		</div>
 	</div>
@@ -335,13 +338,18 @@
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
-import { useRoute } from 'vue-router';
-import { useCoupon, useAuthStore, useResize, getDate } from '@/stores/index';
+
+import { type couponType } from '@/type/couponType';
+
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
-const { resize } = useResize();
 
+import { useCoupon, useAuthStore, useResize, getDate } from '@/stores/index';
+
+import { useRoute } from 'vue-router';
 const route = useRoute();
+
+const { resize } = useResize();
 const authStore = useAuthStore();
 const userStore = useCoupon();
 
@@ -350,55 +358,24 @@ function onSubmit() {
 	console.log('成功');
 }
 
-// 基本
-const token = authStore.token;
-const id = authStore.id;
-// const data = ref(userStore.allData) as any;
 const dropdownBtn = ref<HTMLButtonElement | null>(null);
 const dropdown = ref<HTMLDivElement | null>(null);
 
 // 刪除
 // function inputBadgeClose(id: string) {
-// 	newData.value.productChoose = newData.value.productChoose.filter(
+// 	data.value.productChoose = data.value.productChoose.filter(
 // 		item => item !== id
 // 	);
 // }
 
 // 刪除，待檢查
 function inputBadgeClose(id: string) {
-	newData.value.productChoose = newData.value.productChoose?.filter(
+	data.value.productChoose = data.value.productChoose?.filter(
 		item => item !== id
 	);
 }
 
-// 回傳的假資料格式
-export interface couponNewData {
-	couponName: string | null;
-	start_date: number | null;
-	end_date: number | null;
-	type: string | null; //待檢查，原本為number但上面使用跳錯誤說number跟string沒有關聯，故改為string，參考118行
-	priceOver: number | null;
-	percentage: number | null;
-	productType: number | null;
-	productChoose: Array<string>;
-	isEnabled: boolean | null;
-}
-const data = ref({
-	introduce: '',
-});
-
-// 回傳的假資料
-const newData = ref<couponNewData>({
-	couponName: '',
-	start_date: null,
-	end_date: null,
-	type: null,
-	priceOver: null,
-	percentage: null,
-	productType: null,
-	productChoose: [],
-	isEnabled: true,
-});
+const data = computed(() => userStore.data);
 
 // navTab + seller 畫面下所有資料
 const sellerTitleNewData = {
@@ -466,6 +443,7 @@ const getData = () => {
 				schedule: sellerTitleData.schedule,
 				breadcrumb: true,
 			};
+			userStore.getCoupon(route.params.id as string, authStore.token);
 		}
 	} else if (route.matched[0].path === '/user') {
 		// init.value = userTitleData;

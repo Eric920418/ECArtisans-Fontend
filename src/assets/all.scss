@@ -436,7 +436,7 @@ $radius-8: 0.5rem; //弧度
 }
 .card-directions{
 	color: $Neutral-02;
-	font-size: 12px;
+	font-size:  0.75em;
 	margin: auto 0px;
 	ul{
 		margin: 0px;
@@ -459,4 +459,22 @@ $radius-8: 0.5rem; //弧度
 }
 .icon .fasHeart {
 	fill: $red;
+}
+
+
+
+/* 通用的隱藏數字輸入框箭頭的樣式 */
+.hide-arrows {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield; /* 標準屬性，兼容多數現代瀏覽器 */
+
+  /* 確保WebKit瀏覽器隱藏內外的箭頭按鈕 */
+  -webkit-appearance: none; /* Safari and Chrome */
+}
+
+/* 專門針對WebKit瀏覽器隱藏內外箭頭按鈕 */
+.hide-arrows::-webkit-outer-spin-button,
+.hide-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
