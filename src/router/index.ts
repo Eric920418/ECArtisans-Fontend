@@ -15,8 +15,8 @@ import SignUp from '../views/SignUp.vue';
 // seller 商家所有頁面 ---------------------------------START
 import SellerOverview from '../views/SellerOverview.vue';
 import SellerHome from '../views/SellerHome.vue';
-import SellerOrder from '../views/SellerOrderList.vue';
-import SellerOneOrder from '../views/SellerOneOrder.vue';
+import SellerOrder from '../views/SellerOrder.vue';
+import SellerOrderCheck from '../views/SellerOrderCheck.vue';
 import SellerChat from '../views/SellerChat.vue';
 import SellerActivity from '../views/SellerActivity.vue';
 import SellerActivityNew from '../views/SellerActivityNew.vue';
@@ -74,9 +74,9 @@ const routes = [
 				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
 			},
 			{
-				path: 'order/:orderId', // 單筆訂單管理
-				name: 'SellerOneOrder',
-				component: SellerOneOrder,
+				path: 'order/:id', // 單筆訂單管理
+				name: 'SellerOrderCheck',
+				component: SellerOrderCheck,
 				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
 				props: true, // 將orderID參數作為'props'傳遞給其他組件
 			},

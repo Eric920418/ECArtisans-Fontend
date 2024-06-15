@@ -5,7 +5,7 @@
 			<div class="my-0">
 				<div class="row m-0 p-0">
 					<div
-						v-for="orderItem in filteredOrders"
+						v-for="orderItem in paginatedData"
 						:key="orderItem._id"
 						class="col-12 p-3 m-0"
 					>
@@ -13,7 +13,14 @@
 					</div>
 				</div>
 				<div class="col-12">
-					<!-- <Page :data="paginationData" :path="path" /> -->
+					<!-- 使用 Pagenation 子組件來顯示分頁 -->
+					<!-- 當 Pagenation 組件中的頁碼更新時，子組件傳遞"update:currentPage"事件並觸發 updatePage 方法 -->
+					<Pagenation
+						:currentPage="currentPage"
+						:perPage="perPage"
+						:totalRows="totalRows"
+						@update:currentPage="updatePage"
+					/>
 				</div>
 			</div>
 		</div>
@@ -95,7 +102,7 @@ const initData = () => {
 
 // 格式化 Card 的数据
 const formatCardData = (orderItem: Order) => ({
-	go: { name: 'SellerActivityCheck', params: { id: orderItem._id } },
+	go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
 	img: '', // 暂时没有商品图像信息
 	title: orderItem.orderNumber,
 	state: orderItem.state,
@@ -104,11 +111,11 @@ const formatCardData = (orderItem: Order) => ({
 	btn: [
 		{
 			title: '查看訂單',
-			go: { name: 'SellerActivityCheck', params: { id: orderItem._id } },
+			go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
 		},
 		{
 			title: '聯絡買家',
-			go: { name: 'SellerActivityCheck', params: { id: orderItem._id } },
+			go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
 		},
 	],
 });
@@ -121,6 +128,22 @@ const updateSchedule = (newSchedule: navTabsTitle) => {
 	}
 };
 
+// 設置初始變數
+const currentPage = ref(1); // 當前頁碼，初始為1
+const perPage = ref(2); // 一頁要顯示多少的項目數量
+const totalRows = ref(filteredOrders.value.length); // 總項目數量
+
+// 當currentPage或perPage改變時重新計算當前頁的資料
+const paginatedData = computed(() => {
+	const start = (currentPage.value - 1) * perPage.value;
+	const end = start + perPage.value;
+	return filteredOrders.value.slice(start, end);
+});
+
+// 更新頁碼
+const updatePage = (page: number) => {
+	currentPage.value = page;
+};
 // Fetch data on component mount
 onMounted(() => {
 	initData();

@@ -33,23 +33,23 @@
 import { onMounted, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useOrderStore } from '@/stores/index';
-import { type Order } from '@/type/orderType';
+import { type DetailedOrder } from '@/type/orderType';
 
 // 接收'props'
 const props = defineProps<{
-	orderId: string;
+	id: string;
 }>();
 
 const orderStore = useOrderStore();
 const isLoading = computed(() => orderStore.isLoading); // 從 store 中獲取加載狀態
 const { gettingSingleOrder } = storeToRefs(orderStore);
-const order = computed((): Order | null => gettingSingleOrder.value); // 將從computed gettingSingleOrder取出的值定義好型態
+const order = computed((): DetailedOrder | null => gettingSingleOrder.value); // 將從computed gettingSingleOrder取出的值定義好型態
 
 onMounted(async () => {
 	// pinia沒有這筆資料，就重新呼叫function
-	if (!orderStore.oneOrder || orderStore.oneOrder._id !== props.orderId) {
+	if (!orderStore.oneOrder || orderStore.oneOrder._id !== props.id) {
 		console.log('再度使用方法');
-		await orderStore.getOneOrderByOrderID(props.orderId);
+		await orderStore.getOneOrderByOrderID(props.id);
 	}
 });
 </script>
