@@ -1,139 +1,128 @@
 <template>
-	<div>
-		<h1>商家訂單管理</h1>
-		<div v-if="isLoading">加載中...</div>
-		<div v-else>
-			<p v-if="orders.length === 0">没有訂單</p>
-			<ul v-else>
-				<div v-for="order in orders" :key="order._id">
-					<div v-for="product in order.products" :key="product._id">
-						<div class="card mb-3 d-flex w-100" style="height: 50%">
-							<div class="row g-3 mx-0 mb-0 pb-0">
-								<div class="col-3">
-									<img
-										src="https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true"
-										class="img-eca img-fluid h-100"
-									/>
-								</div>
-								<div class="col-sm-9 col-md-9">
-									<div class="card-body">
-										<h5 class="card-title">交易日期: {{ order.date }}</h5>
-										<h5 class="card-title">
-											訂單編號: {{ order.orderNumber }}
-										</h5>
-										<h5 class="card-title">訂單狀態: {{ order.state }}</h5>
-										<h5 class="card-title">總計: {{ order.price }}</h5>
-
-										<p class="card-text">
-											This is a wider card with supporting text below as a
-											natural lead-in to additional content. This content is a
-											little bit longer.
-										</p>
-										<p class="card-text">
-											<small class="text-muted">Last updated 3 mins ago</small>
-										</p>
-									</div>
-									<button
-										type="button"
-										class="btn btn-primary"
-										@click="handleOrderClick(order._id)"
-									>
-										查看此筆訂單
-									</button>
-								</div>
-							</div>
-						</div>
+	<div class="row g-3 mx-0 mb-0 pb-0">
+		<div class="col-12 m-0 p-0">
+			<NavTabs :data="navTabs" @update-schedule="updateSchedule" />
+			<div class="my-0">
+				<div class="row m-0 p-0">
+					<div
+						v-for="orderItem in filteredOrders"
+						:key="orderItem._id"
+						class="col-12 p-3 m-0"
+					>
+						<Card :data="formatCardData(orderItem)" />
 					</div>
 				</div>
-				<li v-for="order in orders" :key="order._id">
-					資料庫編號: {{ order._id }},訂單編號: {{ order.orderNumber }}, 金額:
-					{{ order.price }}, 訂單狀態: {{ order.state }}, 支付方式:
-					{{ order.pay }}, 交易日期: {{ order.date }}, 產品編號:
-					<ul>
-						<li v-for="product in order.products" :key="product._id">
-							產品編號: {{ product }}
-						</li>
-					</ul>
-					<button
-						type="button"
-						class="btn btn-primary"
-						@click="handleOrderClick(order._id)"
-					>
-						查看此筆訂單
-					</button>
-				</li>
-			</ul>
+				<div class="col-12">
+					<!-- <Page :data="paginationData" :path="path" /> -->
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
-<script lang="ts" setup>
-import { onMounted, computed } from 'vue';
-import { useOrderStore } from '@/stores/index';
-import router from '@/router/index';
-import { type Order } from '@/type/orderType';
+<script setup lang="ts">
+import { onMounted, ref, computed } from 'vue';
+import NavTabs from '@/components/NavTabs.vue';
+import Card from '@/components/OrderCard.vue';
+import Pagenation from '@/components/Pagenation.vue';
 
+import { useRoute } from 'vue-router';
+import router from '@/router';
+import { useOrderStore } from '@/stores/index';
+import { type Order } from '@/type/orderType';
+import { type navTabsTitle } from '@/type/navTabsTitle';
+import { useAuthStore } from '@/stores/index';
+
+const route = useRoute();
 const orderStore = useOrderStore();
 
-const isLoading = computed(() => orderStore.isLoading); // 從 store 中獲取加載狀態
-// const orders = computed((): Order[] | [] => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
-const handleOrderClick = (orderId: string) => {
-	orderStore.getOneOrderByOrderID(orderId).then(() => {
-		router.push({ name: 'SellerOneOrder', params: { orderId } });
-	});
+// Define navTabs structure
+const navTabs = ref<{
+	routeName: string;
+	title: {
+		title: string;
+		path: { name: string; query: { page: number; filter: string } };
+	}[];
+	schedule: string;
+}>({
+	routeName: 'SellerOrder',
+	title: [
+		{
+			title: '全部',
+			path: { name: 'SellerOrder', query: { page: 1, filter: '未結束' } },
+		},
+		{
+			title: '處理中',
+			path: { name: 'SellerOrder', query: { page: 1, filter: '處理中' } },
+		},
+		{
+			title: '運送中',
+			path: { name: 'SellerOrder', query: { page: 1, filter: '運送中' } },
+		},
+		{
+			title: '已完成',
+			path: { name: 'SellerOrder', query: { page: 1, filter: '已完成' } },
+		},
+	],
+	schedule: '全部', // 初始設定
+});
+
+// Fetch orders from the store
+// 呼叫資料 (目前假資料)
+const orders = computed((): Order[] | [] => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
+
+// Categorize orders based on their status
+const categorizedOrders = ref<{ [key: string]: Order[] }>({
+	全部: orders.value,
+	處理中: orders.value.filter(
+		(order: Order) => order.state === 1 || order.state === 2
+	),
+	運送中: orders.value.filter(
+		(order: Order) => order.state === 3 || order.state === 4
+	),
+	已完成: orders.value.filter((order: Order) => order.state === 5),
+});
+
+// Initialize filtered orders based on initial tab selection
+const filteredOrders = ref<Order[]>(categorizedOrders.value['全部']);
+
+// Function to initialize data on component mount
+const initData = () => {
+	if (route.matched[0].path === '/seller') {
+		navTabs.value.schedule = '全部'; // Reset schedule on mount
+	}
 };
 
-// 註冊一個提取所有訂單的方法，先寫死的資料測試
-// onMounted(async () => {
-// 	await orderStore.getAllOrders('661e0d13e8992a1bd4b86caf');
-// });
+// 格式化 Card 的数据
+const formatCardData = (orderItem: Order) => ({
+	go: { name: 'SellerActivityCheck', params: { id: orderItem._id } },
+	img: '', // 暂时没有商品图像信息
+	title: orderItem.orderNumber,
+	state: orderItem.state,
+	price: orderItem.price,
+	date: { sDate: orderItem.date },
+	btn: [
+		{
+			title: '查看訂單',
+			go: { name: 'SellerActivityCheck', params: { id: orderItem._id } },
+		},
+		{
+			title: '聯絡買家',
+			go: { name: 'SellerActivityCheck', params: { id: orderItem._id } },
+		},
+	],
+});
 
-const orders = [
-	{
-		_id: '6628b0217d9abcfe2fe8dd7c',
-		orderNumber: '123',
-		date: '2024/12/12',
-		products: ['661e1795e8992a1bd4b86cb3', '661e1795e8992a1bd4b86cb2'],
-		state: 1,
-		price: 300,
-		pay: 1,
-	},
-	{
-		_id: '6628b0217d9abcfe2fe8dd7d',
-		orderNumber: '124',
-		date: '2024/12/13',
-		products: ['661e1795e8992a1bd4b86cb4', '661e1795e8992a1bd4b86cb5'],
-		state: 2,
-		price: 400,
-		pay: 2,
-	},
-	{
-		_id: '6628b0217d9abcfe2fe8dd7e',
-		orderNumber: '125',
-		date: '2024/12/14',
-		products: ['661e1795e8992a1bd4b86cb6', '661e1795e8992a1bd4b86cb7'],
-		state: 3,
-		price: 500,
-		pay: 3,
-	},
-	{
-		_id: '6628b0217d9abcfe2fe8dd7f',
-		orderNumber: '126',
-		date: '2024/12/15',
-		products: ['661e1795e8992a1bd4b86cb8', '661e1795e8992a1bd4b86cb9'],
-		state: 4,
-		price: 600,
-		pay: 4,
-	},
-	{
-		_id: '6628b0217d9abcfe2fe8dd80',
-		orderNumber: '127',
-		date: '2024/12/16',
-		products: ['661e1795e8992a1bd4b86cba', '661e1795e8992a1bd4b86cbb'],
-		state: 5,
-		price: 700,
-		pay: 5,
-	},
-];
+// Function to update filtered orders based on selected tab
+const updateSchedule = (newSchedule: navTabsTitle) => {
+	if (newSchedule && newSchedule.title) {
+		navTabs.value.schedule = newSchedule.title;
+		filteredOrders.value = categorizedOrders.value[newSchedule.title];
+	}
+};
+
+// Fetch data on component mount
+onMounted(() => {
+	initData();
+});
 </script>
-<style></style>
