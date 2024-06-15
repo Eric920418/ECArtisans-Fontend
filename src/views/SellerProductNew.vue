@@ -77,7 +77,7 @@
 								</label>
 							</div>
 							<div class="w-100 pe-md-5">
-								<v-field
+								<!-- <v-field
 									class="my-auto form-select"
 									id="sellerCategory"
 									aria-label="Select gender"
@@ -98,7 +98,7 @@
 								<error-message
 									name="全站分類"
 									class="invalid-feedback"
-								></error-message>
+								></error-message> -->
 							</div>
 						</div>
 
@@ -116,7 +116,7 @@
 								</label>
 							</div>
 							<div class="w-100">
-								<v-field
+								<!-- <v-field
 									class="my-auto form-select"
 									id="sellerCategory"
 									aria-label="Select gender"
@@ -137,7 +137,7 @@
 								<error-message
 									name="全站分類"
 									class="invalid-feedback"
-								></error-message>
+								></error-message> -->
 							</div>
 						</div>
 						<!-- 性別 END-->
@@ -169,7 +169,7 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 
-import { type couponType } from '@/type/couponType';
+// import { type couponType } from '@/type/couponType';
 
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';

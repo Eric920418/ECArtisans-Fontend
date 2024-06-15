@@ -13,10 +13,7 @@
 			@cancel="loadingClose"
 		/> -->
 		<div class="col-12 m-0 p-0">
-			<NavTabs
-				:data="{ title: [`${init.title}資訊`], schedule: `${init.title}資訊` }"
-				@update-schedule="updateSchedule"
-			/>
+			<NavTabs :data="init.navTabs" />
 			<div class="mb-0 m-3 px-4 px-sm-5 card">
 				<div class="row">
 					<div class="col-12 mb-4 p-eca-12 pt-0" v-if="init.title === '商家'">
@@ -497,11 +494,6 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 
 import NavTabs from '../components/NavTabs.vue';
-const updateSchedule = (newSchedule: string) => {
-	init.value.schedule = newSchedule;
-};
-
-// 頁面用到的資料
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -510,8 +502,6 @@ const id = authStore.id;
 const userStore = useUserStore();
 const data = computed(() => userStore.user);
 const updateStatus = computed(() => userStore.updateStatus);
-// const updateStatus = ref(userStore.updateStatus); //更新
-const eye = ref(false);
 
 // 同步資料 isLoading
 const isLoading = ref(true);
@@ -523,25 +513,18 @@ const loadingClose = () => {
 	}
 };
 
-const userTitleData = {
-	title: '會員',
-};
-const sellerTitleData = {
-	title: '商家',
-};
-
-const init = ref({}) as any;
-
-// 假資料
-type updateType = {
+// 假資料 --------------------
+type UpdateType = {
 	password: string | null;
 	confirmPassword: string | null;
 };
-const update = ref<updateType>({
+const update = ref<UpdateType>({
 	password: 'aa1234567',
 	confirmPassword: 'aa1234567',
 });
-// 顯示 密碼確認
+
+// 顯示 密碼確認 --------------------
+const eye = ref(false);
 function showUpdate() {
 	userStore.updateStatus = true;
 	update.value.password = '';
@@ -549,25 +532,12 @@ function showUpdate() {
 	document.getElementById('password')!.focus();
 }
 
-//送出表單
+//送出表單 --------------------
 function onSubmit(): any {
 	userStore.upUserAccount(update.value);
 }
 
-const getData = () => {
-	// 根據當前路由加載資料
-	if (route && route.name === 'SellerProfile') {
-		init.value = sellerTitleData;
-	} else if (route && route.name === 'UserProfile') {
-		init.value = userTitleData;
-	}
-	userStore.getUserAccount(id);
-};
-onMounted(() => {
-	getData();
-});
-
-//清除
+//清除 --------------------
 function cancel(): any {
 	userStore.updateStatus = false;
 	eye.value = false;
@@ -593,6 +563,46 @@ function getFile() {
 		userStore.getImgUrl(file, authStore.token);
 	}
 }
+
+const userTitleData = {
+	title: '會員',
+	navTabs: {
+		routeName: 'UserProfile',
+		title: [
+			{
+				title: '會員資訊',
+				// path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
+			},
+		],
+		schedule: '1',
+	},
+};
+
+const sellerTitleData = {
+	title: '商家',
+	navTabs: {
+		routeName: 'SellerProfile',
+		title: [
+			{
+				title: '商家資訊',
+				// path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
+			},
+		],
+		schedule: '1',
+	},
+};
+
+const init = ref({}) as any;
+
+onMounted(() => {
+	// 根據當前路由加載資料
+	if (route && route.name === 'SellerProfile') {
+		init.value = sellerTitleData;
+	} else if (route && route.name === 'UserProfile') {
+		init.value = userTitleData;
+	}
+	userStore.getUserAccount(id);
+});
 </script>
 <style lang="scss" scoped>
 .flex-shrink {

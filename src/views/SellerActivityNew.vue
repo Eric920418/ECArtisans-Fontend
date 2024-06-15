@@ -239,7 +239,7 @@ const dropdown = ref<HTMLDivElement | null>(null);
 // }
 
 // 回傳的假資料格式
-export interface couponNewData {
+export interface CouponNewDataType {
 	activity_id: string | null;
 	activity_name: string | null;
 	activity_images: string | null;
@@ -254,7 +254,7 @@ const data = ref({
 });
 
 // 回傳的假資料
-const newData = ref<couponNewData>({
+const newData = ref<CouponNewDataType>({
 	activity_id: '',
 	activity_name: '',
 	activity_images: '',

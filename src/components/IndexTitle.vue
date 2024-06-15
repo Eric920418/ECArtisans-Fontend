@@ -14,13 +14,13 @@
 		<div class="d-flex position-absolute bottom-0 end-0" v-if="data.openBtn">
 			<div
 				class="prev btn-eca d-none d-sm-flex me-3"
-				@click.stop="data.openBtn.prev()"
+				@click.stop="data.openBtn ? data.openBtn.prev() : () => {}"
 			>
 				<font-awesome-icon :icon="['fas', 'angle-left']" />
 			</div>
 			<div
 				class="next btn-eca d-none d-sm-flex"
-				@click.stop="data.openBtn.next()"
+				@click.stop="data.openBtn ? data.openBtn.next() : () => {}"
 			>
 				<font-awesome-icon :icon="['fas', 'angle-right']" />
 			</div>
@@ -28,7 +28,7 @@
 	</div>
 </template>
 <script lang="ts" setup>
-export interface indexTitle {
+export interface IndexTitleType {
 	title: string;
 	titleEn: string;
 	openBtn?: {
@@ -38,7 +38,7 @@ export interface indexTitle {
 }
 // 接收傳入的值
 const props = defineProps<{
-	data: indexTitle; // 消息内容
+	data: IndexTitleType; // 消息内容
 }>();
 </script>
 <style lang="scss" scoped>

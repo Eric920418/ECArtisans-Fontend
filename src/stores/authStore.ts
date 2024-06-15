@@ -1,12 +1,9 @@
 import { defineStore } from 'pinia';
-// import { type UserData } from '../type/userType';
 import router from '@/router/index';
-// import { logIn,signUp } from '@/api/authApi';
 import { sellerLogin, userLogin } from './api';
-// import { sellerAccount } from './sellerStore';  // 直接從 userStore 導入 useUserStore
 import { alertStore } from '@/main'; // 導入實例
 
-interface UserData {
+interface UserDataType {
 	mail: string;
 	password: string;
 }
@@ -21,7 +18,7 @@ export const useAuthStore = defineStore({
 		accountType: '',
 	}),
 	actions: {
-		async login(data: UserData): Promise<void> {
+		async login(data: UserDataType): Promise<void> {
 			await this.setAccountType();
 			if (data.mail !== '' && data.password !== '') {
 				if (this.accountType !== '') {

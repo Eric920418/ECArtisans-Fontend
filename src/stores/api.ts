@@ -163,12 +163,21 @@ export const sellerCoupon = (coupon_id: string, token: string) =>
 	handleApiResponse(
 		apiRequest.get(`/shop/coupon/${coupon_id}`, headers(token))
 	);
+
 // 44	post  /shop/coupon	 	賣家新增優惠劵	 	賣家端
 export const sellerCouponNew = (data: any) =>
 	handleApiResponse(apiRequest.post('/shop/coupon', data));
+
 // 45	put   /shop/coupon/${coupon_id}	 	賣家修改優惠劵	 	賣家端
-export const sellerCouponEdit = (coupon_id: string) =>
-	handleApiResponse(apiRequest.put(`/shop/coupon/${coupon_id}`));
+export const sellerCouponEdit = (
+	coupon_id: string,
+	data: Object,
+	token: string
+) =>
+	handleApiResponse(
+		apiRequest.put(`/shop/coupon/${coupon_id}`, data, headers(token))
+	);
+
 // 46	delete  /shop/coupon/${coupon_id}	 	 賣家刪除單一優惠劵	 	賣家端
 export const sellerCouponDelete = (coupon_id: string) =>
 	handleApiResponse(apiRequest.delete(`/shop/coupon/${coupon_id}`));
@@ -272,9 +281,12 @@ export const userCoupon = (user_id: string, discount_id: string) =>
 	handleApiResponse(
 		apiRequest.get(`/users/${user_id}/discounts/${discount_id}`)
 	);
-// 22	get   /users/${user_id}/collect	 	 會員收藏商品	 	買家端
+// 22	get 會員收藏商品	 	買家端
 export const userCollect = (user_id: string) =>
-	handleApiResponse(apiRequest.get(`/users/${user_id}/collect`));
+	handleApiResponse(
+		apiRequest.get(`/users/${user_id}/collect`)
+		// , headers(token)
+	);
 // 23	get     /users/${user_id}/collect-shop	 	 會員關注店家	 	 買家端
 export const userFollowShops = (user_id: string) =>
 	handleApiResponse(apiRequest.get(`/users/${user_id}/collect-shop`));

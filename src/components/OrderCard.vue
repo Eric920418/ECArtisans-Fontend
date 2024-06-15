@@ -55,12 +55,12 @@
 import router from '@/router';
 import { getCoupon } from '@/stores/index';
 
-export interface btn {
+export interface BtnType {
 	title: String;
 	go: Object; //轉跳 to 的內容
 }
 
-export interface orderCard {
+export interface OrderCardType {
 	go?: Object; // Card 轉跳 to 的內容
 	img?: String;
 	title: string;
@@ -72,11 +72,11 @@ export interface orderCard {
 		//交易日期
 		sDate: string;
 	};
-	btn?: Array<btn>;
+	btn?: Array<BtnType>;
 }
 
 const props = defineProps<{
-	data: orderCard;
+	data: OrderCardType;
 }>();
 
 // 将价格格式化为带千分位的字符串

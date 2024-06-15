@@ -1,12 +1,16 @@
-export interface navTabsTitle {
+export interface NavTabsTitleType {
 	title: string;
 	goBack?: boolean;
-	path?: Object;
+	path?: {
+		name: string;
+		query?: any;
+	};
 	// {name:...}
 }
 
-export interface navTabs {
-	title: Array<navTabsTitle>;
+export interface NavTabsType {
+	routeName: string;
+	title: Array<NavTabsTitleType>;
 	// navTabsTitle [ {...資料 } , { ...資料 } ]
 	schedule: string; // '預設頁面名稱'
 	breadcrumb?: boolean; // '是否為 麵包屑 例如：優惠劵 > 新增優惠劵 '

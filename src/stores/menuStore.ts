@@ -14,15 +14,15 @@ export const sellerMenu = [
 	},
 	{
 		title: '訂單管理',
-		path: { name: 'SellerOrder', query: { page: 1, filter: '全部' } },
+		path: { name: 'SellerOrder', query: { page: 1, type: '1' } },
 	},
 	{
 		title: '優惠劵管理',
-		path: { name: 'SellerCoupon', query: { page: 1, filter: '未結束' } },
+		path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
 	},
 	{
 		title: '活動管理',
-		path: { name: 'SellerActivity', query: { page: 1, filter: '未結束' } },
+		path: { name: 'SellerActivity', query: { page: 1, type: '1' } },
 	},
 	/*
     {
@@ -44,6 +44,6 @@ export const userMenu = [
 	},
 	{
 		title: '收藏清單',
-		path: { name: 'UserCollect', query: { page: 1, filter: '未結束' } },
+		path: { name: 'UserCollect', query: { page: 1, type: '1' } },
 	},
 ];

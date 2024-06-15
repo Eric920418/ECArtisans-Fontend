@@ -9,7 +9,8 @@
 						:key="couponItem.id"
 						class="col-12 col-lg-6 p-3 m-0"
 					>
-						<Card
+						{{ couponItem }}
+						<!-- <Card
 							:data="{
 								go: {
 									name: 'SellerActivityCheck',
@@ -42,7 +43,7 @@
 									},
 								],
 							}"
-						/>
+						/> -->
 					</div>
 				</div>
 				<div class="col-12">

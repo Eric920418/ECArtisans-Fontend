@@ -17,7 +17,7 @@
 							v-if="data.state"
 							class="text-enable neutral-02 mb-0 text-nowrap"
 						>
-							{{ data.state }}
+							{{ data.state ? '啟用中' : '停止' }}
 						</p>
 					</div>
 				</div>
@@ -25,14 +25,13 @@
 				<div class="d-flex" v-if="data.type !== undefined || data.id">
 					<!-- 如果數字 0 會當 false -->
 					<p
-						v-if="data.type !== undefined"
+						v-if="data.type !== undefined && data.type !== null"
 						class="text-card-coupon btn-Bg-active rounded-1 text-primary mb-0 me-2"
 					>
-						<!-- {{ data.percentage ? parseInt(data.percentage) >= 1 : '' }} -->
 						{{
-							data.percentage !== undefined && parseInt(data.percentage) >= 1
-								? getCoupon(parseInt(data.type), parseInt(data.percentage))
-								: getCoupon(parseInt(data.type))
+							data.percentage && data.type === 0
+								? getCoupon(data.type, data.percentage)
+								: getCoupon(data.type)
 						}}
 					</p>
 					<p v-if="data.id" class="mb-0 mt-1 text-no neutral-02">
@@ -40,11 +39,9 @@
 					</p>
 				</div>
 				<p v-if="data.date" class="text-date mb-0 mt-1">
-					有效日期： {{ $getDate(data.date.sDate) }}
-					<!-- 有效日期：{{ data.date.sDate ? getDate(data.date.sDate) : '' }} -->
+					有效日期： {{ data.date.sDate ? $getDate(data.date.sDate) : '' }}
 					<span v-if="data.date.sDate && data.date.eDate">~</span>
-					{{ $getDate(data.date.eDate) }}
-					<!-- {{ data.date.eDate ? getDate(data.date.eDate) : '' }} -->
+					{{ data.date.eDate ? $getDate(data.date.eDate) : '' }}
 				</p>
 				<div v-if="data.btn" class="d-flex p-0 d-flex justify-content-end mt-2">
 					<button
@@ -66,30 +63,10 @@
 // import { getDate } from '@/stores/index';
 import router from '@/router';
 import { getCoupon } from '@/stores/index';
-
-export interface btn {
-	title: String;
-	go: Object; //轉跳 to 的內容
-}
-
-export interface activityCard {
-	go?: Object; // Card 轉跳 to 的內容
-	img?: String;
-	title: string;
-	state?: string; // 狀態：啟用中
-	type?: string; //優惠劵 型態 Ex:免運劵、優惠劵
-	percentage?: string; //優惠劵 型態 Ex:免運劵、優惠劵
-	id?: string; //編號
-	date?: {
-		//有效日期
-		sDate: string;
-		eDate: string;
-	};
-	btn?: Array<btn>;
-}
+import { type ActivityCardType } from '@/type/ActivityCardType';
 
 const props = defineProps<{
-	data: activityCard;
+	data: ActivityCardType;
 }>();
 </script>
 

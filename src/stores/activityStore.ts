@@ -84,16 +84,16 @@ export const useActivity = defineStore({
 			try {
 				let res;
 				if (id && this.accountType === 'seller') {
-					await sellerCouponAll(id, page, token)
-						.then(res => {
-							this.allData = res.coupons;
-							this.pagination = res.pagination;
-							console.log(res);
-						})
-						.catch(err => {
-							console.log(err);
-							alertStore.error(err.response.data.message);
-						});
+					// await sellerCouponAll(id, page, token)
+					// 	.then(res => {
+					// 		this.allData = res.coupons;
+					// 		this.pagination = res.pagination;
+					// 		console.log(res);
+					// 	})
+					// 	.catch(err => {
+					// 		console.log(err);
+					// 		alertStore.error(err.response.data.message);
+					// 	});
 				} else if (id && this.accountType === 'user') {
 					// await user(id)
 					// 	.then(res => {
