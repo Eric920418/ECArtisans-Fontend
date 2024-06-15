@@ -74,6 +74,9 @@ dependencies:
   vue-cookies:
     specifier: ^1.8.4
     version: 1.8.4
+  vue-draggable-plus:
+    specifier: ^0.5.0
+    version: 0.5.0(@types/sortablejs@1.15.8)
   vue-loading-overlay:
     specifier: ^6.0
     version: 6.0.4(vue@3.4.21)
@@ -1125,6 +1128,10 @@ packages:
     dependencies:
       '@types/node': 20.11.28
     dev: true
+
+  /@types/sortablejs@1.15.8:
+    resolution: {integrity: sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==}
+    dev: false
 
   /@types/web-bluetooth@0.0.16:
     resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
@@ -6474,6 +6481,18 @@ packages:
         optional: true
     dependencies:
       vue: 3.4.21(typescript@5.4.2)
+    dev: false
+
+  /vue-draggable-plus@0.5.0(@types/sortablejs@1.15.8):
+    resolution: {integrity: sha512-A5TT5+M5JceROSjPO9aDZTsrSN1TetEs419czPlboomarSiGIBIxTp2WD7XH53EHMrbO7Qo+leRiHWV/rMlyjA==}
+    peerDependencies:
+      '@types/sortablejs': ^1.15.0
+      '@vue/composition-api': '*'
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      '@types/sortablejs': 1.15.8
     dev: false
 
   /vue-eslint-parser@9.4.2(eslint@8.49.0):
