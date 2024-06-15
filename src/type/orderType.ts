@@ -1,4 +1,5 @@
-export interface Product {
+// 商品詳細
+export interface DetailedOrderProduct { 
 	_id: string;
 	seller_id?: string;
 	sellerCategory: Array<number>; //商品主要類別
@@ -38,15 +39,29 @@ export interface Product {
 	image: string[];
 }
 
+// 詳細的訂單類型
+export interface DetailedOrder {
+  _id: string;
+  orderNumber: string;
+  date: string;
+  products: DetailedOrderProduct[];
+  state: number;
+  price: number;
+  pay: number;
+}
+
+
+// 查詢所有訂單的訂單型態
 export interface Order {
 	_id: string;
 	orderNumber: string;
 	date: string;
-	products: Product[];
+	products: string[];
 	state: number;
 	price: number;
 	pay: number;
 }
+
 
 export interface ApiResponse {
 	status: string;

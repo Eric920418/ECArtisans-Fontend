@@ -14,7 +14,7 @@ export const sellerMenu = [
 	},
 	{
 		title: '訂單管理',
-		path: { name: 'SellerOrder', query: { page: 1, filter: '未結束' } },
+		path: { name: 'SellerOrder', query: { page: 1, filter: '全部' } },
 	},
 	{
 		title: '優惠劵管理',
