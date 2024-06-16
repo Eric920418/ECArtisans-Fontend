@@ -626,11 +626,11 @@ function add() {
 }
 
 // // 刪除，待檢查
-// function inputBadgeClose(id: string) {
-// 	data.value.productChoose = data.value.productChoose?.filter(
-// 		item => item !== id
-// 	);
-// }
+function inputBadgeClose(id: string) {
+	data.value.productChoose = data.value.productChoose?.filter(
+		item => item !== id
+	);
+}
 
 // // navTab + seller 畫面下所有資料
 
