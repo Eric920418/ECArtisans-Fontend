@@ -57,7 +57,7 @@ import { useRoute } from 'vue-router';
 import router from '@/router';
 
 import { useProduct, useAuthStore, getDate } from '@/stores/index';
-import { type navTabsTitle } from '@/type/navTabsTitle';
+import { type NavTabsTitleType } from '@/type/navTabsTitle';
 
 // 組件
 import NavTabs from '../components/NavTabs.vue';
@@ -72,7 +72,7 @@ const data = computed(() => userStore.allData);
 // 頁碼 準備要做成元件，未完成
 
 // 如果是 當我選中 navTabs資料後切換 的 navTabs 資料
-const updateSchedule = (newSchedule: navTabsTitle) => {
+const updateSchedule = (newSchedule: NavTabsTitleType) => {
 	if (Object.hasOwn(newSchedule, 'title') && newSchedule.title) {
 		navTabs.value.schedule = newSchedule.title;
 	}

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
-import { type couponType } from '../type/couponType';
-import { getDate } from '@/setup/globalFunction';
+import { type CouponType } from '../type/couponType';
+import { getDate, getISO } from '@/setup/globalFunction';
 
 import {
 	sellerCouponAll, // 42	get  賣家顯示所有優惠劵 (seller_id: string, page: number)
@@ -27,7 +27,7 @@ import {
 export const useCoupon = defineStore({
 	id: 'coupon',
 	state: () => ({
-		allData: [] as Array<couponType>, // 賣家所有優惠劵
+		allData: [] as Array<CouponType>, // 賣家所有優惠劵
 		data: {
 			_id: '',
 			seller_id: '',
@@ -35,12 +35,12 @@ export const useCoupon = defineStore({
 			startDate: null,
 			endDate: null,
 			type: null,
-			discountCondition: null,
+			discountConditions: null,
 			percentage: null,
 			productType: null,
 			productChoose: [],
 			isEnabled: true,
-		} as couponType, // 賣家所有優惠劵
+		} as CouponType, // 賣家所有優惠劵
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
@@ -69,8 +69,10 @@ export const useCoupon = defineStore({
 				await this.setAccountType();
 				let res;
 				if (this.accountType === 'seller') {
+					console.log('正在發送');
 					await sellerCouponAll(token)
 						.then(res => {
+							console.log('發送');
 							this.allData = res.Coupons;
 						})
 						.catch(err => {
@@ -81,7 +83,7 @@ export const useCoupon = defineStore({
 				alertStore.error('showError');
 			}
 		},
-		// 獲取所有優惠劵
+		// 獲取 單筆 優惠劵
 		async getCoupon(coupon_id: string, token: string): Promise<void> {
 			try {
 				await this.setAccountType();
@@ -89,12 +91,50 @@ export const useCoupon = defineStore({
 				if (this.accountType === 'seller') {
 					await sellerCoupon(coupon_id, token)
 						.then(res => {
+							console.log(res);
 							const isData = res.Coupons[0];
 							isData.startDate = getDate(isData.startDate);
 							isData.endDate = getDate(isData.endDate);
 							isData.type = parseInt(isData.type);
 							isData.discountConditions = parseInt(isData.discountConditions);
+							isData.productType = parseInt(isData.productType);
 							this.data = isData;
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+				}
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 更新 單筆 優惠劵
+		async getCouponEdit(data: CouponType, token: string): Promise<void> {
+			try {
+				await this.setAccountType();
+				let res;
+				if (
+					Object.hasOwn(data, 'startDate') &&
+					Object.hasOwn(data, 'endDate') &&
+					typeof data.startDate === 'string' &&
+					typeof data.endDate === 'string'
+				) {
+					data.startDate = getISO(data.startDate, 'start');
+					data.endDate = getISO(data.endDate, 'end');
+					data.startDate = data.startDate.toString();
+					data.endDate = data.endDate.toString();
+				}
+
+				let coupon_id;
+				if (this.data._id) {
+					coupon_id = this.data._id;
+					data.isEnabled = true;
+				}
+				console.log(data);
+				if (this.accountType === 'seller' && coupon_id) {
+					await sellerCouponEdit(coupon_id, JSON.stringify(data), token)
+						.then(res => {
+							console.log(res);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);

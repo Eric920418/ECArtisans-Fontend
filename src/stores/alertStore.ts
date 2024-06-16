@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 
-type message = {
+type MessageType = {
 	icon: string | null;
 	text: string;
 };
-type toast = {
-	message: message;
+type ToastType = {
+	message: MessageType;
 	type: string;
 	icon: string | null;
 	show: boolean;
@@ -15,13 +15,13 @@ type toast = {
 };
 
 type messageArray = {
-	[key: string]: message; // 使用 toast 类型替代 string 类型
+	[key: string]: MessageType; // 使用 ToastType 类型替代 string 类型
 };
 
 export const useAlertStore = defineStore({
 	id: 'alert', //警報
 	state: () => ({
-		toasts: [] as Array<toast>,
+		toasts: [] as Array<ToastType>,
 		message: {
 			// icon = null 就是不要 icon
 			logIn: { icon: 'circle-check', text: '登入成功' },
@@ -43,24 +43,24 @@ export const useAlertStore = defineStore({
 	}),
 	actions: {
 		success(index: string): any {
-			this.addToast(index, 'toast');
+			this.addToast(index, 'ToastType');
 		},
 		error(index: string): any {
 			this.addToast(index, 'error');
 		},
 		addToast(index: string, toastType: string) {
-			let message = this.message[index] as message;
-			if (!message) message = { icon: null, text: index } as message;
+			let message = this.message[index] as MessageType;
+			if (!message) message = { icon: null, text: index } as MessageType;
 			const timestamp = this.nextTimestamp++; //index
 
-			const toast = {
+			const ToastType = {
 				message: message.text,
 				type: toastType,
 				icon: message.icon,
 				show: true,
 				timestamp: timestamp,
-			} as toast | any;
-			this.toasts.push(toast);
+			} as ToastType | any;
+			this.toasts.push(ToastType);
 
 			setTimeout(() => {
 				this.removeToast(timestamp);
@@ -68,7 +68,7 @@ export const useAlertStore = defineStore({
 		},
 		removeToast(timestamp: number) {
 			const index = this.toasts.findIndex(
-				toast => toast.timestamp === timestamp
+				ToastType => ToastType.timestamp === timestamp
 			);
 			if (index !== -1) {
 				this.toasts.splice(index, 1);
@@ -76,7 +76,7 @@ export const useAlertStore = defineStore({
 		},
 		showToast(timestamp: number) {
 			const index = this.toasts.findIndex(
-				toast => toast.timestamp === timestamp
+				ToastType => ToastType.timestamp === timestamp
 			);
 			if (index !== -1) {
 				this.toasts[index].show = false;

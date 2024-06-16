@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
-import { type Product } from '../type/orderType';
+import { type DetailedOrderType } from '../type/orderType';
 import { getDate } from '@/setup/globalFunction';
 
 import {
@@ -67,20 +67,16 @@ export const useProduct = defineStore({
 				createAt: '2024-06-03T12:34:56.789Z',
 				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
 			},
-		] as Array<Product>, // 賣家所有優惠劵
+		] as Array<DetailedOrderType>, // 賣家所有優惠劵
 		data: {
 			_id: '',
-			seller_id: '',
-			couponName: '',
-			startDate: null,
-			endDate: null,
-			type: null,
-			discountCondition: null,
-			percentage: null,
-			productType: null,
-			productChoose: [],
-			isEnabled: true,
-		} as couponType, // 賣家所有優惠劵
+			orderNumber: '',
+			date: '',
+			products: [],
+			state: 0,
+			price: 0,
+			pay: 0,
+		} as DetailedOrderType, // 賣家所有優惠劵
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),

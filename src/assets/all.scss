@@ -21,6 +21,9 @@
 	font-family: "Noto Sans TC","微軟正黑體","sans-serif";
 	min-height: 100vh;
 }
+.white{
+	color: #fff !important;
+}
 
 .wrapper {
   flex-grow: 1 ; //撐開中間
@@ -57,7 +60,13 @@
 		color: #fff;
 	}
 }
-
+.btn:disabled, .btn.disabled, fieldset:disabled {
+	color: #fff;
+}
+.btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show,
+.btn:focus-visible{
+	color: $yellow;
+}
 .btn-Bg:hover{
 	color: $gray-900;
  }
@@ -416,6 +425,10 @@ $radius-8: 0.5rem; //弧度
 .fs-12 {
 	font-size:  0.75em; //12px
 }
+.fs-10 {
+	font-size:  0.625em; //12px
+}
+
 .card-newImg-disabled,
 .card-newImg{
 	text-align: center;

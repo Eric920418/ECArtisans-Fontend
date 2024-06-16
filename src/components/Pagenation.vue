@@ -23,7 +23,7 @@
 		</template>
 	</BPagination>
 
-	<div>Current page : {{ localCurrentPage }}</div>
+	<!-- <div>Current page : {{ localCurrentPage }}</div> -->
 </template>
 
 <script setup lang="ts">

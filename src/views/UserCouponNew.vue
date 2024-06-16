@@ -6,14 +6,30 @@
 				<div class="m-3 card m-3 p-4 p-sm-5">
 					<!-- 表格 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
-						<!-- @submit="onSubmit" -->
 						<div
-							class="d-flex justify-content-between align-items-center mb-4 p-0"
+							class="row m-0 p-0 mb-4 flex-column-reverse flex-sm-row justify-content-between align-items-center"
+							style="height: 60px"
 						>
-							<h3 class="fs-5 p-0 neutral-01 mb-0">{{ init.schedule }}</h3>
-							<p>編號：{{ data._id }}</p>
+							<div class="col-12 col-sm-10 d-flex m-0 p-0 align-items-end">
+								<h3 class="m-0 p-0 fs-5 p-0 neutral-01 mb-3 mb-sm-0">
+									<!-- {{ init.schedule }} -->
+									編號：{{ data._id }}
+									<br />
+									<!-- 編號：{{ data.seller ? data.seller._id : '' }} -->
+								</h3>
+								<!-- <p class="m-0 p-0 fs-12 mb-0 mt-1">編號：{{ data._id }}</p> -->
+							</div>
 
-							<a class="mb-0" v-if="route.name === 'SellerCouponCheck'">
+							<a
+								class="col-12 col-sm-2 p-0 mb-0 text-end"
+								:class="{
+									'neutral-03': dateAndToDay(data.startDate),
+								}"
+							>
+								<!-- v-if="
+									route.name === 'SellerCouponCheck' &&
+									!dateAndToDay(data.startDate)
+								" -->
 								立即停止
 							</a>
 						</div>
@@ -24,58 +40,69 @@
 							</label>
 							<v-field
 								id="couponName"
-								name="優惠卷名稱"
+								name="couponName"
 								type="text"
 								class="form-control"
-								:class="{ 'is-invalid': errors['優惠卷名稱'] }"
+								:class="{ 'is-invalid': errors['couponName'] }"
 								rules="required"
 								v-model="data.couponName"
 								aria-label="優惠卷名稱"
 								placeholder="請輸入優惠卷名稱"
+								:disabled="dateAndToDay(data.startDate)"
 							></v-field>
-							<!-- <error-message
-								name="優惠卷名稱"
+							<error-message
+								name="couponName"
 								class="invalid-feedback"
-							></error-message> -->
+							></error-message>
 						</div>
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
-							<label for="start_date" class="mb-1">
+							<label for="startDate" class="mb-1">
 								使用期限
 								<span class="text-danger">*</span>
 							</label>
 							<div class="d-flex">
 								<div>
 									<v-field
-										id="start_date"
-										name="起始日"
+										id="startDate"
+										name="startDate"
 										type="date"
 										class="form-control col-2"
-										:class="{ 'is-invalid': errors['起始日'] }"
-										rules="startDate|required"
+										:class="{ 'is-invalid': errors['startDate'] }"
+										:rules="
+											dateAndToDay(data.startDate) ? '' : 'startDate|required'
+										"
+										ref="document.getElementById('startDate')"
 										v-model="data.startDate"
-										aria-label="起始日"
+										aria-label="startDate"
 										placeholder="請輸入優惠卷使用期限"
+										:disabled="dateAndToDay(data.startDate)"
 									></v-field>
 									<error-message
-										name="起始日"
+										name="startDate"
 										class="invalid-feedback"
 									></error-message>
 								</div>
 								<p class="mx-3 fs-3">~</p>
 								<div>
 									<v-field
-										id="end_date"
-										name="到期日"
+										id="endDate"
+										name="endDate"
 										type="date"
 										class="form-control col-2"
-										:class="{ 'is-invalid': errors['到期日'] }"
-										rules="endDate:起始日|required"
+										:class="{ 'is-invalid': errors['endDate'] }"
+										:rules="
+											dateAndToDay(data.startDate)
+												? ''
+												: 'endDate:startDate|required'
+										"
 										v-model="data.endDate"
+										ref="document.getElementById('endDate')"
 										aria-label="到期日"
 										placeholder="請輸入優惠卷使用期限"
+										:disabled="dateAndToDay(data.startDate)"
 									></v-field>
 									<error-message
-										name="到期日"
+										name="endDate"
 										class="invalid-feedback"
 									></error-message>
 								</div>
@@ -97,6 +124,7 @@
 									rules="policy|required"
 									:value="1"
 									as="input"
+									:disabled="dateAndToDay(data.startDate)"
 								></v-field>
 								<label class="form-check-label me-4" for="delivery">免運</label>
 								<v-field
@@ -109,6 +137,7 @@
 									rules="policy|required"
 									:value="0"
 									as="input"
+									:disabled="dateAndToDay(data.startDate)"
 								></v-field>
 								<label class="form-check-label" for="discount">折扣</label>
 							</div>
@@ -130,14 +159,15 @@
 								</label>
 								<v-field
 									id="priceOver"
-									name="低消金額"
+									name="discountConditions"
 									type="number"
 									class="form-control text-end me-0 hide-arrows"
-									:class="{ 'is-invalid': errors['低消金額'] }"
+									:class="{ 'is-invalid': errors['discountConditions'] }"
 									rules="numeric|required"
 									v-model="data.discountConditions"
-									aria-label="低消金額"
+									aria-label="discountConditions"
 									placeholder="請輸入金額"
+									:disabled="dateAndToDay(data.startDate)"
 								></v-field>
 							</div>
 						</div>
@@ -154,14 +184,15 @@
 									</label>
 									<v-field
 										id="percentage"
-										name="優惠折數"
+										name="percentage"
 										type="text"
 										class="form-control text-end me-2"
-										:class="{ 'is-invalid': errors['優惠折數'] }"
+										:class="{ 'is-invalid': errors['percentage'] }"
 										rules="numeric|required"
 										v-model="data.percentage"
-										aria-label="優惠折數"
+										aria-label="percentage"
 										placeholder="請輸入折數"
+										:disabled="dateAndToDay(data.startDate)"
 									></v-field>
 									<p class="mb-0 mr-2">折</p>
 								</div>
@@ -170,7 +201,15 @@
 								</p>
 							</div>
 						</div>
-						<!-- <div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
+						<div
+							class="col-12 p-0 m-0 mb-2"
+							:style="{
+								'min-height':
+									data.productType === 1 && data.productChoose
+										? '60px'
+										: '100px',
+							}"
+						>
 							<p>
 								活動範圍
 								<span class="text-danger">*</span>
@@ -183,10 +222,11 @@
 								id="all"
 								name="productType"
 								rules="policy|required"
-								value="全館"
+								:value="0"
 								as="input"
+								:disabled="dateAndToDay(data.startDate)"
 							></v-field>
-							<label class="form-check-label me-4" for="all">全館</label>
+							<label class="form-check-label me-4" for="all">所有商品</label>
 							<v-field
 								class="form-check-input me-2"
 								type="radio"
@@ -195,33 +235,33 @@
 								id="part"
 								name="productType"
 								rules="policy|required"
-								value="部分商品"
+								:value="1"
 								as="input"
+								:disabled="dateAndToDay(data.startDate)"
 							></v-field>
 							<label class="form-check-label" for="productType">部分商品</label>
 						</div>
 
 						<div
 							class="col-12 p-0 m-0 mb-2"
-							v-if="
-								typeof data.productType === 'string' &&
-								data.productType === '部分商品'
-							"
+							v-if="data.productType === 1 && data.productChoose"
+							style="min-height: 100px"
 						>
 							<div class="dropdown">
 								<button
 									class="form-control py-0"
 									:class="{
-										'justify-content-between': data.productChoose?.length === 0,
-										'justify-content-start': data.productChoose?.length !== 0,
+										'justify-content-between': data.productChoose.length === 0,
+										'justify-content-start': data.productChoose.length !== 0,
 									}"
 									ref="dropdownBtn"
 									type="button"
 									data-bs-toggle="dropdown"
 									data-bs-auto-close="outside"
+									:disabled="dateAndToDay(data.startDate)"
 								>
 									<div
-										v-if="data.productChoose?.length === 0"
+										v-if="data.productChoose.length === 0"
 										class="text-start d-flex justify-content-between align-items-center"
 									>
 										<p class="mb-0 neutral-03" style="padding: 6px 0px">
@@ -234,10 +274,12 @@
 										/>
 									</div>
 									<div v-else class="row m-0 p-0">
+										<!-- :class="{ 'bg-neutral-01': addNum, 'd-block': addNum }" -->
 										<div
 											v-for="item in data.productChoose"
 											:key="item"
 											class="input-badge w-auto"
+											:class="{ 'bg-neutral-02': addNum, white: addNum }"
 										>
 											<p class="mb-0">{{ item }}</p>
 											<button
@@ -255,14 +297,17 @@
 										:key="sttIndex"
 									>
 										<div class="dropdown-item">
-											<input
+											<v-field
 												class="form-check-input me-2"
 												type="checkbox"
 												v-model="data.productChoose"
-												:id="stt"
-												:name="stt"
+												:class="{ 'is-invalid': errors['productChoose'] }"
 												:value="stt"
-											/>
+												:id="stt"
+												name="productChoose"
+												as="input"
+											></v-field>
+											<!-- :rules="data.productType === 1 ? 'required' : ''" -->
 											<label
 												class="form-check-label"
 												:for="stt"
@@ -274,8 +319,16 @@
 									</li>
 								</ul>
 							</div>
-						</div> -->
-
+							<span
+								role="alert"
+								class="text-danger"
+								style="margin-top: 0.25rem; font-size: 0.875em"
+							>
+								商品請最少選擇一項
+							</span>
+							<h1>待接商品api取得商品名稱+id</h1>
+						</div>
+						{{ data.productChoose }}
 						<div class="col-12 p-0 m-0 mb-2">
 							<label class="mb-1 me-3">
 								注意事項
@@ -324,13 +377,18 @@
 					>
 						取消
 					</button>
-					<button type="submit" class="btn btn-primary px-5 m-0 ms-1 ms-sm-2">
+					<button
+						:disabled="dateAndToDay(data.startDate)"
+						type="submit"
+						class="btn btn-primary px-5 m-0 ms-1 ms-sm-2"
+					>
 						{{ init.btn }}
 					</button>
 				</div>
-
 				<br />
 				{{ userStore.data }}
+				<br />
+				{{ authStore.token }}
 			</v-form>
 		</div>
 	</div>
@@ -339,34 +397,79 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 
-import { type couponType } from '@/type/couponType';
-
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
 
-import { useCoupon, useAuthStore, useResize, getDate } from '@/stores/index';
+import {
+	useCoupon,
+	useAuthStore,
+	useResize,
+	dateAndToDay,
+} from '@/stores/index';
 
 import { useRoute } from 'vue-router';
 const route = useRoute();
-
+import { alertStore } from '@/main'; // 導入實例
 const { resize } = useResize();
 const authStore = useAuthStore();
 const userStore = useCoupon();
-
+const data = computed(() => userStore.data);
 // 完成後送出
-function onSubmit() {
-	console.log('成功');
+function onSubmit(isValue: any | void) {
+	if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
+		alertStore.error('請選擇商品');
+	} else {
+		if (isValue.productType === 0) isValue.productChoose = [];
+		userStore.getCouponEdit(isValue, authStore.token);
+	}
 }
+// 調整日期 input
+function updateStartDateMin() {
+	const startDateInput = document.getElementById(
+		'startDate'
+	) as HTMLInputElement | null;
+	if (startDateInput) {
+		const today = new Date();
+		today.setDate(today.getDate() + 1); // 明天
+		startDateInput.min = today.toISOString().split('T')[0];
+	}
+}
+
+function updateEndDateMin() {
+	const endDateInput = document.getElementById(
+		'end_date'
+	) as HTMLInputElement | null;
+	if (endDateInput) {
+		if (data.value.startDate instanceof Date) {
+			endDateInput.min = data.value.startDate.toISOString().split('T')[0];
+		} else if (typeof data.value.startDate === 'string') {
+			endDateInput.min = data.value.startDate;
+		} else {
+			endDateInput.min = '';
+		}
+	}
+}
+
+onMounted(() => {
+	updateStartDateMin();
+	updateEndDateMin();
+});
+
+watch(
+	() => data.value.startDate,
+	() => {
+		updateEndDateMin();
+	}
+);
 
 const dropdownBtn = ref<HTMLButtonElement | null>(null);
 const dropdown = ref<HTMLDivElement | null>(null);
 
-// 刪除
-// function inputBadgeClose(id: string) {
-// 	data.value.productChoose = data.value.productChoose.filter(
-// 		item => item !== id
-// 	);
-// }
+const addNum = ref(false);
+function add() {
+	if (addNum.value === false) addNum.value = true;
+	else addNum.value = false;
+}
 
 // 刪除，待檢查
 function inputBadgeClose(id: string) {
@@ -374,8 +477,6 @@ function inputBadgeClose(id: string) {
 		item => item !== id
 	);
 }
-
-const data = computed(() => userStore.data);
 
 // navTab + seller 畫面下所有資料
 const sellerTitleNewData = {
@@ -406,7 +507,7 @@ const sellerTitleData = {
 		},
 	],
 	schedule: '修改優惠劵', //目前頁面
-	btn: '新增',
+	btn: '修改',
 };
 
 const navTabs = ref({}) as any;

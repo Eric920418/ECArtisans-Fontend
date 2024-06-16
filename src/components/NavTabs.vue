@@ -1,24 +1,32 @@
 <template>
-	<div class="m-0 p-0 d-sm-flex align-items-center justify-content-sm-between">
+	<div
+		class="m-0 p-0 d-sm-flex align-items-center justify-content-sm-between"
+		v-if="data"
+	>
 		<ul class="nav nav-tabs m-0" v-if="data.title">
 			<li
 				class="nav-item mb-0 p-0 d-flex align-items-center justify-content-center"
 				v-for="(titleItem, titleIndex) in data.title"
 				:key="titleIndex"
-				@click="handleClick(titleItem)"
+				@click="data.title.length > 1 ? handleClick(titleItem) : () => {}"
 			>
+				<div
+					v-if="data.title.length === 1"
+					class="px-3 py-2 my-0 text-primary"
+					aria-current="page"
+				>
+					<h2 class="fs-4 mb-0 px-2" style="height: fit-content">
+						{{ typeof titleItem === 'string' ? titleItem : titleItem.title }}
+					</h2>
+				</div>
 				<a
+					v-else-if="titleItem.path && titleItem.path.query"
 					class="nav-link my-0"
 					aria-current="page"
 					:class="{
-						'active text-primary':
-							(typeof titleItem === 'string' && data.schedule === titleItem) ||
-							(typeof titleItem !== 'string' &&
-								data.schedule === titleItem.title),
-						'neutral-02':
-							(typeof titleItem === 'string' && data.schedule !== titleItem) ||
-							(typeof titleItem !== 'string' &&
-								data.schedule !== titleItem.title),
+						'neutral-02': route.query.type
+							? titleItem.path.query.type !== route.query.type
+							: false,
 					}"
 				>
 					<h2 class="fs-4 mb-0 px-2" style="height: fit-content">
@@ -32,9 +40,8 @@
 				/>
 			</li>
 		</ul>
-		<div class="text-end">
+		<div class="text-end" v-if="data.btn">
 			<router-link
-				v-if="data.btn"
 				:to="data.btn.path"
 				class="btn btn-outline-primary px-4 me-3"
 			>
@@ -47,21 +54,21 @@
 import router from '@/router';
 import { go } from '@/stores/index';
 import { useRoute } from 'vue-router';
-import { type navTabsTitle, type navTabs } from '@/type/navTabsTitle';
+import { type NavTabsTitleType, type NavTabsType } from '@/type/navTabsTitle';
 
 const route = useRoute();
 
 const props = defineProps<{
-	data: navTabs;
+	data: NavTabsType;
 }>();
 
-const emit = defineEmits(['update-schedule']);
+// const emit = defineEmits(['update-schedule']);
 
-const handleClick = (titleItem: navTabsTitle) => {
+const handleClick = (titleItem: NavTabsTitleType) => {
 	if (Object.hasOwn(titleItem, 'goBack') && titleItem.goBack) router.go(-1);
 	if (Object.hasOwn(titleItem, 'path') && titleItem.path) go(titleItem.path);
 
-	emit('update-schedule', titleItem as navTabsTitle);
+	// emit('update-schedule', titleItem as navTabsTitle);
 };
 </script>
 <style lang="scss" scoped></style>

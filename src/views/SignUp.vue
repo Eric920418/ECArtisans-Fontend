@@ -541,7 +541,7 @@ import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { useRoute } from 'vue-router';
 import { useAuthStore, useUserStore } from '@/stores/index';
 import Loading from 'vue-loading-overlay';
-import { type UserData } from '@/type/userType';
+import { type UserDataType } from '@/type/userType';
 import router from '@/router';
 // 頁面用到的資料
 const authStore = useAuthStore();
@@ -586,7 +586,7 @@ const sellerTitleData = {
 	],
 };
 
-const data = ref<UserData>({
+const data = ref<UserDataType>({
 	name: null,
 	gender: null,
 	phone: null,

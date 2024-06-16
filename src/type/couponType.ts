@@ -1,6 +1,7 @@
-export interface couponType {
+export interface CouponType {
 	_id: string;
-	seller_id: string;
+	seller_id?: string;
+	seller?: Object;
 	couponName: string | null;
 	startDate: string | Date | null;
 	endDate: string | Date | null;

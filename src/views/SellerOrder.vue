@@ -36,8 +36,8 @@ import Pagenation from '@/components/Pagenation.vue';
 import { useRoute } from 'vue-router';
 import router from '@/router';
 import { useOrderStore } from '@/stores/index';
-import { type Order } from '@/type/orderType';
-import { type navTabsTitle } from '@/type/navTabsTitle';
+import { type OrderType } from '@/type/orderType';
+import { type NavTabsTitleType } from '@/type/navTabsTitle';
 import { useAuthStore } from '@/stores/index';
 
 const route = useRoute();
@@ -76,22 +76,22 @@ const navTabs = ref<{
 
 // Fetch orders from the store
 // 呼叫資料 (目前假資料)
-const orders = computed((): Order[] | [] => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
+const orders = computed((): OrderType[] | [] => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
 
 // Categorize orders based on their status
-const categorizedOrders = ref<{ [key: string]: Order[] }>({
+const categorizedOrders = ref<{ [key: string]: OrderType[] }>({
 	全部: orders.value,
 	處理中: orders.value.filter(
-		(order: Order) => order.state === 1 || order.state === 2
+		(order: OrderType) => order.state === 1 || order.state === 2
 	),
 	運送中: orders.value.filter(
-		(order: Order) => order.state === 3 || order.state === 4
+		(order: OrderType) => order.state === 3 || order.state === 4
 	),
-	已完成: orders.value.filter((order: Order) => order.state === 5),
+	已完成: orders.value.filter((order: OrderType) => order.state === 5),
 });
 
 // Initialize filtered orders based on initial tab selection
-const filteredOrders = ref<Order[]>(categorizedOrders.value['全部']);
+const filteredOrders = ref<OrderType[]>(categorizedOrders.value['全部']);
 
 // Function to initialize data on component mount
 const initData = () => {
@@ -101,7 +101,7 @@ const initData = () => {
 };
 
 // 格式化 Card 的数据
-const formatCardData = (orderItem: Order) => ({
+const formatCardData = (orderItem: OrderType) => ({
 	go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
 	img: '', // 暂时没有商品图像信息
 	title: orderItem.orderNumber,
@@ -121,7 +121,7 @@ const formatCardData = (orderItem: Order) => ({
 });
 
 // Function to update filtered orders based on selected tab
-const updateSchedule = (newSchedule: navTabsTitle) => {
+const updateSchedule = (newSchedule: NavTabsTitleType) => {
 	if (newSchedule && newSchedule.title) {
 		navTabs.value.schedule = newSchedule.title;
 		filteredOrders.value = categorizedOrders.value[newSchedule.title];

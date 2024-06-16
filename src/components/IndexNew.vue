@@ -69,7 +69,7 @@ import 'swiper/css/grid';
 import { useResize } from '@/stores/index';
 const { resize } = useResize();
 
-interface Product {
+interface ProductType {
 	avatar: string;
 	comment: string;
 	company: string;
@@ -81,7 +81,7 @@ interface Product {
 // 請強制設訂為 12 的倍數 ...例如：12、24、48...
 // 因為顯示為 4 、 3  避免有缺。
 // 除非 每次顯示 改為 4 跟 8 的倍數。
-const ProductList = ref<Product[]>([
+const ProductList = ref<ProductType[]>([
 	{
 		avatar:
 			'https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__',

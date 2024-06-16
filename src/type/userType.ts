@@ -1,4 +1,4 @@
-export interface UserData {
+export interface UserDataType {
 	_id?: string;
 	name: string | undefined | null;
 	gender: string | undefined | null;

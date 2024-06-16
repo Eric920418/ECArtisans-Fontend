@@ -12,15 +12,9 @@
 						:to="menuItem.path"
 						class="list-group-item btn btn-Bg rounded-2 text-start p-3"
 						:class="{
-							'btn-Bg-active': route.name
-								.split('er')[1]
-								.includes(menuItem.path.name.split('er')[1]),
+							'btn-Bg-active': isRouteName(route.name, menuItem.path.name),
 						}"
-						:aria-current="
-							route.name
-								.split('er')[1]
-								.includes(menuItem.path.name.split('er')[1])
-						"
+						:aria-current="isRouteName(route.name, menuItem.path.name)"
 					>
 						{{ menuItem.title }}
 					</router-link>
@@ -40,7 +34,12 @@ import { useAuthStore, useUserStore } from '@/stores/index';
 
 const route = useRoute();
 const userStore = useUserStore();
-
+function isRouteName(routeName: any, menuItemName: string) {
+	if (typeof routeName === 'string' && typeof menuItemName === 'string') {
+		return routeName.split('er')[1]?.includes(menuItemName.split('er')[1]);
+	}
+	return false;
+}
 const menu = ref([]) as any;
 const getData = () => {
 	if (route.matched[0].path === '/seller') {
