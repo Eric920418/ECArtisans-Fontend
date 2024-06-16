@@ -1,7 +1,7 @@
 <template>
 	<div class="row g-3 mx-0 mb-0 pb-0">
 		<div class="col-12 m-0 p-0">
-			<NavTabs :data="navTabs" @update-schedule="updateSchedule" />
+			<NavTabs :data="navTabs" />
 			<div class="my-0">
 				<div class="row m-0 p-0">
 					<div
@@ -33,70 +33,73 @@ import NavTabs from '@/components/NavTabs.vue';
 import Card from '@/components/OrderCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
 
-import { useRoute } from 'vue-router';
-import router from '@/router';
+import { useRoute, useRouter } from 'vue-router';
+
 import { useOrderStore } from '@/stores/index';
 import { type OrderType } from '@/type/orderType';
 import { type NavTabsTitleType } from '@/type/navTabsTitle';
 import { useAuthStore } from '@/stores/index';
 
 const route = useRoute();
+const router = useRouter();
 const orderStore = useOrderStore();
+// 呼叫資料 (目前假資料)
+const orders = computed((): OrderType[] | [] => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
 
-// Define navTabs structure
-const navTabs = ref<{
-	routeName: string;
-	title: {
-		title: string;
-		path: { name: string; query: { page: number; filter: string } };
-	}[];
-	schedule: string;
-}>({
+const navTabs = ref({}) as any;
+
+// 如果是 seller 的 navTabs 資料
+const sellerTitleData = {
 	routeName: 'SellerOrder',
 	title: [
 		{
 			title: '全部',
-			path: { name: 'SellerOrder', query: { page: 1, filter: '未結束' } },
+			path: { name: 'SellerOrder', query: { page: 1, type: '1' } },
 		},
 		{
 			title: '處理中',
-			path: { name: 'SellerOrder', query: { page: 1, filter: '處理中' } },
+			path: { name: 'SellerOrder', query: { page: 1, type: '2' } },
 		},
 		{
 			title: '運送中',
-			path: { name: 'SellerOrder', query: { page: 1, filter: '運送中' } },
+			path: { name: 'SellerOrder', query: { page: 1, type: '3' } },
 		},
 		{
 			title: '已完成',
-			path: { name: 'SellerOrder', query: { page: 1, filter: '已完成' } },
+			path: { name: 'SellerOrder', query: { page: 1, type: '4' } },
 		},
 	],
-	schedule: '全部', // 初始設定
-});
+	schedule: computed(() => route.query.type || '1'),
+};
 
-// Fetch orders from the store
-// 呼叫資料 (目前假資料)
-const orders = computed((): OrderType[] | [] => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
+// 封裝分類邏輯的函數，想要入口統一，之後比較好撰寫內容
+function categorized(allData: OrderType[]) {
+	let data = allData;
+	let filterText = navTabs.value.schedule; //固定篩選條件
 
-// Categorize orders based on their status
-const categorizedOrders = ref<{ [key: string]: OrderType[] }>({
-	全部: orders.value,
-	處理中: orders.value.filter(
-		(order: OrderType) => order.state === 1 || order.state === 2
-	),
-	運送中: orders.value.filter(
-		(order: OrderType) => order.state === 3 || order.state === 4
-	),
-	已完成: orders.value.filter((order: OrderType) => order.state === 5),
-});
+	if (filterText === '2') {
+		data = data.filter(order => order.state === 1);
+	} else if (filterText === '3') {
+		data = data.filter(order => order.state === 2);
+	} else if (filterText === '4') {
+		data = data.filter(order => order.state === 3);
+	}
+
+	return data;
+}
 
 // Initialize filtered orders based on initial tab selection
-const filteredOrders = ref<OrderType[]>(categorizedOrders.value['全部']);
+// 接收篩選後的結果
+const filteredData = computed(() => categorized(orders.value));
 
 // Function to initialize data on component mount
 const initData = () => {
+	// 因為要設置路由守衛 會有抓資料的問題，判斷改在這裡獲取 navTabs 的資料
 	if (route.matched[0].path === '/seller') {
-		navTabs.value.schedule = '全部'; // Reset schedule on mount
+		navTabs.value = {
+			title: sellerTitleData.title,
+			schedule: sellerTitleData.schedule,
+		};
 	}
 };
 
@@ -120,32 +123,58 @@ const formatCardData = (orderItem: OrderType) => ({
 	],
 });
 
-// Function to update filtered orders based on selected tab
-const updateSchedule = (newSchedule: NavTabsTitleType) => {
-	if (newSchedule && newSchedule.title) {
-		navTabs.value.schedule = newSchedule.title;
-		filteredOrders.value = categorizedOrders.value[newSchedule.title];
-	}
-};
-
-// 設置初始變數
-const currentPage = ref(1); // 當前頁碼，初始為1
-const perPage = ref(2); // 一頁要顯示多少的項目數量
-const totalRows = ref(filteredOrders.value.length); // 總項目數量
+const currentPage = computed(() => parseInt(route.query.page as string) || 1);
+const perPage = ref(1); // 一頁要顯示多少的項目數量
+const totalRows = computed(() => filteredData.value.length); // 總項目數量
+const maxPage = Math.ceil(filteredData.value.length / perPage.value); // 計算最大頁數
 
 // 當currentPage或perPage改變時重新計算當前頁的資料
 const paginatedData = computed(() => {
 	const start = (currentPage.value - 1) * perPage.value;
 	const end = start + perPage.value;
-	return filteredOrders.value.slice(start, end);
+	return filteredData.value.slice(start, end);
 });
 
 // 更新頁碼
 const updatePage = (page: number) => {
-	currentPage.value = page;
+	const query = { ...route.query, page: page.toString() };
+	router.push({ path: route.path, query });
 };
+
+// 全局的路由前置守衛，處理篩選條件不存在或資料為空的情況
+router.beforeEach((to, from, next) => {
+	const { query } = to;
+	const page = parseInt(query.page as string) || 1;
+	const filterType = (query.type as string) || '1';
+
+	// 確保 navTabs.title 是一個有效的陣列
+	if (Array.isArray(navTabs.value.title) && navTabs.value.title.length > 0) {
+		// 判斷目標文字是否存在於 path.query.type 中
+		const isInNavTabs = navTabs.value.title.some(
+			(tab: any) => tab.path.query.type === filterType
+		);
+
+		// 篩選條件不存在的情況
+		if (!isInNavTabs) {
+			next({ path: to.path, query: { page: 1, type: '1' } });
+			return;
+		} else if (page > maxPage) {
+			// 判斷大於目前最大的頁數
+			next({ path: to.path, query: { ...query, page: 1 } });
+			return;
+		}
+	}
+
+	next();
+});
+
 // Fetch data on component mount
 onMounted(() => {
 	initData();
 });
+
+// 註冊一個提取所有訂單的方法，先寫死的資料測試
+// onMounted(async () => {
+// 	await orderStore.getAllOrders('661e0d13e8992a1bd4b86caf');
+// });
 </script>

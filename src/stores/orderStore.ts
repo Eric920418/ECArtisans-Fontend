@@ -51,7 +51,7 @@ export const useOrderStore = defineStore({
 				orderNumber: '126',
 				date: '2024/12/15',
 				products: ['661e1795e8992a1bd4b86cb8', '661e1795e8992a1bd4b86cb9'],
-				state: 4,
+				state: 2,
 				price: 600,
 				pay: 4,
 			},
@@ -60,11 +60,12 @@ export const useOrderStore = defineStore({
 				orderNumber: '127',
 				date: '2024/12/16',
 				products: ['661e1795e8992a1bd4b86cba', '661e1795e8992a1bd4b86cbb'],
-				state: 5,
+				state: 1,
 				price: 700,
 				pay: 5,
 			},
 		] as OrderType[], // 賣家所有訂單
+    
 		oneOrder: null as DetailedOrderType | null, // 賣家單筆訂單詳情
 		isLoading: false, // 請求狀態
 	}),
@@ -105,7 +106,7 @@ export const useOrderStore = defineStore({
 					'單筆訂單取得失敗'
 				);
 				const data = res as ApiResponse;
-				const { thisShop } = data as { thisShop: DetailedOrderType };
+				const { thisShop } = data as unknown as { thisShop: DetailedOrderType };
 				this.oneOrder = JSON.parse(JSON.stringify(thisShop)); // 更新所有訂單數據
 				// router.push({ name: 'SellerOneOrder', params: { orderId: order_id } });
 			} catch (error) {
