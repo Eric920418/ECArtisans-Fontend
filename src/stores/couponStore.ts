@@ -120,16 +120,6 @@ export const useCoupon = defineStore({
 				data.startDate = getISO(data.startDate, 'start');
 				data.endDate = getISO(data.endDate, 'end');
 				data.isEnabled = true;
-				// 	{
-				// 		"couponName": "3C產品折扣優惠(測試過期)",
-				// 		"startDate": "2024-06-03T12:34:56.789Z",
-				// 		"endDate": "2024-06-05T12:34:56.789Z",
-				// 		"type": 1,
-				// 		"discountConditions": 350,
-				// 		"percentage": 80,
-				// 		"productType": 1,
-				// 		"isEnabled": true
-				// }
 				if (data.productType === 0) delete data.productChoose;
 				if (data.type === 0) delete data.percentage;
 				alertStore.success('couponDelete');
