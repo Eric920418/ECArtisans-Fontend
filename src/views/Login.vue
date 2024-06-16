@@ -29,7 +29,11 @@
 							}"
 						>
 							<h2 class="z-3 fw-bold display-3">
-								<img src="/images/ECArtisans.svg" />
+								<img
+									src="/images/ECArtisans.svg"
+									alt="ECArtisans"
+									title="ECArtisans"
+								/>
 							</h2>
 							<h3 class="z-3 fw-bold">{{ init.subtitle }}</h3>
 						</div>

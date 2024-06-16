@@ -22,7 +22,6 @@
 			<font-awesome-icon :icon="['fas', 'angles-right']" />
 		</template>
 	</BPagination>
-
 	<!-- <div>Current page : {{ localCurrentPage }}</div> -->
 </template>
 

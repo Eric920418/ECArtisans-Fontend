@@ -164,23 +164,21 @@ export const sellerCoupon = (coupon_id: string, token: string) =>
 		apiRequest.get(`/shop/coupon/${coupon_id}`, headers(token))
 	);
 
-// 44	post  /shop/coupon	 	賣家新增優惠劵	 	賣家端
-export const sellerCouponNew = (data: any) =>
-	handleApiResponse(apiRequest.post('/shop/coupon', data));
+// 44	post  賣家新增優惠劵	 	賣家端
+export const sellerCouponNew = (data: any, token: string) =>
+	handleApiResponse(apiRequest.post('/shop/coupon', data, headers(token)));
 
-// 45	put   /shop/coupon/${coupon_id}	 	賣家修改優惠劵	 	賣家端
-export const sellerCouponEdit = (
-	coupon_id: string,
-	data: Object,
-	token: string
-) =>
+// 45	put 賣家修改優惠劵	 	賣家端
+export const sellerCouponEdit = (coupon_id: string, data: any, token: string) =>
 	handleApiResponse(
 		apiRequest.put(`/shop/coupon/${coupon_id}`, data, headers(token))
 	);
 
-// 46	delete  /shop/coupon/${coupon_id}	 	 賣家刪除單一優惠劵	 	賣家端
-export const sellerCouponDelete = (coupon_id: string) =>
-	handleApiResponse(apiRequest.delete(`/shop/coupon/${coupon_id}`));
+// 46	delete 賣家刪除單一優惠劵	 	賣家端
+export const sellerCouponDelete = (coupon_id: string, token: string) =>
+	handleApiResponse(
+		apiRequest.delete(`/shop/coupon/${coupon_id}`, headers(token))
+	);
 
 // 商家 ■ 訂單管理 ■
 // 12	get   /shop/${seller_id}/orders	 	 訂單管理	 	 賣家端

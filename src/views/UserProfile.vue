@@ -102,7 +102,7 @@
 											type="text"
 											class="form-control"
 											:class="{ 'is-invalid': errors['商家名稱'] }"
-											rules="shopName"
+											rules="text:商家名稱"
 											v-model="data.brand"
 											aria-label="商家名稱"
 											placeholder="請輸入商家名稱"

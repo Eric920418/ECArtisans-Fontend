@@ -10,7 +10,7 @@
 				<div v-for="(toast, index) in toasts" :key="index" class="mb-2">
 					<div
 						v-if="toast.type === 'toast'"
-						class="toast toast-info align-items-center text-white bg-dark border-0 opacity-75"
+						class="toast toast-info align-items-center text-white bg-dark border-0 opacity-75 z-5"
 						:class="{ show: toast.show }"
 						role="alert"
 						aria-live="assertive"

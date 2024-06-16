@@ -39,9 +39,28 @@ export function getISO(
 			date = new Date(isoDate);
 			date.setUTCHours(23, 59, 59, 999);
 		}
-		if (date) return date;
+		if (date) return date.toISOString();
 	}
 	return isoDate as string;
+}
+
+export function dayAndToDay(
+	text: string | null | Date,
+	isType: '>' | '<' | '<=' | '>=' | '='
+): boolean {
+	if (text) {
+		const date = new Date(text);
+		const toDay = new Date();
+		date.setHours(0, 0, 0, 0);
+		toDay.setHours(0, 0, 0, 0); //設置為當天的 23:59:59.999
+
+		if (isType === '>') return toDay > date;
+		if (isType === '<') return toDay < date;
+		if (isType === '>=') return toDay >= date;
+		if (isType === '<=') return toDay <= date;
+		if (isType === '=') return toDay === date;
+	}
+	return false;
 }
 
 // 全預註冊
@@ -53,8 +72,11 @@ const global = {
 		app.config.globalProperties.$title = title;
 		app.provide('title', title);
 
+		// 日期相關
 		app.config.globalProperties.$getDate = getDate;
 		app.provide('getDate', getDate);
+		app.config.globalProperties.$dayAndToDay = dayAndToDay;
+		app.provide('dayAndToDay', dayAndToDay);
 	},
 };
 
