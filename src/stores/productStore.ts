@@ -30,7 +30,6 @@ export const useProduct = defineStore({
 		allData: [
 			{
 				_id: '560165060adf',
-				seller_id: '5465461sda',
 				productName: '草莓醬',
 				category: '果醬',
 				sellerCategory: '食品',
@@ -67,7 +66,7 @@ export const useProduct = defineStore({
 				createAt: '2024-06-03T12:34:56.789Z',
 				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
 			},
-		] as Array<DetailedOrderType>, // 賣家所有優惠劵
+		] as unknown as Array<DetailedOrderType>, // 賣家所有優惠劵
 		data: {
 			_id: '',
 			orderNumber: '',

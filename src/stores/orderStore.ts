@@ -105,7 +105,7 @@ export const useOrderStore = defineStore({
 					'單筆訂單取得失敗'
 				);
 				const data = res as ApiResponse;
-				const { thisShop } = data as { thisShop: DetailedOrderType };
+				const { thisShop } = data as { thisShop: any };
 				this.oneOrder = JSON.parse(JSON.stringify(thisShop)); // 更新所有訂單數據
 				// router.push({ name: 'SellerOneOrder', params: { orderId: order_id } });
 			} catch (error) {
