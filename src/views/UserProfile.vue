@@ -489,7 +489,7 @@ import { useUserStore, useAuthStore } from '@/stores/index';
 import { alertStore } from '@/main'; // 導入實例
 import { useRoute } from 'vue-router';
 import router from '@/router/index';
-import { type UserData } from '@/type/userType';
+// import { type UserDataType } from '@/type/userType';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 

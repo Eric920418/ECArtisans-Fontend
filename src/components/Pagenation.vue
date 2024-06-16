@@ -26,10 +26,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useResize } from '@/stores/index';
 const { resize } = useResize();
+import { useRoute, useRouter } from 'vue-router';
 // 使用方式可以參考'test-page'
+
+const route = useRoute();
+const router = useRouter();
 
 // 接受 props
 const props = defineProps({
@@ -39,7 +43,8 @@ const props = defineProps({
 });
 
 // 接收從父組件傳遞的頁碼，一開始為1
-const localCurrentPage = ref(props.currentPage);
+// let localCurrentPage = ref(props.currentPage);
+const localCurrentPage = computed(() => props.currentPage);
 
 // 用戶在此組件的操作 -> 監聽localCurrentPage的變化
 // 通過 emit 事件通知父組件，來啟動父組件重新計算頁碼
