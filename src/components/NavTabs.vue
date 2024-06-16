@@ -8,7 +8,6 @@
 				class="nav-item mb-0 p-0 d-flex align-items-center justify-content-center"
 				v-for="(titleItem, titleIndex) in data.title"
 				:key="titleIndex"
-				@click="data.title.length > 1 ? handleClick(titleItem) : () => {}"
 			>
 				<div
 					v-if="data.title.length === 1"
@@ -21,11 +20,12 @@
 				</div>
 				<a
 					v-else-if="titleItem.path && titleItem.path.query"
-					class="nav-link my-0"
+					class="nav-link my-0 neutral-02"
 					aria-current="page"
+					@click="handleClick(titleItem)"
 					:class="{
-						'neutral-02': route.query.type
-							? titleItem.path.query.type !== route.query.type
+						'text-primary': route.query.type
+							? titleItem.path.query.type === route.query.type
 							: false,
 					}"
 				>
@@ -33,6 +33,39 @@
 						{{ typeof titleItem === 'string' ? titleItem : titleItem.title }}
 					</h2>
 				</a>
+				<div v-else class="px-3 py-2 my-0 text-primary" aria-current="page">
+					<h2 class="fs-4 mb-0 px-2" style="height: fit-content">
+						{{ typeof titleItem === 'string' ? titleItem : titleItem.title }}
+					</h2>
+				</div>
+				<!-- <div
+					v-if="data.title.length === 1"
+					class="px-3 py-2 my-0 text-primary"
+					aria-current="page"
+				>
+					<h2 class="fs-4 mb-0 px-2" style="height: fit-content">
+						{{ typeof titleItem === 'string' ? titleItem : titleItem.title }}
+					</h2>
+				</div>
+				<a
+					v-else-if="titleItem.path && titleItem.path.query"
+					class="nav-link my-0 neutral-02"
+					aria-current="page"
+					:class="{
+						'text-primary': route.query.type
+							? titleItem.path.query.type === route.query.type
+							: false,
+					}"
+				>
+					<h2 class="fs-4 mb-0 px-2" style="height: fit-content">
+						{{ typeof titleItem === 'string' ? titleItem : titleItem.title }}
+					</h2>
+				</a>
+				<div v-else class="nav-link my-0" aria-current="page">
+					<h2 class="fs-4 mb-0 px-2" style="height: fit-content">
+						{{ typeof titleItem === 'string' ? titleItem : titleItem.title }}
+					</h2>
+				</div> -->
 				<font-awesome-icon
 					:icon="['fas', 'angle-right']"
 					v-if="titleIndex !== data.title.length - 1 && data.breadcrumb"

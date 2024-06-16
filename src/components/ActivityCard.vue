@@ -14,10 +14,18 @@
 
 					<div>
 						<p
-							v-if="data.state"
+							v-if="data.date && data.date.eDate && data.date.sDate"
 							class="text-enable neutral-02 mb-0 text-nowrap"
 						>
-							{{ data.state ? '啟用中' : '停止' }}
+							{{
+								!data.state
+									? '停止'
+									: $dayAndToDay(data.date.eDate, '>')
+										? '已過期'
+										: $dayAndToDay(data.date.sDate, '>=')
+											? '進行中'
+											: '預約中'
+							}}
 						</p>
 					</div>
 				</div>

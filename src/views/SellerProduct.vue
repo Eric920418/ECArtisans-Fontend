@@ -120,20 +120,4 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-.text-enable {
-	padding: 2px 0px;
-	flex-shrink: 0 !important; //禁止擠壓
-	font-size: 0.75rem; //12
-	@media (min-width: 768px) {
-		//依照 Breakpoints md以上 高度是 204px
-		font-size: 0.875rem; //14
-	}
-}
-.text-no {
-	font-size: 0.75em;
-}
-.text-date {
-	font-size: 0.875em;
-}
-</style>
+<style lang="scss" scoped></style>

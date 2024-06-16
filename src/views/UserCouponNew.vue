@@ -11,27 +11,42 @@
 							style="height: 60px"
 						>
 							<div class="col-12 col-sm-10 d-flex m-0 p-0 align-items-end">
-								<h3 class="m-0 p-0 fs-5 p-0 neutral-01 mb-3 mb-sm-0">
-									<!-- {{ init.schedule }} -->
-									編號：{{ data._id }}
+								<h3
+									class="m-0 p-0 p-0 neutral-01 mb-3 mb-sm-0"
+									:class="{
+										'fs-6': route.name !== 'SellerCouponNew',
+										'fs-5': route.name === 'SellerCouponNew',
+									}"
+								>
+									{{
+										route.name === 'SellerCouponNew'
+											? '新增優惠劵'
+											: '編號：' + data._id
+									}}
 									<br />
-									<!-- 編號：{{ data.seller ? data.seller._id : '' }} -->
 								</h3>
-								<!-- <p class="m-0 p-0 fs-12 mb-0 mt-1">編號：{{ data._id }}</p> -->
 							</div>
-
 							<a
+								v-if="
+									route.name !== 'SellerCouponNew' &&
+									data.isEnabled &&
+									$dayAndToDay(data.endDate, '<')
+										? true
+										: false
+								"
 								class="col-12 col-sm-2 p-0 mb-0 text-end"
-								:class="{
-									'neutral-03': dateAndToDay(data.startDate),
-								}"
+								@click="
+									$dayAndToDay(data.startDate, '>') ? onStop() : onDelete()
+								"
 							>
-								<!-- v-if="
-									route.name === 'SellerCouponCheck' &&
-									!dateAndToDay(data.startDate)
-								" -->
-								立即停止
+								{{ $dayAndToDay(data.startDate, '>') ? '立即停止' : '刪除' }}
 							</a>
+							<div
+								v-else-if="route.name !== 'SellerCouponNew'"
+								class="col-12 col-sm-2 p-0 mb-0 text-end neutral-03"
+							>
+								立即停止
+							</div>
 						</div>
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
 							<label for="couponName" class="mb-1">
@@ -44,11 +59,17 @@
 								type="text"
 								class="form-control"
 								:class="{ 'is-invalid': errors['couponName'] }"
-								rules="required"
+								rules="text:優惠劵名稱"
 								v-model="data.couponName"
 								aria-label="優惠卷名稱"
 								placeholder="請輸入優惠卷名稱"
-								:disabled="dateAndToDay(data.startDate)"
+								:disabled="
+									route.name === 'SellerCouponNew'
+										? false
+										: data.isEnabled && $dayAndToDay(data.startDate, '<')
+											? false
+											: true
+								"
 							></v-field>
 							<error-message
 								name="couponName"
@@ -69,13 +90,22 @@
 										class="form-control col-2"
 										:class="{ 'is-invalid': errors['startDate'] }"
 										:rules="
-											dateAndToDay(data.startDate) ? '' : 'startDate|required'
+											route.name === 'SellerCouponNew' ||
+											(data.isEnabled && $dayAndToDay(data.startDate, '<'))
+												? 'startDate|need:開始日期'
+												: ''
 										"
 										ref="document.getElementById('startDate')"
 										v-model="data.startDate"
 										aria-label="startDate"
 										placeholder="請輸入優惠卷使用期限"
-										:disabled="dateAndToDay(data.startDate)"
+										:disabled="
+											route.name === 'SellerCouponNew'
+												? false
+												: data.isEnabled && $dayAndToDay(data.startDate, '<')
+													? false
+													: true
+										"
 									></v-field>
 									<error-message
 										name="startDate"
@@ -91,15 +121,22 @@
 										class="form-control col-2"
 										:class="{ 'is-invalid': errors['endDate'] }"
 										:rules="
-											dateAndToDay(data.startDate)
-												? ''
-												: 'endDate:startDate|required'
+											route.name === 'SellerCouponNew' ||
+											(data.isEnabled && $dayAndToDay(data.startDate, '<'))
+												? 'endDate:startDate|need:結束日期'
+												: ''
 										"
 										v-model="data.endDate"
 										ref="document.getElementById('endDate')"
 										aria-label="到期日"
 										placeholder="請輸入優惠卷使用期限"
-										:disabled="dateAndToDay(data.startDate)"
+										:disabled="
+											route.name === 'SellerCouponNew'
+												? false
+												: data.isEnabled && $dayAndToDay(data.startDate, '<')
+													? false
+													: true
+										"
 									></v-field>
 									<error-message
 										name="endDate"
@@ -124,7 +161,13 @@
 									rules="policy|required"
 									:value="1"
 									as="input"
-									:disabled="dateAndToDay(data.startDate)"
+									:disabled="
+										route.name === 'SellerCouponNew'
+											? false
+											: data.isEnabled && $dayAndToDay(data.startDate, '<')
+												? false
+												: true
+									"
 								></v-field>
 								<label class="form-check-label me-4" for="delivery">免運</label>
 								<v-field
@@ -137,7 +180,13 @@
 									rules="policy|required"
 									:value="0"
 									as="input"
-									:disabled="dateAndToDay(data.startDate)"
+									:disabled="
+										route.name === 'SellerCouponNew'
+											? false
+											: data.isEnabled && $dayAndToDay(data.startDate, '<')
+												? false
+												: true
+									"
 								></v-field>
 								<label class="form-check-label" for="discount">折扣</label>
 							</div>
@@ -167,7 +216,13 @@
 									v-model="data.discountConditions"
 									aria-label="discountConditions"
 									placeholder="請輸入金額"
-									:disabled="dateAndToDay(data.startDate)"
+									:disabled="
+										route.name === 'SellerCouponNew'
+											? false
+											: data.isEnabled && $dayAndToDay(data.startDate, '<')
+												? false
+												: true
+									"
 								></v-field>
 							</div>
 						</div>
@@ -192,7 +247,13 @@
 										v-model="data.percentage"
 										aria-label="percentage"
 										placeholder="請輸入折數"
-										:disabled="dateAndToDay(data.startDate)"
+										:disabled="
+											route.name === 'SellerCouponNew'
+												? false
+												: data.isEnabled && $dayAndToDay(data.startDate, '<')
+													? false
+													: true
+										"
 									></v-field>
 									<p class="mb-0 mr-2">折</p>
 								</div>
@@ -224,7 +285,13 @@
 								rules="policy|required"
 								:value="0"
 								as="input"
-								:disabled="dateAndToDay(data.startDate)"
+								:disabled="
+									route.name === 'SellerCouponNew'
+										? false
+										: data.isEnabled && $dayAndToDay(data.startDate, '<')
+											? false
+											: true
+								"
 							></v-field>
 							<label class="form-check-label me-4" for="all">所有商品</label>
 							<v-field
@@ -237,7 +304,13 @@
 								rules="policy|required"
 								:value="1"
 								as="input"
-								:disabled="dateAndToDay(data.startDate)"
+								:disabled="
+									route.name === 'SellerCouponNew'
+										? false
+										: data.isEnabled && $dayAndToDay(data.startDate, '<')
+											? false
+											: true
+								"
 							></v-field>
 							<label class="form-check-label" for="productType">部分商品</label>
 						</div>
@@ -247,6 +320,30 @@
 							v-if="data.productType === 1 && data.productChoose"
 							style="min-height: 100px"
 						>
+							<!-- <div class="dropdown">
+							<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+								Dropdown form
+							</button>
+							<form class="dropdown-menu p-4">
+								<div class="mb-3">
+									<label for="exampleDropdownFormEmail2" class="form-label">Email address</label>
+									<input type="email" class="form-control" id="exampleDropdownFormEmail2" placeholder="email@example.com">
+								</div>
+								<div class="mb-3">
+									<label for="exampleDropdownFormPassword2" class="form-label">Password</label>
+									<input type="password" class="form-control" id="exampleDropdownFormPassword2" placeholder="Password">
+								</div>
+								<div class="mb-3">
+									<div class="form-check">
+										<input type="checkbox" class="form-check-input" id="dropdownCheck2">
+										<label class="form-check-label" for="dropdownCheck2">
+											Remember me
+										</label>
+									</div>
+								</div>
+								<button type="submit" class="btn btn-primary">Sign in</button>
+							</form>
+						</div> -->
 							<div class="dropdown">
 								<button
 									class="form-control py-0"
@@ -258,7 +355,13 @@
 									type="button"
 									data-bs-toggle="dropdown"
 									data-bs-auto-close="outside"
-									:disabled="dateAndToDay(data.startDate)"
+									:disabled="
+										route.name === 'SellerCouponNew'
+											? false
+											: data.isEnabled && $dayAndToDay(data.startDate, '<')
+												? false
+												: true
+									"
 								>
 									<div
 										v-if="data.productChoose.length === 0"
@@ -293,7 +396,19 @@
 								</button>
 								<ul class="dropdown-menu w-100 scrollbar" ref="dropdown">
 									<li
-										v-for="(stt, sttIndex) in init2.shopTypeText"
+										v-for="(stt, sttIndex) in [
+											'只是假資料',
+											'娛樂',
+											'服飾',
+											'3C產品',
+											'食品',
+											'家具',
+											'運動',
+											'寵物',
+											'生活用品',
+											'清潔用品',
+											'其他',
+										]"
 										:key="sttIndex"
 									>
 										<div class="dropdown-item">
@@ -307,7 +422,6 @@
 												name="productChoose"
 												as="input"
 											></v-field>
-											<!-- :rules="data.productType === 1 ? 'required' : ''" -->
 											<label
 												class="form-check-label"
 												:for="stt"
@@ -373,57 +487,96 @@
 					<button
 						type="button"
 						class="btn btn-outline-primary px-5 mx-1 mx-sm-2 me-md-4"
+						@click="trytry"
+					>
+						aa
+					</button>
+					<button
+						type="button"
+						class="btn btn-outline-primary px-5 mx-1 mx-sm-2 me-md-4"
 						@click="router.back()"
 					>
 						取消
 					</button>
 					<button
-						:disabled="dateAndToDay(data.startDate)"
+						:disabled="
+							route.name === 'SellerCouponNew'
+								? false
+								: dayAndToDay(data.startDate, '>=')
+						"
 						type="submit"
 						class="btn btn-primary px-5 m-0 ms-1 ms-sm-2"
 					>
-						{{ init.btn }}
+						{{ init['end-bottom-btn'] }}
 					</button>
 				</div>
-				<br />
-				{{ userStore.data }}
-				<br />
 				{{ authStore.token }}
 			</v-form>
 		</div>
 	</div>
 </template>
 <script setup lang="ts">
+import { alertStore } from '@/main'; // 導入實例
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
+import { useRoute, useRouter } from 'vue-router';
 
+// 組件
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
 
+// stores
 import {
 	useCoupon,
 	useAuthStore,
 	useResize,
-	dateAndToDay,
+	dayAndToDay,
 } from '@/stores/index';
 
-import { useRoute } from 'vue-router';
 const route = useRoute();
-import { alertStore } from '@/main'; // 導入實例
-const { resize } = useResize();
+// const router = useRouter();
+
 const authStore = useAuthStore();
 const userStore = useCoupon();
-const data = computed(() => userStore.data);
-// 完成後送出
+
+// 資料完成後送出
 function onSubmit(isValue: any | void) {
-	if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
-		alertStore.error('請選擇商品');
-	} else {
-		if (isValue.productType === 0) isValue.productChoose = [];
-		userStore.getCouponEdit(isValue, authStore.token);
+	if (route.matched[0].path === '/seller') {
+		if (route.name === 'SellerCouponNew') {
+			// 新增狀態
+			if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
+				alertStore.error('請選擇商品');
+			} else {
+				if (isValue.productType === 0) isValue.productChoose = [];
+				userStore.newCoupon(isValue);
+			}
+		} else if (route.name === 'SellerCouponCheck') {
+			// 修改/查看狀態
+			if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
+				alertStore.error('請選擇商品');
+			} else {
+				if (isValue.productType === 0) isValue.productChoose = [];
+				userStore.getCouponEdit(isValue);
+			}
+		}
 	}
 }
-// 調整日期 input
+
+function trytry() {
+	alertStore.success('couponDelete');
+	alertStore.error('請選擇商品');
+}
+
+function onStop() {
+	console.log('停止');
+}
+
+function onDelete() {
+	userStore.deleteCoupon();
+}
+const data = computed(() => userStore.data);
+
+// 判斷起始日期 min
 function updateStartDateMin() {
 	const startDateInput = document.getElementById(
 		'startDate'
@@ -434,7 +587,7 @@ function updateStartDateMin() {
 		startDateInput.min = today.toISOString().split('T')[0];
 	}
 }
-
+// 判斷結束日期 min
 function updateEndDateMin() {
 	const endDateInput = document.getElementById(
 		'end_date'
@@ -462,6 +615,7 @@ watch(
 	}
 );
 
+// 下拉篩選 Tabs 功能
 const dropdownBtn = ref<HTMLButtonElement | null>(null);
 const dropdown = ref<HTMLDivElement | null>(null);
 
@@ -471,101 +625,100 @@ function add() {
 	else addNum.value = false;
 }
 
-// 刪除，待檢查
-function inputBadgeClose(id: string) {
-	data.value.productChoose = data.value.productChoose?.filter(
-		item => item !== id
-	);
-}
+// // 刪除，待檢查
+// function inputBadgeClose(id: string) {
+// 	data.value.productChoose = data.value.productChoose?.filter(
+// 		item => item !== id
+// 	);
+// }
 
-// navTab + seller 畫面下所有資料
+// // navTab + seller 畫面下所有資料
+
+// // navTab + seller 畫面下所有資料
+// const sellerTitleData = {
+// 	routeName: 'SellerCouponNew',
+// 	title: [
+// 		{
+// 			title: '優惠劵',
+// 			path: { name: 'SellerCoupon', query: { page: 1 } },
+// 		},
+// 		{
+// 			title: '修改優惠劵',
+// 		},
+// 	],
+// 	schedule: '修改優惠劵', //目前頁面
+// 	btn: '修改',
+// };
+
+// const navTabs = ref({}) as any;
+// const init2 = ref({
+// 	shopTypeText: ,
+// }) as any;
+
 const sellerTitleNewData = {
-	routeName: 'SellerCouponNew',
-	title: [
-		{
-			title: '優惠劵',
-			path: { name: 'SellerCoupon', query: { page: 1, filter: '未結束' } },
-		},
-		{
-			title: '新增優惠劵',
-		},
-	],
-	schedule: '新增優惠劵', //目前頁面
-	btn: '新增',
+	init: { 'end-bottom-btn': '儲存' },
+	navTabs: {
+		routeName: 'SellerCouponNew',
+		title: [
+			{
+				title: '優惠劵',
+				path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
+			},
+			{
+				title: '新增優惠劵',
+			},
+		],
+		schedule: '', //目前頁面
+		breadcrumb: true,
+	},
 };
 
-// navTab + seller 畫面下所有資料
+// 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
-	routeName: 'SellerCouponNew',
-	title: [
-		{
-			title: '優惠劵',
-			path: { name: 'SellerCoupon', query: { page: 1 } },
-		},
-		{
-			title: '修改優惠劵',
-		},
-	],
-	schedule: '修改優惠劵', //目前頁面
-	btn: '修改',
+	init: { 'end-bottom-btn': '修改' },
+	navTabs: {
+		routeName: 'SellerCouponCheck',
+		title: [
+			{
+				title: '優惠劵',
+				path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
+			},
+			{
+				title: '修改優惠劵',
+			},
+		],
+		breadcrumb: true,
+		schedule: '',
+	},
 };
-
 const navTabs = ref({}) as any;
-const init2 = ref({
-	shopTypeText: [
-		'娛樂',
-		'服飾',
-		'3C產品',
-		'食品',
-		'家具',
-		'運動',
-		'寵物',
-		'生活用品',
-		'清潔用品',
-		'其他',
-	],
-}) as any;
 const init = ref({}) as any;
-const getData = () => {
+
+// 全局的路由前置守衛，處理篩選條件不存在或資料為空的情況
+router.beforeEach((to, from, next) => {
+	next();
+});
+
+onMounted(() => {
 	if (route.matched[0].path === '/seller') {
 		if (route.name === 'SellerCouponNew') {
 			// 新增狀態
-			init.value = sellerTitleNewData;
-			navTabs.value = {
-				title: sellerTitleNewData.title,
-				schedule: sellerTitleNewData.schedule,
-				breadcrumb: true,
-			};
+			init.value = sellerTitleNewData.init;
+			navTabs.value = sellerTitleNewData.navTabs;
 		} else if (route.name === 'SellerCouponCheck') {
 			// 修改/查看狀態
-			init.value = sellerTitleData;
-			navTabs.value = {
-				title: sellerTitleData.title,
-				schedule: sellerTitleData.schedule,
-				breadcrumb: true,
-			};
+			init.value = sellerTitleData.init;
+			navTabs.value = sellerTitleData.navTabs;
 			userStore.getCoupon(route.params.id as string, authStore.token);
 		}
 	} else if (route.matched[0].path === '/user') {
 		// init.value = userTitleData;
 	}
 	// userStore.getCouponAll(id, page, token);
-};
-onMounted(() => {
-	getData();
 });
 </script>
 
 <style lang="scss" scoped>
-.text-no {
-	font-size: 0.75em;
-}
-.text-date {
-	font-size: 0.875em;
-}
-.text-date {
-	flex-shrink: 0; //禁止擠壓
-}
 .dropdown-menu {
 	height: 250px;
 	overflow-y: scroll;

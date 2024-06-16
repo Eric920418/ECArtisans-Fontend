@@ -31,6 +31,7 @@ export const useAlertStore = defineStore({
 			renewError: { icon: 'circle-xmark', text: '更新失敗' },
 			showError: { icon: 'circle-xmark', text: '讀取資料失敗' },
 			registerOK: { icon: 'circle-check', text: '註冊成功，返回登入頁面' },
+			couponDelete: { icon: 'trash', text: '優惠劵刪除成功' },
 			couponOK: { icon: 'circle-check', text: '已取得優惠劵' },
 			focusShopOK: { icon: 'house-circle-check', text: '商家已加入關注' },
 			focusShopFail: { icon: 'house-chimney-crack', text: '已取消關注商家' },
@@ -38,14 +39,16 @@ export const useAlertStore = defineStore({
 			focusProductFail: { icon: 'heart-crack', text: '已取消收藏商品' },
 			error: { icon: 'circle-exclamation', text: '系統發生未預期的錯誤' },
 		} as messageArray,
-		delayTime: 3000, // 延遲時間
+		delayTime: 30000, // 延遲時間
 		nextTimestamp: 1, // index
 	}),
 	actions: {
 		success(index: string): any {
-			this.addToast(index, 'ToastType');
+			console.log('success運行中');
+			this.addToast(index, 'toast');
 		},
 		error(index: string): any {
+			console.log('error運行中');
 			this.addToast(index, 'error');
 		},
 		addToast(index: string, toastType: string) {

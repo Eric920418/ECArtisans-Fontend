@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
 import { type CouponType } from '../type/couponType';
 import { getDate, getISO } from '@/setup/globalFunction';
+import { useAuthStore } from './authStore';
 
 import {
 	sellerCouponAll, // 42	get  賣家顯示所有優惠劵 (seller_id: string, page: number)
@@ -10,6 +11,7 @@ import {
 	sellerCouponEdit, // 45	put  	賣家修改優惠劵 (coupon_id: string)
 	sellerCouponDelete, // 46	delete 賣家刪除單一優惠劵 (coupon_id: string)
 } from './api';
+import router from '@/router';
 
 // /:order_id
 // 單一訂單用這隻
@@ -74,6 +76,7 @@ export const useCoupon = defineStore({
 						.then(res => {
 							console.log('發送');
 							this.allData = res.Coupons;
+							console.log('全部', res.Coupons[0]);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
@@ -91,7 +94,7 @@ export const useCoupon = defineStore({
 				if (this.accountType === 'seller') {
 					await sellerCoupon(coupon_id, token)
 						.then(res => {
-							console.log(res);
+							console.log('單筆', res);
 							const isData = res.Coupons[0];
 							isData.startDate = getDate(isData.startDate);
 							isData.endDate = getDate(isData.endDate);
@@ -108,33 +111,85 @@ export const useCoupon = defineStore({
 				alertStore.error('showError');
 			}
 		},
-		// 更新 單筆 優惠劵
-		async getCouponEdit(data: CouponType, token: string): Promise<void> {
+		// 新增 單筆 優惠劵
+		async newCoupon(data: any): Promise<void> {
 			try {
 				await this.setAccountType();
+				const authStore = useAuthStore();
 				let res;
-				if (
-					Object.hasOwn(data, 'startDate') &&
-					Object.hasOwn(data, 'endDate') &&
-					typeof data.startDate === 'string' &&
-					typeof data.endDate === 'string'
-				) {
-					data.startDate = getISO(data.startDate, 'start');
-					data.endDate = getISO(data.endDate, 'end');
-					data.startDate = data.startDate.toString();
-					data.endDate = data.endDate.toString();
-				}
-
-				let coupon_id;
-				if (this.data._id) {
-					coupon_id = this.data._id;
-					data.isEnabled = true;
-				}
-				console.log(data);
-				if (this.accountType === 'seller' && coupon_id) {
-					await sellerCouponEdit(coupon_id, JSON.stringify(data), token)
+				data.startDate = getISO(data.startDate, 'start');
+				data.endDate = getISO(data.endDate, 'end');
+				data.isEnabled = true;
+				// 	{
+				// 		"couponName": "3C產品折扣優惠(測試過期)",
+				// 		"startDate": "2024-06-03T12:34:56.789Z",
+				// 		"endDate": "2024-06-05T12:34:56.789Z",
+				// 		"type": 1,
+				// 		"discountConditions": 350,
+				// 		"percentage": 80,
+				// 		"productType": 1,
+				// 		"isEnabled": true
+				// }
+				if (data.productType === 0) delete data.productChoose;
+				if (data.type === 0) delete data.percentage;
+				alertStore.success('couponDelete');
+				console.log('新增', data);
+				console.log(this.accountType);
+				if (this.accountType === 'seller') {
+					await sellerCouponNew(data, authStore.token)
 						.then(res => {
 							console.log(res);
+						})
+						.catch(err => {
+							console.log(err);
+							// alertStore.error(err.response.data.message);
+						});
+				}
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 更新 單筆 優惠劵
+		async getCouponEdit(data: any): Promise<void> {
+			try {
+				await this.setAccountType();
+				const authStore = useAuthStore();
+				console.log('更新前發送的authStore.token', authStore.token); //可以使用
+				console.log('更新前發送的data._id', this.data._id); //可以使用
+				let res;
+				data.startDate = getISO(data.startDate, 'start');
+				data.endDate = getISO(data.endDate, 'end');
+				const updateData = {
+					...data,
+				};
+
+				// if (data.productType === 0) delete data.productChoose;
+				// if (data.type === 0) delete data.percentage;
+				console.log('更新前發送的', data);
+				if (this.accountType === 'seller' && this.data._id) {
+					await sellerCouponEdit(this.data._id, updateData, authStore.token)
+						.then(res => {
+							console.log(res);
+							alertStore.success('renewOK');
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+				}
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 刪除 單筆 優惠劵
+		async deleteCoupon(): Promise<void> {
+			try {
+				await this.setAccountType();
+				const authStore = useAuthStore();
+				if (this.accountType === 'seller' && this.data._id) {
+					await sellerCouponDelete(this.data._id, authStore.token)
+						.then(res => {
+							alertStore.success('couponDelete');
+							router.go(-1);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);

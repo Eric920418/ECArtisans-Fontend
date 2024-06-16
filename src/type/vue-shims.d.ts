@@ -6,5 +6,9 @@ declare module '@vue/runtime-core' {
 		$go: (path: string | Object) => any;
 		$title: (text: string) => any;
 		$getDate: (date: string | null) => string | void;
+		$dayAndToDay: (
+			text: string | null | Date,
+			isType: '>' | '<' | '<=' | '>=' | '='
+		) => boolean;
 	}
 }

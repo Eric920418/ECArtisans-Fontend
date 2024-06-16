@@ -1,6 +1,6 @@
 <template>
 	<div class="one-column-layout">
-		<header>
+		<header class="position-sticky">
 			<template v-if="isShopRoute">
 				<NavigationBarShop />
 			</template>
@@ -11,10 +11,6 @@
 		<main>
 			<slot name="main"></slot>
 		</main>
-		<!-- <aside>
-			<slot name="aside" />
-			<Footer />
-		</aside> -->
 		<footer>
 			<Footer />
 		</footer>

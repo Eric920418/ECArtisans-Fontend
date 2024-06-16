@@ -34,13 +34,20 @@ function isName(value: any): string | boolean {
 	return nameRegex.test(value) ? true : '只能輸入含中文或英文字符';
 }
 
-function isShopName(value: any): string | boolean {
+function isText(value: any, [target]: string): string | boolean {
 	if (!value || value.trim() === '') {
-		return '商家名稱為必填';
+		return target + '為必填';
 	}
 
 	const shopNameRegex = /^[\u4e00-\u9fa5a-zA-Z0-9.,_-\s]{1,20}$/; // 允许中文、英文、数字、逗号、下划线、连字符、空格，最大长度 20 个字符
 	return shopNameRegex.test(value) ? true : '不可輸入特殊符號';
+}
+
+function isNeed(value: any, [target]: string): string | boolean {
+	if (!value || value.trim() === '') {
+		return target + '為必填';
+	}
+	return true;
 }
 
 // 驗證 密碼
@@ -167,13 +174,14 @@ defineRule('phone', isPhone);
 defineRule('address', isAddress);
 defineRule('password', isPassword);
 defineRule('confirmed', isConfirmed);
-defineRule('shopName', isShopName);
+defineRule('text', isText);
 defineRule('gender', isGender);
 defineRule('policy', isPolicy);
 defineRule('birthday', isBirthday);
 defineRule('collection', isCollection);
 defineRule('startDate', isStartDate);
 defineRule('endDate', isEndDate);
+defineRule('need', isNeed);
 // 其他驗證方法 --------------------------------------------END
 
 // 匯出元件和配置
@@ -187,10 +195,11 @@ export {
 	isPassword,
 	isGender,
 	isConfirmed,
-	isShopName,
+	isText,
 	isPolicy,
 	isBirthday,
 	isCollection,
 	isStartDate,
 	isEndDate,
+	isNeed,
 };
