@@ -24,9 +24,9 @@
     // "compileOnSave": false,    //編輯器在儲存檔案的時候根據tsconfig.json重新產生編譯檔案
 
     /* 基本選項 */ //關掉三個，因為出現錯誤提示
-    "target": "es5",   
+    "target": "es2022",
     // "module": "commonjs",                  // 指定使用模块: 'commonjs', 'amd', 'system', 'umd' or 'es2015'
-    "lib": [],                             // 指定要包含在编译中的库文件
+    "lib": ["es2022", "dom"],    // 指定要包含在编译中的库文件
     "allowJs": true,                       // 允许编译 javascript 文件
     "checkJs": true,                       // 报告 javascript 文件中的错误
     "jsx": "preserve",                     // 指定 jsx 代码的生成: 'preserve', 'react-native', or 'react'

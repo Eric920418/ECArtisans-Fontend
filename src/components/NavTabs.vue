@@ -98,8 +98,13 @@ const props = defineProps<{
 // const emit = defineEmits(['update-schedule']);
 
 const handleClick = (titleItem: NavTabsTitleType) => {
-	if (Object.hasOwn(titleItem, 'goBack') && titleItem.goBack) router.go(-1);
-	if (Object.hasOwn(titleItem, 'path') && titleItem.path) go(titleItem.path);
+	if (
+		Object.prototype.hasOwnProperty.call(titleItem, 'goBack') &&
+		titleItem.goBack
+	)
+		router.go(-1);
+	if (Object.prototype.hasOwnProperty.call(titleItem, 'path') && titleItem.path)
+		go(titleItem.path);
 
 	// emit('update-schedule', titleItem as navTabsTitle);
 };
