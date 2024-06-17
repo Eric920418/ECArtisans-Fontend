@@ -11,7 +11,7 @@
 					/>
 				</h1>
 			</router-link>
-			<!-- <p>isLoggedIn: {{ authStore.isLoggedIn }}</p> -->
+			<p>isLoggedIn: {{ authStore.isLoggedIn }}</p>
 			<div class="position-relative d-flex">
 				<button
 					class="me-2 navbar-toggler collapsed d-flex d-lg-none flex-column justify-content-around"
@@ -41,6 +41,11 @@
 			>
 				<ul class="navbar-nav mb-2 mb-lg-0">
 					<li class="nav-item dropdown">
+						<button type="button" class="btn btn-primary" @click="sellerlogin">
+							臨時的商家登入點
+						</button>
+					</li>
+					<li class="nav-item dropdown">
 						<a
 							class="nav-link dropdown-toggle"
 							href="#"
@@ -51,7 +56,7 @@
 						>
 							商品總覽
 						</a>
-						<div class="dropdown-menu">
+						<div class="dropdown-menu md-menu">
 							<ol class="" aria-labelledby="navbarScrollingDropdown">
 								<li v-for="(menu, menuIndex) in menulist" :key="menuIndex">
 									<a class="dropdown-item overflow-y-hidden" href="#">
@@ -91,7 +96,44 @@
 						</router-link>
 						<div class="mx-2 dropdown">
 							<!-- 判斷是否登入，未登入則跳轉至登入頁面 -->
-							<template
+							<div
+								v-if="
+									authStore.isLoggedIn && authStore.accountType === 'seller'
+								"
+								class="mx-2"
+							>
+								<div class="mx-2 dropdown">
+									<!-- 判斷是否登入，未登入則跳轉至登入頁面 -->
+									<button
+										class="btn btn-primary rounded-circle dropdown-menu-end"
+										type="button"
+										id="dropdownMenuButton"
+										data-bs-toggle="dropdown"
+										aria-expanded="false"
+										data-display="static"
+									>
+										<i class="bi bi-person-circle"></i>
+									</button>
+									<ul
+										class="dropdown-menu dropdown-menu-lg-end"
+										aria-labelledby="dropdownMenuButton"
+									>
+										<li>
+											<router-link
+												:to="{ name: 'SellerProfile' }"
+												class="dropdown-item"
+											>
+												商家中心
+											</router-link>
+										</li>
+										<li @click="shopLogout">
+											<a class="dropdown-item">登出</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+
+							<!-- <template
 								v-if="authStore.isLoggedIn && authStore.accountType === 'user'"
 							>
 								<button
@@ -122,7 +164,7 @@
 								<a @click="toLogin" class="btn btn-primary rounded-circle">
 									<i class="bi bi-person-circle"></i>
 								</a>
-							</template>
+							</template> -->
 						</div>
 						<div class="mx-2 dropdown">
 							<button
@@ -154,6 +196,7 @@ import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/index';
 import Logo from './Logo.vue';
+
 const authStore = useAuthStore();
 
 const router = useRouter();
@@ -169,6 +212,9 @@ const menulist = [
 	'清潔用品',
 	'其他',
 ];
+function sellerlogin() {
+	router.push({ name: 'SellerLogin' });
+}
 
 function toLogin() {
 	router.push({ name: 'UserLogin' });
@@ -177,9 +223,13 @@ function toLogin() {
 function toSellerHome() {
 	router.push({ name: 'SellerHome' });
 }
+async function shopLogout() {
+	authStore.logout();
+}
 
-async function toLogout() {
-	await authStore.logout(); // 等待登出操作完成
+function toLogout() {
+	console.log('執行');
+	// authStore.logout(); // 等待登出操作完成
 }
 // const isShopRoute = ref(false);
 
