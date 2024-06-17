@@ -502,7 +502,7 @@
 						:disabled="
 							route.name === 'SellerCouponNew'
 								? false
-								: dayAndToDay(data.startDate, '>=')
+								: $dayAndToDay(data.startDate, '>=')
 						"
 						type="submit"
 						class="btn btn-primary px-5 m-0 ms-1 ms-sm-2"
@@ -526,12 +526,7 @@ import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
 
 // stores
-import {
-	useCoupon,
-	useAuthStore,
-	useResize,
-	dayAndToDay,
-} from '@/stores/index';
+import { useCoupon, useAuthStore, useResize } from '@/stores/index';
 
 const route = useRoute();
 // const router = useRouter();

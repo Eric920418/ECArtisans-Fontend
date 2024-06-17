@@ -39,7 +39,7 @@ export const useAlertStore = defineStore({
 			focusProductFail: { icon: 'heart-crack', text: '已取消收藏商品' },
 			error: { icon: 'circle-exclamation', text: '系統發生未預期的錯誤' },
 		} as messageArray,
-		delayTime: 30000, // 延遲時間
+		delayTime: 3000, // 延遲時間
 		nextTimestamp: 1, // index
 	}),
 	actions: {
