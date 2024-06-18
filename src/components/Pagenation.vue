@@ -43,12 +43,21 @@ const props = defineProps({
 });
 
 // 接收從父組件傳遞的頁碼，一開始為1
-// let localCurrentPage = ref(props.currentPage);
-const localCurrentPage = computed(() => props.currentPage);
+const localCurrentPage = ref(props.currentPage);
 
 // 用戶在此組件的操作 -> 監聽localCurrentPage的變化
 // 通過 emit 事件通知父組件，來啟動父組件重新計算頁碼
 const emit = defineEmits(['update:currentPage']);
+
+// 監聽 props 的變化，更新 localCurrentPage -> 使此組件與父組件同步
+watch(
+	() => props.currentPage,
+	newPage => {
+		localCurrentPage.value = newPage;
+	}
+);
+
+// 監聽 localCurrentPage 的變化，通知父组件更新頁碼
 watch(localCurrentPage, newPage => {
 	emit('update:currentPage', newPage);
 });

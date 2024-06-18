@@ -5,7 +5,18 @@ const apiRequest = axios.create({
 	baseURL: 'https://ecartisans-backend-1.onrender.com',
 });
 
+// 圖片專用
 function headers(token: string) {
+	const headers = {
+		headers: {
+			// 'Content-Type': 'application/json', 此為預設
+			Authorization: `Bearer ${token}`,
+		},
+	} as Object;
+
+	return headers;
+}
+function FormHeaders(token: string) {
 	const headers = {
 		headers: {
 			'Content-Type': 'multipart/form-data',
@@ -46,7 +57,7 @@ const handleApiResponse = async <T>(
 
 // 圖片上傳 ■
 export const uploadImage = (data: any, token: string) =>
-	handleApiResponse(apiRequest.post('/upload/file', data, headers(token)));
+	handleApiResponse(apiRequest.post('/upload/file', data, FormHeaders(token)));
 
 // 購物商城 ■ 購物商城 ■ 購物商城 ■
 

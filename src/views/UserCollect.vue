@@ -183,8 +183,13 @@ const userTitleData = {
 	schedule: '未結束', //目前頁面
 };
 
-const updateSchedule = (newSchedule: any) => {
-	init.value.schedule = newSchedule;
+const updateSchedule = (newSchedule: NavTabsTitleType) => {
+	if (
+		Object.prototype.hasOwnProperty.call(newSchedule, 'title') &&
+		newSchedule.title
+	) {
+		navTabs.value.schedule = newSchedule.title;
+	}
 };
 
 const navTabs = ref({}) as any;
