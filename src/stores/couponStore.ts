@@ -149,15 +149,16 @@ export const useCoupon = defineStore({
 				let res;
 				data.startDate = getISO(data.startDate, 'start');
 				data.endDate = getISO(data.endDate, 'end');
-				const updateData = {
-					...data,
-				};
 
 				// if (data.productType === 0) delete data.productChoose;
 				// if (data.type === 0) delete data.percentage;
 				console.log('更新前發送的', data);
 				if (this.accountType === 'seller' && this.data._id) {
-					await sellerCouponEdit(this.data._id, updateData, authStore.token)
+					await sellerCouponEdit(
+						this.data._id,
+						JSON.stringify(data),
+						authStore.token
+					)
 						.then(res => {
 							console.log(res);
 							alertStore.success('renewOK');
