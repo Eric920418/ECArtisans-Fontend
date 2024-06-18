@@ -487,13 +487,6 @@
 					<button
 						type="button"
 						class="btn btn-outline-primary px-5 mx-1 mx-sm-2 me-md-4"
-						@click="trytry"
-					>
-						aa
-					</button>
-					<button
-						type="button"
-						class="btn btn-outline-primary px-5 mx-1 mx-sm-2 me-md-4"
 						@click="router.back()"
 					>
 						取消
@@ -510,7 +503,7 @@
 						{{ init['end-bottom-btn'] }}
 					</button>
 				</div>
-				{{ authStore.token }}
+				<!-- {{ authStore.token }} -->
 			</v-form>
 		</div>
 	</div>

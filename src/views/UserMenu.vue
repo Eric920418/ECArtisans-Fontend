@@ -6,10 +6,10 @@
 				class="d-none d-lg-block col-lg-2 p-0 m-0"
 			>
 				<ul class="list-group userMenu mt-5">
-					<router-link
+					<li
 						v-for="(menuItem, menuIndex) in menu"
 						:key="menuIndex"
-						:to="menuItem.path"
+						@click="$go(menuItem.path)"
 						class="list-group-item btn btn-Bg rounded-2 text-start p-3"
 						:class="{
 							'btn-Bg-active': isRouteName(route.name, menuItem.path.name),
@@ -17,7 +17,7 @@
 						:aria-current="isRouteName(route.name, menuItem.path.name)"
 					>
 						{{ menuItem.title }}
-					</router-link>
+					</li>
 				</ul>
 			</div>
 			<!-- 右側 -->
