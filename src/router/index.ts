@@ -185,9 +185,11 @@ router.beforeEach((to, from, next) => {
 	const authStore = useAuthStore();
 	const loggedIn = authStore.isLoggedIn;
 	const accountType = authStore.accountType;
+
 	const requiresSellerAuth = to.matched.some(
 		record => record.meta.requiresSellerAuth
 	);
+
 	const requiresUserAuth = to.matched.some(
 		record => record.meta.requiresUserAuth
 	);
