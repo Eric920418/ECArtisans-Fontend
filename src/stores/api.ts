@@ -5,7 +5,6 @@ const apiRequest = axios.create({
 	baseURL: 'https://ecartisans-backend-1.onrender.com',
 });
 
-// 圖片專用
 function headers(token: string) {
 	const headers = {
 		headers: {
@@ -16,6 +15,8 @@ function headers(token: string) {
 
 	return headers;
 }
+
+// 圖片專用
 function FormHeaders(token: string) {
 	const headers = {
 		headers: {
