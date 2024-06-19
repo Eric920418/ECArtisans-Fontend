@@ -158,7 +158,6 @@
 						{{ init.btn }}
 					</button>
 				</div>
-
 				<br />
 				{{ userStore.data }}
 			</v-form>

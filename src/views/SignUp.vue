@@ -1,6 +1,9 @@
 <template>
 	<div class="container">
 		<!-- 立即註冊 --------------------------------------------------------- START -->
+		<button class="btn btn-primary px-5 mt-4" @click="showCustomAlert">
+			快速合約方案的連結
+		</button>
 		<div
 			v-if="init.schedule === 'info' && addUserStatus === false"
 			class="row g-3 py-4 px-4 d-flex justify-content-center"
@@ -536,14 +539,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, createApp } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore, useUserStore } from '@/stores/index';
 import Loading from 'vue-loading-overlay';
 import { type UserDataType } from '@/type/userType';
-import router from '@/router';
+import Swal from 'sweetalert2';
+import PlanList from '../components/PlanList.vue';
+
+const planListRef = ref();
+
+// 為了製作方便先放這裡
+function showCustomAlert() {
+	Swal.fire({
+		title: '合約方案',
+		width: 900,
+		padding: '0',
+		showCloseButton: true,
+		showConfirmButton: false,
+		html: '<div id="modal"></div>',
+		didOpen: () => {
+			const app = createApp(PlanList);
+			app.mount('#modal');
+		},
+	});
+}
+
 // 頁面用到的資料
+const router = useRouter();
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const isLoading = computed(() => authStore.isLoading);
@@ -623,60 +647,6 @@ function onSubmit1(): any {
 	}
 }
 
-// function oneSubmitDisabled(): any {
-// 	let isOK = false;
-// 	if (data.value.name === null && data.value.name === '') isOK = true;
-// 	if (data.value.gender === null && data.value.gender === '') isOK = true;
-// 	if (data.value.phone === null && data.value.phone === '') isOK = true;
-// 	if (data.value.mail === null && data.value.mail === '') isOK = true;
-// 	if (data.value.password === null && data.value.password === '') isOK = true;
-// 	if (data.value.confirmPassword === null && data.value.confirmPassword === '') isOK = true;
-
-// 	// confirmPassword: null,
-// 	// address: null,
-// 	// //會員
-// 	// birthday: null,
-// 	// //開店
-// 	// brand: null,
-// 	// introduce: null,
-// 	// collection: null,
-// 	// salesType: [],
-
-// 	if (init.value && init.value.type === 'seller') {
-// 		if()
-// 		init.value.schedule = 'shopType';
-// 	} else if (init.value && init.value.type === 'user') {
-// 		let getData = {
-// 			// 會員註冊需要的資料
-// 			name: data.value.name,
-// 			gender: data.value.gender,
-// 			phone: data.value.phone,
-// 			mail: data.value.mail,
-// 			password: data.value.password,
-// 			confirmPassword: data.value.confirmPassword,
-// 			address: data.value.address,
-// 			birthday: data.value.birthday,
-// 		};
-// 		userStore.addUserAuth(getData);
-// 	}
-// 	//第二步驟
-// 	let getData = {
-// 		// 商家註冊需要的資料
-// 		bossName: data.value.name,
-// 		gender: data.value.gender,
-// 		phone: data.value.phone,
-// 		mail: data.value.mail,
-// 		password: data.value.password,
-// 		confirmPassword: data.value.confirmPassword,
-// 		brand: data.value.brand, //商家名稱
-// 		address: data.value.address, //商家地址
-// 		collection: data.value.collection, //收款帳戶
-// 		salesType: data.value.salesType, //販賣類型
-// 		introduce: data.value.introduce, //介紹
-// 	};
-// 	userStore.addUserAuth(getData);
-// }
-
 function onSubmit2(): any {
 	if (
 		data.value.introduce &&
@@ -723,3 +693,14 @@ onMounted(() => {
 	getData();
 });
 </script>
+<style scoped>
+.swal2-html-container,
+div:where(.swal2-container) .swal2-html-container {
+	margin: 0em 12px 1em !important;
+	padding: 0px !important;
+}
+.swal2-html-container,
+div:where(.swal2-container) button:where(.swal2-close):focus {
+	box-shadow: none !important;
+}
+</style>
