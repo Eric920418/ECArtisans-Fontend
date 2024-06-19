@@ -3,6 +3,8 @@ import { useAuthStore } from '@/stores/authStore';
 
 // 前台商場頁面(非會員中心) ---------------------------------START
 import Index from '../views/PageIndex.vue';
+import ShopHome from '../views/ShopHome.vue';
+import ShopProduct from '../views/ShopProduct.vue';
 import TestPage from '../views/TestPage.vue';
 // import FAQ from '../views/eric/IndexFAQ.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
@@ -31,6 +33,7 @@ import UserCollect from '../views/UserCollect.vue';
 import UserCoupon from '../views/UserCoupon.vue';
 import UserCouponNew from '../views/UserCouponNew.vue';
 import Component from 'vue-loading-overlay';
+import { computed } from 'vue';
 
 // 會員所有頁面 ---------------------------------END
 
@@ -153,6 +156,7 @@ const routes = [
 		path: '/user',
 		name: 'User',
 		component: () => import('../views/UserMenu.vue'),
+		meta: { requiresUserAuth: true }, // 買家身份登入後才能訪問
 		children: [
 			// {
 			//   path: 'home', //
@@ -172,6 +176,11 @@ const routes = [
 			},
 		],
 	},
+	{
+		path: '/shop/:id', // 前台商家頁面
+		name: 'ShopHome',
+		component: ShopHome,
+	},
 	// user 買家所有頁面 ------------------------- user 買家所有頁面 --------END
 ];
 
@@ -185,11 +194,9 @@ router.beforeEach((to, from, next) => {
 	const authStore = useAuthStore();
 	const loggedIn = authStore.isLoggedIn;
 	const accountType = authStore.accountType;
-
 	const requiresSellerAuth = to.matched.some(
 		record => record.meta.requiresSellerAuth
 	);
-
 	const requiresUserAuth = to.matched.some(
 		record => record.meta.requiresUserAuth
 	);

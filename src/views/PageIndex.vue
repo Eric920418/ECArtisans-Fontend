@@ -1,9 +1,14 @@
 <template>
 	<div>
 		<Banner :data="funData" />
+		<router-link :to="{ name: 'ShopHome', params: { id: seller_id } }">
+			測試前往商店
+		</router-link>
+
 		<div class="container">
 			<Fun :data="funData" />
 		</div>
+
 		<Hot :data="shopData" />
 		<Shop :data="shopData" />
 		<New :data="shopData" />
@@ -48,7 +53,7 @@ import { gsap } from 'gsap';
 const block = ref();
 const box = ref();
 const shopData = ref([]);
-
+let seller_id = ref(212322);
 const funData = ref([
 	{
 		cols: 6,
