@@ -1,6 +1,5 @@
 <template>
 	<nav class="navbar navbar-expand-xl navbar-light bg-white">
-		<!-- :class="{'': ,}" 		{{ resize }} -->
 		<div
 			class="container"
 			:class="{
@@ -18,8 +17,15 @@
 					/>
 				</h1>
 			</router-link>
-			<!-- <p>isLoggedIn: {{ authStore.isLoggedIn }}</p> -->
-			<div class="position-relative d-flex btn-group">
+			<button
+				v-if="route.name === 'SellerHome' && isUser === 'seller' && !isLoggedIn"
+				class="btn btn-primary px-xxl-4"
+				type="button"
+				@click="$go({ name: 'SellerLogin' })"
+			>
+				申請/登入商家
+			</button>
+			<div v-if="!isSellerRoute" class="position-relative d-flex btn-group">
 				<button
 					class="me-2 navbar-toggler collapsed d-flex d-xl-none flex-column justify-content-around"
 					type="button"
@@ -46,211 +52,247 @@
 			</div>
 
 			<div
-				class="collapse navbar-collapse d-xl-flex justify-content-xl-between navbar-menu bg-white px-3 pe-xl-0"
+				v-if="!isSellerRoute"
+				class="collapse navbar-collapse d-xl-flex justify-content-xl-between navbar-menu bg-white p-0 w-100"
 				id="navbarScroll"
 			>
 				<div
-					class=""
-					:class="{
-						'row flex-column flex-nowrap ': resize < 1200,
-						'd-flex justify-content-between w-100 p-0': resize >= 1200,
+					class="py-4 py-xl-2 px-3 pe-xl-0 w-100"
+					:style="{
+						height: resize < 1200 ? ' calc(100vh - 56px)' : 'fit-content',
+						'overflow-y': resize < 1200 ? 'auto' : 'visible',
 					}"
 				>
 					<div
 						:class="{
-							'col-12 order-2': resize < 1200,
-							'd-flex align-items-center justify-content-center':
-								resize >= 1200,
+							'row flex-column flex-nowrap ': resize < 1200,
+							'd-flex justify-content-between w-100 p-0': resize >= 1200,
 						}"
-						class=""
 					>
-						<ul
+						<div
 							:class="{
-								'row m-0 p-0': resize < 1200,
-								'navbar-nav mb-2 mb-lg-0': resize >= 1200,
+								'col-12 order-2': resize < 1200,
+								'd-flex align-items-center justify-content-center':
+									resize >= 1200,
 							}"
-							style="list-style: none"
+							class=""
 						>
-							<li
+							<ul
 								:class="{
-									'col-12 my-3 fs-3 m-0 p-0': resize < 1200,
-									'nav-item dropdown': resize >= 1200,
+									'row m-0 p-0': resize < 1200,
+									'navbar-nav mb-2 mb-lg-0': resize >= 1200,
 								}"
 								style="list-style: none"
 							>
-								<button
+								<li
 									:class="{
-										'nav-link mb-3 mb-lg-0 px-2': resize < 1200,
-										'nav-link dropdown-toggle fs-6': resize >= 1200,
+										'col-12 my-3 fs-3 m-0 p-0': resize < 1200,
+										'nav-item dropdown': resize >= 1200,
 									}"
-									id="navbarScrollingDropdown"
-									role="button"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
+									style="list-style: none"
 								>
-									商品總覽
-								</button>
-								<div
-									:class="{
-										'col-12 m-0 p-0': resize < 1200,
-										'dropdown-menu md-menu': resize >= 1200,
-									}"
-								>
-									<ol
-										:class="{ 'row m-0 p-0 ': resize < 1200 }"
-										aria-labelledby="navbarScrollingDropdown"
-									>
-										<li
-											v-for="(menu, menuIndex) in menulist"
-											:key="menuIndex"
-											style="list-style: none"
-											:class="{ 'col-6 col-sm-3 m-0 p-2': resize < 1200 }"
-										>
-											<a
-												:class="{
-													'btn btn-Bg rounded-2 text-center w-100 h-100 py-2':
-														resize < 1200,
-													'dropdown-item overflow-y-hidden': resize >= 1200,
-												}"
-												href="#"
-											>
-												{{ menu }}
-												<div v-if="resize >= 1200" class="dot"></div>
-											</a>
-										</li>
-									</ol>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<div
-						:class="{
-							'col-12 order-1': resize < 1200,
-							'd-flex align-items-center justify-content-center':
-								resize >= 1200,
-						}"
-					>
-						<div
-							class="d-flex align-items-center justify-content-center me-3 nav-search"
-						>
-							<input
-								id="search"
-								name="請輸入名稱"
-								type="search"
-								class="form-control nav-search-input"
-								aria-label="優惠卷名稱"
-								placeholder="請輸入名稱..."
-							/>
-							<div class="btn-group">
-								<div class="dropdown-center">
 									<button
-										class="btn nav-btn-search dropdown-toggle d-flex align-items-center justify-content-center"
-										type="button"
+										:class="{
+											'nav-link mb-3 mb-lg-0 px-2': resize < 1200,
+											'nav-link dropdown-toggle fs-6': resize >= 1200,
+										}"
+										id="navbarScrollingDropdown"
+										role="button"
 										data-bs-toggle="dropdown"
 										aria-expanded="false"
 									>
-										<div class="line flex-shrink">
-											{{ searchText }}
-										</div>
+										商品總覽
 									</button>
-									<ul class="dropdown-menu menu-search text-center">
-										<li
-											v-for="(searchType, searchTypeIndex) in searchlist"
-											:key="searchTypeIndex"
-											@click="getSearchText(searchType)"
+									<div
+										:class="{
+											'col-12 m-0 p-0': resize < 1200,
+											'dropdown-menu md-menu': resize >= 1200,
+										}"
+									>
+										<ol
+											:class="{ 'row m-0 p-0 ': resize < 1200 }"
+											aria-labelledby="navbarScrollingDropdown"
 										>
-											<div class="dropdown-item">
-												{{ searchType }}
-											</div>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<button
-								class="btn btn-primary btn-search d-flex align-items-center justify-content-center"
-								type="button"
-								@click="onSubmit1"
-								style="width: 36px; height: 36px"
-							>
-								<font-awesome-icon :icon="['fas', 'magnifying-glass']" />
-							</button>
+											<li
+												v-for="(menu, menuIndex) in menulist"
+												:key="menuIndex"
+												style="list-style: none"
+												:class="{ 'col-6 col-sm-3 m-0 p-2': resize < 1200 }"
+											>
+												<a
+													:class="{
+														'btn btn-Bg rounded-2 text-center w-100 h-100 py-2':
+															resize < 1200,
+														'dropdown-item overflow-y-hidden': resize >= 1200,
+													}"
+													href="#"
+												>
+													{{ menu }}
+													<div v-if="resize >= 1200" class="dot"></div>
+												</a>
+											</li>
+										</ol>
+									</div>
+								</li>
+							</ul>
 						</div>
-					</div>
-					<div
-						:class="{
-							'col-12 order-3': resize < 1200,
-							'd-flex align-items-center justify-content-center':
-								resize >= 1200,
-						}"
-					>
+						<!-- 搜尋框  搜尋框 --------------------------- -->
 						<div
 							:class="{
-								'row m-0 ': resize < 1200,
+								'col-12 order-1 mb-3': resize < 1200,
 								'd-flex align-items-center justify-content-center':
 									resize >= 1200,
 							}"
 						>
-							<button
-								@click="$go({ name: 'SellerHome' })"
-								class="btn text-primary flex-shrink"
-								:class="{
-									'col-12 py-2 text-start': resize < 1200,
-								}"
-							>
-								<i class="bi bi-shop-window"></i>
-								<span>我要開店</span>
-							</button>
-
-							<button
-								@click="$go({ name: 'UserProfile' })"
-								class="btn text-primary flex-shrink"
-								:class="{
-									'col-12 py-2 text-start': resize < 1200,
-								}"
-							>
-								<i class="bi bi-person"></i>
-								會員中心
-							</button>
-
 							<div
-								class="btn-group flex-shrink"
+								class="d-flex align-items-center justify-content-center me-3 nav-search"
+							>
+								<input
+									id="search"
+									name="請輸入名稱"
+									type="search"
+									class="form-control nav-search-input"
+									aria-label="優惠卷名稱"
+									placeholder="請輸入名稱..."
+								/>
+								<div class="btn-group">
+									<div class="dropdown-center">
+										<button
+											class="btn nav-btn-search dropdown-toggle d-flex align-items-center justify-content-center"
+											type="button"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+										>
+											<div class="line flex-shrink">
+												{{ searchText }}
+											</div>
+										</button>
+										<ul class="dropdown-menu menu-search text-center">
+											<li
+												v-for="(searchType, searchTypeIndex) in searchlist"
+												:key="searchTypeIndex"
+												@click="getSearchText(searchType)"
+											>
+												<div class="dropdown-item">
+													{{ searchType }}
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<button
+									class="btn btn-primary btn-search d-flex align-items-center justify-content-center"
+									type="button"
+									@click="onSubmit1"
+									style="width: 36px; height: 36px"
+								>
+									<font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+								</button>
+							</div>
+						</div>
+
+						<!-- 其他 按鈕 --------------------------- -->
+
+						<div
+							:class="{
+								'col-12 order-3': resize < 1200,
+								'd-flex align-items-center justify-content-center px-2 m-0':
+									resize >= 1200,
+							}"
+						>
+							<div
 								:class="{
-									'col-12 py-2 text-start': resize < 1200,
+									'row m-0 ': resize < 1200,
+									'd-flex align-items-center justify-content-center':
+										resize >= 1200,
 								}"
 							>
-								<div class="dropdown">
-									<button
-										class="btn text-primary m-0 p-0 w-100"
-										type="button"
-										id="dropdownMenuButton"
-										data-bs-toggle="dropdown"
-										aria-expanded="false"
-									>
-										<i class="bi bi-heart"></i>
-										收藏
-									</button>
-									<ul
-										class="dropdown-menu dropdown-menu-lg-st"
-										aria-labelledby="dropdownMenuButton"
-									>
-										<li><a class="dropdown-item" href="#">收藏商品</a></li>
-										<li><a class="dropdown-item" href="#">關注商家</a></li>
-									</ul>
-								</div>
-							</div>
-
-							<button
-								v-if="resize >= 1200"
-								class="ms-2 btn btn-primary rounded-circle position-relative"
-							>
-								<i class="bi bi-bag"></i>
-								<span
-									class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger rounded-circle"
+								<button
+									@click="
+										isUser === 'seller' && isLoggedIn
+											? $go({ name: 'SellerProfile' })
+											: $go({ name: 'SellerHome' })
+									"
+									class="btn text-primary flex-shrink"
+									:class="{
+										'col-12 py-4 px-0 text-start': resize < 1200,
+									}"
 								>
-									99+
-									<span class="visually-hidden">purchase car list</span>
-								</span>
-							</button>
+									<i class="bi bi-shop-window"></i>
+									<span>
+										{{
+											isUser === 'seller' && isLoggedIn
+												? '前往商店'
+												: '我要開店'
+										}}
+									</span>
+								</button>
+
+								<button
+									@click="
+										isUser === 'user' && isLoggedIn
+											? $go({ name: 'UserProfile' })
+											: $go({ name: 'UserLogin' })
+									"
+									class="btn text-primary flex-shrink"
+									:class="{
+										'col-12 py-4 px-0 text-start': resize < 1200,
+									}"
+								>
+									<i class="bi bi-person"></i>
+									會員中心
+								</button>
+
+								<div
+									class="btn-group flex-shrink"
+									:class="{
+										'col-12 px-0': resize < 1200,
+									}"
+								>
+									<div
+										class=""
+										:class="{
+											'nav-item w-100': resize < 1200,
+											dropdown: resize >= 1200,
+										}"
+									>
+										<button
+											class="btn text-primary m-0 p-0 text-start"
+											:class="{
+												'py-4 w-100': resize < 1200,
+											}"
+											type="button"
+											id="dropdownMenuButton"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+										>
+											<i class="bi bi-heart"></i>
+											收藏
+										</button>
+										<ul
+											v-if="resize >= 1200"
+											class="dropdown-menu dropdown-menu-lg-st"
+											aria-labelledby="dropdownMenuButton"
+										>
+											<li><a class="dropdown-item" href="#">收藏商品</a></li>
+											<li><a class="dropdown-item" href="#">關注商家</a></li>
+										</ul>
+									</div>
+								</div>
+
+								<button
+									v-if="resize >= 1200"
+									class="ms-2 btn btn-primary rounded-circle position-relative"
+								>
+									<i class="bi bi-bag"></i>
+									<span
+										class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger rounded-circle"
+									>
+										99+
+										<span class="visually-hidden">purchase car list</span>
+									</span>
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -260,8 +302,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watchEffect } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, ref, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/index';
 import Logo from './Logo.vue';
 import { useResize } from '@/stores/index';
@@ -269,7 +311,9 @@ const { resize } = useResize();
 
 const authStore = useAuthStore();
 
+const route = useRoute();
 const router = useRouter();
+
 const menulist = [
 	'娛樂',
 	'服飾',
@@ -317,6 +361,25 @@ function toLogout() {
 // watchEffect(() => {
 // 	isShopRoute.value = route.path.toLowerCase().startsWith('/seller');
 // });
+const isUser = computed(() => {
+	return authStore.accountType;
+});
+const isLoggedIn = computed(() => {
+	return authStore.isLoggedIn;
+});
+const isSellerRoute = computed(() => {
+	return route.matched.length > 0 && route.matched[0].path.includes('/seller');
+});
+
+onMounted(() => {
+	// 根據當前路由加載資料
+	if (route && route.name === 'SellerProfile') {
+		// init.value = sellerTitleData;
+	} else if (route && route.name === 'UserProfile') {
+		// init.value = userTitleData;
+	}
+	// userStore.getUserAccount(id);
+});
 </script>
 
 <style scoped>

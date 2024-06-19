@@ -123,6 +123,8 @@ import 'vue-loading-overlay/dist/css/index.css';
 
 import { useAuthStore, useResize } from '@/stores/index';
 const { resize } = useResize();
+const route = useRoute();
+
 // 頁面用到的資料
 const authStore = useAuthStore();
 
