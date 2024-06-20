@@ -126,7 +126,9 @@ const formatCardData = (orderItem: OrderType) => ({
 const currentPage = computed(() => parseInt(route.query.page as string) || 1);
 const perPage = ref(1); // 一頁要顯示多少的項目數量
 const totalRows = computed(() => filteredData.value.length); // 總項目數量
-const maxPage = Math.ceil(filteredData.value.length / perPage.value); // 計算最大頁數
+const maxPage = computed(() =>
+	Math.ceil(filteredData.value.length / perPage.value)
+);
 
 // 當currentPage或perPage改變時重新計算當前頁的資料
 const paginatedData = computed(() => {
@@ -158,7 +160,8 @@ router.beforeEach((to, from, next) => {
 		if (!isInNavTabs) {
 			next({ path: to.path, query: { page: 1, type: '1' } });
 			return;
-		} else if (page > maxPage) {
+		}
+		if (page > maxPage.value) {
 			// 判斷大於目前最大的頁數
 			next({ path: to.path, query: { ...query, page: 1 } });
 			return;
