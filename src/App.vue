@@ -6,16 +6,11 @@
 			position: sticky; 可以偵測高度 
 		 -->
 		<header class="header">
-			<!-- <template v-if="isShopRoute"> -->
-			<!--  -->
-			<!-- </template> -->
-			<!--<template v-else> -->
 			<NavigationBar />
-			<!-- <NavigationBarShop /> -->
-			<!--</template> -->
 		</header>
 		<main class="main">
-			<RouterView />
+			<!-- 強制重新刷新 -->
+			<RouterView :key="route.path" />
 		</main>
 		<footer>
 			<FooterViews />
