@@ -23,6 +23,7 @@ import { useRoute } from 'vue-router';
 import NavTabs from '../components/NavTabs.vue';
 import Card from '@/components/ProductCard.vue';
 import router from '@/router';
+import type { NavTabsTitleType } from '@/type/navTabsTitle';
 const route = useRoute();
 const authStore = useAuthStore();
 const userStore = useUserStore();

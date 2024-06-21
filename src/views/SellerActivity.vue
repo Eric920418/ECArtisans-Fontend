@@ -27,7 +27,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 // 組件
 import NavTabs from '@/components/NavTabs.vue';
@@ -43,7 +43,7 @@ const router = useRouter();
 
 const authStore = useAuthStore();
 const userStore = useCoupon();
-
+const navTabs = ref({}) as any;
 // 封裝分類邏輯的函數，想要入口統一，之後比較好撰寫內容
 function categorized(allData: CouponType[]) {
 	let data = allData;
@@ -107,7 +107,6 @@ const sellerTitleData = {
 		return (route.query.type as string) || '1';
 	}),
 };
-const navTabs = ref({}) as any;
 
 // Card 資料
 const formatCardData = (item: CouponType) =>
@@ -133,9 +132,12 @@ const formatCardData = (item: CouponType) =>
 		],
 	}) as ActivityCardType;
 
-const currentPage = computed(() => parseInt(route.query.page as string) || 1);
+const currentPage = computed(() => parseInt(route.query.page as string));
 const perPage = ref(2); // 一頁要顯示多少的項目數量
 const totalRows = computed(() => filteredData.value.length); // 總項目數量
+const maxPage = computed(() =>
+	Math.ceil(filteredData.value.length / perPage.value)
+);
 
 // 當currentPage或perPage改變時重新計算當前頁的資料
 const paginatedData = computed(() => {
@@ -166,7 +168,8 @@ router.beforeEach((to, from, next) => {
 		if (!isInNavTabs) {
 			next({ path: to.path, query: { page: '1', type: '1' } });
 			return;
-		} else if (page > perPage.value) {
+		}
+		if (page > maxPage.value) {
 			next({ path: to.path, query: { ...query, page: 1 } });
 			return;
 		}
@@ -175,7 +178,7 @@ router.beforeEach((to, from, next) => {
 	next();
 });
 
-onMounted(() => {
+onMounted(async () => {
 	// 因為要設置路由守衛 會有抓資料的問題，判斷改在這裡獲取 navTabs 的資料
 	if (route.matched[0].path === '/seller') {
 		navTabs.value = {
@@ -183,7 +186,7 @@ onMounted(() => {
 			schedule: sellerTitleData.schedule,
 			btn: { title: '新增優惠劵', path: { name: 'SellerCouponNew' } },
 		};
-		userStore.getCouponAll(authStore.token);
+		await userStore.getCouponAll(authStore.token);
 	}
 });
 </script>

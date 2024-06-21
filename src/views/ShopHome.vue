@@ -24,11 +24,13 @@
 				</div>
 				<div class="p-3 flex-grow-1">
 					<h2>商家店名</h2>
-					<p>最新公告　2023/02/12</p>
-					<dir>
+					<p>最新公告 2023/02/12</p>
+					<div>
 						<p>最新消息</p>
-					</dir>
-					<div>點我領取優惠卷</div>
+					</div>
+					<button type="button" class="btn btn-primary" @click="getCoupon">
+						點我領取優惠卷
+					</button>
 				</div>
 			</div>
 		</div>
@@ -38,7 +40,7 @@
 			<div class="row container m-0 p-0">
 				<div
 					class="col-6 col-md-4 col-xl-3 px-2 py-3"
-					v-for="(item, index) in ProductList"
+					v-for="(item, index) in paginatedData"
 					:key="index"
 				>
 					<Card :item="item" />
@@ -64,8 +66,9 @@ import { useRoute, useRouter } from 'vue-router';
 import Banner from '@/components/Banner.vue';
 import Card from '@/components/ProductCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
-
 import { useResize } from '@/stores/index';
+import { alertStore } from '@/main'; // 導入實例
+
 const route = useRoute();
 const router = useRouter();
 
@@ -137,7 +140,7 @@ const ProductList = ref<ProductType[]>([
 		comment: '可以用聊天機器人玩這麼豐富的行銷活動！ 太贊拉～',
 		company: '油土伯',
 		name: 'HowBig',
-		sold: 100,
+		sold: 1220,
 		price: 100,
 		stars: 3.6,
 	},
@@ -149,7 +152,7 @@ const ProductList = ref<ProductType[]>([
 		name: 'Lina執行長',
 		sold: 100,
 		price: 100,
-		stars: 3.6,
+		stars: 2.6,
 	},
 	{
 		avatar:
@@ -167,7 +170,7 @@ const ProductList = ref<ProductType[]>([
 		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
 		company: '油土伯',
 		name: 'HowBig',
-		sold: 100,
+		sold: 130,
 		price: 100,
 		stars: 3.6,
 	},
@@ -177,7 +180,7 @@ const ProductList = ref<ProductType[]>([
 		comment: '【當日出貨】鞋子防水收納袋 加厚 升級版',
 		company: '生活小舖',
 		name: 'Lina執行長',
-		sold: 100,
+		sold: 5000,
 		price: 100,
 		stars: 5.0,
 	},
@@ -327,67 +330,67 @@ const funData = ref([
 ]);
 
 // 封裝分類邏輯的函數，想要入口統一，之後比較好撰寫內容
-function categorized(allData: CouponType[]) {
+function categorized(allData: ProductType[]) {
 	let data = allData;
 	let filterText = navTabs.value.schedule; //固定篩選條件
 
-	//如果要更多篩選條件 可寫在這裡
-	if (filterText === '2') {
-		data = data.filter(item => {
-			const { endDate, isEnabled } = item; // 從 item 中取出 endDate 和 isEnabled
-			if (isEnabled && endDate) {
-				// 將 endDate 轉換為 Date 對象
-				const endDateObj = new Date(endDate);
-				const today = new Date(); // 獲取當前日期
-				return endDateObj >= today; // 比較 endDate 是否早於當前日期
-			}
-			return false;
-		});
-	}
-	if (filterText === '3') {
-		data = data.filter(item => {
-			const { endDate, isEnabled } = item; // 從 item 中取出 endDate 和 isEnabled
-			if (isEnabled && endDate) {
-				// 將 endDate 轉換為 Date 對象
-				const endDateObj = new Date(endDate);
-				const today = new Date(); // 獲取當前日期
-				return endDateObj < today; // 比較 endDate 是否早於當前日期
-			}
-			return false;
-		});
-	}
-	if (filterText === '4') data = data.filter(itme => itme.isEnabled === false);
+	// //如果要更多篩選條件 可寫在這裡
+	// if (filterText === '2') {
+	// 	data = data.filter(item => {
+	// 		const { endDate, isEnabled } = item; // 從 item 中取出 endDate 和 isEnabled
+	// 		if (isEnabled && endDate) {
+	// 			// 將 endDate 轉換為 Date 對象
+	// 			const endDateObj = new Date(endDate);
+	// 			const today = new Date(); // 獲取當前日期
+	// 			return endDateObj >= today; // 比較 endDate 是否早於當前日期
+	// 		}
+	// 		return false;
+	// 	});
+	// }
+	// if (filterText === '3') {
+	// 	data = data.filter(item => {
+	// 		const { endDate, isEnabled } = item; // 從 item 中取出 endDate 和 isEnabled
+	// 		if (isEnabled && endDate) {
+	// 			// 將 endDate 轉換為 Date 對象
+	// 			const endDateObj = new Date(endDate);
+	// 			const today = new Date(); // 獲取當前日期
+	// 			return endDateObj < today; // 比較 endDate 是否早於當前日期
+	// 		}
+	// 		return false;
+	// 	});
+	// }
+	// if (filterText === '4') data = data.filter(itme => itme.isEnabled === false);
 
 	if (data.length > 1) {
 		data.sort((a, b) => {
 			// 先按 isEnabled 排序，true 在前
-			if (a.isEnabled && !b.isEnabled) return -1;
-			if (!a.isEnabled && b.isEnabled) return 1;
+			// if (a.isEnabled && !b.isEnabled) return -1;
+			// if (!a.isEnabled && b.isEnabled) return 1;
 
-			// 然后按 isEnabled && $dayAndToDay(endDate, '<=') 排序，true 在前
-			const aEndDateValid = a.isEnabled && dayAndToDay(a.endDate, '<=');
-			const bEndDateValid = b.isEnabled && dayAndToDay(b.endDate, '<=');
+			// // 然后按 isEnabled && $dayAndToDay(endDate, '<=') 排序，true 在前
+			// const aEndDateValid = a.isEnabled && dayAndToDay(a.endDate, '<=');
+			// const bEndDateValid = b.isEnabled && dayAndToDay(b.endDate, '<=');
 
-			if (aEndDateValid && !bEndDateValid) return -1;
-			if (!aEndDateValid && bEndDateValid) return 1;
+			// if (aEndDateValid && !bEndDateValid) return -1;
+			// if (!aEndDateValid && bEndDateValid) return 1;
 
-			// 最后按 isEnabled && $dayAndToDay(startDate, '>=') 排序，true 在前
-			const aStartDateValid = a.isEnabled && dayAndToDay(a.startDate, '>=');
-			const bStartDateValid = b.isEnabled && dayAndToDay(b.startDate, '>=');
+			// // 最后按 isEnabled && $dayAndToDay(startDate, '>=') 排序，true 在前
+			// const aStartDateValid = a.isEnabled && dayAndToDay(a.startDate, '>=');
+			// const bStartDateValid = b.isEnabled && dayAndToDay(b.startDate, '>=');
 
-			if (aStartDateValid && !bStartDateValid) return -1;
-			if (!aStartDateValid && bStartDateValid) return 1;
+			// if (aStartDateValid && !bStartDateValid) return -1;
+			// if (!aStartDateValid && bStartDateValid) return 1;
 
 			// 如果都相同，保持原顺序
 			return 0;
 		});
 	}
-
+	console.log(data.length);
 	return data;
 }
 
 // 接收篩選後的結果
-const filteredData = computed(() => categorized(funData.value));
+const filteredData = computed(() => categorized(ProductList.value));
 
 // 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
@@ -416,33 +419,18 @@ const sellerTitleData = {
 };
 const navTabs = ref({}) as any;
 
-// Card 資料
-const formatCardData = (item: CouponType) =>
-	({
-		title: item.couponName,
-		state: item.isEnabled as boolean, // 狀態：啟用中
-		type: item.type as number, //優惠劵 型態 Ex:免運劵、優惠劵
-		percentage: item.percentage as number, //優惠劵 型態 Ex:免運劵、優惠劵
-		id: item._id as string,
-		date: {
-			sDate: item.startDate as string,
-			eDate: item.endDate as string,
-		},
-		btn: [
-			{
-				title: '查看',
-				go: { name: 'SellerCouponCheck', params: { id: item._id } },
-			},
-			{
-				title: '修改',
-				go: { name: 'SellerCouponCheck', params: { id: item._id } },
-			},
-		],
-	}) as ActivityCardType;
+const getCoupon = () => {
+	alertStore.success('couponOK');
+	// 待補新增邏輯
+	// 待補不能重複領取的邏輯
+};
 
 const currentPage = computed(() => parseInt(route.query.page as string) || 1);
-const perPage = ref(2); // 一頁要顯示多少的項目數量
+const perPage = ref(8); // 一頁要顯示多少的項目數量
 const totalRows = computed(() => filteredData.value.length); // 總項目數量
+const maxPage = computed(() =>
+	Math.ceil(filteredData.value.length / perPage.value)
+);
 
 // 當currentPage或perPage改變時重新計算當前頁的資料
 const paginatedData = computed(() => {
@@ -453,7 +441,9 @@ const paginatedData = computed(() => {
 
 // 更新頁碼
 const updatePage = (page: number) => {
-	router.push({ query: { ...route.query, page: page } });
+	const query = { ...route.query, page: page.toString() };
+	console.log(query);
+	router.push({ path: route.path, query });
 };
 
 // 全局的路由前置守衛，處理篩選條件不存在或資料為空的情況
@@ -470,12 +460,13 @@ router.beforeEach((to, from, next) => {
 		);
 
 		// 篩選條件不存在的情況
-		if (!isInNavTabs) {
-			next({ path: to.path, query: { page: '1', type: '1' } });
-			return;
-		} else if (page > perPage.value + 1) {
-			// 調整 基數時 造成的錯誤
-			next({ path: to.path, query: { ...query, page: 1 } });
+		// if (!isInNavTabs) {
+		// 	next({ path: to.path, query: { page: '1', type: '1' } });
+		// 	return;
+		// }
+		if (page > maxPage.value) {
+			// 判斷大於目前最大的頁數
+			next({ path: to.path, query: { page: 1 } });
 			return;
 		}
 	}
@@ -495,7 +486,7 @@ onMounted(() => {
 	// }
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .shop-img {
 	width: 100%;
 	height: 200px;

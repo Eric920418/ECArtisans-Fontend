@@ -73,7 +73,10 @@ const data = computed(() => userStore.allData);
 
 // 如果是 當我選中 navTabs資料後切換 的 navTabs 資料
 const updateSchedule = (newSchedule: NavTabsTitleType) => {
-	if (Object.hasOwn(newSchedule, 'title') && newSchedule.title) {
+	if (
+		Object.prototype.hasOwnProperty.call(newSchedule, 'title') &&
+		newSchedule.title
+	) {
 		navTabs.value.schedule = newSchedule.title;
 	}
 };
