@@ -31,17 +31,17 @@ export const useProduct = defineStore({
 			{
 				_id: '11560165060adf',
 				productName: '草莓醬',
-				category: '果醬',
+				category: '果醬草',
 				sellerCategory: '食品',
 				origin: '台灣',
 				ingredient: '草莓、糖、檸檬汁',
 				format: [
 					{
 						title: '草莓',
-						cost: 50,
-						price: 150,
+						cost: 5050505050,
+						price: 150150150150150,
 						color: '紅色',
-						stock: 20,
+						stock: 2020,
 						image: 'url1',
 					},
 				],
