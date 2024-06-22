@@ -44,6 +44,11 @@
 .neutral-05{
 	color: $Neutral-05;
 }
+.gray{
+	color: $gray-900;
+}
+
+
 .card{
 	border: none;
 	padding: 16px;
@@ -271,6 +276,16 @@ $radius-8: 0.5rem; //弧度
 	background-color: rgba(0, 0, 0, .3);
 	background-blend-mode: multiply;
 }
+.hover-icon{
+	color: $gray-900;
+}
+.hover-icon:focus,
+.hover-icon:focus-visible,
+.hover-icon:focus-within,
+.hover-icon:hover{
+	color: $primary;
+}
+
 //頭像 白線
 .avatar-border{
 	border: 4px white solid;
@@ -427,6 +442,7 @@ $radius-8: 0.5rem; //弧度
 	font-size:  0.625em; //10px
 }
 
+.card-newImg-delete,
 .card-newImg-disabled,
 .card-newImg{
 	text-align: center;
@@ -445,6 +461,29 @@ $radius-8: 0.5rem; //弧度
 		margin: 0px;
 	}
 }
+.w-fit{
+	width: fit-content;
+}
+.card-newImg-delete{
+	border: 2px solid  #CFD4DF;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	.icon{
+		display: none;
+	}
+}
+
+.card-newImg-delete:hover{
+	border: 2px solid  #CFD4DF;
+	background-color: rgba(0, 0, 0, .3);
+	background-blend-mode: multiply;
+	.icon{
+		display: block;
+	}
+}
+
+
 .card-directions{
 	color: $Neutral-02;
 	font-size:  0.75em;
@@ -605,6 +644,24 @@ $radius-8: 0.5rem; //弧度
 			}
 		}
 	}
+	.is-invalid,
+	.is-invalid:focus,
+	.is-invalid:focus-visible,
+	.nav-search-input,
+	.nav-search-input:checked,
+	.nav-search-input:active,
+	.nav-search-input:hover,
+	.nav-search-input:focus-visible,
+	.nav-search-input:focus {
+		color: $gray-900 ;
+		border: none;
+		border-color: none;
+		border-style: none;
+		background-color: inherit;
+		outline-color: $Neutral-05;
+		outline: none;
+		box-shadow: none;
+	}
 }
 .nav-search{
 	padding: 8px 8px;
@@ -642,33 +699,7 @@ $radius-8: 0.5rem; //弧度
 	}
 }
 
-.is-invalid,
-.is-invalid:focus,
-.is-invalid:focus-visible,
-.nav-search-input,
-.nav-search-input:checked,
-.nav-search-input:active,
-.nav-search-input:hover,
-.nav-search-input:focus-visible,
-.nav-search-input:focus {
-	color: $gray-900 ;
-	border: none;
-	border-color: none;
-	border-style: none;
-	background-color: inherit;
-	outline-color: $Neutral-05;
-	outline: none;
-	box-shadow: none;
-	// width: 384px; 
-	// height: 2em;
-	// @media (min-width: 768px) {
-	// 	width: 384px;  //依 navbar.height
-	// }
-	// @media (min-width: 1200px) {
-	// 	height: 2em;
-	// 	width: 200px;  //依 navbar.height
-	// }
-}
+
 // navbar
 .navbar-toggler-icon,
 .navbar-toggler-icon::before ,

@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+import { useRoute } from 'vue-router';
 
 // 前台商場頁面(非會員中心) ---------------------------------START
 import Index from '../views/PageIndex.vue';
@@ -46,7 +47,11 @@ const routes = [
 	{ path: '/seller-login', name: 'SellerLogin', component: Login },
 	{ path: '/user-sign-up', name: 'UserSignUp', component: SignUp },
 	{ path: '/seller-sign-up', name: 'SellerSignUp', component: SignUp },
-
+	{
+		path: '/shop/:id', // 前台商家頁面
+		name: 'ShopHome',
+		component: ShopHome,
+	},
 	// seller 商家所有頁面 ------------------------- seller 商家所有頁面 --------START
 	{
 		path: '/seller',
@@ -62,89 +67,89 @@ const routes = [
 				path: 'profile', // 商家資訊
 				name: 'SellerProfile',
 				component: UserProfile,
-				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
 			},
 			{
 				path: 'overview', // 商家總覽
 				name: 'SellerOverview',
 				component: SellerOverview,
-				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
 			},
 			{
 				path: 'order', // 訂單管理
 				name: 'SellerOrder',
 				component: SellerOrder,
-				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
 			},
 			{
 				path: 'order/:id', // 單筆訂單管理
 				name: 'SellerOrderCheck',
 				component: SellerOrderCheck,
-				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
 				props: true, // 將orderID參數作為'props'傳遞給其他組件
 			},
 			{
 				path: 'chat', // 單筆訂單管理
 				name: 'SellerChat',
 				component: SellerChat,
-				meta: { requiresSellerAuth: true }, // 商家身份登入後才能訪問
+				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
 				props: true, // 將orderID參數作為'props'傳遞給其他組件
 			},
 			{
 				path: 'coupon', // 優惠劵
 				name: 'SellerCoupon',
 				component: UserCoupon,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 			},
 			{
 				path: 'coupon-new', // 新增優惠劵
 				name: 'SellerCouponNew',
 				component: UserCouponNew,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 			},
 			{
 				path: 'coupon/:id', // 修改/查看優惠劵
 				name: 'SellerCouponCheck',
 				component: UserCouponNew,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 				props: true,
 			},
 			{
 				path: 'activity', // 活動管理
 				name: 'SellerActivity',
 				component: SellerActivity,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 			},
 			{
 				path: 'activity-new', // 新增活動
 				name: 'SellerActivityNew',
 				component: SellerActivityNew,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 			},
 			{
 				path: 'activity/:id', // 修改/查看活動
 				name: 'SellerActivityCheck',
 				component: SellerActivityNew,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 				props: true,
 			},
 			{
 				path: 'product', // 商品總覽
 				name: 'SellerProduct',
 				component: SellerProduct,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 			},
 			{
 				path: 'product-new', // 新增商品
 				name: 'SellerProductNew',
 				component: SellerProductNew,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 			},
 			{
 				path: 'product/:id', // 修改/查看商品
 				name: 'SellerProductCheck',
 				component: SellerProductNew,
-				meta: { requiresSellerAuth: true },
+				meta: { requiresAuth: true, role: 'seller', seller: true },
 				props: true,
 			},
 		],
@@ -156,30 +161,38 @@ const routes = [
 		path: '/user',
 		name: 'User',
 		component: () => import('../views/UserMenu.vue'),
-		meta: { requiresUserAuth: true }, // 買家身份登入後才能訪問
+		meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 		children: [
-			// {
-			//   path: 'home', //
-			//   component: UserHome,
-			// },
 			{
 				path: 'profile', // 會員中心
 				name: 'UserProfile',
 				component: UserProfile,
-				meta: { requiresUserAuth: true }, // 買家身份登入後才能訪問
+				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 			},
 			{
 				path: 'collect', // 收藏商品
 				name: 'UserCollect',
 				component: UserCollect,
-				meta: { requiresUserAuth: true }, // 買家身份登入後才能訪問
+				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 			},
 		],
 	},
+	// {
+	// 	path: '/:pathMatch(.*)*',
+	// 	component: () => import('../views/NotFound.vue'),
+	// },
+	// 重新導向
 	{
-		path: '/shop/:id', // 前台商家頁面
-		name: 'ShopHome',
-		component: ShopHome,
+		path: '/:pathMatch(.*)*',
+		redirect: {
+			name: 'Index',
+		},
+	},
+	{
+		path: '/newPage/:pathMatch(.*)*',
+		redirect: {
+			name: 'Index',
+		},
 	},
 	// user 買家所有頁面 ------------------------- user 買家所有頁面 --------END
 ];
@@ -190,71 +203,57 @@ const router = createRouter({
 });
 
 // 設置路由守衛
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
 	const authStore = useAuthStore();
 	const loggedIn = authStore.isLoggedIn;
 	const accountType = authStore.accountType;
-	const requiresSellerAuth = to.matched.some(
-		record => record.meta.requiresSellerAuth
-	);
-	const requiresUserAuth = to.matched.some(
-		record => record.meta.requiresUserAuth
-	);
 
-	if ((requiresSellerAuth || requiresUserAuth) && !loggedIn) {
-		// 如果需要商家或買家身份驗證但未登入，讓用戶返回指定頁面登入
-		if (requiresSellerAuth) {
-			alert('商家尚未登入！');
-			next({ name: 'Sellerlogin' }); // 導向商家登入頁面
-		} else if (requiresUserAuth) {
-			alert('買家尚未登入！');
-			next({ name: 'Userlogin' }); // 導向買家登入頁面
+	// 確認所有匹配的路由記錄中是否有 requiresAuth
+	const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+	const roles = to.matched.flatMap(record =>
+		record.meta.role ? [record.meta.role] : []
+	);
+	const user = to.matched.some(record => record.meta.user);
+	const seller = to.matched.some(record => record.meta.seller);
+
+	if (!loggedIn) {
+		// 未登入的情況
+		if (requiresAuth) {
+			if (roles.includes('seller')) {
+				alert('商家尚未登入！');
+				next({ name: 'SellerLogin' });
+			} else if (roles.includes('user')) {
+				alert('買家尚未登入！');
+				next({ name: 'UserLogin' });
+			} else {
+				next('/login');
+			}
+		} else {
+			next();
 		}
-	} else if (requiresSellerAuth && loggedIn && accountType !== 'seller') {
-		// 如果需要商家身份驗證且已登入，但登入的角色不是商家，則重新回到商家登入頁面
-		alert('沒有商家權限，重新登入！');
-		next({ name: 'Sellerlogin' }); // 導向買家登入頁面
-	} else if (requiresUserAuth && loggedIn && accountType !== 'user') {
-		// 如果需要買家身份驗證且已登入，但登入的角色不是買家，則重新回到買家登入頁面
-		alert('沒有買家權限，重新登入！');
-		next({ name: 'Userlogin' }); // 導向買家登入頁面
 	} else {
-		next(); // 否則繼續導航
+		// 已登入的情況
+		try {
+			if (!authStore.token) {
+				// 假設這裡需要手動設置 userInfo，例如從後端獲取
+				console.log(authStore.token);
+			}
+			// 根據用戶角色進行權限判斷
+			if (roles.includes('seller') && accountType !== 'seller') {
+				alert('沒有商家權限，重新登入！');
+				next({ name: 'SellerLogin' });
+			} else if (roles.includes('user') && accountType !== 'user') {
+				alert('沒有買家權限，重新登入！');
+				next({ name: 'UserLogin' });
+			} else {
+				next(); // 繼續導航
+			}
+		} catch (err) {
+			console.error('Error:', err);
+			alert('token過期，請重新登入');
+			await authStore.logout(); // 假設有一個 logout 方法來處理登出
+			next({ name: 'Sellerlogin' });
+		}
 	}
 });
-
-// 設置路由守衛
-router.beforeEach((to, from, next) => {
-	const authStore = useAuthStore();
-	const loggedIn = authStore.isLoggedIn;
-	const accountType = authStore.accountType;
-	const requiresSellerAuth = to.matched.some(
-		record => record.meta.requiresSellerAuth
-	);
-	const requiresUserAuth = to.matched.some(
-		record => record.meta.requiresUserAuth
-	);
-
-	if ((requiresSellerAuth || requiresUserAuth) && !loggedIn) {
-		// 如果需要商家或買家身份驗證但未登入，讓用戶返回指定頁面登入
-		if (requiresSellerAuth) {
-			alert('商家尚未登入！');
-			next({ name: 'Sellerlogin' }); // 導向商家登入頁面
-		} else if (requiresUserAuth) {
-			alert('買家尚未登入！');
-			next({ name: 'Userlogin' }); // 導向買家登入頁面
-		}
-	} else if (requiresSellerAuth && loggedIn && accountType !== 'seller') {
-		// 如果需要商家身份驗證且已登入，但登入的角色不是商家，則重新回到商家登入頁面
-		alert('沒有商家權限，重新登入！');
-		next({ name: 'Sellerlogin' }); // 導向買家登入頁面
-	} else if (requiresUserAuth && loggedIn && accountType !== 'user') {
-		// 如果需要買家身份驗證且已登入，但登入的角色不是買家，則重新回到買家登入頁面
-		alert('沒有買家權限，重新登入！');
-		next({ name: 'Userlogin' }); // 導向買家登入頁面
-	} else {
-		next(); // 否則繼續導航
-	}
-});
-
 export default router;

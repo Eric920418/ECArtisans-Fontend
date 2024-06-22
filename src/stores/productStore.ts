@@ -29,8 +29,122 @@ export const useProduct = defineStore({
 	state: () => ({
 		allData: [
 			{
-				_id: '560165060adf',
+				_id: '11560165060adf',
 				productName: '草莓醬',
+				category: '果醬',
+				sellerCategory: '食品',
+				origin: '台灣',
+				ingredient: '草莓、糖、檸檬汁',
+				format: [
+					{
+						title: '草莓',
+						cost: 50,
+						price: 150,
+						color: '紅色',
+						stock: 20,
+						image: 'url1',
+					},
+				],
+				introduction: '好吃的草莓醬',
+				production: '熬煮',
+				isOnshelf: true,
+				review: [
+					{
+						//還沒處理好 只有Schema
+						userID: '456165',
+						rate: 4,
+						comment: '很讚',
+						createAt: '2024-06-03T12:34:56.789Z',
+						updateAt: '2024-06-03T12:34:56.789Z',
+					},
+				],
+				fare: 50,
+				pay: 1,
+				keywords: ['罐', '果醬'],
+				image: ['url1', 'url2', 'url3', 'url4'],
+				sold: 0, //還沒處理好 等訂單處理好回頭處理
+				createAt: '2024-06-03T12:34:56.789Z',
+				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
+			},
+			{
+				_id: '22560165060adf',
+				productName: '22草莓醬',
+				category: '果醬',
+				sellerCategory: '食品',
+				origin: '台灣',
+				ingredient: '草莓、糖、檸檬汁',
+				format: [
+					{
+						title: '草莓',
+						cost: 50,
+						price: 150,
+						color: '紅色',
+						stock: 20,
+						image: 'url1',
+					},
+				],
+				introduction: '好吃的草莓醬',
+				production: '熬煮',
+				isOnshelf: true,
+				review: [
+					{
+						//還沒處理好 只有Schema
+						userID: '456165',
+						rate: 4,
+						comment: '很讚',
+						createAt: '2024-06-03T12:34:56.789Z',
+						updateAt: '2024-06-03T12:34:56.789Z',
+					},
+				],
+				fare: 50,
+				pay: 1,
+				keywords: ['罐', '果醬'],
+				image: ['url1', 'url2', 'url3', 'url4'],
+				sold: 0, //還沒處理好 等訂單處理好回頭處理
+				createAt: '2024-06-03T12:34:56.789Z',
+				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
+			},
+			{
+				_id: '33560165060adf',
+				productName: '33草莓醬',
+				category: '果醬',
+				sellerCategory: '食品',
+				origin: '台灣',
+				ingredient: '草莓、糖、檸檬汁',
+				format: [
+					{
+						title: '草莓',
+						cost: 50,
+						price: 150,
+						color: '紅色',
+						stock: 20,
+						image: 'url1',
+					},
+				],
+				introduction: '好吃的草莓醬',
+				production: '熬煮',
+				isOnshelf: true,
+				review: [
+					{
+						//還沒處理好 只有Schema
+						userID: '456165',
+						rate: 4,
+						comment: '很讚',
+						createAt: '2024-06-03T12:34:56.789Z',
+						updateAt: '2024-06-03T12:34:56.789Z',
+					},
+				],
+				fare: 50,
+				pay: 1,
+				keywords: ['罐', '果醬'],
+				image: ['url1', 'url2', 'url3', 'url4'],
+				sold: 0, //還沒處理好 等訂單處理好回頭處理
+				createAt: '2024-06-03T12:34:56.789Z',
+				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
+			},
+			{
+				_id: '44560165060adf',
+				productName: '44草莓醬',
 				category: '果醬',
 				sellerCategory: '食品',
 				origin: '台灣',

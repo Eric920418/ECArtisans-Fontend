@@ -124,7 +124,7 @@ const formatCardData = (orderItem: OrderType) => ({
 });
 
 const currentPage = computed(() => parseInt(route.query.page as string) || 1);
-const perPage = ref(1); // 一頁要顯示多少的項目數量
+const perPage = ref(5); // 一頁要顯示多少的項目數量
 const totalRows = computed(() => filteredData.value.length); // 總項目數量
 const maxPage = computed(() =>
 	Math.ceil(filteredData.value.length / perPage.value)
