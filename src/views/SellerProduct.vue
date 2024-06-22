@@ -9,7 +9,9 @@
 					<div
 						class="nav-item mb-0 d-flex align-items-center justify-content-center"
 					>
-						123
+						<div>狀態</div>
+						<div>分類</div>
+						<div>搜尋</div>
 					</div>
 				</div>
 				<div class="text-end">
@@ -21,10 +23,20 @@
 					</router-link>
 				</div>
 			</div>
-			<div class="p-4">
-				<table class="table">
-					<thead>
-						<tr class="tr-only-hide text-canter">
+
+			<div class="p-4 table-responsive">
+				<!-- table table-striped table-bordered table-rwd -->
+				<table>
+					<!-- :class="{
+						'table align-middle table-hover': resize >= 768,
+					}" -->
+					<!-- 'table-rwd w-100': resize < 768, -->
+					<thead v-if="resize >= 768">
+						<tr
+							:class="{
+								'tr-only-hide text-canter': resize >= 768,
+							}"
+						>
 							<th
 								v-for="(thItme, thIndex) in tableThead"
 								:key="thIndex"
@@ -35,47 +47,127 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="(tdItme, tdIndex) in tableTbody" :key="tdIndex">
-							<th :data-th="tableThead[0].text" :class="tableThead[0].class">
+						<tr
+							v-for="(tdItme, tdIndex) in tableTbody"
+							:key="tdIndex"
+							:class="{
+								card: resize < 768,
+							}"
+						>
+							<!-- d-flex flex-nowrap -->
+							<!-- :class="tableThead[0].class" -->
+							<th
+								:data-th="tableThead[0].text"
+								:class="{
+									'order-1 no': resize < 768,
+								}"
+							>
 								{{ tdIndex + 1 }}
 							</th>
+							<!-- :class="tableThead[1].class" -->
 							<td
 								:data-th="tableThead[1].text"
-								:class="tableThead[1].class"
-								class="d-flex align-items-center justify-content-center"
+								:class="{
+									'order-0 img  p-0': resize < 768,
+									'product-img p-3': resize >= 768,
+								}"
 							>
-								<div class="product-img p-0">
-									<img
-										src="https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/f4e6bbf2-eb85-4343-acad-c4b537c36356.png?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=CruKUkjAnFhe9fnpj5ibWwYu7ApqDm7RgDyYKYlHPh36dgeOi%2BClu6neh2%2Fz51mp4C9c9RjAtzlTsRpXCRcXMBV1xQ7RtoyU2fIQHTQNy3me%2FILbbVF%2B2pA6D47Dcr%2BtA1ztvMZZ6Dn%2FhSrv%2FC%2F35bOunhzc5rMJjUoObpGVa%2Fqhg4dxOwjiupa%2B8F6OSmr9GshRDYoUnuYe49gMuhoSSBUxDvDvZsuGtcCfvTRak2eKZAPl2KK9u1mqY%2FXkwxyY4AkCxUFA92i354XZAMjMluQ9iJJ0bRHx7ncYeXBRjxUcwI%2BSdiRKwqCelYP25IFk74nefHxs6WLrTInn87Ilnw%3D%3D"
-										class="img-eca"
-									/>
-								</div>
+								<!-- <div
+									:class="{
+										'product-img p-0': resize >= 768,
+									}"
+								> -->
+								<img
+									src="https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/f4e6bbf2-eb85-4343-acad-c4b537c36356.png?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=CruKUkjAnFhe9fnpj5ibWwYu7ApqDm7RgDyYKYlHPh36dgeOi%2BClu6neh2%2Fz51mp4C9c9RjAtzlTsRpXCRcXMBV1xQ7RtoyU2fIQHTQNy3me%2FILbbVF%2B2pA6D47Dcr%2BtA1ztvMZZ6Dn%2FhSrv%2FC%2F35bOunhzc5rMJjUoObpGVa%2Fqhg4dxOwjiupa%2B8F6OSmr9GshRDYoUnuYe49gMuhoSSBUxDvDvZsuGtcCfvTRak2eKZAPl2KK9u1mqY%2FXkwxyY4AkCxUFA92i354XZAMjMluQ9iJJ0bRHx7ncYeXBRjxUcwI%2BSdiRKwqCelYP25IFk74nefHxs6WLrTInn87Ilnw%3D%3D"
+									class="img-eca"
+								/>
+								<!-- </div> -->
 							</td>
-							<td :data-th="tableThead[2].text" :class="tableThead[2].class">
-								{{ tdItme.isOnshelf }}
+							<!-- :class="tableThead[2].class" -->
+							<td
+								:data-th="tableThead[2].text"
+								:class="{
+									'order-1 isOnshelf': resize < 768,
+								}"
+							>
+								<p class="m-0">{{ tdItme.isOnshelf }}</p>
 							</td>
-							<td :data-th="tableThead[3].text" :class="tableThead[3].class">
-								{{ tdItme.sellerCategory }}
+							<!-- :class="tableThead[3].class" -->
+							<td
+								:data-th="tableThead[3].text"
+								:class="{
+									'category order-1 ': resize < 768,
+								}"
+							>
+								<p class="m-0 categoryIcon">{{ tdItme.sellerCategory }}</p>
 							</td>
-							<td :data-th="tableThead[4].text" :class="tableThead[4].class">
-								{{ tdItme.productName }}
+							<!-- :class="tableThead[4].class" -->
+							<td
+								:data-th="tableThead[4].text"
+								:class="{
+									'order-0 itle ': resize < 768,
+								}"
+								class=""
+							>
+								<h3 class="m-0 text-hidden">{{ tdItme.productName }}</h3>
 							</td>
-							<td :data-th="tableThead[5].text" :class="tableThead[5].class">
+							<!-- :class="tableThead[5].class" -->
+							<td
+								:data-th="tableThead[5].text"
+								:class="{
+									'order-0  id': resize < 768,
+								}"
+							>
 								{{ tdItme._id }}
 							</td>
-							<td :data-th="tableThead[6].text" :class="tableThead[6].class">
+							<td
+								:data-th="tableThead[6].text"
+								:class="{
+									'order-0  cost': resize < 768,
+								}"
+							>
+								<!-- class="order-1"
+								:class="tableThead[6].class" -->
 								{{ tdItme.format[0].cost }}
 							</td>
-							<td :data-th="tableThead[7].text" :class="tableThead[7].class">
+							<td
+								:data-th="tableThead[7].text"
+								:class="{
+									'order-1 profit': resize < 768,
+								}"
+							>
+								<!-- :class="tableThead[7].class" -->
 								{{ tdItme.format[0].price - tdItme.format[0].cost }}
 							</td>
-							<td :data-th="tableThead[8].text" :class="tableThead[8].class">
-								{{ tdItme.format[0].price }}
+							<td
+								:data-th="tableThead[8].text"
+								:class="{
+									'order-1 price': resize < 768,
+								}"
+							>
+								<p
+									class="m-0"
+									:class="{
+										'fs-5 fw-bold text-end ': resize < 768,
+									}"
+								>
+									{{ tdItme.format[0].price }}
+								</p>
 							</td>
-							<td :data-th="tableThead[9].text" :class="tableThead[9].class">
+							<td
+								:data-th="tableThead[9].text"
+								:class="{
+									'order-1 stock': resize < 768,
+								}"
+							>
 								{{ tdItme.format[0].stock }}
 							</td>
-							<td :data-th="tableThead[10].text" :class="tableThead[10].class">
+							<td
+								:data-th="tableThead[10].text"
+								:class="{
+									'order-1 icon': resize < 768,
+								}"
+							>
 								<a
 									href=""
 									class="hover-icon"
@@ -154,6 +246,7 @@ import router from '@/router';
 // stores
 import { useProduct, useAuthStore, useResize } from '@/stores/index';
 
+const { resize } = useResize();
 const route = useRoute();
 
 const authStore = useAuthStore();
@@ -381,47 +474,184 @@ onMounted(() => {
 	}
 }
 .product-img {
-	max-width: 60px;
-	max-height: 60px;
+	max-width: 100px;
+	max-height: 100px;
 }
 
-@media (max-width: 736px) {
-	// .table-rwd {
-	// 	min-width: 100%;
-	// }
-	// /*針對tr去做隱藏*/
-	// tr.tr-only-hide {
-	// 	display: none !important;
-	// }
-	// /*讓tr變成區塊主要讓他有個區塊*/
-	// .table-rwd tr {
-	// 	display: block;
-	// 	// border: 1px solid #f7f7f7;
-	// 	margin-top: 5px;
-	// }
-	// .table-rwd td {
-	// 	text-align: left;
-	// 	font-size: 15px;
-	// 	overflow: hidden;
-	// 	width: 100%;
-	// 	display: block;
-	// }
-	// .table-rwd td:before {
-	// 	/*最重要的就是這串*/
-	// 	content: attr(data-th) ' : ';
-	// 	/*最重要的就是這串*/
-	// 	display: inline-block;
-	// 	text-transform: uppercase;
-	// 	font-weight: bold;
-	// 	margin-right: 10px;
-	// 	// color: #d20b2a;
-	// }
-
-	// /*當RWD縮小的時候.table-bordered 會有兩條線，所以針對.table-bordered去做修正*/
-	// .table-rwd.table-bordered td,
-	// .table-rwd.table-bordered th,
-	// .table-rwd.table-bordered {
-	// 	border: 0;
-	// }
+.table-rwd tr {
+	display: grid;
+	grid-template-columns: [line_1] 30% [line2] 17.5% [column-3] 17.5% [line4] 17.5% [column-5] 17.5% [line6];
+	grid-template-rows: [row-1] 20% [row-2] 25% [row-3] 18% [row-4] 37% [row-5];
+	// border: 1px solid #cb0909;
+	width: 100%;
+	margin-bottom: 25px;
 }
+.text-hidden {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: auto;
+}
+.table-rwd td {
+	border: 1px solid #cb0909;
+	padding: 0px 8px;
+}
+.no {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	padding: 0px 8px;
+	grid-column-start: 2;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
+.img {
+	width: 100%;
+	height: 100%;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 5;
+}
+.isOnshelf {
+	display: flex;
+	justify-content: end;
+	align-items: center;
+	width: 100%;
+	grid-column-start: 4;
+	grid-column-end: 6;
+	grid-row-start: 1;
+	grid-row-end: 2;
+}
+.category {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 3;
+	grid-row-end: 4;
+	font-size: 0.85em;
+}
+.categoryIcon {
+	padding: 0px 8px;
+	background-color: rgb(196, 231, 244);
+	border-radius: 8px;
+	text-align: center;
+}
+.title {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	width: 100%;
+	grid-column-start: 2;
+	grid-column-end: 6;
+	grid-row-start: 2;
+	grid-row-end: 3;
+}
+.id {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	width: 100%;
+	grid-column-start: 3;
+	grid-column-end: 6;
+	grid-row-start: 3;
+	grid-row-end: 4;
+	font-size: 0.85em;
+}
+.cost {
+	width: 100%;
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 4;
+	grid-row-end: 5;
+}
+.profit {
+	width: 100%;
+	grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 4;
+	grid-row-end: 5;
+}
+
+.price {
+	display: inline-block;
+	line-height: 1.25em;
+	justify-content: start;
+	align-items: center;
+
+	grid-column-start: 4;
+	grid-column-end: 5;
+	grid-row-start: 4;
+	grid-row-end: 5;
+}
+.stock {
+	width: 100%;
+	grid-column-start: 5;
+	grid-column-end: 6;
+	grid-row-start: 4;
+	grid-row-end: 5;
+}
+.icon {
+	display: none;
+}
+
+.table-rwd .id:before,
+// .table-rwd .category:before,
+.table-rwd .cost:before,
+.table-rwd .profit:before,
+.table-rwd .price:before,
+.table-rwd .stock:before {
+	/*最重要的就是這串*/
+	content: attr(data-th) ' : ';
+	/*最重要的就是這串*/
+	display: inline-block;
+	text-transform: uppercase;
+	font-weight: 400;
+	margin-right: 10px;
+	font-size: 0.85em;
+	// color: #d20b2a;
+}
+// @media (max-width: 736px) {
+// 	.table-rwd {
+// 		min-width: 100%;
+// 	}
+// 	/*針對tr去做隱藏*/
+// 	tr.tr-only-hide {
+// 		display: none !important;
+// 	}
+// 	/*讓tr變成區塊主要讓他有個區塊*/
+// 	.table-rwd tr {
+// 		display: block;
+// 		// border: 1px solid #f7f7f7;
+// 		margin-top: 5px;
+// 	}
+// 	.table-rwd td {
+// 		text-align: left;
+// 		font-size: 15px;
+// 		overflow: hidden;
+// 		width: 100%;
+// 		display: block;
+// 	}
+// 	.table-rwd td:before {
+// 		/*最重要的就是這串*/
+// 		content: attr(data-th) ' : ';
+// 		/*最重要的就是這串*/
+// 		display: inline-block;
+// 		text-transform: uppercase;
+// 		font-weight: bold;
+// 		margin-right: 10px;
+// 		// color: #d20b2a;
+// 	}
+
+// 	/*當RWD縮小的時候.table-bordered 會有兩條線，所以針對.table-bordered去做修正*/
+// 	.table-rwd.table-bordered td,
+// 	.table-rwd.table-bordered th,
+// 	.table-rwd.table-bordered {
+// 		border: 0;
+// 	}
+// }
 </style>
