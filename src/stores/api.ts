@@ -2,7 +2,7 @@ import axios, { type AxiosResponse } from 'axios';
 
 // 登入相關的 handleApiResponse(api
 const apiRequest = axios.create({
-	baseURL: 'https://ecartisans-backend-1.onrender.com',
+	baseURL: 'https://ecartisans-backend-backup.onrender.com',
 });
 
 function headers(token: string) {
