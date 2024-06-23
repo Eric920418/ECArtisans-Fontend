@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
-import { type SellerPageType, type SellerPageProductType } from '../type/shopType';
+import { type SellerPageType, type SellerPageProductType, type RecommendShopType } from '../type/shopType';
 import { getDate } from '@/setup/globalFunction';
 
 import {
 	shop, // 58	get  賣家資訊 (seller_id: string)
 	shopProducts, // 59	get  賣場商品	 (seller_id: string)
+	home_popularProducts, // 27 get 首頁熱銷商品
+	home_recommendShops, // 28 get 首頁推薦商家
+	home_newProducts, // 29 get 首頁新品推薦
+
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -47,7 +51,9 @@ export const useShop = defineStore({
 				],
 			},
 		] as unknown as SellerPageType[],
-		data: {}  as SellerPageType,
+		sellerHomeData: {}  as SellerPageType,
+		sellerProductsData: []  as SellerPageProductType[],
+		recommendShopData: []  as RecommendShopType[],
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
@@ -70,34 +76,91 @@ export const useShop = defineStore({
 				this.accountType = 'user';
 			}
 		},
-		// 獲取所有賣家頁面資訊
-		async getShopAll(seller_id: string): Promise<void> {
+		// 獲取首頁推薦商家
+		async getRecommendShops(): Promise<void> {
 			try {
-				await this.setAccountType();
-				let res;
-				if (this.accountType === 'seller') {
-					// const authStore = useAuthStore();
-					const [shopRes, shopProductsRes] = await Promise.all([
-            shop(seller_id),
-            shopProducts(seller_id),
-          ]);
-					// 合并结果
-					const data: SellerPageType = {
-						...shopRes.data,
-						products: shopProductsRes.data,
-					};
+					console.log('正在發送');
+					// 固定抓6 筆
+					await home_recommendShops(6)
+						.then(res => {
+							console.log('發送');
+							console.log('全部', res.data);
+							// return(res.data)
+							this.recommendShopData = res.data
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},	
+		// 獲取首頁熱銷商品
+		async getPopularProducts(): Promise<void> {
+			try {
+					console.log('正在發送');
+					// 固定抓16 筆
+					await home_popularProducts(16)
+						.then(res => {
+							console.log('發送');
+							console.log('全部', res.data);
+							// return(res.data)
+							this.sellerProductsData = res.data
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},	
+		// 獲取首頁新品推薦
+		async getNewProducts(): Promise<void> {
+			try {
+					console.log('正在發送');
+					// 固定抓8 筆
+					await home_newProducts(6)
+						.then(res => {
+							console.log('發送');
+							console.log('全部', res.data);
+							// return(res.data)
+							this.sellerProductsData = res.data
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},	
+		// 獲取所有賣家頁面資訊
+		async getShop(seller_id: string): Promise<void> {
+			try {
+				await shop(seller_id)
+					.then(res => {
+						console.log(res.data)
+						this.sellerHomeData = res.data[0];
+						console.log(this.sellerHomeData)
+					})
+					.catch(err => {
+						alertStore.error(err.response.data.message);
+					});
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 獲取所有賣家頁面資訊
+		async getShopProducts(seller_id: string): Promise<void> {
+			try {
 
-					this.data = data;
-
-					// await shop(seller_id)
-					// 	.then(res => {
-					// 		console.log(res.products)
-					// 		this.allData = res.products;
-					// 	})
-					// 	.catch(err => {
-					// 		alertStore.error(err.response.data.message);
-					// 	});
-				}
+				await shopProducts(seller_id)
+					.then(res => {
+						console.log(res.data)
+						this.sellerProductsData = res.data;
+					})
+					.catch(err => {
+						alertStore.error(err.response.data.message);
+					});
 			} catch (error) {
 				alertStore.error('showError');
 			}

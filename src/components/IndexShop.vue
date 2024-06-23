@@ -35,35 +35,42 @@
 							<div
 								class="indexShopCard-top col-12 d-flex justify-content-center align-items-center bg-img-eca-dack"
 								:style="{
-									'background-image': `url(${item.seller_image})`,
+									'background-image': `url(${item.shop_image})`,
 								}"
 							>
 								<div
 									class="d-flex justify-content-center align-items-center"
-									@click="$go({ name: 'ShopHome', params: { id: index } })"
+									@click="
+										$go({ name: 'ShopHome', params: { id: item.seller_id } })
+									"
 								>
 									<div
 										class="avatar-l avatar-border ma-12"
 										:style="{
-											'background-image': `url(${item.seller_image})`,
+											'background-image': `url(${item.shop_image})`,
 										}"
 									></div>
 									<div class="text-white ma-12">
-										<h3 class="mb-2">{{ item.seller_name }}</h3>
+										<h3 class="mb-2">{{ item.shop_name }}</h3>
 										<Star :stars="item.star" />
 									</div>
 								</div>
 							</div>
 							<div class="row m-0 p-2">
 								<div
-									class="col m-2 p-0 rounded-3 overflow-x-hidden productCard"
-									v-for="(productItem, productIndex) in item.product"
-									:key="productIndex"
+									class="col m-2 p-0 rounded-3 overflow-x-hidden product_imagesCard"
+									v-for="(
+										product_imagesItem, product_imagesIndex
+									) in item.product_images"
+									:key="product_imagesIndex"
 									@click="
-										$go({ name: 'ShopHome', params: { id: productIndex } })
+										$go({
+											name: 'ShopHome',
+											params: { id: item.seller_id },
+										})
 									"
 								>
-									<img :src="productItem.src" class="img-eca" />
+									<img :src="product_imagesItem" class="img-eca" />
 								</div>
 							</div>
 						</div>
@@ -170,13 +177,18 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { useResize } from '@/stores/index';
 import Title from './IndexTitle.vue';
 import Star from './Star.vue';
+import { type RecommendShopType } from '../type/shopType';
+
 const { resize } = useResize();
+// stores
+import { useShop } from '@/stores/index';
+const userStore = useShop();
 
 const shopList = ref([
 	{ name: '古早味蜜餞', src: 'https://picsum.photos/id/117/1296/650' },
@@ -201,116 +213,118 @@ const shopList = ref([
 	{ name: '魔法能量商店', src: 'https://picsum.photos/id/10/609/600' },
 	{ name: 'Solong 官方商城', src: 'https://picsum.photos/id/11/1296/650' },
 ]);
-const recommendSellerList = ref([
-	{
-		seller_id: 1,
-		seller_name: '古早味蜜餞',
-		seller_image: 'images/shop/1-banner.png',
-		product: [
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-		],
-		star: 0.5,
-		total_comments: 0,
-	},
-	{
-		seller_id: 2,
-		seller_name: '魔法能量商店',
-		seller_image: 'images/shop/2-banner.png',
-		product: [
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-		],
-		star: 1,
-		total_comments: 25,
-	},
-	{
-		seller_id: 3,
-		seller_name: '333',
-		seller_image: 'images/shop/3-banner.png',
-		product: [
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-		],
-		star: 4.3,
-		total_comments: 10,
-	},
-	{
-		seller_id: 4,
-		seller_name: 'lex jewelry',
-		seller_image: 'images/shop/2-2-product.png',
-		product: [
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-		],
-		star: 4.3,
-		total_comments: 2,
-	},
-	{
-		seller_id: 5,
-		seller_name: '444',
-		seller_image: 'images/shop/2-2-product.png',
-		product: [
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-		],
-		star: 2.5,
-		total_comments: 30,
-	},
-	{
-		seller_id: 6,
-		seller_name: '555',
-		seller_image: 'images/shop/2-2-product.png',
-		product: [
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-			{
-				src: 'images/shop/2-2-product.png',
-			},
-		],
-		star: 4.3,
-		total_comments: 50,
-	},
-]);
+// const recommendSellerList = ref([
+// 	{
+// 		seller_id: 1,
+// 		shop_name: '古早味蜜餞',
+// 		shop_image: 'images/shop/1-banner.png',
+// 		product_images: [
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 		],
+// 		star: 0.5,
+// 		total_comments: 0,
+// 	},
+// 	{
+// 		seller_id: 2,
+// 		shop_name: '魔法能量商店',
+// 		shop_image: 'images/shop/2-banner.png',
+// 		product_images: [
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 		],
+// 		star: 1,
+// 		total_comments: 25,
+// 	},
+// 	{
+// 		seller_id: 3,
+// 		shop_name: '333',
+// 		shop_image: 'images/shop/3-banner.png',
+// 		product_images: [
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 		],
+// 		star: 4.3,
+// 		total_comments: 10,
+// 	},
+// 	{
+// 		seller_id: 4,
+// 		shop_name: 'lex jewelry',
+// 		shop_image: 'images/shop/2-2-product_images.png',
+// 		product_images: [
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 		],
+// 		star: 4.3,
+// 		total_comments: 2,
+// 	},
+// 	{
+// 		seller_id: 5,
+// 		shop_name: '444',
+// 		shop_image: 'images/shop/2-2-product_images.png',
+// 		product_images: [
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 		],
+// 		star: 2.5,
+// 		total_comments: 30,
+// 	},
+// 	{
+// 		seller_id: 6,
+// 		shop_name: '555',
+// 		shop_image: 'images/shop/2-2-product_images.png',
+// 		product_images: [
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 			{
+// 				src: 'images/shop/2-2-product_images.png',
+// 			},
+// 		],
+// 		star: 4.3,
+// 		total_comments: 50,
+// 	},
+// ]);
+
+const recommendSellerList = computed(() => userStore.recommendShopData);
 
 const navigation = ref({
 	nextEl: '.swiper-button-next',
@@ -333,9 +347,13 @@ const titleData = {
 	title: '商家推薦',
 	titleEn: 'shop',
 };
+
+onMounted(async () => {
+	await userStore.getRecommendShops();
+});
 </script>
 <style lang="scss" scoped>
-.productCard {
+.product_imagesCard {
 	transition: all 1s ease-out;
 	height: 90px;
 	@media (min-width: 1200px) {
