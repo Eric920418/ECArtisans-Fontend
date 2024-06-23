@@ -311,3 +311,13 @@ export const userFollowShopsDelete = (user_id: string, seller_id: string) =>
 	handleApiResponse(
 		apiRequest.delete(`/users/${user_id}/collect-shop/${seller_id}`)
 	);
+
+interface PaymentData {
+	email?: string;
+	Amt: number;
+	ItemDesc: string;
+}
+
+// 藍新金流API
+export const paymentCreate = async (paymentData: PaymentData) =>
+	handleApiResponse(apiRequest.post('/payment', paymentData));
