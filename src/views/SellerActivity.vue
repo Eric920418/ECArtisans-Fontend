@@ -84,23 +84,23 @@ const filteredData = computed(() => categorized(userStore.allData));
 
 // 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
-	routeName: 'SellerCoupon',
+	routeName: 'SellerActivity',
 	title: [
 		{
 			title: '全部',
-			path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
+			path: { name: 'SellerActivity', query: { page: 1, type: '1' } },
 		},
 		{
 			title: '未結束',
-			path: { name: 'SellerCoupon', query: { page: 1, type: '2' } },
+			path: { name: 'SellerActivity', query: { page: 1, type: '2' } },
 		},
 		{
 			title: '結束',
-			path: { name: 'SellerCoupon', query: { page: 1, type: '3' } },
+			path: { name: 'SellerActivity', query: { page: 1, type: '3' } },
 		},
 		{
 			title: '停止',
-			path: { name: 'SellerCoupon', query: { page: 1, type: '4' } },
+			path: { name: 'SellerActivity', query: { page: 1, type: '4' } },
 		},
 	],
 	schedule: computed(() => {
@@ -123,16 +123,16 @@ const formatCardData = (item: CouponType) =>
 		btn: [
 			{
 				title: '查看',
-				go: { name: 'SellerCouponCheck', params: { id: item._id } },
+				go: { name: 'SellerActivityCheck', params: { id: item._id } },
 			},
 			{
 				title: '修改',
-				go: { name: 'SellerCouponCheck', params: { id: item._id } },
+				go: { name: 'SellerActivityCheck', params: { id: item._id } },
 			},
 		],
 	}) as ActivityCardType;
 
-const currentPage = computed(() => parseInt(route.query.page as string));
+const currentPage = computed(() => parseInt(route.query.page as string)) || 1;
 const perPage = ref(2); // 一頁要顯示多少的項目數量
 const totalRows = computed(() => filteredData.value.length); // 總項目數量
 const maxPage = computed(() =>
@@ -152,31 +152,31 @@ const updatePage = (page: number) => {
 };
 
 // 全局的路由前置守衛，處理篩選條件不存在或資料為空的情況
-router.beforeEach((to, from, next) => {
-	const { query } = to;
-	const page = parseInt(query.page as string) || 1;
-	const filterType = (query.type as string) || '1';
+// router.beforeEach((to, from, next) => {
+// 	const { query } = to;
+// 	const page = parseInt(query.page as string) || 1;
+// 	const filterType = (query.type as string) || '1';
 
-	// 確保 navTabs.title 是一個有效的陣列
-	if (Array.isArray(navTabs.value.title) && navTabs.value.title.length > 0) {
-		// 判斷目標文字是否存在於 path.query.type 中
-		const isInNavTabs = navTabs.value.title.some(
-			(tab: any) => tab.path.query.type === filterType
-		);
+// 	// 確保 navTabs.title 是一個有效的陣列
+// 	if (Array.isArray(navTabs.value.title) && navTabs.value.title.length > 0) {
+// 		// 判斷目標文字是否存在於 path.query.type 中
+// 		const isInNavTabs = navTabs.value.title.some(
+// 			(tab: any) => tab.path.query.type === filterType
+// 		);
 
-		// 篩選條件不存在的情況
-		if (!isInNavTabs) {
-			next({ path: to.path, query: { page: '1', type: '1' } });
-			return;
-		}
-		if (page > maxPage.value) {
-			next({ path: to.path, query: { ...query, page: 1 } });
-			return;
-		}
-	}
+// 		// 篩選條件不存在的情況
+// 		if (!isInNavTabs) {
+// 			next({ path: to.path, query: { page: '1', type: '1' } });
+// 			return;
+// 		}
+// 		if (page > maxPage.value) {
+// 			next({ path: to.path, query: { ...query, page: 1 } });
+// 			return;
+// 		}
+// 	}
 
-	next();
-});
+// 	next();
+// });
 
 onMounted(async () => {
 	// 因為要設置路由守衛 會有抓資料的問題，判斷改在這裡獲取 navTabs 的資料
@@ -184,7 +184,7 @@ onMounted(async () => {
 		navTabs.value = {
 			title: sellerTitleData.title,
 			schedule: sellerTitleData.schedule,
-			btn: { title: '新增優惠劵', path: { name: 'SellerCouponNew' } },
+			btn: { title: '新增優惠劵', path: { name: 'SellerActivityNew' } },
 		};
 		await userStore.getCouponAll(authStore.token);
 	}

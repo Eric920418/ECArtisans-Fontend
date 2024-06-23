@@ -66,13 +66,16 @@ import { useRoute, useRouter } from 'vue-router';
 import Banner from '@/components/Banner.vue';
 import Card from '@/components/ProductCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
-import { useResize } from '@/stores/index';
 import { alertStore } from '@/main'; // 導入實例
 
-const route = useRoute();
-const router = useRouter();
+// stores
+import { useProduct, useAuthStore, useResize } from '@/stores/index';
 
-const resize = useResize().resize;
+const { resize } = useResize();
+const route = useRoute();
+
+const authStore = useAuthStore();
+const userStore = useProduct();
 interface ProductType {
 	avatar: string;
 	comment: string;
@@ -476,13 +479,13 @@ router.beforeEach((to, from, next) => {
 
 onMounted(() => {
 	// // 因為要設置路由守衛 會有抓資料的問題，判斷改在這裡獲取 navTabs 的資料
-	// if (route.matched[0].path === '/seller') {
-	// 	navTabs.value = {
-	// 		title: sellerTitleData.title,
-	// 		schedule: sellerTitleData.schedule,
-	// 		btn: { title: '新增優惠劵', path: { name: 'SellerCouponNew' } },
-	// 	};
-	// 	userStore.getCouponAll();
+	if (route.matched[0].path === '/seller') {
+		// 	navTabs.value = {
+		// 		title: sellerTitleData.title,
+		// 		schedule: sellerTitleData.schedule,
+		// 		btn: { title: '新增優惠劵', path: { name: 'SellerCouponNew' } },
+	}
+	userStore.getCouponAll();
 	// }
 });
 </script>

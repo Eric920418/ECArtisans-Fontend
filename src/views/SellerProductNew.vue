@@ -115,16 +115,17 @@
 							</label>
 							<v-field
 								id="productName"
-								name="優惠卷名稱"
+								v-model="data.productName"
+								name="優惠券名稱"
 								type="text"
 								class="form-control"
-								:class="{ 'is-invalid': errors['優惠卷名稱'] }"
-								rules="phone|required"
-								aria-label="優惠卷名稱"
-								placeholder="請輸入優惠卷名稱"
+								:class="{ 'is-invalid': errors['優惠券名稱'] }"
+								rules="required"
+								aria-label="商品名稱"
+								placeholder="請輸入商品名稱"
 							></v-field>
 							<error-message
-								name="優惠卷名稱"
+								name="優惠券名稱"
 								class="invalid-feedback"
 							></error-message>
 						</div>
@@ -139,6 +140,7 @@
 							<v-field
 								class="my-auto form-select"
 								id="allType"
+								v-model="data.sellerCategory"
 								aria-label="全站分類"
 								name="全站分類"
 								:class="{
@@ -149,7 +151,7 @@
 							>
 								<option value="" disabled>請選擇...</option>
 								<option
-									:value="shopTypeItme"
+									:value="shopTypeIndex.toString()"
 									v-for="(shopTypeItme, shopTypeIndex) in init2.shopTypeText"
 									:key="shopTypeIndex"
 								>
@@ -166,20 +168,20 @@
 								<span class="text-danger">*</span>
 							</label>
 							<v-field
-								class="my-auto form-select"
+								class="my-auto form-control"
 								id="shopType"
+								v-model="data.category[0]"
 								aria-label="商家分類"
 								name="商家分類"
 								:class="{
 									'is-invalid': errors['商家分類'],
 								}"
-								rules="gender"
-								as="select"
-							>
-								<option value="" disabled>請選擇...</option>
-								<option value="男">男</option>
-								<option value="女">女</option>
-							</v-field>
+								placeholder="請輸入商品名稱"
+							></v-field>
+							<error-message
+								name="優惠券名稱"
+								class="invalid-feedback"
+							></error-message>
 						</div>
 						<div
 							class="col-6 col-sm-6 ps-0 pe-3 m-0 mb-2"
@@ -192,10 +194,11 @@
 							<v-field
 								class="my-auto form-select"
 								id="origin"
-								aria-label="商家分類"
-								name="商家分類"
+								v-model="data.origin"
+								aria-label="商品產地"
+								name="商品產地"
 								:class="{
-									'is-invalid': errors['商家分類'],
+									'is-invalid': errors['全站分類'],
 								}"
 								rules="gender"
 								as="select"
@@ -220,6 +223,7 @@
 							</label>
 							<v-field
 								id="manufacture"
+								v-model="data.production"
 								name="製造方式"
 								type="text"
 								class="form-control"
@@ -238,6 +242,7 @@
 							</label>
 							<v-field
 								id="material"
+								v-model="data.ingredient"
 								name="材質"
 								type="text"
 								class="form-control"
@@ -259,6 +264,7 @@
 								v-slot="{ field, errors }"
 								name="comment"
 								rules="max:500|required"
+								v-model="data.introduction"
 							>
 								<textarea
 									id="introduce"
@@ -267,7 +273,9 @@
 									:class="{ 'is-invalid': errors[0] }"
 									name="comment"
 								/>
-								<p class="text-end fs-12">n / 500</p>
+								<p class="text-end fs-12">
+									{{ data.introduction?.length }} / 500
+								</p>
 							</v-field>
 						</div>
 					</div>
@@ -286,9 +294,12 @@
 
 						<!-- 單個規格 -->
 						<div
+							v-for="(formatItem, index) in data.format"
+							:key="index"
 							class="col-12 col-sm-12 p-0 mb-4 mb-md-5"
 							style="min-height: 100px"
 						>
+							{{ formatItem }}
 							<div class="row m-0 bg-neutral05 p-4 pt-3">
 								<div class="col-12 m-0 mb-1 p-0 text-end">
 									<button
@@ -419,16 +430,15 @@
 							</label>
 							<div class="d-flex">
 								<div
-									v-for="(stt, sttIndex) in ['刷卡', '取貨付款']"
+									v-for="(stt, sttIndex) in ['刷卡', '取貨付款', 'line pay']"
 									:key="sttIndex"
 								>
 									<div class="dropdown-item pe-2">
 										<v-field
 											class="form-check-input me-2"
 											type="checkbox"
-											v-model="data.productChoose"
-											:class="{ 'is-invalid': errors['productChoose'] }"
-											:value="stt"
+											v-model="data.pay"
+											:value="sttIndex + 1"
 											:id="stt"
 											name="productChoose"
 											as="input"
@@ -539,18 +549,18 @@ const sellerTitleData = {
 
 const navTabs = ref({}) as any;
 const init2 = ref({
-	shopTypeText: [
-		'娛樂',
-		'服飾',
-		'3C產品',
-		'食品',
-		'家具',
-		'運動',
-		'寵物',
-		'生活用品',
-		'清潔用品',
-		'其他',
-	],
+	shopTypeText: {
+		1: '娛樂',
+		2: '服飾',
+		3: '3C產品',
+		4: '食品',
+		5: '家具',
+		6: '運動用品',
+		7: '寵物用品',
+		8: '生活用品',
+		9: '清潔用品',
+		10: '其他',
+	},
 	originText: ['台灣', '中國', '美國', '日本', '澳洲', '韓國'],
 	colorText: ['黑', '白', '紅', '橙', '黃', '綠', '藍', '紫', '透明', '彩色'],
 }) as any;

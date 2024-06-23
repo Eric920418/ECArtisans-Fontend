@@ -93,10 +93,10 @@ export const productSearch = (data: any) =>
 // 購物商城 ■ 賣家資訊
 // 58	get   /seller/${seller_id}	 	賣家資訊	 	 買家端
 export const shop = (seller_id: string) =>
-	handleApiResponse(apiRequest.get(`/seller/${seller_id}`));
+	handleApiResponse(apiRequest.get(`/sellers/${seller_id}`));
 // 59	get   /seller/${seller_id}/products	 	 賣場商品	 	買家端
 export const shopProducts = (seller_id: string) =>
-	handleApiResponse(apiRequest.get(`/seller/${seller_id}/products`));
+	handleApiResponse(apiRequest.get(`/sellers/${seller_id}/products`));
 
 // ■ 商家 ■ 商家 ■ 商家 ■
 

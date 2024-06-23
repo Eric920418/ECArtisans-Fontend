@@ -20,165 +20,30 @@ import router from '@/router';
 // }
 // https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__
 
+// 定義類別
+const categoryMapping: Record<number, string> = {
+	1: '娛樂',
+	2: '服飾',
+	3: '3C產品',
+	4: '食品',
+	5: '家具',
+	6: '運動用品',
+	7: '寵物用品',
+	8: '生活用品',
+	9: '清潔用品',
+	10: '其他'
+};
 
+// 從數字轉成對應類別
+function convertCategoryNumbersToNames(categoryNumbers: Array<number>): string {
+	const categories = categoryNumbers.map(number => categoryMapping[number]);
+	return categories.length === 1 ? categories[0] : categories.join(', ');
+}
 
 export const useProduct = defineStore({
 	id: 'product',
 	state: () => ({
-		allData: [
-			{
-				_id: '11560165060adf',
-				productName: '草莓醬',
-				category: '果醬草',
-				sellerCategory: '食品',
-				origin: '台灣',
-				ingredient: '草莓、糖、檸檬汁',
-				format: [
-					{
-						title: '草莓',
-						cost: 5050505050,
-						price: 150150150150150,
-						color: '紅色',
-						stock: 2020,
-						image: 'url1',
-					},
-				],
-				introduction: '好吃的草莓醬',
-				production: '熬煮',
-				isOnshelf: true,
-				review: [
-					{
-						//還沒處理好 只有Schema
-						userID: '456165',
-						rate: 4,
-						comment: '很讚',
-						createAt: '2024-06-03T12:34:56.789Z',
-						updateAt: '2024-06-03T12:34:56.789Z',
-					},
-				],
-				fare: 50,
-				pay: 1,
-				keywords: ['罐', '果醬'],
-				image: ['url1', 'url2', 'url3', 'url4'],
-				sold: 0, //還沒處理好 等訂單處理好回頭處理
-				createAt: '2024-06-03T12:34:56.789Z',
-				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
-			},
-			{
-				_id: '22560165060adf',
-				productName: '22草莓醬',
-				category: '果醬',
-				sellerCategory: '食品',
-				origin: '台灣',
-				ingredient: '草莓、糖、檸檬汁',
-				format: [
-					{
-						title: '草莓',
-						cost: 50,
-						price: 150,
-						color: '紅色',
-						stock: 20,
-						image: 'url1',
-					},
-				],
-				introduction: '好吃的草莓醬',
-				production: '熬煮',
-				isOnshelf: true,
-				review: [
-					{
-						//還沒處理好 只有Schema
-						userID: '456165',
-						rate: 4,
-						comment: '很讚',
-						createAt: '2024-06-03T12:34:56.789Z',
-						updateAt: '2024-06-03T12:34:56.789Z',
-					},
-				],
-				fare: 50,
-				pay: 1,
-				keywords: ['罐', '果醬'],
-				image: ['url1', 'url2', 'url3', 'url4'],
-				sold: 0, //還沒處理好 等訂單處理好回頭處理
-				createAt: '2024-06-03T12:34:56.789Z',
-				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
-			},
-			{
-				_id: '33560165060adf',
-				productName: '33草莓醬',
-				category: '果醬',
-				sellerCategory: '食品',
-				origin: '台灣',
-				ingredient: '草莓、糖、檸檬汁',
-				format: [
-					{
-						title: '草莓',
-						cost: 50,
-						price: 150,
-						color: '紅色',
-						stock: 20,
-						image: 'url1',
-					},
-				],
-				introduction: '好吃的草莓醬',
-				production: '熬煮',
-				isOnshelf: true,
-				review: [
-					{
-						//還沒處理好 只有Schema
-						userID: '456165',
-						rate: 4,
-						comment: '很讚',
-						createAt: '2024-06-03T12:34:56.789Z',
-						updateAt: '2024-06-03T12:34:56.789Z',
-					},
-				],
-				fare: 50,
-				pay: 1,
-				keywords: ['罐', '果醬'],
-				image: ['url1', 'url2', 'url3', 'url4'],
-				sold: 0, //還沒處理好 等訂單處理好回頭處理
-				createAt: '2024-06-03T12:34:56.789Z',
-				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
-			},
-			{
-				_id: '44560165060adf',
-				productName: '44草莓醬',
-				category: '果醬',
-				sellerCategory: '食品',
-				origin: '台灣',
-				ingredient: '草莓、糖、檸檬汁',
-				format: [
-					{
-						title: '草莓',
-						cost: 50,
-						price: 150,
-						color: '紅色',
-						stock: 20,
-						image: 'url1',
-					},
-				],
-				introduction: '好吃的草莓醬',
-				production: '熬煮',
-				isOnshelf: true,
-				review: [
-					{
-						//還沒處理好 只有Schema
-						userID: '456165',
-						rate: 4,
-						comment: '很讚',
-						createAt: '2024-06-03T12:34:56.789Z',
-						updateAt: '2024-06-03T12:34:56.789Z',
-					},
-				],
-				fare: 50,
-				pay: 1,
-				keywords: ['罐', '果醬'],
-				image: ['url1', 'url2', 'url3', 'url4'],
-				sold: 0, //還沒處理好 等訂單處理好回頭處理
-				createAt: '2024-06-03T12:34:56.789Z',
-				updateAt: '2024-06-03T12:34:56.789Z', //日期正常不會顯示 有必要才會顯示(再跟我
-			},
-		] as unknown as Array<DetailedOrderProductType>, // 賣家所有商品
+		allData: [] as Array<DetailedOrderProductType>, // 賣家所有商品
 		data: {
 			_id: '',
 			seller_id: '',
@@ -249,8 +114,15 @@ export const useProduct = defineStore({
 					const authStore = useAuthStore();
 					await sellerProductAll(authStore.token)
 						.then(res => {
-							console.log(res.products)
-							this.allData = res.products;
+							// 轉換 sellerCategory 
+							const processedProducts = res.products.map((product: { sellerCategory: number[]; }) => ({
+								...product,
+								sellerCategory: convertCategoryNumbersToNames(product.sellerCategory)
+							}));
+						// 更新狀態
+						this.allData = processedProducts;
+						console.log(processedProducts)
+
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
@@ -260,6 +132,7 @@ export const useProduct = defineStore({
 				alertStore.error('showError');
 			}
 		},
+		
 		// 獲取單一商品
 		async getProduct(product_id: string, token: string): Promise<void> {
 			try {
