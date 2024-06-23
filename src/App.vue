@@ -10,7 +10,7 @@
 		</header>
 		<main class="main">
 			<!-- 強制重新刷新 -->
-			<RouterView :key="route.path" />
+			<RouterView :key="routekey" />
 		</main>
 		<footer>
 			<FooterViews />
@@ -22,12 +22,14 @@
 // import OneColumnLayout from '@/layouts/OneColumnLayout.vue';
 import Alert from '@/components/Toast.vue';
 // import PopUp from '@/components/PopUp.vue';
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import NavigationBar from '@/components/NavigationBar.vue';
 import NavigationBarShop from '@/components/NavigationBarShop.vue';
 import FooterViews from '@/components/Footer.vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
+
+const routekey = computed(() => route.path);
 </script>
 
 <style scoped lang="scss">

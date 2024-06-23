@@ -7,7 +7,6 @@ import {
 	userCollectDelete, // 24	delete 會員取消收藏商品
 	userFollowShopsDelete, // 25	delete  會員取消關注店家
 } from './api';
-// import { id } from 'element-plus/es/locale/index.mjs';
 
 export const useCoupon = defineStore({
 	id: 'coupon',

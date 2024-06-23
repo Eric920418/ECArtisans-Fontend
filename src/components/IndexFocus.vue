@@ -1,5 +1,5 @@
 <template>
-	<div class="w-100 m-index-title mb-7">
+	<div class="w-100 m-index-title">
 		<Title :data="titleData" />
 		<div class="m-0 p-0">
 			<div class="container px-eca-12 px-sm-0">
@@ -36,6 +36,7 @@
 						<div class="card p-0">
 							<div
 								class="card-top d-flex justify-content-center align-items-center p-3 border-bottom"
+								@click="$go({ name: 'ShopHome', params: { id: index } })"
 							>
 								<div
 									class="avatar"
@@ -51,6 +52,9 @@
 									class="col m-2 p-0 rounded-3 overflow-x-hidden productCard"
 									v-for="(productItem, productIndex) in item.product"
 									:key="productIndex"
+									@click="
+										$go({ name: 'ShopHome', params: { id: productIndex } })
+									"
 								>
 									<img :src="productItem.src" class="img-eca" />
 								</div>

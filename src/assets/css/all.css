@@ -15718,6 +15718,10 @@ textarea.form-control-lg {
   color: #454545;
 }
 
+.bg-bg {
+  background-color: #E3F6F8 !important;
+}
+
 .card {
   border: none;
   padding: 16px;
@@ -15915,13 +15919,15 @@ textarea.form-control-lg {
 }
 
 .m-index-title {
-  margin-top: 52px;
+  margin-top: 0px;
   margin-bottom: 0px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 @media (min-width: 768px) {
   .m-index-title {
-    margin-top: 79px;
-    margin-bottom: 120px;
+    padding-top: 40px;
+    padding-bottom: 60px;
   }
 }
 

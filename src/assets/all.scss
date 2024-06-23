@@ -47,7 +47,9 @@
 .gray{
 	color: $gray-900;
 }
-
+.bg-bg{
+	background-color: $Bg !important;
+}
 
 .card{
 	border: none;
@@ -245,11 +247,13 @@ $radius-8: 0.5rem; //弧度
 }
 
 .m-index-title { //首頁上下間距
-	margin-top: 52px;
+	margin-top: 0px;
 	margin-bottom: 0px;
+	padding-top: 24px;
+	padding-bottom: 24px;
 	@media (min-width: 768px) {
-		margin-top: 79px;
-		margin-bottom: 120px;
+		padding-top: 40px;
+		padding-bottom: 60px;
 	}
 }
 

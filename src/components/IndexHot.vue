@@ -1,5 +1,5 @@
 <template>
-	<div class="w-100 p-0 m-index-title">
+	<div class="w-100 m-index-title">
 		<Title :data="titleData" />
 		<div class="m-0 p-0">
 			<div class="container px-eca-12 px-sm-0">
@@ -8,6 +8,7 @@
 				<!-- slidesPerView:一次顯示 4 欄位 row: 2列  slidesPerGroup: 一次滑動 4 欄位-->
 				<!-- :pagination 改 type: 'bullets' 才可以用按鈕 -->
 				<!-- spaceBetween: SwiperSlide裡面的每個項目 間距 要多少 -->
+
 				<swiper
 					:slidesPerView="
 						resize <= 576 ? 2 : resize <= 768 ? 2 : resize <= 1200 ? 3 : 4
@@ -35,7 +36,10 @@
 					ref="swiperContainerRef"
 				>
 					<SwiperSlide v-for="(item, index) in ProductList" :key="index">
-						<Card :item="item" />
+						<Card
+							:item="item"
+							@click="$go({ name: 'ShopHome', params: { id: item.seller_id } })"
+						/>
 					</SwiperSlide>
 					<div
 						class="swiper-pagination d-flex-column d-sm-none swiper-page-bottom"
@@ -71,6 +75,7 @@ import { useResize } from '@/stores/index';
 const { resize } = useResize();
 
 interface ProductType {
+	seller_id: string;
 	avatar: string;
 	comment: string;
 	company: string;
@@ -84,6 +89,7 @@ interface ProductType {
 // 除非 每次顯示 改為 4 跟 8 的倍數。
 const ProductList = ref<ProductType[]>([
 	{
+		seller_id: '12132132',
 		avatar:
 			'https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__',
 		comment: '【當日出貨】鞋子防水收納袋 加厚 升級版',
@@ -94,6 +100,8 @@ const ProductList = ref<ProductType[]>([
 		stars: 5.0,
 	},
 	{
+		seller_id: '12132132',
+
 		avatar:
 			'https://s3-alpha-sig.figma.com/img/f443/14cb/95829dd257c8bbdc7bad432a3950f897?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NL6Zl40xRyI2F-B8kMnTb00FjuousDku2R182mh7DOyVFd6s6ugPN4fIG8TNJa0MFnKkD2q6Q6I1MFGI1wJu7loxezMpt-gcDfIMSG7N1c1jcSJK-WJVA8YgkwVQmYYnQVUWhfSywrr6jHezYHGcpbezAav-grhBYvHFDHZ8FDlDN73iCq0NX1CkrSwMYkAP8iYRcz8TH2VX~RFllrL6zM6NzlETuW0ab7T-c7rJvM6U1A-meiKRPe5NDz-cIbovJTLvUoWVl0oZRT8~vr7sQ6-JCy-pwDQ~zqFogelcqfIRQdHWB834y0xI0X5MvUJdkf4EBGgH6eaiWffkQK2Ecg__',
 		comment: '【招財轉運】純銀 六字箴言 戒指 女生 ',
@@ -104,6 +112,8 @@ const ProductList = ref<ProductType[]>([
 		stars: 4.3,
 	},
 	{
+		seller_id: '2222222',
+
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
 		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
@@ -114,6 +124,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 1.2,
 	},
 	{
+		seller_id: '1111111',
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user01.jpg?raw=true',
 		comment: '讓我們公司的產品以更活潑的方式讓使用者認識。 ',
@@ -125,6 +136,7 @@ const ProductList = ref<ProductType[]>([
 	},
 
 	{
+		seller_id: '33333',
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user02.jpg?raw=true',
 		comment: '讓我們一個月內提高10000個追踪者，客戶體驗反饋很正面！ ',
@@ -135,6 +147,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 2.3,
 	},
 	{
+		seller_id: '44444444',
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
 		comment: '可以用聊天機器人玩這麼豐富的行銷活動！ 太贊拉～',
@@ -145,6 +158,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 3.6,
 	},
 	{
+		seller_id: '557855555',
 		avatar:
 			'https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__',
 		comment: '【當日出貨】鞋子防水收納袋 加厚 升級版',
@@ -155,6 +169,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 3.6,
 	},
 	{
+		seller_id: '999778999999',
 		avatar:
 			'https://s3-alpha-sig.figma.com/img/f443/14cb/95829dd257c8bbdc7bad432a3950f897?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NL6Zl40xRyI2F-B8kMnTb00FjuousDku2R182mh7DOyVFd6s6ugPN4fIG8TNJa0MFnKkD2q6Q6I1MFGI1wJu7loxezMpt-gcDfIMSG7N1c1jcSJK-WJVA8YgkwVQmYYnQVUWhfSywrr6jHezYHGcpbezAav-grhBYvHFDHZ8FDlDN73iCq0NX1CkrSwMYkAP8iYRcz8TH2VX~RFllrL6zM6NzlETuW0ab7T-c7rJvM6U1A-meiKRPe5NDz-cIbovJTLvUoWVl0oZRT8~vr7sQ6-JCy-pwDQ~zqFogelcqfIRQdHWB834y0xI0X5MvUJdkf4EBGgH6eaiWffkQK2Ecg__',
 		comment: '【招財轉運】純銀 六字箴言 戒指 女生 ',
@@ -165,6 +180,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 2.2,
 	},
 	{
+		seller_id: '889777888',
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
 		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
@@ -175,6 +191,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 3.6,
 	},
 	{
+		seller_id: '7777787777',
 		avatar:
 			'https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__',
 		comment: '【當日出貨】鞋子防水收納袋 加厚 升級版',
@@ -185,6 +202,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 5.0,
 	},
 	{
+		seller_id: '7787745646',
 		avatar:
 			'https://s3-alpha-sig.figma.com/img/f443/14cb/95829dd257c8bbdc7bad432a3950f897?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NL6Zl40xRyI2F-B8kMnTb00FjuousDku2R182mh7DOyVFd6s6ugPN4fIG8TNJa0MFnKkD2q6Q6I1MFGI1wJu7loxezMpt-gcDfIMSG7N1c1jcSJK-WJVA8YgkwVQmYYnQVUWhfSywrr6jHezYHGcpbezAav-grhBYvHFDHZ8FDlDN73iCq0NX1CkrSwMYkAP8iYRcz8TH2VX~RFllrL6zM6NzlETuW0ab7T-c7rJvM6U1A-meiKRPe5NDz-cIbovJTLvUoWVl0oZRT8~vr7sQ6-JCy-pwDQ~zqFogelcqfIRQdHWB834y0xI0X5MvUJdkf4EBGgH6eaiWffkQK2Ecg__',
 		comment: '【招財轉運】純銀 六字箴言 戒指 女生 ',
@@ -195,6 +213,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 4.3,
 	},
 	{
+		seller_id: '7777884545',
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
 		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
@@ -205,6 +224,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 1.2,
 	},
 	{
+		seller_id: '7777777877',
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user01.jpg?raw=true',
 		comment: '讓我們公司的產品以更活潑的方式讓使用者認識。 ',
@@ -215,6 +235,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 5.0,
 	},
 	{
+		seller_id: '66666664567666',
 		avatar:
 			'https://s3-alpha-sig.figma.com/img/f443/14cb/95829dd257c8bbdc7bad432a3950f897?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NL6Zl40xRyI2F-B8kMnTb00FjuousDku2R182mh7DOyVFd6s6ugPN4fIG8TNJa0MFnKkD2q6Q6I1MFGI1wJu7loxezMpt-gcDfIMSG7N1c1jcSJK-WJVA8YgkwVQmYYnQVUWhfSywrr6jHezYHGcpbezAav-grhBYvHFDHZ8FDlDN73iCq0NX1CkrSwMYkAP8iYRcz8TH2VX~RFllrL6zM6NzlETuW0ab7T-c7rJvM6U1A-meiKRPe5NDz-cIbovJTLvUoWVl0oZRT8~vr7sQ6-JCy-pwDQ~zqFogelcqfIRQdHWB834y0xI0X5MvUJdkf4EBGgH6eaiWffkQK2Ecg__',
 		comment: '【招財轉運】純銀 六字箴言 戒指 女生 ',
@@ -225,6 +246,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 4.3,
 	},
 	{
+		seller_id: '99997897899999',
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
 		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
@@ -235,6 +257,7 @@ const ProductList = ref<ProductType[]>([
 		stars: 1.2,
 	},
 	{
+		seller_id: '4545564',
 		avatar:
 			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user01.jpg?raw=true',
 		comment: '讓我們公司的產品以更活潑的方式讓使用者認識。 ',

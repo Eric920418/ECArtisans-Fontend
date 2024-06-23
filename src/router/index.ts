@@ -215,7 +215,8 @@ router.beforeEach(async (to, from, next) => {
 	);
 	const user = to.matched.some(record => record.meta.user);
 	const seller = to.matched.some(record => record.meta.seller);
-
+	// 每次路由切换时触发页面滚动到顶部
+	window.scrollTo({ top: 0, behavior: 'smooth' });
 	if (!loggedIn) {
 		// 未登入的情況
 		if (requiresAuth) {
