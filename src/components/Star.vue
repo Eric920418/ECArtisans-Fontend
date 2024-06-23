@@ -15,13 +15,13 @@
 				<img :src="starIcon" alt="Filled Star" class="icon-star" />
 			</div>
 			<!-- 半顆 -->
-			<div class="d-flex align-items-center" v-if="halfStar()">
+			<div class="d-flex align-items-center" v-if="isHalfStar">
 				<img :src="halfStarIcon" alt="Half Star" class="icon-star" />
 			</div>
 			<!-- 空 -->
 			<div
 				class="d-flex align-items-center"
-				v-for="(star, starIndex) in emptyStars()"
+				v-for="(star, starIndex) in emptyStars"
 				:key="'emptied-' + starIndex"
 			>
 				<img :src="emptyStarIcon" alt="Emptied Star" class="icon-star" />
@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
 import starIcon from '@/assets/icons/iconStar.svg';
 import emptyStarIcon from '@/assets/icons/iconStarOutline.svg';
 import halfStarIcon from '@/assets/icons/iconStarHalf.svg';
@@ -43,21 +44,21 @@ const props = defineProps<{
 // const filledStars = Math.floor(props.stars);
 // const emptyStars = 5 - filledStars; // 計算空星數量
 
-const filledStars = Math.floor(props.stars);
+const filledStars = computed(() => Math.floor(props.stars));
 
 // 半顆 0.5 ~ 0.9 之間算是半顆
-const halfStar = () => {
-	const decimalPart = props.stars - Math.floor(props.stars);
+const isHalfStar = computed(() => {
+	const decimalPart = props.stars - filledStars.value;
 	return decimalPart >= 0.5 && decimalPart < 1;
-};
+});
 
-const emptyStars = () => {
+const emptyStars = computed(() => {
 	let half = 0;
-	if (halfStar()) {
+	if (isHalfStar.value) {
 		half = 1;
 	}
-	return 5 - half - filledStars;
-};
+	return 5 - filledStars.value - half;
+});
 </script>
 <style lang="scss" scoped>
 .icon-star {

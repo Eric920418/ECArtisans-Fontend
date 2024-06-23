@@ -13,7 +13,7 @@
 							<h3 class="fs-5 p-0 neutral-01 mb-0">{{ init.schedule }}</h3>
 
 							<!-- ↓之後會靠邏輯判斷只會出現一個 -->
-							<a href="">刪除商品</a>
+							<a @click="deleteProduct()">刪除商品</a>
 							<a href="">立即下架</a>
 						</div>
 						<div class="col-12 p-0 m-0 mb-4">
@@ -470,25 +470,26 @@
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
+import { alertStore } from '@/main'; // 導入實例
 
 // import { type couponType } from '@/type/couponType';
 
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
 
-import { useCoupon, useAuthStore, useResize, getDate } from '@/stores/index';
+import { useProduct, useAuthStore, useResize, getDate } from '@/stores/index';
 
 import { useRoute } from 'vue-router';
 const route = useRoute();
 
 const { resize } = useResize();
 const authStore = useAuthStore();
-const userStore = useCoupon();
+const userStore = useProduct();
 
-// 完成後送出
-function onSubmit() {
-	console.log('成功');
-}
+// // 完成後送出
+// function onSubmit() {
+// 	console.log('成功');
+// }
 
 const dropdownBtn = ref<HTMLButtonElement | null>(null);
 const dropdown = ref<HTMLDivElement | null>(null);
@@ -496,11 +497,11 @@ const dropdown = ref<HTMLDivElement | null>(null);
 const hovered = ref([false]);
 
 // 刪除，待檢查
-function inputBadgeClose(id: string) {
-	data.value.productChoose = data.value.productChoose?.filter(
-		item => item !== id
-	);
-}
+// function inputBadgeClose(id: string) {
+// 	data.value.productChoose = data.value.productChoose?.filter(
+// 		item => item !== id
+// 	);
+// }
 
 const data = computed(() => userStore.data);
 
@@ -554,6 +555,29 @@ const init2 = ref({
 	colorText: ['黑', '白', '紅', '橙', '黃', '綠', '藍', '紫', '透明', '彩色'],
 }) as any;
 const init = ref({}) as any;
+
+// 資料完成後送出
+function onSubmit(isValue: any | void) {
+	if (route.matched[0].path === '/seller') {
+		if (route.name === 'SellerProductNew') {
+			// 新增狀態
+			if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
+				alertStore.error('請選擇商品');
+			} else {
+				if (isValue.productType === 0) isValue.productChoose = [];
+				userStore.newProduct(isValue);
+			}
+		} else if (route.name === 'SellerProductCheck') {
+			// 修改/查看狀態
+			if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
+				alertStore.error('請選擇商品');
+			} else {
+				if (isValue.productType === 0) isValue.productChoose = [];
+				userStore.getProductEdit(isValue);
+			}
+		}
+	}
+}
 const getData = () => {
 	if (route.matched[0].path === '/seller') {
 		if (route.name === 'SellerProductNew') {
@@ -572,12 +596,16 @@ const getData = () => {
 				schedule: sellerTitleData.schedule,
 				breadcrumb: true,
 			};
-			userStore.getCoupon(route.params.id as string, authStore.token);
+			userStore.getProduct(route.params.id as string, authStore.token);
 		}
 	} else if (route.matched[0].path === '/user') {
 		// init.value = userTitleData;
 	}
 	// userStore.getCouponAll(id, page, token);
+};
+
+const deleteProduct = async () => {
+	await userStore.deleteProduct();
 };
 onMounted(() => {
 	getData();

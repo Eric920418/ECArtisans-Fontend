@@ -139,32 +139,33 @@ export const sellerHome = (seller_id: string) =>
 
 // 商家 ■ 商品管理 ■
 // 31	get   /shop/${seller_id}/products/all	 	 賣家顯示所有商品管理	 	 賣家端
-export const sellerProductAll = (seller_id: string) =>
-	handleApiResponse(apiRequest.get(`/shop/${seller_id}/products/all`));
+export const sellerProductAll = (token: string) =>
+	handleApiResponse(apiRequest.get(`/shop/products/all`, headers(token)));
 // 32	get   /shop/${seller_id}/products?page&qty&category	 	 賣家商品管理(數量)	 	賣家端
 export const sellerProductData = (
 	seller_id: string,
 	page: number,
 	qty: number,
-	category: string
+	category: string,
+	token: string
 ) =>
 	handleApiResponse(
 		apiRequest.get(
-			`/shop/${seller_id}/products?page=${page}&qty=${qty}&category=${category}`
+			`/shop/${seller_id}/products?page=${page}&qty=${qty}&category=${category}`, headers(token)
 		)
 	);
 // 33	get   /shop/${seller_id}/product/${product_id}	 	賣家單一商品管理	 	賣家端
-export const sellerProduct = (seller_id: string, product_id: string) =>
-	handleApiResponse(apiRequest.get(`/shop/${seller_id}/product/${product_id}`));
+export const sellerProduct = (product_id: string, token: string) =>
+	handleApiResponse(apiRequest.get(`/shop/product/${product_id}`, headers(token)));
 // 34	post  /shop/product	 	 賣家新增單一商品	 	 賣家端
-export const sellerProductNew = (data: any) =>
-	handleApiResponse(apiRequest.post('/shop/product', data));
+export const sellerProductNew = (data:any, token: string) =>
+	handleApiResponse(apiRequest.post('/shop/poduct', data, headers(token)));
 // 35	put   /shop/product/${product_id}	 	賣家修改(編輯)單一商品 	 	賣家端
-export const sellerProductEdit = (product_id: string) =>
-	handleApiResponse(apiRequest.put(`/shop/product/${product_id}`));
+export const sellerProductEdit = (product_id: string, data: any, token: string) =>
+	handleApiResponse(apiRequest.put(`/shop/product/${product_id}`,data, headers(token)));
 // 36	delete  /shop/product/${product_id}	 	賣家刪除單一商品	 	賣家端
-export const sellerProductDelete = (product_id: string) =>
-	handleApiResponse(apiRequest.delete(`/shop/product/${product_id}`));
+export const sellerProductDelete = (product_id: string, token: string) =>
+	handleApiResponse(apiRequest.delete(`/shop/product/${product_id}`, headers(token)));
 
 // 商家 ■ 優惠劵 ■
 // 42	get 賣家顯示所有優惠劵	 	賣家端
