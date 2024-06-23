@@ -1,10 +1,10 @@
 <template>
-	<div class="row mb-8 m-index-title">
+	<div class="row m-index-title">
 		<Title :data="titleData" />
-		<div class="col-12">
+		<!-- <div class="col-12">
 			<h1>待調整 寬度變化</h1>
 			<h3>{{ resize }}</h3>
-		</div>
+		</div> -->
 		<div
 			v-for="(funItem, funIndex) in data"
 			:key="funIndex"
@@ -99,5 +99,9 @@ const props = defineProps<{
 			max-width: 200%;
 		}
 	}
+}
+.card-body {
+	background-color: #fff;
+	border-radius: 8px;
 }
 </style>

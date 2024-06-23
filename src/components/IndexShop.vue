@@ -1,5 +1,5 @@
 <template>
-	<div class="w-100 m-index-title">
+	<div class="w-100 m-index-title bg-bg">
 		<Title :data="titleData" />
 		<div class="m-0 p-0 overflow-x-hidden">
 			<div class="container indexShop position-relative p-0">
@@ -39,14 +39,19 @@
 								}"
 							>
 								<div
-									class="avatar-l avatar-border ma-12"
-									:style="{
-										'background-image': `url(${item.seller_image})`,
-									}"
-								></div>
-								<div class="text-white ma-12">
-									<h3 class="mb-2">{{ item.seller_name }}</h3>
-									<Star :stars="item.star" />
+									class="d-flex justify-content-center align-items-center"
+									@click="$go({ name: 'ShopHome', params: { id: index } })"
+								>
+									<div
+										class="avatar-l avatar-border ma-12"
+										:style="{
+											'background-image': `url(${item.seller_image})`,
+										}"
+									></div>
+									<div class="text-white ma-12">
+										<h3 class="mb-2">{{ item.seller_name }}</h3>
+										<Star :stars="item.star" />
+									</div>
 								</div>
 							</div>
 							<div class="row m-0 p-2">
@@ -111,7 +116,10 @@
 						:virtualIndex="index"
 						class="indexShopSwiperSlide"
 					>
-						<div class="row m-0 p-0 justify-content-center indexShopHover">
+						<div
+							class="row m-0 p-0 justify-content-center indexShopHover"
+							@click="$go({ name: 'ShopHome', params: { id: index } })"
+						>
 							<div
 								class="avatar-l"
 								:style="{
@@ -389,6 +397,7 @@ const titleData = {
 	justify-content: center;
 }
 .indexShopTitle {
+	text-decoration: none !important;
 	display: -webkit-box;
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;

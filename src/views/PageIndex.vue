@@ -1,41 +1,17 @@
 <template>
 	<div>
 		<Banner :data="funData" />
-		<router-link :to="{ name: 'ShopHome', params: { id: seller_id } }">
-			測試前往商店
-		</router-link>
-
-		<div class="container">
-			<Fun :data="funData" />
-		</div>
-
-		<Hot :data="shopData" />
-		<Shop :data="shopData" />
-		<New :data="shopData" />
-		<Focus :data="shopData" />
-
-		<!-- <h1>首頁</h1>
-		<div class="container">
-			<button class="btn btn-primary">primary Button</button>
-			<button class="btn btn-secondary">secondary Button</button>
-			<button class="btn btn-success">success Button</button>
-			<button class="btn btn-info">info Button</button>
-			<button class="btn btn-danger">danger Button</button>
-			<button class="btn btn-light">light Button</button>
-			<button class="btn btn-dark">dark Button</button>
-			<button class="btn btn-neutral01">neutral01 Button</button>
-			<button class="btn btn-neutral02">neutral02 Button</button>
-			<button class="btn btn-neutral03">neutral03 Button</button>
-			<button class="btn btn-neutral04">neutral04 Button</button>
-			<button class="btn btn-neutral05">neutral05 Button</button>
-			<div class="row m-2 p-2">
-				<router-link class="col-4 card-line" to="/">RRR123</router-link>
-				<router-link class="col-4 card-line" to="/">RRR123</router-link>
+		<div class="bg-fun">
+			<div class="container">
+				<Fun :data="funData" />
 			</div>
-			123
-			<div class="block" ref="block"></div>
-			<div class="box" ref="box">一次</div>
-		</div> -->
+			<Hot :data="shopData" />
+		</div>
+		<Shop :data="shopData" />
+		<div class="bg-focus">
+			<New :data="shopData" />
+			<Focus :data="shopData" />
+		</div>
 	</div>
 </template>
 
@@ -53,7 +29,7 @@ import { gsap } from 'gsap';
 const block = ref();
 const box = ref();
 const shopData = ref([]);
-let seller_id = ref(212322);
+
 const funData = ref([
 	{
 		cols: 6,
@@ -162,5 +138,17 @@ onMounted(() => {
 	height: 100px;
 	background-color: #000;
 	border-radius: 10px;
+}
+.bg-fun {
+	background-image: url('../../public/images/bg/bg-fun.svg');
+	background-repeat: no-repeat;
+	background-position: -6vw 35vh;
+	background-size: 120vw;
+}
+.bg-focus {
+	background-image: url('../../public/images/bg/bg-focus.svg');
+	background-repeat: no-repeat;
+	background-position: -30% 60vh;
+	background-size: 110%;
 }
 </style>

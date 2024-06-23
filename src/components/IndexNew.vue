@@ -1,5 +1,5 @@
 <template>
-	<div class="w-100 p-0 m-index-title">
+	<div class="w-100 m-index-title">
 		<Title :data="titleData" />
 		<div class="m-0 p-0">
 			<div class="container px-eca-12 px-sm-0">
@@ -34,7 +34,10 @@
 					:spaceBetween="resize <= 768 ? 12 : 16"
 				>
 					<SwiperSlide v-for="(item, index) in ProductList" :key="index">
-						<Card :item="item" />
+						<Card
+							:item="item"
+							@click="$go({ name: 'ShopHome', params: { id: index } })"
+						/>
 					</SwiperSlide>
 					<div
 						class="swiper-pagination d-flex-column d-sm-none swiper-page-bottom"
