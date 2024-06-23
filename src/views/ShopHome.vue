@@ -73,6 +73,7 @@ import { useProduct, useAuthStore, useResize } from '@/stores/index';
 
 const { resize } = useResize();
 const route = useRoute();
+const router = useRouter();
 
 const authStore = useAuthStore();
 const userStore = useProduct();
@@ -485,7 +486,7 @@ onMounted(() => {
 		// 		schedule: sellerTitleData.schedule,
 		// 		btn: { title: '新增優惠劵', path: { name: 'SellerCouponNew' } },
 	}
-	userStore.getCouponAll();
+	// userStore.getCouponAll();
 	// }
 });
 </script>
