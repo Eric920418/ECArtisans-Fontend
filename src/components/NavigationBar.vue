@@ -45,7 +45,11 @@
 			<!-- 小圖示 -->
 			<div
 				class="position-relative d-flex btn-group"
-				v-if="route.name !== 'SellerHome' && route.name !== 'SellerLogin'"
+				v-if="
+					route.name !== 'SellerHome' &&
+					route.name !== 'SellerLogin' &&
+					route.name !== 'SellerSignUp'
+				"
 			>
 				<button
 					v-if="(isSellerRoute && isLoggedIn) || !isSellerRoute"
@@ -73,9 +77,12 @@
 					</span>
 				</button>
 			</div>
-
 			<div
-				v-if="route.name !== 'SellerHome' && route.name !== 'SellerLogin'"
+				v-if="
+					route.name !== 'SellerHome' &&
+					route.name !== 'SellerLogin' &&
+					route.name !== 'SellerSignUp'
+				"
 				id="navbarScroll"
 				class="collapse navbar-collapse d-xl-flex navbar-menu bg-white p-0 w-100"
 				:class="{

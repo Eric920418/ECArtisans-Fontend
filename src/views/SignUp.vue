@@ -1,9 +1,6 @@
 <template>
 	<div class="container">
 		<!-- 立即註冊 --------------------------------------------------------- START -->
-		<button class="btn btn-primary px-5 mt-4" @click="showCustomAlert">
-			快速合約方案的連結
-		</button>
 		<div
 			v-if="init.schedule === 'info' && addUserStatus === false"
 			class="row g-3 py-4 px-4 d-flex justify-content-center"
@@ -413,6 +410,7 @@
 			</div>
 			<v-form
 				class="col-12 mb-3 col-md-10 col-lg-7 col-xl-6"
+				v-slot="{ errors }"
 				@submit="onSubmit2"
 			>
 				<div class="row">
@@ -435,16 +433,22 @@
 								v-for="(stt, sttIndex) in init.shopTypeText"
 								:key="sttIndex"
 							>
-								<input
+								<v-field
 									class="form-check-input me-2"
 									type="checkbox"
 									v-model="data.salesType"
-									:id="`shopType_${sttIndex}`"
-									:name="stt"
-									:value="stt"
-								/>
-								<label class="form-check-label" :for="stt">
-									{{ stt }}
+									:class="{ 'is-invalid': errors['policy'] }"
+									:value="stt.value"
+									:id="stt.value"
+									name="salesType"
+									as="input"
+								></v-field>
+								<label
+									class="form-check-label"
+									:for="stt.value"
+									style="width: 100%"
+								>
+									{{ stt.text }}
 								</label>
 							</div>
 						</div>
@@ -528,9 +532,14 @@
 				/>
 				<p>你已經完成註冊</p>
 			</div>
-			<div class="col-12 text-center">
+			<div class="col-12 text-center" v-if="init.type === 'user'">
 				<a @click="onSubmitOK()">
 					<button class="btn btn-primary px-5">前往登入</button>
+				</a>
+			</div>
+			<div class="col-12 text-center" v-if="init.type === 'seller'">
+				<a @click="showCustomAlert">
+					<button class="btn btn-primary px-5">合約方案</button>
 				</a>
 			</div>
 		</div>
@@ -539,7 +548,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, createApp } from 'vue';
+import { ref, onMounted, computed, createApp, toValue } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore, useUserStore } from '@/stores/index';
@@ -555,7 +564,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const isLoading = computed(() => authStore.isLoading);
-const addUserStatus = computed(() => userStore.addUserStatus);
+const addUserStatus = computed(() => userStore.addUserStatus); //判斷註冊是否有成功
 // const isLoading = authStore.isLoading;
 
 // 驗證資料
@@ -574,26 +583,26 @@ const userTitleData = {
 
 const sellerTitleData = {
 	type: 'seller',
-	schedule: 'info', //info shopType OK
+	schedule: 'info', // 這裡控制目前的頁面 1.info 2.shopType 3.OK
 	title: '商家',
 	submitText: '下一步',
 	goback: 'SellerLogin',
 	privacyPolicy: '隱私權政策連結',
 	shopType: [],
 	shopTypeText: [
-		'娛樂',
-		'服飾',
-		'3C產品',
-		'食品',
-		'家具',
-		'運動',
-		'寵物',
-		'生活用品',
-		'清潔用品',
-		'其他',
+		{ text: '娛樂', value: 1 },
+		{ text: '服飾', value: 2 },
+		{ text: '3C產品', value: 3 },
+		{ text: '食品', value: 4 },
+		{ text: '家具', value: 5 },
+		{ text: '運動', value: 6 },
+		{ text: '寵物', value: 7 },
+		{ text: '生活用品', value: 8 },
+		{ text: '清潔用品', value: 9 },
 	],
 };
 
+// 資料同步在這裡
 const data = ref<UserDataType>({
 	name: null,
 	gender: null,
@@ -611,7 +620,6 @@ const data = ref<UserDataType>({
 	salesType: [],
 });
 
-// 為了製作方便先放這裡
 function showCustomAlert() {
 	Swal.fire({
 		title: '合約方案',
@@ -619,7 +627,7 @@ function showCustomAlert() {
 		padding: '0',
 		showCloseButton: true,
 		showConfirmButton: false,
-		html: '<div id="modal"></div>',
+		html: '<div id="modal" email:"data.mail" ></div>',
 		didOpen: () => {
 			const app = createApp(PlanList, { email: data.value.mail });
 			app.mount('#modal');

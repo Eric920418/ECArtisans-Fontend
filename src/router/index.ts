@@ -7,6 +7,7 @@ import Index from '../views/PageIndex.vue';
 import ShopHome from '../views/ShopHome.vue';
 import ShopProduct from '../views/ShopProduct.vue';
 import TestPage from '../views/TestPage.vue';
+import PaymentSuccess from '../views/PaymentSuccess.vue';
 // import FAQ from '../views/eric/IndexFAQ.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
 
@@ -182,6 +183,11 @@ const routes = [
 	// 	component: () => import('../views/NotFound.vue'),
 	// },
 	// 重新導向
+	{
+		path: '/paymentSuccess',
+		name: 'PaymentSuccess',
+		component: PaymentSuccess,
+	},
 	{
 		path: '/:pathMatch(.*)*',
 		redirect: {
