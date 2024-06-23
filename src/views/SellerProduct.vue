@@ -169,7 +169,6 @@
 								}"
 							>
 								<a
-									href=""
 									class="hover-icon"
 									@click="
 										$go({
@@ -283,29 +282,6 @@ const tableBody = [
 // 基本
 const tableTbody = computed(() => userStore.allData);
 
-// 資料完成後送出
-function onSubmit(isValue: any | void) {
-	if (route.matched[0].path === '/seller') {
-		if (route.name === 'SellerCouponNew') {
-			// 新增狀態
-			if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
-				alertStore.error('請選擇商品');
-			} else {
-				if (isValue.productType === 0) isValue.productChoose = [];
-				userStore.newCoupon(isValue);
-			}
-		} else if (route.name === 'SellerCouponCheck') {
-			// 修改/查看狀態
-			if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
-				alertStore.error('請選擇商品');
-			} else {
-				if (isValue.productType === 0) isValue.productChoose = [];
-				userStore.getCouponEdit(isValue);
-			}
-		}
-	}
-}
-
 function trytry() {
 	alertStore.success('couponDelete');
 	alertStore.error('請選擇商品');
@@ -316,7 +292,7 @@ function onStop() {
 }
 
 function onDelete() {
-	userStore.deleteCoupon();
+	userStore.deleteProduct();
 }
 const data = computed(() => userStore.data);
 
@@ -332,32 +308,32 @@ function updateStartDateMin() {
 	}
 }
 // 判斷結束日期 min
-function updateEndDateMin() {
-	const endDateInput = document.getElementById(
-		'end_date'
-	) as HTMLInputElement | null;
-	if (endDateInput) {
-		if (data.value.startDate instanceof Date) {
-			endDateInput.min = data.value.startDate.toISOString().split('T')[0];
-		} else if (typeof data.value.startDate === 'string') {
-			endDateInput.min = data.value.startDate;
-		} else {
-			endDateInput.min = '';
-		}
-	}
-}
+// function updateEndDateMin() {
+// 	const endDateInput = document.getElementById(
+// 		'end_date'
+// 	) as HTMLInputElement | null;
+// 	if (endDateInput) {
+// 		if (data.value.startDate instanceof Date) {
+// 			endDateInput.min = data.value.startDate.toISOString().split('T')[0];
+// 		} else if (typeof data.value.startDate === 'string') {
+// 			endDateInput.min = data.value.startDate;
+// 		} else {
+// 			endDateInput.min = '';
+// 		}
+// 	}
+// }
 
-onMounted(() => {
-	updateStartDateMin();
-	updateEndDateMin();
-});
+// onMounted(() => {
+// 	updateStartDateMin();
+// 	updateEndDateMin();
+// });
 
-watch(
-	() => data.value.startDate,
-	() => {
-		updateEndDateMin();
-	}
-);
+// watch(
+// 	() => data.value.startDate,
+// 	() => {
+// 		updateEndDateMin();
+// 	}
+// );
 
 // 下拉篩選 Tabs 功能
 const dropdownBtn = ref<HTMLButtonElement | null>(null);
@@ -370,11 +346,11 @@ function add() {
 }
 
 // // 刪除，待檢查
-function inputBadgeClose(id: string) {
-	data.value.productChoose = data.value.productChoose?.filter(
-		item => item !== id
-	);
-}
+// function inputBadgeClose(id: string) {
+// 	data.value.productChoose = data.value.productChoose?.filter(
+// 		item => item !== id
+// 	);
+// }
 
 // // navTab + seller 畫面下所有資料
 
@@ -402,11 +378,11 @@ function inputBadgeClose(id: string) {
 const sellerTitleNewData = {
 	init: { 'end-bottom-btn': '儲存' },
 	navTabs: {
-		routeName: 'SellerCouponNew',
+		routeName: 'SellerProductNew',
 		title: [
 			{
-				title: '優惠劵',
-				path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
+				title: '商品管理',
+				path: { name: 'SellerProduct', query: { page: 1 } },
 			},
 			{
 				title: '新增優惠劵',
@@ -421,14 +397,14 @@ const sellerTitleNewData = {
 const sellerTitleData = {
 	init: { 'end-bottom-btn': '修改' },
 	navTabs: {
-		routeName: 'SellerCouponCheck',
+		routeName: 'SellerProductCheck',
 		title: [
 			{
-				title: '優惠劵',
-				path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
+				title: '商品管理',
+				path: { name: 'SellerProduct', query: { page: 1 } },
 			},
 			{
-				title: '修改優惠劵',
+				title: '修改商品',
 			},
 		],
 		breadcrumb: true,
@@ -443,18 +419,21 @@ router.beforeEach((to, from, next) => {
 	next();
 });
 
-onMounted(() => {
+onMounted(async () => {
 	if (route.matched[0].path === '/seller') {
-		if (route.name === 'SellerCouponNew') {
-			// 新增狀態
-			init.value = sellerTitleNewData.init;
-			navTabs.value = sellerTitleNewData.navTabs;
-		} else if (route.name === 'SellerCouponCheck') {
-			// 修改/查看狀態
-			init.value = sellerTitleData.init;
-			navTabs.value = sellerTitleData.navTabs;
-			userStore.getCoupon(route.params.id as string, authStore.token);
-		}
+		// if (route.name === 'SellerProductNew') {
+		// 	// 新增狀態
+		// 	init.value = sellerTitleNewData.init;
+		// 	navTabs.value = sellerTitleNewData.navTabs;
+		// } else if (route.name === 'SellerCouponCheck') {
+		// 	// 修改/查看狀態
+		// 	init.value = sellerTitleData.init;
+		// 	navTabs.value = sellerTitleData.navTabs;
+		// 	userStore.getCoupon(route.params.id as string, authStore.token);
+		// }
+		// console.log('哈囉');
+		// await userStore.getProductsAll(authStore.token);
+		// console.log('哈囉');
 	} else if (route.matched[0].path === '/user') {
 		// init.value = userTitleData;
 	}
