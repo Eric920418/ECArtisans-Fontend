@@ -550,22 +550,6 @@ import PlanList from '../components/PlanList.vue';
 
 const planListRef = ref();
 
-// 為了製作方便先放這裡
-function showCustomAlert() {
-	Swal.fire({
-		title: '合約方案',
-		width: 900,
-		padding: '0',
-		showCloseButton: true,
-		showConfirmButton: false,
-		html: '<div id="modal"></div>',
-		didOpen: () => {
-			const app = createApp(PlanList);
-			app.mount('#modal');
-		},
-	});
-}
-
 // 頁面用到的資料
 const router = useRouter();
 const authStore = useAuthStore();
@@ -626,6 +610,22 @@ const data = ref<UserDataType>({
 	collection: null,
 	salesType: [],
 });
+
+// 為了製作方便先放這裡
+function showCustomAlert() {
+	Swal.fire({
+		title: '合約方案',
+		width: 900,
+		padding: '0',
+		showCloseButton: true,
+		showConfirmButton: false,
+		html: '<div id="modal"></div>',
+		didOpen: () => {
+			const app = createApp(PlanList, { email: data.value.mail });
+			app.mount('#modal');
+		},
+	});
+}
 
 function onSubmit1(): any {
 	// 發送
