@@ -140,13 +140,13 @@ onMounted(() => {
 	border-radius: 10px;
 }
 .bg-fun {
-	background-image: url('../../public/images/bg/bg-fun.svg');
+	background-image: url('images/bg/bg-fun.svg');
 	background-repeat: no-repeat;
 	background-position: -6vw 35vh;
 	background-size: 120vw;
 }
 .bg-focus {
-	background-image: url('../../public/images/bg/bg-focus.svg');
+	background-image: url('images/bg/bg-focus.svg');
 	background-repeat: no-repeat;
 	background-position: -30% 60vh;
 	background-size: 110%;
