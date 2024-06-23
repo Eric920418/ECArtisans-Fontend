@@ -59,6 +59,9 @@
 									class="col m-2 p-0 rounded-3 overflow-x-hidden productCard"
 									v-for="(productItem, productIndex) in item.product"
 									:key="productIndex"
+									@click="
+										$go({ name: 'ShopHome', params: { id: productIndex } })
+									"
 								>
 									<img :src="productItem.src" class="img-eca" />
 								</div>
