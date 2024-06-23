@@ -55,11 +55,7 @@
 					v-if="(isSellerRoute && isLoggedIn) || !isSellerRoute"
 					class="me-2 navbar-toggler collapsed d-flex d-xl-none flex-column justify-content-around"
 					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarScroll"
-					aria-controls="navbarScroll"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
+					@click="toggleCollapse()"
 				>
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -83,12 +79,12 @@
 					route.name !== 'SellerLogin' &&
 					route.name !== 'SellerSignUp'
 				"
-				id="navbarScroll"
 				class="collapse navbar-collapse d-xl-flex navbar-menu bg-white p-0 w-100"
 				:class="{
 					'justify-content-xl-between': !isSellerRoute,
 					'justify-content-end': isSellerRoute,
 				}"
+				ref="collapseElement"
 			>
 				<!-- 商家登入後的下拉選單 是商家的路由 / 登入商家角色 -->
 				<div
@@ -154,7 +150,7 @@
 											aria-labelledby="navbarScrollingDropdown"
 										>
 											<li
-												v-for="(sMenuItme, sMenuIndex) in sellerMenu"
+												v-for="(sMenuItem, sMenuIndex) in sellerMenu"
 												:key="sMenuIndex"
 												style="list-style: none"
 												:class="{
@@ -162,16 +158,17 @@
 													'dropdown-item ': resize >= 1200,
 												}"
 											>
-												<a
+												<RouterLink
+													:to="sMenuItem.path"
 													:class="{
 														'btn btn-Bg rounded-2 text-center w-100 h-100 py-2':
 															resize < 1200,
 														'btn  text-center py-2': resize >= 1200,
 													}"
-													@click="$go(sMenuItme.path)"
+													@click="hideCollapse()"
 												>
-													{{ sMenuItme.title }}
-												</a>
+													{{ sMenuItem.title }}
+												</RouterLink>
 											</li>
 										</ol>
 									</div>
@@ -297,7 +294,7 @@
 										}"
 									>
 										<li
-											v-for="(sMenuItme, sMenuIndex) in userMenu"
+											v-for="(sMenuItem, sMenuIndex) in userMenu"
 											:key="sMenuIndex"
 											style="list-style: none"
 											:class="{
@@ -305,16 +302,17 @@
 												'dropdown-item ': resize >= 1200,
 											}"
 										>
-											<a
+											<RouterLink
+												:to="sMenuItem.path"
 												:class="{
 													'btn btn-Bg rounded-2 text-center w-100 h-100 py-2':
 														resize < 1200,
 													'btn  text-center py-2': resize >= 1200,
 												}"
-												@click="$go(sMenuItme.path)"
+												@click="hideCollapse()"
 											>
-												{{ sMenuItme.title }}
-											</a>
+												{{ sMenuItem.title }}
+											</RouterLink>
 										</li>
 									</div>
 								</li>
@@ -352,6 +350,7 @@
 										role="button"
 										data-bs-toggle="dropdown"
 										aria-expanded="false"
+										ref=""
 									>
 										商品總覽
 									</button>
@@ -371,17 +370,18 @@
 												style="list-style: none"
 												:class="{ 'col-6 col-sm-3 m-0 p-2': resize < 1200 }"
 											>
-												<a
+												<RouterLink
+													to="/"
 													:class="{
 														'btn btn-Bg rounded-2 text-center w-100 h-100 py-2':
 															resize < 1200,
 														'dropdown-item overflow-y-hidden': resize >= 1200,
 													}"
-													href="#"
+													@click="hideCollapse()"
 												>
 													{{ menu }}
 													<div v-if="resize >= 1200" class="dot"></div>
-												</a>
+												</RouterLink>
 											</li>
 										</ol>
 									</div>
@@ -640,12 +640,12 @@
 </template>
 
 <script lang="ts" setup>
-// import Collapse from 'bootstrap/js/dist/collapse';
+import Collapse from 'bootstrap/js/dist/collapse';
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/index';
 import Logo from './Logo.vue';
-import { useResize } from '@/stores/index';
+import { useResize, go } from '@/stores/index';
 const { resize } = useResize();
 
 const authStore = useAuthStore();
@@ -669,6 +669,21 @@ const menulist = [
 const searchlist = ['找商品', '找商家'];
 const searchText = ref('找商品');
 
+const collapseElement = ref<HTMLElement | null>(null);
+let collapseInstance: Collapse | null = null;
+
+const toggleCollapse = () => {
+	if (collapseInstance) {
+		collapseInstance.toggle();
+	}
+};
+
+const hideCollapse = () => {
+	if (collapseInstance) {
+		collapseInstance.hide();
+	}
+};
+
 function onSubmit1() {
 	// 送出搜尋選單
 }
@@ -677,18 +692,22 @@ function getSearchText(value: string) {
 }
 
 function sellerlogin() {
+	hideCollapse();
 	router.push({ name: 'SellerLogin' });
 }
 
 function toLogin() {
+	hideCollapse();
 	router.push({ name: 'UserLogin' });
 }
 
 function toSellerHome() {
+	hideCollapse();
 	router.push({ name: 'SellerHome' });
 }
 
 function toLogout() {
+	hideCollapse();
 	authStore.logout(); // 等待登出操作完成
 }
 // const isShopRoute = ref(false);
@@ -717,6 +736,10 @@ const sellerMenu = userUserStore.sellerMenu;
 const userMenu = userUserStore.userMenu;
 
 onMounted(() => {
+	if (collapseElement.value) {
+		collapseInstance = new Collapse(collapseElement.value);
+	}
+
 	// 根據當前路由加載資料
 	if (route && route.name === 'SellerProfile') {
 		// init.value = sellerTitleData;
