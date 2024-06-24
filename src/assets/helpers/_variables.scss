@@ -298,11 +298,11 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
-$red: #FF5959;
+$red: #ff5959;
 $yellow: #fde48e;
 
 $primary: #14b2be !default; //主要顏色
-$Bg: #E3F6F8 !default; //同深色背景
+$Bg: #e3f6f8 !default; //同深色背景
 
 $secondary: $yellow !default; //次要
 $success: $green !default; //成功後顯示顏色
@@ -312,7 +312,6 @@ $danger: $red !default; //危險顏色
 
 $light: #e3f6f8 !default; //淺色的背景
 $dark: #565e6c !default; //深色背景 同 Neutral-01
-
 
 $Neutral-01: #565e6c !default; //同深色背景
 $Neutral-02: #6b768c !default; //深色背景
@@ -446,10 +445,12 @@ $spacers: (
 	2: $spacer * 0.5,
 	3: $spacer,
 	4: $spacer * 1.5,
+	45: $spacer * 2,
 	5: $spacer * 3,
 	6: $spacer * 4,
 	7: $spacer * 5,
 	8: $spacer * 8,
+	85: $spacer * 9.5,
 	9: $spacer * 10,
 	10: $spacer * 11,
 	12: $spacer * 11.43,
