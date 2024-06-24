@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
-import { type DetailedOrderProductType, type DetailedOrderType } from '../type/orderType';
+import {
+	type DetailedOrderProductType,
+	type DetailedOrderType,
+} from '../type/orderType';
 import { getDate } from '@/setup/globalFunction';
 
 import {
@@ -31,7 +34,7 @@ const categoryMapping: Record<number, string> = {
 	7: '寵物用品',
 	8: '生活用品',
 	9: '清潔用品',
-	10: '其他'
+	10: '其他',
 };
 
 // 從數字轉成對應類別
@@ -68,6 +71,7 @@ export const useProduct = defineStore({
 				cost: null,
 				stock: null,
 				color: [],
+				image: '',
 			},
 			introduce: '',
 			production: '',
@@ -114,15 +118,18 @@ export const useProduct = defineStore({
 					const authStore = useAuthStore();
 					await sellerProductAll(authStore.token)
 						.then(res => {
-							// 轉換 sellerCategory 
-							const processedProducts = res.products.map((product: { sellerCategory: number[]; }) => ({
-								...product,
-								sellerCategory: convertCategoryNumbersToNames(product.sellerCategory)
-							}));
-						// 更新狀態
-						this.allData = processedProducts;
-						console.log(processedProducts)
-
+							// 轉換 sellerCategory
+							const processedProducts = res.products.map(
+								(product: { sellerCategory: number[] }) => ({
+									...product,
+									sellerCategory: convertCategoryNumbersToNames(
+										product.sellerCategory
+									),
+								})
+							);
+							// 更新狀態
+							this.allData = processedProducts;
+							console.log(processedProducts);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
@@ -132,7 +139,7 @@ export const useProduct = defineStore({
 				alertStore.error('showError');
 			}
 		},
-		
+
 		// 獲取單一商品
 		async getProduct(product_id: string, token: string): Promise<void> {
 			try {

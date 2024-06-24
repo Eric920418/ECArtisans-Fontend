@@ -7,7 +7,7 @@
 			class="col-12 d-md-flex justify-content-md-center align-items-md-center my-5 m-0 p-0"
 		>
 			<div class="container" :class="{ 'container d-flex': resize >= 576 }">
-				<div class="flex-shrink-1">
+				<div class="flex-shrink-1" style="min-width: 200px">
 					<div class="shop-img" :class="{ 'w-100': resize >= 576 }">
 						<img :src="data.seller_image" class="img-eca" />
 					</div>

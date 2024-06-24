@@ -23,6 +23,7 @@ export interface DetailedOrderProductType {
 		cost: number;
 		stock: number;
 		color: string[];
+		image: string;
 	}[];
 	introduce: string;
 	production: string;
