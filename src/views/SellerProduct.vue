@@ -19,7 +19,7 @@
 						:to="{ name: 'SellerProductNew' }"
 						class="btn btn-outline-primary px-4 me-3"
 					>
-						SellerProductNew
+						新增商品
 					</router-link>
 				</div>
 			</div>

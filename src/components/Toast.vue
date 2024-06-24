@@ -75,7 +75,6 @@ const alertStore = useAlertStore();
 const toasts = computed(() => alertStore.toasts);
 
 function remove(index: number) {
-	// console.log('remove觸發');
 	alertStore.removeToast(index);
 }
 </script>

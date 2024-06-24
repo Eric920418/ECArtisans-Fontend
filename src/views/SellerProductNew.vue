@@ -13,11 +13,18 @@
 							<h3 class="fs-5 p-0 neutral-01 mb-0">{{ init.schedule }}</h3>
 
 							<!-- ↓之後會靠邏輯判斷只會出現一個 -->
-							<a @click="deleteProduct()">刪除商品</a>
-							<a href="">立即下架</a>
+							<a
+								v-if="data._id && data.isOnshelf === false"
+								@click="deleteProduct()"
+							>
+								刪除商品
+							</a>
+							<!-- <a v-if="data._id && data.isOnshelf === true" @click="() => {}" >
+								立即下架
+							</a> -->
 						</div>
-						<div class="col-12 p-0 m-0 mb-4">
-							<p>編號：</p>
+						<div class="col-12 p-0 m-0 mb-4" v-if="data._id">
+							<p>編號：{{ data._id }}</p>
 						</div>
 						<!--  -->
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
@@ -26,40 +33,58 @@
 								<span class="text-danger">*</span>
 							</label>
 							<div class="row m-0" style="margin-bottom: 38px">
-								<!-- bg-img-eca-dack -->
+								<template v-if="data.image.length !== 0">
+									<div
+										v-for="(imageItme, imageIndex) in data.image"
+										:key="imageIndex"
+										class="card-newImg-delete me-3 my-2 p-0 d-flex align-items-center justify-content-center position-relative"
+										:style="{
+											'background-image': `url(${imageItme})`,
+										}"
+									>
+										<!-- 刪除 手機板 右上角的刪除 -->
+										<font-awesome-icon
+											v-if="resize < 768"
+											@click="closeItem('image', imageIndex)"
+											:icon="['fas', 'circle-xmark']"
+											class="fs-5 d-md-none position-absolute top-0 start-100 translate-middle gray p-2"
+										/>
+
+										<!-- 刪除 滑鼠移入時出現 -->
+										<font-awesome-icon
+											v-if="resize >= 768"
+											:icon="['fas', 'trash-can']"
+											class="fs-4 icon"
+											@click="closeItem('image', imageIndex)"
+										/>
+									</div>
+								</template>
 
 								<div
-									class="card-newImg-delete me-3 my-2 p-0 d-flex align-items-center justify-content-center position-relative"
-									:style="{
-										'background-image': `url(https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/f4e6bbf2-eb85-4343-acad-c4b537c36356.png?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=CruKUkjAnFhe9fnpj5ibWwYu7ApqDm7RgDyYKYlHPh36dgeOi%2BClu6neh2%2Fz51mp4C9c9RjAtzlTsRpXCRcXMBV1xQ7RtoyU2fIQHTQNy3me%2FILbbVF%2B2pA6D47Dcr%2BtA1ztvMZZ6Dn%2FhSrv%2FC%2F35bOunhzc5rMJjUoObpGVa%2Fqhg4dxOwjiupa%2B8F6OSmr9GshRDYoUnuYe49gMuhoSSBUxDvDvZsuGtcCfvTRak2eKZAPl2KK9u1mqY%2FXkwxyY4AkCxUFA92i354XZAMjMluQ9iJJ0bRHx7ncYeXBRjxUcwI%2BSdiRKwqCelYP25IFk74nefHxs6WLrTInn87Ilnw%3D%3D)`,
-									}"
+									v-if="data.image.length < 4"
+									class="card-newImg me-3 my-2"
+									@click="uploadFile"
 								>
-									<!-- 刪除 手機板 右上角的刪除 -->
-									<font-awesome-icon
-										:icon="['fas', 'circle-xmark']"
-										class="fs-5 d-md-none position-absolute top-0 start-100 translate-middle gray p-2"
-									/>
-
-									<!-- 刪除 滑鼠移入時出現 -->
-									<font-awesome-icon
-										v-if="resize >= 768"
-										:icon="['fas', 'trash-can']"
-										class="fs-4 icon"
-									/>
-								</div>
-
-								<div class="card-newImg me-3 my-2">
 									<font-awesome-icon
 										:icon="['fas', 'image']"
 										class="fa-image"
 									/>
 									<p>選擇圖片</p>
-									<p>(n/n)</p>
+									<p>({{ data.image ? data.image.length : 0 }}/4)</p>
 								</div>
-
+								<input
+									class="form-control"
+									type="file"
+									id="formFile"
+									ref="inputFieldRef"
+									hidden
+									@change="getFile"
+									autocomplete="photo"
+									accept="image/*"
+								/>
 								<div class="card-directions w-fit py-3">
 									<ul>
-										<li>圖片大小：600 x 600</li>
+										<li>圖片大小：3MB 內</li>
 										<li>檔案限制：JPEG, PNG</li>
 										<li>拖拉商品圖片至第一張以設定封面圖片</li>
 									</ul>
@@ -75,9 +100,10 @@
 								<!-- bg-img-eca-dack -->
 
 								<div
+									v-if="data.image.length !== 0"
 									class="card-newImg-delete me-3 my-2 p-0 d-flex align-items-center justify-content-center position-relative"
 									:style="{
-										'background-image': `url(https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/f4e6bbf2-eb85-4343-acad-c4b537c36356.png?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=CruKUkjAnFhe9fnpj5ibWwYu7ApqDm7RgDyYKYlHPh36dgeOi%2BClu6neh2%2Fz51mp4C9c9RjAtzlTsRpXCRcXMBV1xQ7RtoyU2fIQHTQNy3me%2FILbbVF%2B2pA6D47Dcr%2BtA1ztvMZZ6Dn%2FhSrv%2FC%2F35bOunhzc5rMJjUoObpGVa%2Fqhg4dxOwjiupa%2B8F6OSmr9GshRDYoUnuYe49gMuhoSSBUxDvDvZsuGtcCfvTRak2eKZAPl2KK9u1mqY%2FXkwxyY4AkCxUFA92i354XZAMjMluQ9iJJ0bRHx7ncYeXBRjxUcwI%2BSdiRKwqCelYP25IFk74nefHxs6WLrTInn87Ilnw%3D%3D)`,
+										'background-image': `url(${data.image[0]})`,
 									}"
 								>
 									<font-awesome-icon
@@ -92,13 +118,16 @@
 									/>
 								</div>
 
-								<div class="card-newImg me-3 my-2">
+								<div
+									v-if="data.image.length === 0"
+									class="card-newImg-disabled me-3 my-2"
+								>
 									<font-awesome-icon
 										:icon="['fas', 'image']"
 										class="fa-image"
 									/>
 									<p>選擇圖片</p>
-									<p>(n/n)</p>
+									<p>(0/1)</p>
 								</div>
 
 								<div class="card-directions w-fit py-3">
@@ -137,27 +166,86 @@
 								全站分類
 								<span class="text-danger">*</span>
 							</label>
-							<v-field
-								class="my-auto form-select"
-								id="allType"
-								v-model="data.sellerCategory"
-								aria-label="全站分類"
-								name="全站分類"
-								:class="{
-									'is-invalid': errors['全站分類'],
-								}"
-								rules="gender"
-								as="select"
-							>
-								<option value="" disabled>請選擇...</option>
-								<option
-									:value="shopTypeIndex.toString()"
-									v-for="(shopTypeItme, shopTypeIndex) in init2.shopTypeText"
-									:key="shopTypeIndex"
+							<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
+								<div class="dropdown">
+									<button
+										class="form-control py-0"
+										:class="{
+											'justify-content-between': inputBadge.length === 0,
+											'justify-content-start': inputBadge.length !== 0,
+										}"
+										ref="dropdownBtn"
+										type="button"
+										data-bs-toggle="dropdown"
+										data-bs-auto-close="outside"
+									>
+										<div
+											v-if="inputBadge.length === 0"
+											class="text-start d-flex justify-content-between align-items-center"
+										>
+											<p class="mb-0 neutral-03" style="padding: 6px 0px">
+												請選擇商品...
+											</p>
+											<font-awesome-icon
+												:icon="['fas', 'caret-down']"
+												class="neutral-02 d-flex justify-content-center align-items-center"
+												style="width: 20; height: 20"
+											/>
+										</div>
+										<div v-else class="row m-0 p-0">
+											<!-- :class="{ 'bg-neutral-01': addNum, 'd-block': addNum }" -->
+											<div
+												v-for="(item, index) in inputBadge"
+												:key="index"
+												class="input-badge w-auto"
+												:class="{ 'bg-neutral-02': addNum, white: addNum }"
+											>
+												<p class="mb-0">{{ item.text }}</p>
+												<button
+													type="button"
+													class="btn-close"
+													aria-label="Close"
+													@click="inputBadgeClose(index)"
+												></button>
+											</div>
+										</div>
+									</button>
+									<ul class="dropdown-menu w-100 scrollbar" ref="dropdown">
+										<li
+											v-for="(stt, sttIndex) in init2.shopTypeText"
+											:key="sttIndex"
+										>
+											<div class="dropdown-item">
+												<v-field
+													class="form-check-input me-2"
+													type="checkbox"
+													v-model="inputBadge"
+													:class="{ 'is-invalid': errors['productChoose'] }"
+													:value="stt"
+													:id="stt"
+													name="productChoose"
+													as="input"
+												></v-field>
+												<label
+													class="form-check-label"
+													:for="stt"
+													style="width: 100%"
+												>
+													{{ stt.text }}
+												</label>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<span
+									v-if="inputBadge.length === 0"
+									role="alert"
+									class="text-danger"
+									style="margin-top: 0.25rem; font-size: 0.875em"
 								>
-									{{ shopTypeItme }}
-								</option>
-							</v-field>
+									請最少選擇一項分類
+								</span>
+							</div>
 						</div>
 						<div
 							class="col-6 col-sm-6 ps-0 pe-0 m-0 mb-2"
@@ -187,20 +275,13 @@
 							class="col-6 col-sm-6 ps-0 pe-3 m-0 mb-2"
 							style="min-height: 100px"
 						>
-							<label for="origin" class="mb-1">
-								產地
-								<span class="text-danger">*</span>
-							</label>
+							<label for="origin" class="mb-1">產地</label>
 							<v-field
 								class="my-auto form-select"
 								id="origin"
 								v-model="data.origin"
 								aria-label="商品產地"
 								name="商品產地"
-								:class="{
-									'is-invalid': errors['全站分類'],
-								}"
-								rules="gender"
 								as="select"
 							>
 								<option value="" disabled>請選擇...</option>
@@ -217,18 +298,13 @@
 							class="col-6 col-sm-6 ps-0 pe-0 m-0 mb-2"
 							style="min-height: 100px"
 						>
-							<label for="manufacture" class="mb-1">
-								製造方式
-								<span class="text-danger">*</span>
-							</label>
+							<label for="manufacture" class="mb-1">製造方式</label>
 							<v-field
 								id="manufacture"
 								v-model="data.production"
 								name="製造方式"
 								type="text"
 								class="form-control"
-								:class="{ 'is-invalid': errors['製造方式'] }"
-								rules="required"
 								aria-label="製造方式"
 								placeholder="請輸入"
 							></v-field>
@@ -236,18 +312,13 @@
 
 						<!-- 商品材質 -->
 						<div class="col-12 col-md-8 p-0 m-0 mb-2" style="min-height: 100px">
-							<label for="material" class="mb-1">
-								材質
-								<span class="text-danger">*</span>
-							</label>
+							<label for="material" class="mb-1">材質</label>
 							<v-field
 								id="material"
 								v-model="data.ingredient"
 								name="材質"
 								type="text"
 								class="form-control"
-								:class="{ 'is-invalid': errors['材質'] }"
-								rules="required"
 								aria-label="材質"
 								placeholder="請輸入"
 							></v-field>
@@ -272,9 +343,10 @@
 									class="form-control"
 									:class="{ 'is-invalid': errors[0] }"
 									name="comment"
+									maxlength="500"
 								/>
 								<p class="text-end fs-12">
-									{{ data.introduction?.length }} / 500
+									{{ data.introduction ? data.introduction.length : 0 }} / 500
 								</p>
 							</v-field>
 						</div>
@@ -287,69 +359,80 @@
 							class="col-12 d-flex justify-content-between align-items-center mb-4 p-0"
 						>
 							<h3 class="fs-5 p-0 neutral-01 mb-0">銷售資訊</h3>
-							<button class="btn btn-outline-primary px-4 ms-3">
+							<!-- 使用 v-field addFormatData 時會壞掉 -->
+							<button
+								type="button"
+								class="btn btn-outline-primary px-4 ms-3"
+								@click="addFormatData"
+							>
 								新增規格
 							</button>
 						</div>
-
 						<!-- 單個規格 -->
 						<div
-							v-for="(formatItem, index) in data.format"
-							:key="index"
+							v-for="(formatItem, formatIndex) in data.format"
+							:key="formatIndex"
 							class="col-12 col-sm-12 p-0 mb-4 mb-md-5"
 							style="min-height: 100px"
 						>
-							{{ formatItem }}
-							<div class="row m-0 bg-neutral05 p-4 pt-3">
+							<div
+								class="row m-0 bg-neutral05 p-4 pt-3 rounded"
+								v-if="formatItem"
+							>
 								<div class="col-12 m-0 mb-1 p-0 text-end">
 									<button
+										@click="closeItem('format', formatIndex)"
 										type="button"
 										class="btn-close"
 										aria-label="Close"
+										:disabled="formatIndex === 0"
 									></button>
 								</div>
-								<div class="col-12 col-md-6 ps-0 pe-0 pe-md-3">
-									<label for="Specification" class="mb-1">
+								<div class="col-12 ps-0 pe-0 pe-md-3">
+									<label :for="'Specification_' + formatIndex" class="mb-1">
 										規格
 										<span class="text-danger">*</span>
 									</label>
+
 									<div class="d-flex form-control-end">
 										<!-- rules: max:10 限制字數 -->
-										<v-field
-											id="Specification"
+										<input
+											:id="'Specification_' + formatIndex"
 											name="規格"
 											type="text"
+											v-model="formatItem.title"
 											class="form-control"
-											:class="{ 'is-invalid': errors['規格'] }"
-											rules="max:10|required"
 											aria-label="規格"
 											placeholder="請輸入"
-										></v-field>
+											maxlength="20"
+											:class="{
+												'is-invalid': formatItem.title === '',
+											}"
+										/>
 										<span
 											class="input-group-text ps-0"
-											:class="{ 'is-invalid-text': errors['規格'] }"
+											:class="{
+												'is-invalid-text': formatItem.title === '',
+											}"
 										>
 											<p class="m-0 p-0 ps-2 border-start border-start-1 fs-12">
-												n / 10
+												{{ formatItem.title ? formatItem.title.length : 0 }} /
+												20
 											</p>
 										</span>
 									</div>
 								</div>
-								<div class="col-6 col-md-3 ps-0 pe-3 mt-2 mt-md-0">
-									<label for="color" class="mb-1">
-										顏色
-										<span class="text-danger">*</span>
-									</label>
-									<v-field
+								<div
+									class="col-6 col-md-3 ps-0 pe-3 mt-2"
+									v-if="formatItem.color"
+								>
+									<label :for="'color_' + formatIndex" class="mb-1">顏色</label>
+									<select
 										class="my-auto form-select"
-										id="color"
+										:id="'color_' + formatIndex"
 										aria-label="顏色"
 										name="顏色"
-										:class="{
-											'is-invalid': errors['顏色'],
-										}"
-										rules="gender"
-										as="select"
+										v-model="formatItem.color[0]"
 									>
 										<option value="" disabled>請選擇...</option>
 										<option
@@ -359,96 +442,139 @@
 										>
 											{{ colorItme }}
 										</option>
-									</v-field>
+									</select>
 								</div>
-								<div class="col-6 col-md-3 p-0 mt-2 mt-md-0">
-									<label for="inStock" class="mb-1">
+								<div class="col-6 col-md-3 ps-0 pe-3 mt-2">
+									<label :for="'inStock_' + formatIndex" class="mb-1">
 										庫存
 										<span class="text-danger">*</span>
 									</label>
-									<v-field
-										id="inStock"
+									<input
+										:id="'inStock_' + formatIndex"
 										name="庫存"
-										type="text"
-										class="form-control"
-										:class="{ 'is-invalid': errors['庫存'] }"
-										rules="numeric:true|required"
+										v-model="formatItem.stock"
+										@input="validateStock(formatIndex, 'stock')"
+										type="number"
+										class="form-control text-end me-0 hide-arrows"
+										:class="{
+											'is-invalid': formatItem.stock === null,
+										}"
 										aria-label="庫存"
 										placeholder="請輸入"
-									></v-field>
+										min="0"
+									/>
+								</div>
+								<div class="col-6 col-md-3 ps-0 pe-3 mt-2">
+									<label :for="'cost_' + formatIndex" class="mb-1">
+										成本
+										<span class="text-danger">*</span>
+									</label>
+									<input
+										:id="'cost_' + formatIndex"
+										name="成本"
+										v-model="formatItem.cost"
+										@input="validateStock(formatIndex, 'cost')"
+										type="number"
+										class="form-control text-end me-0 hide-arrows"
+										:class="{
+											'is-invalid': formatItem.stock === null,
+										}"
+										aria-label="成本"
+										placeholder="請輸入"
+										min="0"
+									/>
+								</div>
+
+								<div class="col-6 col-md-3 ps-0 pe-0 mt-2">
+									<label :for="'price_' + formatIndex" class="mb-1">
+										售價
+										<span class="text-danger">*</span>
+									</label>
+									<div class="d-flex form-control-start">
+										<span
+											class="input-group-text pe-0"
+											:class="{ 'is-invalid-text': errors['售價'] }"
+										>
+											<p class="m-0 p-0 pe-2 border-end border-end-1 fs-12">
+												NT$
+											</p>
+										</span>
+										<!-- numeric:true 只能是數字 -->
+										<input
+											:id="'price_' + formatIndex"
+											name="售價"
+											v-model="formatItem.price"
+											@input="validateStock(formatIndex, 'price')"
+											type="number"
+											class="form-control text-end me-0 hide-arrows"
+											:class="{
+												'is-invalid': formatItem.stock === null,
+											}"
+											aria-label="售價"
+											placeholder="請輸入"
+											min="0"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
 
-						<!-- 單價 -->
-						<div class="col-12 col-md-4 ps-0 pe-0 pe-md-3 m-0 mb-4 mb-md-5">
-							<label for="cost" class="mb-1">
-								成本
-								<span class="text-danger">*</span>
-							</label>
-							<v-field
-								id="cost"
-								name="成本"
-								type="text"
-								class="form-control"
-								:class="{ 'is-invalid': errors['成本'] }"
-								rules="numeric:true|required"
-								aria-label="成本"
-								placeholder="請輸入"
-							></v-field>
-						</div>
-
-						<div class="col-12 col-md-4 p-0 m-0 mb-4 mb-md-5">
-							<label for="price" class="mb-1">
-								售價
+						<!-- 運費 -->
+						<div class="col-12 col-md-3 p-0 m-0 pe-0 pe-md-4 mb-4 mb-md-5">
+							<label for="fare" class="mb-1">
+								運費
 								<span class="text-danger">*</span>
 							</label>
 							<div class="d-flex form-control-start">
 								<span
 									class="input-group-text pe-0"
-									:class="{ 'is-invalid-text': errors['售價'] }"
+									:class="{ 'is-invalid-text': errors['運費'] }"
 								>
 									<p class="m-0 p-0 pe-2 border-end border-end-1 fs-12">NT$</p>
 								</span>
 								<!-- numeric:true 只能是數字 -->
 								<v-field
-									id="price"
-									name="售價"
-									type="text"
-									class="form-control"
-									:class="{ 'is-invalid': errors['售價'] }"
+									v-if="data.format[0]"
+									id="fare"
+									name="運費"
+									type="number"
+									v-model="data.fare"
+									class="form-control hide-arrows"
+									:class="{ 'is-invalid': errors['運費'] }"
 									rules="numeric:true|required"
-									aria-label="售價"
+									aria-label="運費"
 									placeholder="請輸入"
 								></v-field>
 							</div>
 						</div>
-						<div class="col-12 ps-0 m-0 mb-2">
+						<div class="col-12 col-md-6 ps-0 m-0 mb-2">
 							<label class="mb-3">
 								付款方式
 								<span class="text-danger">*</span>
 							</label>
 							<div class="d-flex">
 								<div
-									v-for="(stt, sttIndex) in ['刷卡', '取貨付款', 'line pay']"
-									:key="sttIndex"
+									v-for="(pay, payIndex) in ['刷卡', '取貨付款', 'line pay']"
+									:key="payIndex"
 								>
 									<div class="dropdown-item pe-2">
 										<v-field
 											class="form-check-input me-2"
 											type="checkbox"
 											v-model="data.pay"
-											:value="sttIndex + 1"
-											:id="stt"
-											name="productChoose"
+											:value="payIndex + 1"
+											:id="pay"
+											rules="required"
+											name="pay"
+											:class="{ 'is-invalid': errors['pay'] }"
 											as="input"
 										></v-field>
 										<label
 											class="form-check-label"
-											:for="stt"
+											:for="pay"
 											style="width: 100%"
 										>
-											{{ stt }}
+											{{ pay }}
 										</label>
 									</div>
 								</div>
@@ -471,8 +597,6 @@
 						{{ init.btn }}
 					</button>
 				</div>
-				<br />
-				{{ userStore.data }}
 			</v-form>
 		</div>
 	</div>
@@ -482,7 +606,10 @@ import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { alertStore } from '@/main'; // 導入實例
 
-// import { type couponType } from '@/type/couponType';
+import {
+	type FormatType,
+	type DetailedOrderProductType,
+} from '@/type/orderType';
 
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
@@ -496,22 +623,57 @@ const { resize } = useResize();
 const authStore = useAuthStore();
 const userStore = useProduct();
 
-// // 完成後送出
-// function onSubmit() {
-// 	console.log('成功');
-// }
+function closeItem(key: keyof DetailedOrderProductType, index: number) {
+	const property = userStore.data[key];
+	if (Array.isArray(property)) {
+		property.splice(index, 1);
+	}
+}
+
+const addFormatData = () => {
+	// 新增資料 使用 vee-會出錯
+	const newFormat = {
+		title: '',
+		price: 0,
+		cost: 0,
+		stock: 0,
+		image: '',
+		color: [],
+	} as any;
+	userStore.data.format.push(newFormat);
+};
+
+const validateStock = (index: number, text: 'price' | 'cost' | 'stock') => {
+	if (
+		userStore.data.format[index] &&
+		typeof userStore.data.format[index][text] === 'number' &&
+		userStore.data.format[index][text] > 0
+	) {
+	} else {
+		userStore.data.format[index][text] = 0;
+	}
+};
+interface BadgeItem {
+	text: string;
+	value: number;
+}
 
 const dropdownBtn = ref<HTMLButtonElement | null>(null);
 const dropdown = ref<HTMLDivElement | null>(null);
 
+const inputBadge = ref<BadgeItem[]>([]);
+const addNum = ref(false);
+function add() {
+	if (addNum.value === false) addNum.value = true;
+	else addNum.value = false;
+}
+// // 刪除，待檢查
+function inputBadgeClose(index: number) {
+	inputBadge.value = inputBadge.value.filter(
+		(item, itemIndex) => index !== itemIndex
+	);
+}
 const hovered = ref([false]);
-
-// 刪除，待檢查
-// function inputBadgeClose(id: string) {
-// 	data.value.productChoose = data.value.productChoose?.filter(
-// 		item => item !== id
-// 	);
-// }
 
 const data = computed(() => userStore.data);
 
@@ -547,45 +709,89 @@ const sellerTitleData = {
 	btn: '儲存',
 };
 
+const tryData = ref() as any;
 const navTabs = ref({}) as any;
 const init2 = ref({
-	shopTypeText: {
-		1: '娛樂',
-		2: '服飾',
-		3: '3C產品',
-		4: '食品',
-		5: '家具',
-		6: '運動用品',
-		7: '寵物用品',
-		8: '生活用品',
-		9: '清潔用品',
-		10: '其他',
-	},
-	originText: ['台灣', '中國', '美國', '日本', '澳洲', '韓國'],
-	colorText: ['黑', '白', '紅', '橙', '黃', '綠', '藍', '紫', '透明', '彩色'],
+	shopTypeText: [
+		{ text: '娛樂', value: 1 },
+		{ text: '服飾', value: 2 },
+		{ text: '3C產品', value: 3 },
+		{ text: '食品', value: 4 },
+		{ text: '家具', value: 5 },
+		{ text: '運動用品', value: 6 },
+		{ text: '寵物用品', value: 7 },
+		{ text: '生活用品', value: 8 },
+		{ text: '清潔用品', value: 9 },
+		{ text: '其他', value: 10 },
+	],
+	originText: [
+		'台灣',
+		'日本',
+		'韓國',
+		'德國',
+		'美國',
+		'中國',
+		'加拿大',
+		'印度',
+		'英國',
+		'越南',
+		'義大利',
+		'比利時',
+		'未知',
+	],
+	colorText: [
+		'黑色',
+		'白色',
+		'紅色',
+		'橙色',
+		'黃色',
+		'綠色',
+		'藍色',
+		'紫色',
+		'透明',
+		'彩色',
+	],
 }) as any;
 const init = ref({}) as any;
 
 // 資料完成後送出
 function onSubmit(isValue: any | void) {
-	if (route.matched[0].path === '/seller') {
-		if (route.name === 'SellerProductNew') {
-			// 新增狀態
-			if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
-				alertStore.error('請選擇商品');
-			} else {
-				if (isValue.productType === 0) isValue.productChoose = [];
-				userStore.newProduct(isValue);
-			}
-		} else if (route.name === 'SellerProductCheck') {
-			// 修改/查看狀態
-			if (isValue.productType === 1 && isValue.productChoose?.length === 0) {
-				alertStore.error('請選擇商品');
-			} else {
-				if (isValue.productType === 0) isValue.productChoose = [];
-				userStore.getProductEdit(isValue);
+	// true 為通過 format 該填的有寫。不包含 檢查顏色。
+	let isCheck = userStore.data.format.every(formatItem => {
+		return (
+			formatItem.title.length > 0 &&
+			(formatItem.stock === 0 || formatItem.stock > 0)
+		);
+	});
+	if (inputBadge.value.length === 0) {
+		isCheck = false;
+	} else {
+		userStore.data.sellerCategory = [];
+		for (let i = 0; i < inputBadge.value.length; i++) {
+			let num = inputBadge.value[i].value;
+			if (num && num !== null) userStore.data.sellerCategory.push(num);
+		}
+	}
+	if (userStore.data.image.length === 0) isCheck = false;
+	if (isCheck) {
+		// // 跑回圈帶入 format 資料
+		// userStore.data.format.forEach((formatItem, formatIindex) => {
+		// 	if (formatIindex !== 0) {
+		// 		formatItem.cost = userStore.data.format[0].cost;
+		// 		formatItem.price = userStore.data.format[0].price;
+		// 	}
+		// });
+		if (route.matched[0].path === '/seller') {
+			if (route.name === 'SellerProductNew') {
+				// 新增狀態
+				userStore.newProduct();
+			} else if (route.name === 'SellerProductCheck') {
+				// 修改狀態
+				userStore.getProductEdit();
 			}
 		}
+	} else {
+		alertStore.error('請輸入正確的資料');
 	}
 }
 const getData = () => {
@@ -597,6 +803,34 @@ const getData = () => {
 				title: sellerTitleNewData.title,
 				schedule: sellerTitleNewData.schedule,
 				breadcrumb: true,
+			};
+			userStore.data = {
+				sellerCategory: [], //商品主要類別
+				category: [],
+				isOnshelf: true,
+				sold: 0,
+				productName: '',
+				type: [],
+				sellerType: [],
+				origin: '',
+				ingredient: '',
+				introduction: '',
+				format: [
+					{
+						title: '',
+						price: 0,
+						cost: 0,
+						stock: 0,
+						color: [],
+					},
+				],
+				introduce: '',
+				production: '',
+				evaluate: [],
+				haveStore: '',
+				fare: 0,
+				pay: [], //1:信用卡付款 2.ATM匯款 3.店到店付費
+				image: [],
 			};
 		} else if (route.name === 'SellerProductCheck') {
 			// 修改/查看狀態
@@ -613,6 +847,24 @@ const getData = () => {
 	}
 	// userStore.getCouponAll(id, page, token);
 };
+
+// 會員頭像 --------------------
+const inputFieldRef = ref<HTMLInputElement | null>(null); //上傳用的input
+
+function uploadFile() {
+	if (inputFieldRef.value) {
+		inputFieldRef.value.click();
+	}
+}
+function getFile() {
+	let inputField = inputFieldRef.value;
+	// 在這裡處理檔案上傳的邏輯
+	if (inputField && inputField!.files) {
+		let file = inputField.files[0];
+		// 發api 傳回去 +token
+		userStore.getImgUrl(file, authStore.token);
+	}
+}
 
 const deleteProduct = async () => {
 	await userStore.deleteProduct();

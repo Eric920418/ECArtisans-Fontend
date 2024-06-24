@@ -320,30 +320,6 @@
 							v-if="data.productType === 1 && data.productChoose"
 							style="min-height: 100px"
 						>
-							<!-- <div class="dropdown">
-							<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-								Dropdown form
-							</button>
-							<form class="dropdown-menu p-4">
-								<div class="mb-3">
-									<label for="exampleDropdownFormEmail2" class="form-label">Email address</label>
-									<input type="email" class="form-control" id="exampleDropdownFormEmail2" placeholder="email@example.com">
-								</div>
-								<div class="mb-3">
-									<label for="exampleDropdownFormPassword2" class="form-label">Password</label>
-									<input type="password" class="form-control" id="exampleDropdownFormPassword2" placeholder="Password">
-								</div>
-								<div class="mb-3">
-									<div class="form-check">
-										<input type="checkbox" class="form-check-input" id="dropdownCheck2">
-										<label class="form-check-label" for="dropdownCheck2">
-											Remember me
-										</label>
-									</div>
-								</div>
-								<button type="submit" class="btn btn-primary">Sign in</button>
-							</form>
-						</div> -->
 							<div class="dropdown">
 								<button
 									class="form-control py-0"
@@ -442,7 +418,7 @@
 							</span>
 							<h1>待接商品api取得商品名稱+id</h1>
 						</div>
-						{{ data.productChoose }}
+
 						<div class="col-12 p-0 m-0 mb-2">
 							<label class="mb-1 me-3">
 								注意事項
@@ -620,29 +596,6 @@ function inputBadgeClose(id: string) {
 	);
 }
 
-// // navTab + seller 畫面下所有資料
-
-// // navTab + seller 畫面下所有資料
-// const sellerTitleData = {
-// 	routeName: 'SellerCouponNew',
-// 	title: [
-// 		{
-// 			title: '優惠劵',
-// 			path: { name: 'SellerCoupon', query: { page: 1 } },
-// 		},
-// 		{
-// 			title: '修改優惠劵',
-// 		},
-// 	],
-// 	schedule: '修改優惠劵', //目前頁面
-// 	btn: '修改',
-// };
-
-// const navTabs = ref({}) as any;
-// const init2 = ref({
-// 	shopTypeText: ,
-// }) as any;
-
 const sellerTitleNewData = {
 	init: { 'end-bottom-btn': '儲存' },
 	navTabs: {
@@ -689,10 +642,29 @@ router.beforeEach((to, from, next) => {
 
 onMounted(() => {
 	if (route.matched[0].path === '/seller') {
-		if (route.name === 'SellerCouponNew') {
+		if (
+			route.name === 'SellerCouponNew' &&
+			authStore.id &&
+			authStore.id != ''
+		) {
 			// 新增狀態
+			const id = authStore.id;
 			init.value = sellerTitleNewData.init;
 			navTabs.value = sellerTitleNewData.navTabs;
+			// 清空資料
+			userStore.data = {
+				_id: '',
+				seller_id: id,
+				couponName: '',
+				startDate: null,
+				endDate: null,
+				type: null,
+				discountConditions: null,
+				percentage: null,
+				productType: null,
+				productChoose: [],
+				isEnabled: true,
+			};
 		} else if (route.name === 'SellerCouponCheck') {
 			// 修改/查看狀態
 			init.value = sellerTitleData.init;

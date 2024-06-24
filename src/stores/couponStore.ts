@@ -71,12 +71,9 @@ export const useCoupon = defineStore({
 				await this.setAccountType();
 				let res;
 				if (this.accountType === 'seller') {
-					console.log('正在發送');
 					await sellerCouponAll(token)
 						.then(res => {
-							console.log('發送');
 							this.allData = res.Coupons;
-							console.log('全部', res.Coupons[0]);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
@@ -94,7 +91,6 @@ export const useCoupon = defineStore({
 				if (this.accountType === 'seller') {
 					await sellerCoupon(coupon_id, token)
 						.then(res => {
-							console.log('單筆', res);
 							const isData = res.Coupons[0];
 							isData.startDate = getDate(isData.startDate);
 							isData.endDate = getDate(isData.endDate);
@@ -123,15 +119,10 @@ export const useCoupon = defineStore({
 				if (data.productType === 0) delete data.productChoose;
 				if (data.type === 0) delete data.percentage;
 				alertStore.success('couponDelete');
-				console.log('新增', data);
-				console.log(this.accountType);
 				if (this.accountType === 'seller') {
 					await sellerCouponNew(data, authStore.token)
-						.then(res => {
-							console.log(res);
-						})
+						.then(res => {})
 						.catch(err => {
-							console.log(err);
 							// alertStore.error(err.response.data.message);
 						});
 				}
@@ -144,15 +135,12 @@ export const useCoupon = defineStore({
 			try {
 				await this.setAccountType();
 				const authStore = useAuthStore();
-				console.log('更新前發送的authStore.token', authStore.token); //可以使用
-				console.log('更新前發送的data._id', this.data._id); //可以使用
 				let res;
 				data.startDate = getISO(data.startDate, 'start');
 				data.endDate = getISO(data.endDate, 'end');
 
 				// if (data.productType === 0) delete data.productChoose;
 				// if (data.type === 0) delete data.percentage;
-				console.log('更新前發送的', data);
 				if (this.accountType === 'seller' && this.data._id) {
 					await sellerCouponEdit(
 						this.data._id,
@@ -160,7 +148,6 @@ export const useCoupon = defineStore({
 						authStore.token
 					)
 						.then(res => {
-							console.log(res);
 							alertStore.success('renewOK');
 						})
 						.catch(err => {

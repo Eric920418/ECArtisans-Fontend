@@ -53,7 +53,6 @@ const emit = defineEmits(['update:currentPage']);
 watch(
 	() => props.currentPage,
 	newPage => {
-		console.log(newPage);
 		localCurrentPage.value = newPage;
 	}
 );
