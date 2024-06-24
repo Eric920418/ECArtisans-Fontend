@@ -805,6 +805,8 @@ const getData = () => {
 				breadcrumb: true,
 			};
 			userStore.data = {
+				_id: '',
+				state: false,
 				sellerCategory: [], //商品主要類別
 				category: [],
 				isOnshelf: true,
