@@ -62,7 +62,7 @@
 				<button
 					disabled
 					v-if="!isSellerRoute && resize < 1200"
-					class="btn btn-primary rounded-circle me-4"
+					class="btn btn-primary rounded-circle me-4 btn-size"
 				>
 					<i class="bi bi-bag"></i>
 					<span
@@ -620,7 +620,7 @@
 								<button
 									v-if="resize >= 1200"
 									disabled
-									class="ms-2 btn btn-primary rounded-circle position-relative"
+									class="ms-2 btn btn-primary rounded-circle position-relative btn-size"
 								>
 									<i class="bi bi-bag"></i>
 									<span
@@ -752,5 +752,8 @@ onMounted(() => {
 <style scoped>
 .search-size {
 	/* width: 400px; */
+}
+.btn-size {
+	padding: 6px 12px 10px 12px;
 }
 </style>

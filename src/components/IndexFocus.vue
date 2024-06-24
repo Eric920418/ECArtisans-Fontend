@@ -1,5 +1,5 @@
 <template>
-	<div class="w-100 m-index-title">
+	<div class="w-100 m-index-title pb-8 pb-xl-10">
 		<Title :data="titleData" />
 		<div class="m-0 p-0">
 			<div class="container px-eca-12 px-sm-0">
@@ -41,7 +41,7 @@
 								<div
 									class="avatar"
 									:style="{
-										'background-image': `url(${item.seller_image})`,
+										'background-image': `url(${item.seller_portrait})`,
 									}"
 								></div>
 								<p class="m-0 flex-grow-1">{{ item.seller_name }}</p>
@@ -96,111 +96,117 @@ const { resize } = useResize();
 const focusShopList = ref([
 	{
 		seller_id: 1,
-		seller_name: '古早味蜜餞',
-		seller_image: 'images/shop/1-banner.png',
+		seller_name: 'Solong 官方商城',
+		seller_portrait: 'images/shop/sellerPortrait1.png',
+		seller_image: 'images/shop/sellerbackground1.png',
 		product: [
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground1-1.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground1-2.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground1-3.png',
 			},
 		],
-		star: 0,
+		star: 4.5,
 		total_comments: 0,
 	},
 	{
 		seller_id: 2,
 		seller_name: '魔法能量商店',
-		seller_image: 'images/shop/2-banner.png',
+		seller_portrait: 'images/shop/sellerPortrait2.png',
+		seller_image: 'images/shop/sellerbackground2.png',
 		product: [
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground1-1.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground2-2.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground2-3.png',
 			},
 		],
-		star: 1,
+		star: 4.0,
 		total_comments: 25,
 	},
 	{
 		seller_id: 3,
-		seller_name: '333',
-		seller_image: 'images/shop/3-banner.png',
+		seller_name: '古早蜜餞',
+		seller_portrait: 'images/shop/sellerPortrait3.png',
+		seller_image: 'images/shop/sellerbackground3.png',
 		product: [
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground3-1.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground3-2.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground2-3.png',
 			},
 		],
-		star: 4.3,
+		star: 4.7,
 		total_comments: 10,
 	},
 	{
 		seller_id: 4,
-		seller_name: 'lex jewelry',
-		seller_image: 'images/shop/2-2-product.png',
+		seller_name: '大夏製',
+		seller_portrait: 'images/shop/focus2.png',
+		seller_image: 'images/shop/sellerPortrait1.png',
 		product: [
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/focus2-1.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/focus2-2.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/focus2-3.png',
 			},
 		],
-		star: 4.3,
-		total_comments: 2,
+		star: 4.5,
+		total_comments: 0,
 	},
 	{
 		seller_id: 5,
-		seller_name: '444',
-		seller_image: 'images/shop/2-2-product.png',
+		seller_name: '廖老師算命館',
+		seller_portrait: 'images/shop/focus3.png',
+		seller_image: 'images/shop/focus3.png',
 		product: [
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/focus3-1.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/focus3-2.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/focus3-3.png',
 			},
 		],
-		star: 2.5,
-		total_comments: 30,
+		star: 4.0,
+		total_comments: 25,
 	},
 	{
 		seller_id: 6,
-		seller_name: '555',
-		seller_image: 'images/shop/2-2-product.png',
+		seller_name: '古早蜜餞',
+		seller_portrait: 'images/shop/sellerPortrait3.png',
+		seller_image: 'images/shop/sellerbackground3.png',
 		product: [
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground3-1.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground3-2.png',
 			},
 			{
-				src: 'images/shop/2-2-product.png',
+				src: 'images/shop/sellerbackground3-3.png',
 			},
 		],
-		star: 4.3,
-		total_comments: 50,
+		star: 4.7,
+		total_comments: 10,
 	},
 ]);
 const navigation = ref({

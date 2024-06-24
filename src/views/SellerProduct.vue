@@ -24,7 +24,7 @@
 				</div>
 			</div>
 
-			<div class="p-4 table-responsive">
+			<div class="p-4 table table-responsive">
 				<!-- table table-striped table-bordered table-rwd -->
 				<table class="table-bordered">
 					<!-- :class="{
@@ -38,17 +38,17 @@
 							}"
 						>
 							<th
-								v-for="(thItme, thIndex) in tableThead"
+								v-for="(thItem, thIndex) in tableThead"
 								:key="thIndex"
-								:class="thItme.class"
+								:class="thItem.class"
 							>
-								{{ thItme.text }}
+								{{ thItem.text }}
 							</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr
-							v-for="(tdItme, tdIndex) in tableTbody"
+							v-for="(tdItem, tdIndex) in tableTbody"
 							:key="tdIndex"
 							:class="{
 								card: resize < 768,
@@ -77,10 +77,7 @@
 										'product-img p-0': resize >= 768,
 									}"
 								> -->
-								<img
-									src="https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/f4e6bbf2-eb85-4343-acad-c4b537c36356.png?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=CruKUkjAnFhe9fnpj5ibWwYu7ApqDm7RgDyYKYlHPh36dgeOi%2BClu6neh2%2Fz51mp4C9c9RjAtzlTsRpXCRcXMBV1xQ7RtoyU2fIQHTQNy3me%2FILbbVF%2B2pA6D47Dcr%2BtA1ztvMZZ6Dn%2FhSrv%2FC%2F35bOunhzc5rMJjUoObpGVa%2Fqhg4dxOwjiupa%2B8F6OSmr9GshRDYoUnuYe49gMuhoSSBUxDvDvZsuGtcCfvTRak2eKZAPl2KK9u1mqY%2FXkwxyY4AkCxUFA92i354XZAMjMluQ9iJJ0bRHx7ncYeXBRjxUcwI%2BSdiRKwqCelYP25IFk74nefHxs6WLrTInn87Ilnw%3D%3D"
-									class="img-eca"
-								/>
+								<img :src="tdItem.format[0].image" class="img-eca" />
 								<!-- </div> -->
 							</td>
 							<!-- :class="tableThead[2].class" -->
@@ -90,7 +87,7 @@
 									'order-1 isOnshelf': resize < 768,
 								}"
 							>
-								<p class="m-0">{{ tdItme.isOnshelf }}</p>
+								<p class="m-0">{{ tdItem.isOnshelf }}</p>
 							</td>
 							<!-- :class="tableThead[3].class" -->
 							<td
@@ -99,7 +96,7 @@
 									'category order-1 ': resize < 768,
 								}"
 							>
-								<p class="m-0 categoryIcon">{{ tdItme.sellerCategory }}</p>
+								<p class="m-0 categoryIcon">{{ tdItem.sellerCategory }}</p>
 							</td>
 							<!-- :class="tableThead[4].class" -->
 							<td
@@ -109,7 +106,7 @@
 								}"
 								class=""
 							>
-								<h3 class="m-0 text-hidden">{{ tdItme.productName }}</h3>
+								<h3 class="m-0 text-hidden">{{ tdItem.productName }}</h3>
 							</td>
 							<!-- :class="tableThead[5].class" -->
 							<td
@@ -118,7 +115,7 @@
 									'order-0  id': resize < 768,
 								}"
 							>
-								{{ tdItme._id }}
+								{{ tdItem._id }}
 							</td>
 							<td
 								:data-th="tableThead[6].text"
@@ -128,7 +125,7 @@
 							>
 								<!-- class="order-1"
 								:class="tableThead[6].class" -->
-								{{ tdItme.format[0].cost }}
+								{{ tdItem.format[0].cost }}
 							</td>
 							<td
 								:data-th="tableThead[7].text"
@@ -137,7 +134,7 @@
 								}"
 							>
 								<!-- :class="tableThead[7].class" -->
-								{{ tdItme.format[0].price - tdItme.format[0].cost }}
+								{{ tdItem.format[0].price - tdItem.format[0].cost }}
 							</td>
 							<td
 								:data-th="tableThead[8].text"
@@ -151,7 +148,7 @@
 										'fs-5 fw-bold text-end ': resize < 768,
 									}"
 								>
-									{{ tdItme.format[0].price }}
+									{{ tdItem.format[0].price }}
 								</p>
 							</td>
 							<td
@@ -160,7 +157,7 @@
 									'order-1 stock': resize < 768,
 								}"
 							>
-								{{ tdItme.format[0].stock }}
+								{{ tdItem.format[0].stock }}
 							</td>
 							<td
 								:data-th="tableThead[10].text"
@@ -173,7 +170,7 @@
 									@click="
 										$go({
 											name: 'SellerProductCheck',
-											params: { id: tdItme._id },
+											params: { id: tdItem._id },
 										})
 									"
 								>
@@ -196,21 +193,21 @@
 								<th scope="col-12">#</th>
 								<th
 									scope="col-12"
-									v-for="(thItme, thIndex) in tableThead"
+									v-for="(thItem, thIndex) in tableThead"
 									:key="thIndex"
 								>
-									{{ thItme }}
+									{{ thItem }}
 								</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr
-								v-for="(tdItme, tdIndex) in tableTbody"
+								v-for="(tdItem, tdIndex) in tableTbody"
 								:key="tdIndex"
 								@click="
 									$go({
 										name: 'SellerProductCheck',
-										params: { id: tdItme._id },
+										params: { id: tdItem._id },
 									})
 								"
 							>

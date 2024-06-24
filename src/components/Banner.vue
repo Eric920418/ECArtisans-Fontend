@@ -36,7 +36,7 @@
 							'background-attachment': 'fixed',
 							'background-position': 'center',
 							'background-size': 'cover',
-							'background-color': 'rgba(0, 0, 0, .3)',
+							'background-color': 'rgba(0, 0, 0, .1)',
 							'background-blend-mode': 'multiply',
 						}"
 					></div>
@@ -67,9 +67,9 @@ import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 
 const bannerList = ref([
-	{ src: 'https://picsum.photos/id/117/1296/650' },
-	{ src: 'https://picsum.photos/id/49/200/300' },
-	{ src: 'https://picsum.photos/id/18/796/500' },
+	{ src: 'images/shop/banner2.png' },
+	{ src: 'images/shop/banner1.png' },
+	{ src: 'images/shop/banner3.png' },
 	{ src: 'https://picsum.photos/id/20/1296/650' },
 	{ src: 'https://picsum.photos/id/10/609/600' },
 	{ src: 'https://picsum.photos/id/11/1296/650' },
