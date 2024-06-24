@@ -137,7 +137,6 @@ const initData = () => {
 onMounted(async () => {
 	// pinia沒有這筆資料，就重新呼叫function
 	if (!orderStore.oneOrder || orderStore.oneOrder._id !== props.id) {
-		console.log('再度使用方法');
 		await orderStore.getOneOrderByOrderID(props.id);
 	}
 });

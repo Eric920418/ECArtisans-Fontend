@@ -162,7 +162,7 @@ export const sellerProduct = (product_id: string, token: string) =>
 	);
 // 34	post  /shop/product	 	 賣家新增單一商品	 	 賣家端
 export const sellerProductNew = (data: any, token: string) =>
-	handleApiResponse(apiRequest.post('/shop/poduct', data, headers(token)));
+	handleApiResponse(apiRequest.post('/shop/product', data, headers(token)));
 // 35	put   /shop/product/${product_id}	 	賣家修改(編輯)單一商品 	 	賣家端
 export const sellerProductEdit = (
 	product_id: string,

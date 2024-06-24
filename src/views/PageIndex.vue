@@ -25,7 +25,6 @@ import Hot from '@/components/IndexHot.vue';
 import New from '@/components/IndexNew.vue';
 import { gsap } from 'gsap';
 // const { proxy } = getCurrentInstance();
-// console.log(proxy.$axios);
 const block = ref();
 const box = ref();
 const shopData = ref([]);

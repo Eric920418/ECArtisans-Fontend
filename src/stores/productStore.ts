@@ -7,6 +7,7 @@ import {
 import { getDate } from '@/setup/globalFunction';
 
 import {
+	uploadImage,
 	sellerProductAll, // 31	get  賣家顯示所有商品管理 (token: string)
 	sellerProductData, // 32	get 賣家商品管理(數量)	 (	seller_id: string, page: number, qty: number, category: string, token: string)
 	sellerProduct, // 33	get  賣家單一商品管理 (product_id: string, token: string)
@@ -64,15 +65,17 @@ export const useProduct = defineStore({
 			origin: '',
 			ingredient: '',
 			introduction: '',
-			format: {
-				_id: '',
-				title: '',
-				price: null,
-				cost: null,
-				stock: null,
-				color: [],
-				image: '',
-			},
+			format: [
+				{
+					_id: '',
+					title: '',
+					price: null,
+					cost: null,
+					stock: 0,
+					color: [],
+					image: '',
+				},
+			],
 			introduce: '',
 			production: '',
 			state: null,
@@ -129,7 +132,6 @@ export const useProduct = defineStore({
 							);
 							// 更新狀態
 							this.allData = processedProducts;
-							console.log(processedProducts);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
@@ -165,27 +167,31 @@ export const useProduct = defineStore({
 			}
 		},
 		// 新增 單筆 商品
-		async newProduct(data: any): Promise<void> {
+		async newProduct(): Promise<void> {
 			try {
 				await this.setAccountType();
 				const authStore = useAuthStore();
 				let res;
-				// data.startDate = getISO(data.startDate, 'start');
-				// data.endDate = getISO(data.endDate, 'end');
-				data.isEnabled = true;
-				if (data.productType === 0) delete data.productChoose;
-				if (data.type === 0) delete data.percentage;
-				alertStore.success('productDelete');
-				console.log('新增', data);
-				console.log(this.accountType);
+				const data = {
+					productName: this.data.productName,
+					sellerCategory: this.data.sellerCategory,
+					category: this.data.category,
+					origin: this.data.origin,
+					ingredient: this.data.ingredient,
+					format: this.data.format,
+					introduction: this.data.introduction,
+					production: this.data.production,
+					fare: this.data.fare,
+					pay: this.data.pay,
+					image: this.data.image,
+				};
 				if (this.accountType === 'seller') {
-					await sellerProductNew(data, authStore.token)
+					await sellerProductNew(JSON.stringify(data), authStore.token)
 						.then(res => {
-							console.log(res);
+							alertStore.success('renewOK');
 						})
 						.catch(err => {
-							console.log(err);
-							// alertStore.error(err.response.data.message);
+							alertStore.error(err.response.data.message);
 						});
 				}
 			} catch (error) {
@@ -193,27 +199,18 @@ export const useProduct = defineStore({
 			}
 		},
 		// 更新 單筆 商品
-		async getProductEdit(data: any): Promise<void> {
+		async getProductEdit(): Promise<void> {
 			try {
 				await this.setAccountType();
 				const authStore = useAuthStore();
-				console.log('更新前發送的authStore.token', authStore.token); //可以使用
-				console.log('更新前發送的data._id', this.data._id); //可以使用
 				let res;
-				// data.startDate = getISO(data.startDate, 'start');
-				// data.endDate = getISO(data.endDate, 'end');
-
-				// if (data.productType === 0) delete data.productChoose;
-				// if (data.type === 0) delete data.percentage;
-				console.log('更新前發送的', data);
 				if (this.accountType === 'seller' && this.data._id) {
 					await sellerProductEdit(
 						this.data._id,
-						JSON.stringify(data),
+						JSON.stringify(this.data),
 						authStore.token
 					)
 						.then(res => {
-							console.log(res);
 							alertStore.success('renewOK');
 						})
 						.catch(err => {
@@ -241,6 +238,29 @@ export const useProduct = defineStore({
 				}
 			} catch (error) {
 				alertStore.error('showError');
+			}
+		},
+		// 取得圖片
+		async getImgUrl(data: any, token: string) {
+			try {
+				if (data && token && data !== null && token !== null) {
+					this.isLoading = true;
+					const formData = new FormData();
+					formData.append('image', data);
+					await uploadImage(formData, token)
+						.then(res => {
+							this.data.image.push(res.fileUrl);
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+					this.isLoading = false;
+				} else {
+					alertStore.error('找不到資料或登入過期');
+				}
+			} catch (error) {
+				this.isLoading = false;
+				alertStore.error('renewError');
 			}
 		},
 	},

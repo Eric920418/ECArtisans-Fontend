@@ -445,9 +445,8 @@ $radius-8: 0.5rem; //弧度
 .fs-10 {
 	font-size:  0.625em; //10px
 }
-
-.card-newImg-delete,
-.card-newImg-disabled,
+.card-newImg-delete, // 可以刪除
+.card-newImg-disabled,// 不可修正
 .card-newImg{
 	text-align: center;
 	width: 96px;
@@ -468,6 +467,7 @@ $radius-8: 0.5rem; //弧度
 .w-fit{
 	width: fit-content;
 }
+// 可以刪除
 .card-newImg-delete{
 	border: 2px solid  #CFD4DF;
 	background-repeat: no-repeat;
@@ -486,7 +486,6 @@ $radius-8: 0.5rem; //弧度
 		display: block;
 	}
 }
-
 
 .card-directions{
 	color: $Neutral-02;

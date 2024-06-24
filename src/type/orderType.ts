@@ -16,15 +16,7 @@ export interface DetailedOrderProductType {
 	origin: string;
 	ingredient: string;
 	introduction?: string;
-	format: {
-		_id: string;
-		title: string;
-		price: number;
-		cost: number;
-		stock: number;
-		color: string[];
-		image: string;
-	}[];
+	format: Array<FormatType>;
 	introduce: string;
 	production: string;
 	state: boolean;
@@ -65,4 +57,12 @@ export interface OrderType {
 export interface ApiResponseType {
 	status: string;
 	thisShop: OrderType;
+}
+export interface FormatType {
+	_id?: string;
+	title: string;
+	price: number;
+	cost: number;
+	stock: number;
+	color: string[];
 }

@@ -243,7 +243,6 @@ router.beforeEach(async (to, from, next) => {
 		try {
 			if (!authStore.token) {
 				// 假設這裡需要手動設置 userInfo，例如從後端獲取
-				console.log(authStore.token);
 			}
 			// 根據用戶角色進行權限判斷
 			if (roles.includes('seller') && accountType !== 'seller') {

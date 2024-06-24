@@ -75,7 +75,7 @@
 								<p class="form-text lh-sm mt-2" style="font-size: 12px">
 									圖片限制
 									<br />
-									大小：400 x 400px / 300k
+									大小：3MB
 									<br />
 									類型：JPG.PNG
 								</p>

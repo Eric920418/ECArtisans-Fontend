@@ -32,11 +32,8 @@ export const useCoupon = defineStore({
 				await this.setAccountType();
 				let res;
 				if (this.accountType === 'user') {
-					console.log('正在發送');
 					// await userCollect(token)
 					// 	.then(res => {
-					// 		console.log(res);
-
 					// 	})
 					// 	.catch(err => {
 					// 		alertStore.error(err.response.data.message);
