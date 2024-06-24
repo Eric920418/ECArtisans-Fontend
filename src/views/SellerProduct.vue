@@ -77,7 +77,7 @@
 										'product-img p-0': resize >= 768,
 									}"
 								> -->
-								<img :src="tdItem.format[0].image" class="img-eca" />
+								<img :src="tdItem.image[0]" class="img-eca" />
 								<!-- </div> -->
 							</td>
 							<!-- :class="tableThead[2].class" -->
