@@ -20,14 +20,7 @@
 					最推薦
 					<font-awesome-icon :icon="['fas', 'thumbs-up']" class="m-1" />
 				</div>
-				<div
-					class="card row text-center p-2 p-sm-3 py-4 m-0 p-0"
-					@click="
-						() => {
-							console.log(planIndex + '典籍成功');
-						}
-					"
-				>
+				<div class="card row text-center p-2 p-sm-3 py-4 m-0 p-0">
 					<div
 						class="col-12 fs-sm-3 fw-bold my-3 text-center"
 						:class="{ 'fs-5': resize < 1200, 'fs-4': resize >= 1200 }"

@@ -101,6 +101,7 @@
 	letter-spacing: 0.1rem;
 }
 .position {
+	z-index: 10;
 	bottom: 24px;
 	right: 24px;
 	@media (min-width: 768px) {

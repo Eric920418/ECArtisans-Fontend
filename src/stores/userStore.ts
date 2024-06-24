@@ -134,36 +134,16 @@ export const useUserStore = defineStore({
 		},
 		// 註冊/新增 會員
 		async addUserAuth(data: any) {
-			// console.log(data);
 			try {
 				await this.setAccountType();
 				let res;
 				this.isLoading = true;
-				console.log('註冊', data);
-				// 	role,
-				// 	salesType,
-				// 	{
-				// 		"bossName": "aa", //
-				// 		"gender": "男", //
-				// 		"phone": "0912345678", //
-				// 		"mail": "aa@gmail.com", //
-				// 		"password": "a12345678", //
-				// 		"confirmPassword": "a12345678", //
-				// 		"brand": "a12345678", //
-				// 		"address": null,
-				// 		"collection": "0912345678",
-				// 		"salesType": [
-				//[1, 2, 3, 4, 5, 6, 7, 8, 9],
-				//1:娛樂 2:服飾 3:3C產品 4:食品 5:家具 6:運動用品 7:寵物用品 8:生活用品 9:清潔用品
-				// 		],
-				// 		"introduce": "a"
-				// }
+
 				if (this.accountType === 'seller') {
 					await sellerAuth(data)
 						.then(res => {
 							// alertStore.success('registerOK');
 							this.addUserStatus = true;
-							console.log(res);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
@@ -184,7 +164,7 @@ export const useUserStore = defineStore({
 				alertStore.error('renewError');
 			}
 		},
-		// 註冊/新增 會員
+		// 取得圖片
 		async getImgUrl(data: any, token: string) {
 			try {
 				if (data && token && data !== null && token !== null) {

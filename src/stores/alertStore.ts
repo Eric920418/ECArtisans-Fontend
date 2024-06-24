@@ -44,11 +44,9 @@ export const useAlertStore = defineStore({
 	}),
 	actions: {
 		success(index: string): any {
-			console.log('success運行中');
 			this.addToast(index, 'toast');
 		},
 		error(index: string): any {
-			console.log('error運行中');
 			this.addToast(index, 'error');
 		},
 		addToast(index: string, toastType: string) {

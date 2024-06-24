@@ -35,7 +35,6 @@ export const useAuthStore = defineStore({
 						const { user } = res;
 						await this.handleLoginSuccess(user);
 					} catch (error) {
-						// console.log(error);
 						await this.handleLoginError(error);
 					} finally {
 						this.isLoading = false;

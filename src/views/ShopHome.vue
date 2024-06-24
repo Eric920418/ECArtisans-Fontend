@@ -396,7 +396,6 @@ function categorized(allData: SellerPageProductType[]) {
 			return 0;
 		});
 	}
-	console.log(data.length);
 	return data;
 }
 const data = computed(() => shopStore.sellerHomeData);
@@ -453,7 +452,6 @@ const paginatedData = computed(() => {
 // 更新頁碼
 const updatePage = (page: number) => {
 	const query = { ...route.query, page: page.toString() };
-	console.log(query);
 	router.push({ path: route.path, query });
 };
 

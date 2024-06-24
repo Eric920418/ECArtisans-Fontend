@@ -44,12 +44,10 @@ onMounted(() => {
 
 	socket.value.on('connect', () => {
 		chatStatus.connect = true;
-		console.log('Connected to server');
 	});
 
 	socket.value.on('disconnect', () => {
 		chatStatus.connect = false;
-		console.log('Disconnected from server');
 	});
 
 	socket.value.on('message', (msg: Message) => {
