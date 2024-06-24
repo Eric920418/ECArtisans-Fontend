@@ -7,7 +7,6 @@ export interface SellerPageType {
 	seller_info: string;
 	seller_info_date: string;
 	discount: string;
-  products: SellerPageProductType[]; // 新增的 products 属性
 }
 
 // 查詢賣家頁面所有商品資訊
@@ -20,4 +19,14 @@ export interface SellerPageProductType {
 	price: number;
   discount:string,
 	star: number;
+}
+
+// 查詢推薦商家
+export interface RecommendShopType {
+	seller_id: string,
+	shop_name: string,
+	shop_image: string,
+	product_images: string[],
+	star: number,
+	total_comments: number,
 }

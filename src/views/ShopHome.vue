@@ -9,7 +9,7 @@
 			<div class="container" :class="{ 'container d-flex': resize >= 576 }">
 				<div class="flex-shrink-1">
 					<div class="shop-img" :class="{ 'w-100': resize >= 576 }">
-						<img src="https://picsum.photos/id/117/1296/650" class="img-eca" />
+						<img :src="data.seller_image" class="img-eca" />
 					</div>
 					<div>
 						<font-awesome-icon
@@ -23,8 +23,9 @@
 					</div>
 				</div>
 				<div class="p-3 flex-grow-1">
-					<h2>商家店名</h2>
-					<p>最新公告 2023/02/12</p>
+					<h2>{{ data.seller_name }}</h2>
+					<p>最新公告 {{ data.seller_info_date }}</p>
+					<p>{{ data.seller_info }}</p>
 					<div>
 						<p>最新消息</p>
 					</div>
@@ -64,18 +65,25 @@
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Banner from '@/components/Banner.vue';
-import Card from '@/components/ProductCard.vue';
+import Card from '@/components/ProductCardHome.vue';
 import Pagenation from '@/components/Pagenation.vue';
 import { alertStore } from '@/main'; // 導入實例
+import {
+	type SellerPageType,
+	type SellerPageProductType,
+	type RecommendShopType,
+} from '../type/shopType';
 
 // stores
-import { useProduct, useAuthStore, useResize } from '@/stores/index';
+import { useShop, useProduct, useAuthStore, useResize } from '@/stores/index';
 
 const { resize } = useResize();
 const route = useRoute();
+const router = useRouter();
 
 const authStore = useAuthStore();
 const userStore = useProduct();
+const shopStore = useShop();
 interface ProductType {
 	avatar: string;
 	comment: string;
@@ -333,7 +341,7 @@ const funData = ref([
 ]);
 
 // 封裝分類邏輯的函數，想要入口統一，之後比較好撰寫內容
-function categorized(allData: ProductType[]) {
+function categorized(allData: SellerPageProductType[]) {
 	let data = allData;
 	let filterText = navTabs.value.schedule; //固定篩選條件
 
@@ -391,9 +399,9 @@ function categorized(allData: ProductType[]) {
 	console.log(data.length);
 	return data;
 }
-
+const data = computed(() => shopStore.sellerHomeData);
 // 接收篩選後的結果
-const filteredData = computed(() => categorized(ProductList.value));
+const filteredData = computed(() => categorized(shopStore.sellerProductsData));
 
 // 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
@@ -477,16 +485,12 @@ router.beforeEach((to, from, next) => {
 	next();
 });
 
-onMounted(() => {
-	// // 因為要設置路由守衛 會有抓資料的問題，判斷改在這裡獲取 navTabs 的資料
-	if (route.matched[0].path === '/seller') {
-		// 	navTabs.value = {
-		// 		title: sellerTitleData.title,
-		// 		schedule: sellerTitleData.schedule,
-		// 		btn: { title: '新增優惠劵', path: { name: 'SellerCouponNew' } },
-	}
-	userStore.getCouponAll();
-	// }
+onMounted(async () => {
+	await shopStore.getShop(route.params.id as string);
+});
+
+onMounted(async () => {
+	await shopStore.getShopProducts(route.params.id as string);
 });
 </script>
 <style lang="scss" scoped>

@@ -67,14 +67,14 @@ export const uploadImage = (data: any, token: string) =>
 export const home_activities = () =>
 	handleApiResponse(apiRequest.get('/home/activities'));
 // 27	get	 /home/popularProducts	 	 首頁熱銷商品	 	買家端
-export const home_popularProducts = () =>
-	handleApiResponse(apiRequest.get('/home/popularProducts'));
+export const home_popularProducts = (page: number) =>
+	handleApiResponse(apiRequest.get(`/home/popular-products?limit=${page}`));
 // 28	get	 /home/recommendShops	 	 首頁推薦商家	 	 買家端
-export const home_recommendShops = () =>
-	handleApiResponse(apiRequest.get('/home/recommendShops'));
+export const home_recommendShops = (page: number) =>
+	handleApiResponse(apiRequest.get(`/home/recommend-shop?limit=${page}`));
 // 29	get	 /home/newProducts	 	 首頁新品推薦	 	 買家端
-export const home_newProducts = () =>
-	handleApiResponse(apiRequest.get('/home/newProducts'));
+export const home_newProducts = (page: number) =>
+	handleApiResponse(apiRequest.get(`/home/latest-products?limit=${page}`));
 // 30	get	 /home/follow-shops	 	 首頁關注商家	 	 買家端
 export const home_followShops = (data: any) =>
 	handleApiResponse(apiRequest.get('/home/follow-shops', data));
