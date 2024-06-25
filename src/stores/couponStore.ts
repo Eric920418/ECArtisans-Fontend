@@ -118,12 +118,13 @@ export const useCoupon = defineStore({
 				data.isEnabled = true;
 				if (data.productType === 0) delete data.productChoose;
 				if (data.type === 0) delete data.percentage;
-				alertStore.success('couponDelete');
 				if (this.accountType === 'seller') {
 					await sellerCouponNew(data, authStore.token)
-						.then(res => {})
+						.then(res => {
+							alertStore.success('renewOK');
+						})
 						.catch(err => {
-							// alertStore.error(err.response.data.message);
+							alertStore.error(err.response.data.message);
 						});
 				}
 			} catch (error) {
@@ -139,8 +140,6 @@ export const useCoupon = defineStore({
 				data.startDate = getISO(data.startDate, 'start');
 				data.endDate = getISO(data.endDate, 'end');
 
-				// if (data.productType === 0) delete data.productChoose;
-				// if (data.type === 0) delete data.percentage;
 				if (this.accountType === 'seller' && this.data._id) {
 					await sellerCouponEdit(
 						this.data._id,
