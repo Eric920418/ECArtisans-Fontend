@@ -684,9 +684,9 @@ const dropdown = ref<HTMLDivElement | null>(null);
 const inputBadge = ref<BadgeItem[]>([]);
 const addNum = ref(false);
 
-// 修改上下狀態
+// 修改上下架的狀態
 function isOnshelf(onshelf: boolean) {
-	userStore.onshelfEdit(onshelf);
+	// userStore.onshelfEdit(onshelf);
 }
 
 // 刪除，待檢查
