@@ -8,15 +8,19 @@ interface UserDataType {
 	password: string;
 }
 
+function initialState() {
+	return {
+			token: '',
+			id: '',
+			isLoggedIn: false,
+			isLoading: false,
+			accountType: '',
+	};
+}
+
 export const useAuthStore = defineStore({
 	id: 'auth',
-	state: () => ({
-		token: '',
-		id: '',
-		isLoggedIn: false,
-		isLoading: false,
-		accountType: '',
-	}),
+	state: () => initialState(),
 	actions: {
 		async login(data: UserDataType): Promise<void> {
 			await this.setAccountType();
@@ -86,12 +90,14 @@ export const useAuthStore = defineStore({
 		logout(): void {
 			this.isLoggedIn = false;
 			this.reset();
+			localStorage.removeItem('auth');
+			
 			// 返回登入畫面，判斷account身份為商家還是買家
 			const nextPage = this.accountType === 'seller' ? 'SellerHome' : 'Index';
 			router.push({ name: nextPage });
 		},
 		reset(): void {
-			Object.assign(this, this.$state);
+			Object.assign(this, initialState());
 		},
 		cancel(): void {
 			this.reset();
