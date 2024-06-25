@@ -8,7 +8,7 @@ const apiRequest = axios.create({
 function headers(token: string) {
 	const headers = {
 		headers: {
-			// 'Content-Type': 'application/json', 此為預設
+			'Content-Type': 'application/json', //此為預設，沒有放這個商品資訊無法更新
 			Authorization: `Bearer ${token}`,
 		},
 	} as Object;

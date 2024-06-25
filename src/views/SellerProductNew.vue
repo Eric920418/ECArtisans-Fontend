@@ -11,22 +11,35 @@
 							class="d-flex justify-content-between align-items-center mb-4 p-0"
 						>
 							<h3 class="fs-5 p-0 neutral-01 mb-0">{{ init.schedule }}</h3>
-
-							<!-- ↓之後會靠邏輯判斷只會出現一個 -->
-							<a
-								v-if="data._id && data.isOnshelf === false"
-								@click="deleteProduct()"
+							<div
+								v-if="data._id"
+								class="d-flex justify-content-center align-items-center"
 							>
-								刪除商品
-							</a>
-							<!-- <a v-if="data._id && data.isOnshelf === true" @click="() => {}" >
-								立即下架
-							</a> -->
+								<!-- ↓之後會靠邏輯判斷只會出現一個 -->
+								<!-- <a class="a me-3" @click="deleteProduct()">
+									刪除商品
+								</a> -->
+								<button
+									disabled
+									class="btn btn-primary px-4"
+									v-if="data.isOnshelf === false"
+									@click="isOnshelf(true)"
+								>
+									商品上架
+								</button>
+								<button
+									disabled
+									class="btn btn-primary px-4"
+									v-if="data.isOnshelf === true"
+									@click="isOnshelf(false)"
+								>
+									立即下架
+								</button>
+							</div>
 						</div>
 						<div class="col-12 p-0 m-0 mb-4" v-if="data._id">
 							<p>編號：{{ data._id }}</p>
 						</div>
-						<!--  -->
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
 							<label for="couponName" class="mb-1">
 								上傳圖片
@@ -171,8 +184,9 @@
 									<button
 										class="form-control py-0"
 										:class="{
-											'justify-content-between': inputBadge.length === 0,
-											'justify-content-start': inputBadge.length !== 0,
+											'justify-content-between':
+												data.sellerCategory.length === 0,
+											'justify-content-start': data.sellerCategory.length !== 0,
 										}"
 										ref="dropdownBtn"
 										type="button"
@@ -180,7 +194,7 @@
 										data-bs-auto-close="outside"
 									>
 										<div
-											v-if="inputBadge.length === 0"
+											v-if="data.sellerCategory.length === 0"
 											class="text-start d-flex justify-content-between align-items-center"
 										>
 											<p class="mb-0 neutral-03" style="padding: 6px 0px">
@@ -192,20 +206,22 @@
 												style="width: 20; height: 20"
 											/>
 										</div>
-										<div v-else class="row m-0 p-0">
+										<div class="row m-0 p-0">
 											<!-- :class="{ 'bg-neutral-01': addNum, 'd-block': addNum }" -->
 											<div
-												v-for="(item, index) in inputBadge"
+												v-for="(item, index) in data.sellerCategory"
 												:key="index"
 												class="input-badge w-auto"
 												:class="{ 'bg-neutral-02': addNum, white: addNum }"
 											>
-												<p class="mb-0">{{ item.text }}</p>
+												<p class="mb-0">
+													{{ getBadgeText(item) }}
+												</p>
 												<button
 													type="button"
 													class="btn-close"
 													aria-label="Close"
-													@click="inputBadgeClose(index)"
+													@click="inputBadgeClose(item)"
 												></button>
 											</div>
 										</div>
@@ -219,16 +235,16 @@
 												<v-field
 													class="form-check-input me-2"
 													type="checkbox"
-													v-model="inputBadge"
-													:class="{ 'is-invalid': errors['productChoose'] }"
-													:value="stt"
-													:id="stt"
-													name="productChoose"
+													v-model="data.sellerCategory"
+													:class="{ 'is-invalid': errors['sellerCategory'] }"
+													:value="stt.value"
+													:id="'sellerCategory' + stt.value"
+													name="sellerCategory"
 													as="input"
 												></v-field>
 												<label
 													class="form-check-label"
-													:for="stt"
+													:for="'sellerCategory' + stt.value"
 													style="width: 100%"
 												>
 													{{ stt.text }}
@@ -238,7 +254,7 @@
 									</ul>
 								</div>
 								<span
-									v-if="inputBadge.length === 0"
+									v-if="data.sellerCategory.length === 0"
 									role="alert"
 									class="text-danger"
 									style="margin-top: 0.25rem; font-size: 0.875em"
@@ -362,8 +378,13 @@
 							<!-- 使用 v-field addFormatData 時會壞掉 -->
 							<button
 								type="button"
-								class="btn btn-outline-primary px-4 ms-3"
-								@click="addFormatData"
+								class="btn px-4 ms-3"
+								:class="{
+									'btn-outline-primary': data.format.length !== 4,
+									'btn-primary': data.format.length === 4,
+								}"
+								@click="data.format.length !== 4 ? addFormatData() : () => {}"
+								:disabled="data.format.length === 4"
 							>
 								新增規格
 							</button>
@@ -582,7 +603,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div
 					class="col bg-white p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end"
 				>
@@ -663,15 +683,33 @@ const dropdown = ref<HTMLDivElement | null>(null);
 
 const inputBadge = ref<BadgeItem[]>([]);
 const addNum = ref(false);
+
+// 修改上下狀態
+function isOnshelf(onshelf: boolean) {
+	userStore.onshelfEdit(onshelf);
+}
+
+// 刪除，待檢查
+function inputBadgeClose(num: number) {
+	const index = userStore.data.sellerCategory.findIndex(
+		(item: number) => item === num
+	);
+	if (index !== -1) {
+		userStore.data.sellerCategory.splice(index, 1);
+	}
+}
+
+// 取得文字
+function getBadgeText(index: number): string {
+	const text = init2.value.shopTypeText.find(
+		(item: { value: number }) => item.value === index
+	);
+	return text.text;
+}
+
 function add() {
 	if (addNum.value === false) addNum.value = true;
 	else addNum.value = false;
-}
-// // 刪除，待檢查
-function inputBadgeClose(index: number) {
-	inputBadge.value = inputBadge.value.filter(
-		(item, itemIndex) => index !== itemIndex
-	);
 }
 const hovered = ref([false]);
 
@@ -763,24 +801,11 @@ function onSubmit(isValue: any | void) {
 			(formatItem.stock === 0 || formatItem.stock > 0)
 		);
 	});
-	if (inputBadge.value.length === 0) {
+	if (userStore.data.sellerCategory.length === 0) {
 		isCheck = false;
-	} else {
-		userStore.data.sellerCategory = [];
-		for (let i = 0; i < inputBadge.value.length; i++) {
-			let num = inputBadge.value[i].value;
-			if (num && num !== null) userStore.data.sellerCategory.push(num);
-		}
 	}
 	if (userStore.data.image.length === 0) isCheck = false;
 	if (isCheck) {
-		// // 跑回圈帶入 format 資料
-		// userStore.data.format.forEach((formatItem, formatIindex) => {
-		// 	if (formatIindex !== 0) {
-		// 		formatItem.cost = userStore.data.format[0].cost;
-		// 		formatItem.price = userStore.data.format[0].price;
-		// 	}
-		// });
 		if (route.matched[0].path === '/seller') {
 			if (route.name === 'SellerProductNew') {
 				// 新增狀態

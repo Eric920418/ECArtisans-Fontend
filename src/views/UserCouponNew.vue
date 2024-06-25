@@ -425,35 +425,6 @@
 								<span class="text-danger">*</span>
 							</label>
 							活動折扣金額以結算時為準,不可與其他優惠同時使用。
-							<!-- <v-field
-								class="form-control"
-								placeholder="請輸入..."
-								id="precautions"
-								v-model="data.introduce"
-								name="precautions"
-								rules="required"
-								style="height: 6.5em; resize: none"
-							></v-field> -->
-							<!-- <v-field
-								v-slot="{ field, errors }"
-								v-model="data.introduce"
-								name="comment"
-								rules="required"
-							>
-								<textarea
-									v-bind="field"
-									class="form-control"
-									:class="{ 'is-invalid': errors[0] }"
-									name="comment"
-								/>
-							</v-field> -->
-							<!-- <textarea
-								class="form-control"
-								placeholder="請輸入..."
-								id="precautions"
-								v-model="data.introduce"
-								style="height: 6.5em; resize: none"
-							></textarea> -->
 						</div>
 					</div>
 				</div>
@@ -479,7 +450,6 @@
 						{{ init['end-bottom-btn'] }}
 					</button>
 				</div>
-				<!-- {{ authStore.token }} -->
 			</v-form>
 		</div>
 	</div>
