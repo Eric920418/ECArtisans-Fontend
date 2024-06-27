@@ -152,10 +152,6 @@ export const useProduct = defineStore({
 					await sellerProduct(product_id, authStore.token)
 						.then(res => {
 							const isData = res.products[0];
-							// isData.startDate = getDate(isData.startDate);
-							// isData.endDate = getDate(isData.endDate);
-							// isData.type = parseInt(isData.type);
-							// isData.discountConditions = parseInt(isData.discountConditions);
 							this.data = isData;
 						})
 						.catch(err => {
@@ -184,11 +180,13 @@ export const useProduct = defineStore({
 					fare: this.data.fare,
 					pay: this.data.pay,
 					image: this.data.image,
+					isOnshelf: true,
 				};
 				if (this.accountType === 'seller') {
 					await sellerProductNew(JSON.stringify(data), authStore.token)
 						.then(res => {
-							alertStore.success('renewOK');
+							alertStore.success('newOK');
+							router.go(-1);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
@@ -205,6 +203,7 @@ export const useProduct = defineStore({
 				const authStore = useAuthStore();
 				let res;
 				if (this.accountType === 'seller' && this.data._id) {
+					console.log(this.data);
 					await sellerProductEdit(
 						this.data._id,
 						JSON.stringify(this.data),
@@ -212,11 +211,35 @@ export const useProduct = defineStore({
 					)
 						.then(res => {
 							alertStore.success('renewOK');
+							router.go(-1);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
 						});
 				}
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 修改訂單 狀態 上架 下架
+		async onshelfEdit(onshelf: boolean): Promise<void> {
+			try {
+				const authStore = useAuthStore();
+				let res;
+
+				console.log(onshelf);
+				await sellerProductEdit(
+					this.data._id,
+					JSON.stringify({ isOnshelf: onshelf }),
+					authStore.token
+				)
+					.then(res => {
+						console.log(res);
+						alertStore.success('renewOK');
+					})
+					.catch(err => {
+						alertStore.error(err.response.data.message);
+					});
 			} catch (error) {
 				alertStore.error('showError');
 			}
@@ -229,7 +252,7 @@ export const useProduct = defineStore({
 				if (this.accountType === 'seller' && this.data._id) {
 					await sellerProductDelete(this.data._id, authStore.token)
 						.then(res => {
-							alertStore.success('productDelete');
+							alertStore.success('deleteOK');
 							router.go(-1);
 						})
 						.catch(err => {

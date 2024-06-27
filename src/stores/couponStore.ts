@@ -46,16 +46,6 @@ export const useCoupon = defineStore({
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
-	getters: {
-		// // 獲取所有訂單
-		// gettingAllOrders(state) {
-		// 	return state.allOrders;
-		// },
-		// // 獲取單筆訂單
-		// gettingSingleOrder(state) {
-		// 	return state.oneOrder;
-		// },
-	},
 	actions: {
 		async setAccountType(): Promise<void> {
 			const currentPagePath = window.location.hash;
@@ -121,10 +111,12 @@ export const useCoupon = defineStore({
 				if (this.accountType === 'seller') {
 					await sellerCouponNew(data, authStore.token)
 						.then(res => {
-							alertStore.success('renewOK');
+							alertStore.success('newOK');
+							router.go(-1);
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
+							// alertStore.error('newError');
 						});
 				}
 			} catch (error) {
@@ -150,6 +142,7 @@ export const useCoupon = defineStore({
 							alertStore.success('renewOK');
 						})
 						.catch(err => {
+							// alertStore.error('renewError');
 							alertStore.error(err.response.data.message);
 						});
 				}
@@ -169,6 +162,7 @@ export const useCoupon = defineStore({
 							router.go(-1);
 						})
 						.catch(err => {
+							// alertStore.error('deleteError');
 							alertStore.error(err.response.data.message);
 						});
 				}
