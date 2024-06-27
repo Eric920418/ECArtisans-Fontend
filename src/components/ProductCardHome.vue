@@ -3,7 +3,11 @@
 		<!-- overflow-hidden 雖然可以超出隱藏，但線條會不見，所以直接對圖片導圓角 -->
 		<!-- 使用 圖片 的寫法 img-eca 是為了讓內容滿版置中，外層 card-top 限制圖片高度跟大小 -->
 		<div class="card-top overflow-hidden position-relative">
-			<img :src="item.products_images" class="img-eca" alt="..." />
+			<img
+				:src="item.products_images || item.products_image"
+				class="img-eca"
+				alt="..."
+			/>
 			<!-- SVG 更換顏色相關：
 				https://uu9924079.medium.com/%E5%9C%A8-hover-%E6%99%82%E6%9B%B4%E6%94%B9-svg-%E9%A1%8F%E8%89%B2%E7%9A%84%E5%B9%BE%E7%A8%AE%E6%96%B9%E5%BC%8F-15eb425c4977 
 				https://css-tricks.com/change-color-of-svg-on-hover/

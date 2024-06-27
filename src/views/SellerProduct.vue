@@ -428,9 +428,8 @@ onMounted(async () => {
 		// 	navTabs.value = sellerTitleData.navTabs;
 		// 	userStore.getCoupon(route.params.id as string, authStore.token);
 		// }
-		console.log('哈囉');
+
 		await userStore.getProductsAll(authStore.token);
-		console.log('哈囉');
 	} else if (route.matched[0].path === '/user') {
 		// init.value = userTitleData;
 	}

@@ -13,11 +13,8 @@
 					</h3>
 
 					<div>
-						<p
-							v-if="data.state"
-							class="text-enable neutral-02 mb-0 text-nowrap"
-						>
-							{{ data.state }}
+						<p class="text-enable neutral-02 mb-0 text-nowrap">
+							{{ stateText }}
 						</p>
 					</div>
 				</div>
@@ -52,6 +49,7 @@
 
 <script setup lang="ts">
 // import { getDate } from '@/stores/index';
+import { computed } from 'vue';
 import router from '@/router';
 import { getCoupon } from '@/stores/index';
 
@@ -79,7 +77,12 @@ const props = defineProps<{
 	data: OrderCardType;
 }>();
 
-// 将价格格式化为带千分位的字符串
+// 轉換state為文字
+const stateText = computed(() => {
+	return props.data.state === 0 ? '未付' : '已付';
+});
+
+// 將價格格式帶上千分位字串
 const formatPrice = (price: number | undefined): string => {
 	if (!price) return '';
 	return price.toLocaleString('en-US');

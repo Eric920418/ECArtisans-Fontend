@@ -2,7 +2,7 @@
 	<div class="row g-3 mx-0 mb-0 pb-0">
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" />
-			<v-form @submit="onSubmit" v-slot="{ errors }" class="m-0 p-0">
+			<v-form @submit="onSubmit" class="m-0 p-0">
 				<div class="m-3 card m-3 p-4 p-sm-5">
 					<!-- 表格 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
@@ -68,7 +68,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 import { storeToRefs } from 'pinia';
-import { useOrderStore, useAuthStore, useResize } from '@/stores/index';
+import { useOrder, useAuthStore, useResize } from '@/stores/index';
 import { type DetailedOrderType } from '@/type/orderType';
 
 const init = ref({}) as any;
@@ -78,14 +78,12 @@ const props = defineProps<{
 	id: string;
 }>();
 
-const orderStore = useOrderStore();
+const orderStore = useOrder();
 const { resize } = useResize();
 const authStore = useAuthStore();
 const isLoading = computed(() => orderStore.isLoading); // 從 store 中獲取加載狀態
-const { gettingSingleOrder } = storeToRefs(orderStore);
-const order = computed(
-	(): DetailedOrderType | null => gettingSingleOrder.value
-); // 將從computed gettingSingleOrder取出的值定義好型態
+// const { gettingSingleOrder } = storeToRefs(orderStore);
+const order = computed((): DetailedOrderType | null => null); // 將從computed gettingSingleOrder取出的值定義好型態
 
 const navTabs = ref({}) as any;
 // navTab + seller 畫面下所有資料
@@ -136,9 +134,9 @@ const initData = () => {
 
 onMounted(async () => {
 	// pinia沒有這筆資料，就重新呼叫function
-	if (!orderStore.oneOrder || orderStore.oneOrder._id !== props.id) {
-		await orderStore.getOneOrderByOrderID(props.id);
-	}
+	// if (!orderStore.oneOrder || orderStore.oneOrder._id !== props.id) {
+	// 	await orderStore.getOneOrderByOrderID(props.id);
+	// }
 });
 
 onMounted(() => {

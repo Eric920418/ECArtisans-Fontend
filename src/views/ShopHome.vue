@@ -24,14 +24,23 @@
 				</div>
 				<div class="p-3 flex-grow-1">
 					<h2>{{ data.seller_name }}</h2>
-					<p>最新公告 {{ data.seller_info_date }}</p>
-					<p>{{ data.seller_info }}</p>
-					<div>
-						<p>最新消息</p>
+					<div
+						:class="{ 'multi-line-ellipsis': !isExpanded }"
+						ref="textContainer"
+						class="text-content"
+					>
+						<span>{{ data.seller_info }}</span>
 					</div>
-					<button type="button" class="btn btn-primary" @click="getCoupon">
-						點我領取優惠卷
-					</button>
+					<div v-if="showButton" class="mt-2">
+						<button type="button" class="btn btn-link" @click="toggleExpand">
+							{{ isExpanded ? '收起' : '展開' }}
+						</button>
+					</div>
+					<div class="mt-2">
+						<button type="button" class="btn btn-primary" @click="getCoupon">
+							點我領取優惠卷
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -256,6 +265,25 @@ const ProductList = ref<ProductType[]>([
 		stars: 5.0,
 	},
 ]);
+
+const isExpanded = ref(false);
+const showButton = ref(false);
+const textContainer = ref<HTMLElement | null>(null);
+
+const toggleExpand = () => {
+	isExpanded.value = !isExpanded.value;
+};
+
+const checkTextOverflow = () => {
+	const el = textContainer.value;
+	if (el) {
+		// 實際內容高度與實際容器高度
+		const actualHeight = el.scrollHeight;
+		const containerHeight = el.clientHeight;
+		// 比较高度决定是否顯示展開按鈕
+		showButton.value = actualHeight > containerHeight;
+	}
+};
 
 const funData = ref([
 	{
@@ -490,6 +518,10 @@ onMounted(async () => {
 onMounted(async () => {
 	await shopStore.getShopProducts(route.params.id as string);
 });
+
+onMounted(() => {
+	checkTextOverflow();
+});
 </script>
 <style lang="scss" scoped>
 .shop-img {
@@ -498,5 +530,13 @@ onMounted(async () => {
 	@media (min-width: 576px) {
 		width: 200px;
 	}
+}
+
+.multi-line-ellipsis {
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /* 最多顯示幾行 */
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 </style>

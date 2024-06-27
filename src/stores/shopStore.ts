@@ -13,6 +13,7 @@ import {
 	home_popularProducts, // 27 get 首頁熱銷商品
 	home_recommendShops, // 28 get 首頁推薦商家
 	home_newProducts, // 29 get 首頁新品推薦
+	home_followShops // 30 get 首頁關注商家
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -58,6 +59,7 @@ export const useShop = defineStore({
 		sellerHomeData: {} as SellerPageType,
 		sellerProductsData: [] as SellerPageProductType[],
 		recommendShopData: [] as RecommendShopType[],
+		followShopData: [] as RecommendShopType[],
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
@@ -84,7 +86,7 @@ export const useShop = defineStore({
 		async getRecommendShops(): Promise<void> {
 			try {
 				// 固定抓6 筆
-				await home_recommendShops(6)
+				await home_recommendShops(16)
 					.then(res => {
 						// return(res.data)
 						this.recommendShopData = res.data;
@@ -116,13 +118,34 @@ export const useShop = defineStore({
 		async getNewProducts(): Promise<void> {
 			try {
 				// 固定抓8 筆
-				await home_newProducts(6)
+				await home_newProducts(8)
 					.then(res => {
 						this.sellerProductsData = res.data;
 					})
 					.catch(err => {
 						alertStore.error(err.response.data.message);
 					});
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 獲取關注商家資訊
+		async getFollowShops(): Promise<void> {
+			try {
+				const authStore = useAuthStore();
+				if (authStore.accountType === 'user') {
+					await home_followShops(authStore.token)
+						.then(res => {
+							this.followShopData = res.data;
+						})
+						.catch(err => {
+							// alertStore.error(err.response.data.message);
+							this.followShopData = [];
+						});
+					}
+					else{
+						console.log(authStore.accountType)
+					}
 			} catch (error) {
 				alertStore.error('showError');
 			}
@@ -149,6 +172,7 @@ export const useShop = defineStore({
 						this.sellerProductsData = res.data;
 					})
 					.catch(err => {
+						this.sellerProductsData = []; //避免未覆蓋掉上一筆查的商品
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
