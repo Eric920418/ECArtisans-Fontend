@@ -128,16 +128,16 @@
 					>
 						<div
 							class="row m-0 p-0 justify-content-center indexShopHover"
-							@click="$go({ name: 'ShopHome', params: { id: index } })"
+							@click="$go({ name: 'ShopHome', params: { id: item.seller_id } })"
 						>
 							<div
 								class="avatar-l"
 								:style="{
-									'background-image': `url(${item.src})`,
+									'background-image': `url(${item.shop_image})`,
 								}"
 							></div>
 							<p class="indexShopTitle text-center mb-0">
-								{{ item.name }}
+								{{ item.shop_name }}
 							</p>
 						</div>
 					</SwiperSlide>
@@ -183,160 +183,28 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import { useResize } from '@/stores/index';
 import Title from './IndexTitle.vue';
 import Star from './Star.vue';
-import { type RecommendShopType } from '../type/shopType';
 
 const { resize } = useResize();
 // stores
 import { useShop } from '@/stores/index';
 const userStore = useShop();
 
-const shopList = ref([
-	{ name: '古早味蜜餞', src: 'https://picsum.photos/id/117/1296/650' },
-	{
-		name: 'Solong 官方商城官方商城官',
-		src: 'https://picsum.photos/id/49/200/300',
-	},
-	{ name: '商店名稱', src: 'https://picsum.photos/id/18/796/500' },
-	{ name: '大研生醫', src: 'https://picsum.photos/id/20/1296/650' },
-	{ name: '古早味蜜餞', src: 'https://picsum.photos/id/10/609/600' },
-	{ name: 'Solong 官方商城', src: 'https://picsum.photos/id/11/1296/650' },
-	{ name: '古早味蜜餞', src: 'https://picsum.photos/id/117/1296/650' },
-	{ name: '魔法能量商店', src: 'https://picsum.photos/id/49/200/300' },
-	{ name: 'Solong 官方商城', src: 'https://picsum.photos/id/18/796/500' },
-	{ name: '大研生醫', src: 'https://picsum.photos/id/20/1296/650' },
-	{ name: '古早味蜜餞', src: 'https://picsum.photos/id/10/609/600' },
-	{ name: '魔法能量商店', src: 'https://picsum.photos/id/11/1296/650' },
-	{ name: 'Solong 官方商城', src: 'https://picsum.photos/id/117/1296/650' },
-	{ name: '大研生醫', src: 'https://picsum.photos/id/49/200/300' },
-	{ name: '古早味蜜餞', src: 'https://picsum.photos/id/18/796/500' },
-	{ name: 'Solong 官方商城', src: 'https://picsum.photos/id/20/1296/650' },
-	{ name: '魔法能量商店', src: 'https://picsum.photos/id/10/609/600' },
-	{ name: 'Solong 官方商城', src: 'https://picsum.photos/id/11/1296/650' },
-]);
-
-// const recommendSellerList = ref([
-// 	{
-// 		seller_id: 1,
-// 		seller_name: 'Solong 官方商城',
-// 		seller_portrait: 'images/shop/sellerPortrait1.png',
-// 		seller_image: 'images/shop/sellerbackground1.png',
-// 		product: [
-// 			{
-// 				src: 'images/shop/sellerbackground1-1.png',
-// 			},
-// 			{
-// 				src: 'images/shop/sellerbackground1-2.png',
-// 			},
-// 			{
-// 				src: 'images/shop/sellerbackground1-3.png',
-// 			},
-// 		],
-// 		star: 4.5,
-// 		total_comments: 0,
-// 	},
-// 	{
-// 		seller_id: 2,
-// 		seller_name: '魔法能量商店',
-// 		seller_portrait: 'images/shop/sellerPortrait2.png',
-// 		seller_image: 'images/shop/sellerbackground2.png',
-// 		product: [
-// 			{
-// 				src: 'images/shop/sellerbackground1-1.png',
-// 			},
-// 			{
-// 				src: 'images/shop/sellerbackground2-2.png',
-// 			},
-// 			{
-// 				src: 'images/shop/sellerbackground2-3.png',
-// 			},
-// 		],
-// 		star: 4.0,
-// 		total_comments: 25,
-// 	},
-// 	{
-// 		seller_id: 3,
-// 		seller_name: '古早蜜餞',
-// 		seller_portrait: 'images/shop/sellerPortrait3.png',
-// 		seller_image: 'images/shop/sellerbackground3.png',
-// 		product: [
-// 			{
-// 				src: 'images/shop/sellerbackground3-1.png',
-// 			},
-// 			{
-// 				src: 'images/shop/sellerbackground3-2.png',
-// 			},
-// 			{
-// 				src: 'images/shop/sellerbackground2-3.png',
-// 			},
-// 		],
-// 		star: 4.7,
-// 		total_comments: 10,
-// 	},
-// 	{
-// 		seller_id: 4,
-// 		seller_name: '大夏製',
-// 		seller_portrait: 'images/shop/focus2.png',
-// 		seller_image: 'images/shop/sellerPortrait1.png',
-// 		product: [
-// 			{
-// 				src: 'images/shop/focus2-1.png',
-// 			},
-// 			{
-// 				src: 'images/shop/focus2-2.png',
-// 			},
-// 			{
-// 				src: 'images/shop/focus2-3.png',
-// 			},
-// 		],
-// 		star: 4.5,
-// 		total_comments: 0,
-// 	},
-// 	{
-// 		seller_id: 5,
-// 		seller_name: '廖老師算命館',
-// 		seller_portrait: 'images/shop/focus3.png',
-// 		seller_image: 'images/shop/focus3.png',
-// 		product: [
-// 			{
-// 				src: 'images/shop/focus3-1.png',
-// 			},
-// 			{
-// 				src: 'images/shop/focus3-2.png',
-// 			},
-// 			{
-// 				src: 'images/shop/focus3-3.png',
-// 			},
-// 		],
-// 		star: 4.0,
-// 		total_comments: 25,
-// 	},
-// 	{
-// 		seller_id: 6,
-// 		seller_name: '古早蜜餞',
-// 		seller_portrait: 'images/shop/sellerPortrait3.png',
-// 		seller_image: 'images/shop/sellerbackground3.png',
-// 		product: [
-// 			{
-// 				src: 'images/shop/sellerbackground3-1.png',
-// 			},
-// 			{
-// 				src: 'images/shop/sellerbackground3-2.png',
-// 			},
-// 			{
-// 				src: 'images/shop/sellerbackground3-3.png',
-// 			},
-// 		],
-// 		star: 4.7,
-// 		total_comments: 10,
-// 	},
-// ]);
+interface Shop {
+	seller_id: string;
+	shop_name: string;
+	shop_image: string;
+}
 
 const recommendSellerList = computed(() => userStore.recommendShopData);
 
-const navigation = ref({
-	nextEl: '.swiper-button-next',
-	prevEl: '.swiper-button-prev',
+const shopList = computed<Shop[]>(() => {
+	return recommendSellerList.value.map(shopData => ({
+		seller_id: shopData.seller_id,
+		shop_name: shopData.shop_name,
+		shop_image: shopData.shop_image,
+	}));
 });
+
 const modules = [Autoplay, Pagination, Navigation, Scrollbar];
 const prevEl = () => {};
 const nextEl = () => {};

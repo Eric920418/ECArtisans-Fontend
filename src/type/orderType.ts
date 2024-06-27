@@ -46,12 +46,17 @@ export interface DetailedOrderType {
 // 查詢所有訂單的訂單型態
 export interface OrderType {
 	_id: string;
-	orderNumber: string;
-	date: string;
-	products: string[];
-	state: number;
-	price: number;
-	pay: number;
+	products: OrderFormatType[];
+	state: number;  //訂單狀態  0:未付, 1:已付
+	totalPrice: number; //訂單總金額
+	createdAt: string; //訂單建立時間
+	updatedAt: string; // 訂單最後更新時間
+}
+
+export interface OrderFormatType {
+	format: {
+		image: string
+	}
 }
 
 export interface ApiResponseType {

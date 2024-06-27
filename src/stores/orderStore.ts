@@ -1,144 +1,109 @@
 import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
-import { sellerOrderAll, sellerOrder } from './api';
-import { type OrderType, type DetailedOrderType } from '@/type/orderType';
+import {
+	type OrderFormatType,
+	type DetailedOrderType,
+	type OrderType,
+} from '../type/orderType';
+import { getDate } from '@/setup/globalFunction';
 
-// /:order_id
-// 單一訂單用這隻
-// 頁面要先呈現
-// /:seller_id/orders
+import {
+	sellerOrderAll, // 12	get  訂單管理 
+	sellerOrder, // 13	get  單一訂單管理	 
+} from './api';
+import { useAuthStore } from './authStore';
+import router from '@/router';
 
-// 指定賣家的所有訂單
 
-interface ApiResponse {
-	status: string;
-	thisShop: OrderType;
-}
-
-export const useOrderStore = defineStore({
+export const useOrder = defineStore({
 	id: 'order',
 	state: () => ({
-		allOrders: [
-			{
-				_id: '6628b0217d9abcfe2fe8dd7c',
-				orderNumber: '123',
-				date: '2024/12/12',
-				products: ['661e1795e8992a1bd4b86cb3', '661e1795e8992a1bd4b86cb2'],
-				state: 1,
-				price: 2300,
-				pay: 1,
-			},
-			{
-				_id: '6628b0217d9abcfe2fe8dd7d',
-				orderNumber: '124',
-				date: '2024/12/13',
-				products: ['661e1795e8992a1bd4b86cb4', '661e1795e8992a1bd4b86cb5'],
-				state: 2,
-				price: 400,
-				pay: 2,
-			},
-			{
-				_id: '6628b0217d9abcfe2fe8dd7e',
-				orderNumber: '125',
-				date: '2024/12/14',
-				products: ['661e1795e8992a1bd4b86cb6', '661e1795e8992a1bd4b86cb7'],
-				state: 3,
-				price: 500,
-				pay: 3,
-			},
-			{
-				_id: '6628b0217d9abcfe2fe8dd7f',
-				orderNumber: '126',
-				date: '2024/12/15',
-				products: ['661e1795e8992a1bd4b86cb8', '661e1795e8992a1bd4b86cb9'],
-				state: 2,
-				price: 600,
-				pay: 4,
-			},
-			{
-				_id: '6628b0217d9abcfe2fe8dd80',
-				orderNumber: '127',
-				date: '2024/12/16',
-				products: ['661e1795e8992a1bd4b86cba', '661e1795e8992a1bd4b86cbb'],
-				state: 1,
-				price: 700,
-				pay: 5,
-			},
-		] as OrderType[], // 賣家所有訂單
-    
-		oneOrder: null as DetailedOrderType | null, // 賣家單筆訂單詳情
+		allData: [ //陣列，包含一個或多個訂單的資訊
+					{
+							"_id": "666ed8ee4666041420f054a6", //訂單id
+							"products": [
+									{
+											"format": { //商品規格
+													"image": "https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/120d317c-e861-4846-a71b-22b79d021316.png?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=eT1wr94NsgKZNqAeHk0Np143ESO8pod8fWt8Y75GDSO0T5bws9Tp%2Fd7u6VSiCFxqSSRwqg6yuYIHchJldY3lySrlD3PTYXUSJWJJhjxYE%2BOZbtki9N0aU10GQ1IUDW7EkC9j4nwj3rnaT%2FaOY2GXlRQbyOc8m8%2BgQ82jhr9%2Fklj8ry5xZBZ82F9ECcli0JFWa1L6IIyron5QGyx0OrxpbdnACYypwc6lJFn8VKRPpZsNVckg2mkoK3%2FuICHErvTvlGxDweZl0f4T1thbfISlkJt7%2BCcOTQGFUe6MTvWhK%2Fw0A%2FInMMUgM0qDjz0e%2FzD6JbX8mYwj8t%2BltNZ7LDEDYg%3D%3D" //商品圖片
+											}
+									}
+							],
+							"state": 0,  //訂單狀態  0:未付, 1:已付
+							"totalPrice": 800, //訂單總金額
+							"createdAt": "2024-06-16T12:22:06.504Z", //訂單建立時間
+							"updatedAt": "2024-06-16T12:22:06.504Z" // 訂單最後更新時間
+					},
+					{
+							"_id": "666ee45fdf3a67628239d206",
+							"products": [
+									{
+											"format": {
+													"image": "https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/120d317c-e861-4846-a71b-22b79d021316.png?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=eT1wr94NsgKZNqAeHk0Np143ESO8pod8fWt8Y75GDSO0T5bws9Tp%2Fd7u6VSiCFxqSSRwqg6yuYIHchJldY3lySrlD3PTYXUSJWJJhjxYE%2BOZbtki9N0aU10GQ1IUDW7EkC9j4nwj3rnaT%2FaOY2GXlRQbyOc8m8%2BgQ82jhr9%2Fklj8ry5xZBZ82F9ECcli0JFWa1L6IIyron5QGyx0OrxpbdnACYypwc6lJFn8VKRPpZsNVckg2mkoK3%2FuICHErvTvlGxDweZl0f4T1thbfISlkJt7%2BCcOTQGFUe6MTvWhK%2Fw0A%2FInMMUgM0qDjz0e%2FzD6JbX8mYwj8t%2BltNZ7LDEDYg%3D%3D"
+											}
+									}
+							],
+							"state": 0,
+							"totalPrice": 800,
+							"createdAt": "2024-06-16T13:10:55.512Z",
+							"updatedAt": "2024-06-16T13:10:55.512Z"
+					}
+			] as unknown as OrderType[],
 		isLoading: false, // 請求狀態
+		accountType: '',
 	}),
 	getters: {
-		// 獲取所有訂單
-		gettingAllOrders(state) {
-			return state.allOrders;
-		},
-		// 獲取單筆訂單
-		gettingSingleOrder(state) {
-			return state.oneOrder;
-		},
+		// // 獲取所有訂單
+		// gettingAllOrders(state) {
+		// 	return state.allOrders;
+		// },
+		// // 獲取單筆訂單
+		// gettingSingleOrder(state) {
+		// 	return state.oneOrder;
+		// },
 	},
 	actions: {
-		// 一個通用的 API 處理所有請求
-		async handleApiCall<T>(
-			apiFunction: () => Promise<T>,
-			successMessage: string = '操作成功',
-			errorMessage: string = '操作失敗'
-		): Promise<T | undefined> {
-			this.isLoading = true;
-			try {
-				const res = await apiFunction(); // 發送 API 請求
-				alertStore.success(successMessage); // 請求成功，顯示成功訊息
-				return res; // 返回請求結果
-			} catch (error) {
-				this.handleError(error, errorMessage); // 處理錯誤
-			} finally {
-				this.isLoading = false; // 請求結束，取消加載狀態
+		async setAccountType(): Promise<void> {
+			const currentPagePath = window.location.hash;
+			if (currentPagePath.includes('/seller')) {
+				this.accountType = 'seller';
+			} else if (currentPagePath.includes('/user')) {
+				this.accountType = 'user';
 			}
 		},
-		// 獲取單筆訂單
-		async getOneOrderByOrderID(order_id: string): Promise<void> {
-			try {
-				const res = await this.handleApiCall(
-					() => sellerOrder(order_id),
-					'單筆訂單取得成功',
-					'單筆訂單取得失敗'
-				);
-				const data = res as ApiResponse;
-				const { thisShop } = data as unknown as { thisShop: DetailedOrderType };
-				this.oneOrder = JSON.parse(JSON.stringify(thisShop)); // 更新所有訂單數據
-				// router.push({ name: 'SellerOneOrder', params: { orderId: order_id } });
-			} catch (error) {
-				// 錯誤已處理
-			}
-		},
-		// 獲取賣家的所有訂單
-		async getAllOrders(seller_id: string): Promise<void> {
-			try {
-				const res = await this.handleApiCall(
-					() => sellerOrderAll(seller_id),
-					'所有訂單取得成功'
-				);
-				const { thisShop } = res as { thisShop: any };
-				this.allOrders = thisShop.flatMap((shop: { order: any }) => shop.order); // 提取商店所有訂單
-			} catch (error) {
-				// 錯誤已處理
-			}
-		},
-		// 處理登入錯誤
-		handleError(error: any, errorMessage: string): void {
-			console.error('登入錯誤:', error);
-			if (error.response && error.response.status === 500) {
-				errorMessage = '伺服器錯誤，請稍後再試';
-			} else if (
-				error.response &&
-				error.response.data &&
-				error.response.data.message
-			) {
-				errorMessage = error.response.data.message;
-			}
-			alertStore.error(errorMessage); // 顯示錯誤訊息
-		},
+		// 獲取所有訂單
+		async gettingAllOrders(token: string): Promise<void> {
+				try {
+					await this.setAccountType();
+					if (this.accountType === 'seller') {
+						const authStore = useAuthStore();
+						await sellerOrderAll(authStore.token)
+							.then(res => {
+								// 轉換 sellerCategory
+								const processedOrders = res.orders.map((orderGroup: { order: OrderType[] }) => {
+									return orderGroup.order.map((order: OrderType) => {
+										return {
+											...order,
+											products: order.products.map((product: OrderFormatType) => ({
+												...product,
+												format: {
+													...product.format,
+													// 根据需要转换 format 内的其他字段
+													image: product.format.image
+												}
+											}))
+										};
+									});
+								});								// 更新狀態
+								// this.allData = processedOrders;
+								alertStore.success('訂單取得成功');
+							})
+							.catch(err => {
+								alertStore.error(err.response.data.message);
+							});
+					}
+				} catch (error) {
+					alertStore.error('showError');
+				}
+			},
 	},
 });

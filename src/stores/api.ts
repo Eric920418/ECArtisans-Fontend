@@ -76,8 +76,8 @@ export const home_recommendShops = (page: number) =>
 export const home_newProducts = (page: number) =>
 	handleApiResponse(apiRequest.get(`/home/latest-products?limit=${page}`));
 // 30	get	 /home/follow-shops	 	 首頁關注商家	 	 買家端
-export const home_followShops = (data: any) =>
-	handleApiResponse(apiRequest.get('/home/follow-shops', data));
+export const home_followShops = (token: string) =>
+	handleApiResponse(apiRequest.get('/home/follow-shops', headers(token)));
 
 // 購物商城 ■ 商品總覽
 // 54	get   /products/${category}	 	 商品總覽	 	 買家端
@@ -206,12 +206,12 @@ export const sellerCouponDelete = (coupon_id: string, token: string) =>
 
 // 商家 ■ 訂單管理 ■
 // 12	get   /shop/${seller_id}/orders	 	 訂單管理	 	 賣家端
-export const sellerOrderAll = (seller_id: string) =>
-	handleApiResponse(apiRequest.get(`/shop/${seller_id}/orders`));
+export const sellerOrderAll = (token: string) =>
+	handleApiResponse(apiRequest.get(`/shop/orders`, headers(token)));
 // 13	get   /shop/${seller_id}/order/${order_id}	 	 單一訂單管理	 	賣家端
 // export const sellerOrder = (seller_id: string, order_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/order/${order_id}`));
-export const sellerOrder = (order_id: string) =>
-	handleApiResponse(apiRequest.get(`/orders/${order_id}`));
+export const sellerOrder = (order_id: string, token: string) =>
+	handleApiResponse(apiRequest.get(`/orders/${order_id}`, headers(token)));
 
 // 商家 ■ 活動相關 ■
 // 37	get	    /${seller_id}/activities	 	賣家顯示所有活動管理 	 	賣家端

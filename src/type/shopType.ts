@@ -13,7 +13,8 @@ export interface SellerPageType {
 export interface SellerPageProductType {
 	products_id: string;
 	products_name: string;
-	products_images: string;
+	products_images?: string;
+	products_image?: string;
 	seller_name: string;
 	total_sales: number;
 	price: number;

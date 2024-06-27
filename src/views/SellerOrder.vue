@@ -7,7 +7,7 @@
 					<div
 						v-for="orderItem in paginatedData"
 						:key="orderItem._id"
-						class="col-12 p-3 m-0"
+						class="col-12 col-md-6 p-3 m-0"
 					>
 						<Card :data="formatCardData(orderItem)" />
 					</div>
@@ -35,16 +35,16 @@ import Pagenation from '@/components/Pagenation.vue';
 
 import { useRoute, useRouter } from 'vue-router';
 
-import { useOrderStore } from '@/stores/index';
+import { useOrder } from '@/stores/index';
 import { type OrderType } from '@/type/orderType';
 import { type NavTabsTitleType } from '@/type/navTabsTitle';
 import { useAuthStore } from '@/stores/index';
 
 const route = useRoute();
 const router = useRouter();
-const orderStore = useOrderStore();
+const orderStore = useOrder();
 // 呼叫資料 (目前假資料)
-const orders = computed((): OrderType[] | [] => orderStore.gettingAllOrders); // 從 store 中獲取所有訂單
+const orders = computed((): OrderType[] | [] => orderStore.allData); // 從 store 中獲取所有訂單
 
 const navTabs = ref({}) as any;
 
@@ -103,14 +103,14 @@ const initData = () => {
 	}
 };
 
-// 格式化 Card 的数据
+// 格式化card數據
 const formatCardData = (orderItem: OrderType) => ({
 	go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
-	img: '', // 暂时没有商品图像信息
-	title: orderItem.orderNumber,
+	img: orderItem.products[0].format.image || '',
+	title: orderItem._id,
 	state: orderItem.state,
-	price: orderItem.price,
-	date: { sDate: orderItem.date },
+	price: orderItem.totalPrice,
+	date: { sDate: orderItem.createdAt },
 	btn: [
 		{
 			title: '查看訂單',
@@ -122,7 +122,6 @@ const formatCardData = (orderItem: OrderType) => ({
 		},
 	],
 });
-
 const currentPage = computed(() => parseInt(route.query.page as string) || 1);
 const perPage = ref(5); // 一頁要顯示多少的項目數量
 const totalRows = computed(() => filteredData.value.length); // 總項目數量
