@@ -95,7 +95,6 @@
 												? 'startDate|need:開始日期'
 												: ''
 										"
-										ref="document.getElementById('startDate')"
 										v-model="data.startDate"
 										aria-label="startDate"
 										placeholder="請輸入優惠卷使用期限"
@@ -127,7 +126,6 @@
 												: ''
 										"
 										v-model="data.endDate"
-										ref="document.getElementById('endDate')"
 										aria-label="到期日"
 										placeholder="請輸入優惠卷使用期限"
 										:disabled="
@@ -516,25 +514,29 @@ function updateStartDateMin() {
 		'startDate'
 	) as HTMLInputElement | null;
 	if (startDateInput) {
-		const today = new Date();
-		today.setDate(today.getDate() + 1); // 明天
-		startDateInput.min = today.toISOString().split('T')[0];
+		startDateInput.min = getTomorrow();
 	}
 }
 // 判斷結束日期 min
 function updateEndDateMin() {
 	const endDateInput = document.getElementById(
-		'end_date'
+		'endDate'
 	) as HTMLInputElement | null;
 	if (endDateInput) {
-		if (data.value.startDate instanceof Date) {
-			endDateInput.min = data.value.startDate.toISOString().split('T')[0];
-		} else if (typeof data.value.startDate === 'string') {
+		if (typeof data.value.startDate === 'string') {
 			endDateInput.min = data.value.startDate;
 		} else {
-			endDateInput.min = '';
+			endDateInput.min = getTomorrow();
 		}
 	}
+}
+function getTomorrow() {
+	const today = new Date('Thu Jun 27 2024 01:24:19 GMT+0800');
+	const year = today.getFullYear();
+	const month = (today.getMonth() + 1).toString().padStart(2, '0');
+	const day = today.getDate().toString().padStart(2, '0');
+	const localDate = `${year}-${month}-${day}`;
+	return localDate;
 }
 
 onMounted(() => {

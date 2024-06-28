@@ -11,6 +11,10 @@ import PaymentSuccess from '../views/PaymentSuccess.vue';
 // import FAQ from '../views/eric/IndexFAQ.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
 
+// 購物車
+import Cart from '../views/Cart.vue';
+import CartCheck from '../views/CartCheck.vue';
+
 // 登入註冊相關頁面 ---------------------------------START
 import Login from '../views/Login.vue';
 import SignUp from '../views/SignUp.vue';
@@ -178,6 +182,21 @@ const routes = [
 			},
 		],
 	},
+	{
+		path: '/cart',
+		name: 'Cart',
+		component: Cart,
+		// meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
+	},
+	{
+		path: '/cart-check',
+		name: 'CartCheck',
+		component: CartCheck,
+		// meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
+	},
+
+	// 以上需會員登入。
+
 	// {
 	// 	path: '/:pathMatch(.*)*',
 	// 	component: () => import('../views/NotFound.vue'),
@@ -188,12 +207,12 @@ const routes = [
 		name: 'PaymentSuccess',
 		component: PaymentSuccess,
 	},
-	{
-		path: '/:pathMatch(.*)*',
-		redirect: {
-			name: 'Index',
-		},
-	},
+	// {
+	// 	path: '/:pathMatch(.*)*',
+	// 	redirect: {
+	// 		name: 'Index',
+	// 	},
+	// },
 	{
 		path: '/newPage/:pathMatch(.*)*',
 		redirect: {

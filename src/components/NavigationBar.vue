@@ -60,9 +60,9 @@
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<button
-					disabled
 					v-if="!isSellerRoute && resize < 1200"
 					class="btn btn-primary rounded-circle me-4 btn-size"
+					@click="$go({ name: 'Cart' })"
 				>
 					<i class="bi bi-bag"></i>
 					<span
@@ -619,8 +619,8 @@
 
 								<button
 									v-if="resize >= 1200"
-									disabled
 									class="ms-2 btn btn-primary rounded-circle position-relative btn-size"
+									@click="$go({ name: 'Cart' })"
 								>
 									<i class="bi bi-bag"></i>
 									<span

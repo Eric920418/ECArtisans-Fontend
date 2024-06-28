@@ -27,8 +27,14 @@ export const useAlertStore = defineStore({
 			logIn: { icon: 'circle-check', text: '登入成功' },
 			logError: { icon: 'circle-xmark', text: '登入失敗' },
 			logOut: { icon: 'circle-check', text: '登出成功' },
+
+			newOK: { icon: 'circle-check', text: '新增成功' },
+			newError: { icon: 'circle-xmark', text: '新增失敗' },
 			renewOK: { icon: 'circle-check', text: '更新成功' },
 			renewError: { icon: 'circle-xmark', text: '更新失敗' },
+			deleteOK: { icon: 'circle-check', text: '刪除成功' },
+			deleteError: { icon: 'circle-xmark', text: '刪除失敗' },
+
 			showError: { icon: 'circle-xmark', text: '讀取資料失敗' },
 			registerOK: { icon: 'circle-check', text: '註冊成功，返回登入頁面' },
 			couponDelete: { icon: 'trash', text: '優惠劵刪除成功' },
