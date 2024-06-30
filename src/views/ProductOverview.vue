@@ -1,5 +1,5 @@
 <template>
-	<div class="container-fluid">
+	<div class="container">
 		<div class="row mt-7">
 			<!-- Sidebar for filters -->
 			<div class="col-lg-2">
@@ -74,12 +74,9 @@
 						</div>
 					</div>
 				</div>
-			</div>
-
-			<!-- 商品卡 -->
-			<div class="col-lg-8">
-				<!-- Sorting Options (Visible on small screens) -->
-				<div class="card mb-4 d-block d-lg-none">
+				<!-- Sidebar for sorting  -->
+				<!-- Sorting Options -->
+				<div class="card mb-4">
 					<h3 class="fs-5 neutral-01 mb-0 me-3">排序</h3>
 					<div class="card-body">
 						<select
@@ -93,7 +90,10 @@
 						</select>
 					</div>
 				</div>
+			</div>
 
+			<!-- 商品卡 -->
+			<div class="col-lg-10">
 				<div class="row">
 					<h3 class="fs-5 neutral-01 mb-0 me-3">
 						共 {{ totalRows }} 樣關於
@@ -110,11 +110,11 @@
 						<Card
 							:item="item"
 							@click="
-								$go({ name: 'ShopHome', params: { id: item.products_id } })
+								$go({ name: 'ShopProduct', params: { id: item.products_id } })
 							"
 						/>
 					</div>
-					<div class="col-12">
+					<div class="col-12 mt-5">
 						<!-- 使用 Pagenation 子組件來顯示分頁 -->
 						<!-- 當 Pagenation 組件中的頁碼更新時，子組件傳遞"update:currentPage"事件並觸發 updatePage 方法 -->
 						<Pagenation
@@ -123,25 +123,6 @@
 							:totalRows="totalRows"
 							@update:currentPage="updatePage"
 						/>
-					</div>
-				</div>
-			</div>
-
-			<!-- Sidebar for sorting (Visible on large screens) -->
-			<div class="col-lg-2 d-none d-lg-block">
-				<!-- Sorting Options -->
-				<div class="card mb-4">
-					<h3 class="fs-5 neutral-01 mb-0 me-3">排序</h3>
-					<div class="card-body">
-						<select
-							class="form-select mb-3"
-							id="sortBy"
-							v-model="filters.sortBy"
-						>
-							<option value="">預設排序</option>
-							<option value="priceAsc">價格：低到高</option>
-							<option value="priceDesc">價格：高到低</option>
-						</select>
 					</div>
 				</div>
 			</div>
