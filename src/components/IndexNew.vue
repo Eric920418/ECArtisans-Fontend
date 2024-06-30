@@ -44,7 +44,7 @@
 						<Card
 							:item="item"
 							@click="
-								$go({ name: 'ShopHome', params: { id: item.products_id } })
+								$go({ name: 'ShopProduct', params: { id: item.products_id } })
 							"
 						/>
 					</SwiperSlide>

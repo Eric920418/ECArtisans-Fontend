@@ -79,7 +79,7 @@ const setThumbsSwiper = (swiper: any) => {
 	thumbsSwiper.value = swiper;
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .swiper-box {
 	width: 100%;
 	// 	margin: 0;
