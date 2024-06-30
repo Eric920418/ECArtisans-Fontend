@@ -104,24 +104,61 @@ const initData = () => {
 };
 
 // 格式化card數據
-const formatCardData = (orderItem: OrderType) => ({
-	go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
-	img: orderItem.products[0].format.image || '',
-	title: orderItem._id,
-	state: orderItem.state,
-	price: orderItem.totalPrice,
-	date: { sDate: orderItem.createdAt },
-	btn: [
-		{
-			title: '查看訂單',
-			go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
-		},
-		{
-			title: '聯絡買家',
-			go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
-		},
-	],
-});
+const formatCardData = (orderItem: OrderType) => {
+	const commonData = {
+		go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+		img: orderItem.products[0].format.image || '',
+		title: orderItem._id,
+		state: orderItem.state,
+		price: orderItem.totalPrice,
+		product_count: orderItem.products.length,
+		delivery: orderItem.delivery,
+		date: { sDate: orderItem.createdAt },
+	};
+
+	if (route.matched[0].path === '/seller') {
+		return {
+			...commonData,
+			btn: [
+				{
+					title: '查看訂單',
+					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '聯絡買家',
+					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+				},
+			],
+		};
+	} else {
+		return {
+			...commonData,
+			btn: [
+				{
+					title: '已收到貨',
+					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '立即評價',
+					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '查看評價',
+					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '查看訂單',
+					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '聯絡賣家',
+					go: { name: 'BuyerOrderCheck', params: { id: orderItem._id } },
+				},
+			],
+		};
+	}
+};
+
 const currentPage = computed(() => parseInt(route.query.page as string) || 1);
 const perPage = ref(5); // 一頁要顯示多少的項目數量
 const totalRows = computed(() => filteredData.value.length); // 總項目數量

@@ -17,6 +17,9 @@
 	</div>
 </template>
 <script setup lang="ts">
+/*
+	參考來源：https://fadamakis.com/clean-layout-architecture-for-vue-applications-a738201a2a1e
+*/
 import { ref, watchEffect } from 'vue';
 import NavigationBar from '../components/NavigationBar.vue';
 import NavigationBarShop from '../components/NavigationBarShop.vue';

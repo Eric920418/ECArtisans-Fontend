@@ -9,11 +9,19 @@
 			v-for="(funItem, funIndex) in data"
 			:key="funIndex"
 			class="m-0"
-			:class="`col-${funItem.cols} col-sm-${funItem.cols_sm} col-md-${funItem.cols_md} col-lg-${funItem.cols_lg} ${funItem.data ? `p-0` : 'funCard'}`"
+			:class="`col-${funItem.cols} col-sm-${funItem.cols_sm} col-md-${
+				funItem.cols_md
+			} col-lg-${funItem.cols_lg} ${funItem.data ? `p-0` : 'funCard'}`"
 		>
 			<div v-if="!funItem.data" class="card h-100 m-0 p-0 bg-transparent">
 				<div
 					class="card-body p-0 position-relative d-flex justify-content-center"
+					@click="
+						$go({
+							name: 'ProductOverview',
+							query: { category: funItem.name, page: 1 },
+						})
+					"
 				>
 					<img
 						:src="`${funItem.url}`"
@@ -31,7 +39,7 @@
 				</div>
 			</div>
 
-			<div class="row h-100 p-0 m-0" v-else-if="funItem.data">
+			<div class="row h-100 p-0 m-0">
 				<div
 					v-for="(fun_2_Item, fun_2_Index) in funItem.data"
 					:key="fun_2_Index"

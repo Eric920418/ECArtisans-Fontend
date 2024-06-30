@@ -13,7 +13,7 @@ import VueCookies from 'vue-cookies';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import * as VeeValidate from './setup/vee-validate';
-
+import VueSlider from 'vue-slider-component';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { LoadingPlugin } from 'vue-loading-overlay';
 
@@ -57,5 +57,6 @@ app.use(VueAxios, axios);
 app.use(VueCookies);
 app.use(LoadingPlugin);
 app.use(createBootstrap({ components: true, directives: true })); // Change this line
+app.component('VueSlider', VueSlider);
 
 app.mount('#app');

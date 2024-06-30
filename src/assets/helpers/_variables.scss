@@ -319,6 +319,12 @@ $Neutral-03: #e4e9f2 !default; //深色背景
 $Neutral-04: #f0f4f7 !default; //深色背景
 $Neutral-05: #f7f7f7 !default; //深色背景
 
+// 讓其他頁面可以直接呼叫該變數
+:root {
+  --primary: #{$primary};
+	--secondary: #{$secondary};
+}
+
 /* 	備註：
 			文字顏色 直接調整 $gray-900 因為壓不過去。
 			input::placeholder 另外調整。

@@ -13,7 +13,8 @@ import {
 	home_popularProducts, // 27 get 首頁熱銷商品
 	home_recommendShops, // 28 get 首頁推薦商家
 	home_newProducts, // 29 get 首頁新品推薦
-	home_followShops // 30 get 首頁關注商家
+	home_followShops, // 30 get 首頁關注商家
+	productAll, // 54	get 商品總覽
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -173,6 +174,21 @@ export const useShop = defineStore({
 					})
 					.catch(err => {
 						this.sellerProductsData = []; //避免未覆蓋掉上一筆查的商品
+						alertStore.error(err.response.data.message);
+					});
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 獲取商品分類的所有商品
+		async getAllProductsByCategoryID(categoryID:string): Promise<void> {
+			try {
+				// 固定抓8 筆
+				await productAll(categoryID)
+					.then(res => {
+						this.sellerProductsData = res.data;
+					})
+					.catch(err => {
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
