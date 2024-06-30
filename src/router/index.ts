@@ -58,8 +58,13 @@ const routes = [
 	},
 	{
 		path: '/search', // 前台商品總覽
-    name: 'ProductOverview',
+		name: 'ProductOverview',
 		component: ProductOverview,
+	},
+	{
+		path: '/product/:id', // 前台商品詳細頁面
+		name: 'ShopProduct',
+		component: ShopProduct,
 	},
 	// seller 商家所有頁面 ------------------------- seller 商家所有頁面 --------START
 	{

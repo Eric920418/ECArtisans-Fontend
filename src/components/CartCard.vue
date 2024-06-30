@@ -133,18 +133,7 @@ const props = defineProps<{
 	width: 80px;
 	height: 80px;
 }
-.text-line-2 {
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-}
-.text-line-1 {
-	display: -webkit-box;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-}
+
 
 @media (max-width: 768px) {
 	.fs-5 {
