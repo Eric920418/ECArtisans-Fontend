@@ -1,46 +1,172 @@
 <template>
-	<div class="row g-3 mx-0 mb-0 pb-0">
-		<div class="col-12 m-0 p-0">
-			<NavTabs :data="navTabs" @update-schedule="updateSchedule" />
-			<div class="my-0">
-				<div class="row m-0 p-2">
+	<div class="container-fluid">
+		<div class="row mt-7">
+			<!-- Sidebar for filters -->
+			<div class="col-lg-2">
+				<!-- Filter options -->
+				<div class="card mb-4">
+					<h3 class="fs-5 neutral-01 mb-0 me-3">篩選</h3>
+					<div class="card-body">
+						<!-- Discount Activities Dropdown -->
+						<div class="mb-3">
+							<label for="discountActivities" class="form-label">
+								折價活動
+							</label>
+							<select
+								v-model="filters.selectedDiscount"
+								id="discountActivities"
+								class="form-select"
+							>
+								<option value="">全部</option>
+								<option value="折抵券">折抵券</option>
+								<option value="免運券">免運券</option>
+							</select>
+						</div>
+
+						<!-- Price Range Slider with vue-slider-component -->
+						<div class="mb-3">
+							<label for="priceRange" class="form-label">價格範圍</label>
+							<vue-slider
+								:min="minPrice"
+								:max="maxPrice"
+								v-model="filters.priceRange"
+								:dragging="true"
+								:interval="10"
+								tooltip="always"
+								tooltip-placement="bottom"
+								:enable-cross="false"
+							></vue-slider>
+						</div>
+
+						<!-- Origin Dropdown -->
+						<div class="mb-3">
+							<label for="origin" class="form-label">產地</label>
+							<select
+								v-model="filters.selectedOrigin"
+								id="origin"
+								class="form-select"
+							>
+								<option value="">全部</option>
+								<option value="taiwan">台灣</option>
+								<option value="china">中國</option>
+							</select>
+						</div>
+
+						<!-- Color Dropdown -->
+						<div class="mb-3">
+							<label for="color" class="form-label">顏色</label>
+							<select
+								v-model="filters.selectedColor"
+								id="color"
+								class="form-select"
+							>
+								<option value="">全部</option>
+								<option value="red">紅色</option>
+								<option value="blue">藍色</option>
+							</select>
+						</div>
+
+						<!-- Reset Buttons -->
+						<div class="d-grid gap-2">
+							<button class="btn btn-secondary" @click="resetFilters">
+								重設
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 商品卡 -->
+			<div class="col-lg-8">
+				<!-- Sorting Options (Visible on small screens) -->
+				<div class="card mb-4 d-block d-lg-none">
+					<h3 class="fs-5 neutral-01 mb-0 me-3">排序</h3>
+					<div class="card-body">
+						<select
+							class="form-select mb-3"
+							id="sortBy"
+							v-model="filters.sortBy"
+						>
+							<option value="">預設排序</option>
+							<option value="priceAsc">價格：低到高</option>
+							<option value="priceDesc">價格：高到低</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="row">
+					<h3 class="fs-5 neutral-01 mb-0 me-3">
+						共 {{ totalRows }} 樣關於
+						<span :style="{ color: 'var(--bs-primary)' }">
+							「 {{ $route.query.category }} 」
+						</span>
+						的商品
+					</h3>
 					<div
-						class="col-6 col-md-4 col-lg-4 col-xl-3 p-1 m-0"
-						v-for="(item, index) in ProductList"
+						v-for="(item, index) in paginatedData"
 						:key="index"
+						class="col-6 col-md-4 col-lg-4 col-xl-3 p-1 m-0"
 					>
-						<Card :item="item" :goCart="true" />
+						<Card
+							:item="item"
+							@click="
+								$go({ name: 'ShopHome', params: { id: item.products_id } })
+							"
+						/>
+					</div>
+					<div class="col-12">
+						<!-- 使用 Pagenation 子組件來顯示分頁 -->
+						<!-- 當 Pagenation 組件中的頁碼更新時，子組件傳遞"update:currentPage"事件並觸發 updatePage 方法 -->
+						<Pagenation
+							:currentPage="currentPage"
+							:perPage="perPage"
+							:totalRows="totalRows"
+							@update:currentPage="updatePage"
+						/>
+					</div>
+				</div>
+			</div>
+
+			<!-- Sidebar for sorting (Visible on large screens) -->
+			<div class="col-lg-2 d-none d-lg-block">
+				<!-- Sorting Options -->
+				<div class="card mb-4">
+					<h3 class="fs-5 neutral-01 mb-0 me-3">排序</h3>
+					<div class="card-body">
+						<select
+							class="form-select mb-3"
+							id="sortBy"
+							v-model="filters.sortBy"
+						>
+							<option value="">預設排序</option>
+							<option value="priceAsc">價格：低到高</option>
+							<option value="priceDesc">價格：高到低</option>
+						</select>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
-<script setup lang="ts">
-import { useUserStore, useAuthStore } from '@/stores/index';
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import NavTabs from '../components/NavTabs.vue';
-import Card from '@/components/ProductCardHome.vue';
-import router from '@/router';
-import type { NavTabsTitleType } from '@/type/navTabsTitle';
-const route = useRoute();
-const authStore = useAuthStore();
-const userStore = useUserStore();
 
-interface Product {
-	avatar: string;
-	comment: string;
-	company: string;
-	name: string;
-	sold: number;
-	price: number;
-	stars: number;
-}
-// 請強制設訂為 12 的倍數 ...例如：12、24、48...
-// 因為顯示為 4 、 3  避免有缺。
-// 除非 每次顯示 改為 4 跟 8 的倍數。
-const ProductList = ref([
+<script setup lang="ts">
+import { ref, reactive, computed, onMounted, watch } from 'vue';
+import Card from '@/components/ProductCardHome.vue';
+import Pagenation from '@/components/Pagenation.vue';
+
+import '../../node_modules/vue-slider-component/lib/theme/default.scss';
+import { useRoute, useRouter } from 'vue-router';
+// stores
+import { useShop, useResize } from '@/stores/index';
+const { resize } = useResize();
+
+const route = useRoute();
+const router = useRouter();
+
+const shopStore = useShop();
+
+// const ProductList = computed(() => shopStore.sellerProductsData);
+const products = ref([
 	{
 		products_id: '66769071b72f97fbc2b5561a',
 		products_name: '專業運動耳機',
@@ -219,49 +345,132 @@ const ProductList = ref([
 	},
 ]);
 
-const userTitleData = {
-	routeName: 'UserCoupon',
-	title: [
-		{
-			title: '未結束',
-			path: { name: 'UserCollect', query: { page: 1, filter: '未結束' } },
-		},
-		{
-			title: '結束',
-			path: { name: 'UserCollect', query: { page: 1, filter: '結束' } },
-		},
-		{
-			title: '停止',
-			path: { name: 'UserCollect', query: { page: 1, filter: '停止' } },
-		},
-	],
-	schedule: '未結束', //目前頁面
+// Filter price slider default
+const minPrice = 0;
+// Caculate max price from data
+const maxPrice = products.value.reduce((max, product) => {
+	return product.price > max ? product.price : max;
+}, 0);
+
+// filter & sort condition
+const filters = reactive({
+	selectedDiscount: '',
+	selectedOrigin: '',
+	selectedColor: '',
+	priceRange: [minPrice, maxPrice],
+	sortBy: '', // default sort
+});
+// Filtered products based on selected filters
+const filteredProducts = computed(() => {
+	let filteredData = products.value;
+
+	// Apply filters based on selected options
+	if (filters.selectedDiscount) {
+		filteredData = filteredData.filter(product => {
+			// Check if product.discount array includes the selected discount type
+			return product.discount.includes(filters.selectedDiscount);
+		});
+	}
+	/*商品資料尚未有這些 */
+	// if (filters.selectedOrigin) {
+	// 	filteredData = filteredData.filter(
+	// 		product => product.origin === filters.selectedOrigin
+	// 	);
+	// }
+	// if (filters.selectedColor) {
+	// 	filteredData = filteredData.filter(
+	// 		product => product.color === filters.selectedColor
+	// 	);
+	// }
+
+	// Filtering based on price range
+	filteredData = filteredData.filter(
+		product =>
+			product.price >= filters.priceRange[0] &&
+			product.price <= filters.priceRange[1]
+	);
+
+	// Sorting based on price
+	if (filters.sortBy === 'priceAsc') {
+		filteredData.sort((a, b) => a.price - b.price);
+	} else if (filters.sortBy === 'priceDesc') {
+		filteredData.sort((a, b) => b.price - a.price);
+	}
+
+	return filteredData;
+});
+
+// Reset filters function
+const resetFilters = () => {
+	filters.selectedDiscount = '';
+	filters.selectedOrigin = '';
+	filters.selectedColor = '';
+	filters.priceRange = [minPrice, maxPrice];
 };
 
-const updateSchedule = (newSchedule: NavTabsTitleType) => {
-	if (
-		Object.prototype.hasOwnProperty.call(newSchedule, 'title') &&
-		newSchedule.title
-	) {
-		navTabs.value.schedule = newSchedule.title;
+const currentPage = computed(() => parseInt(route.query.page as string)) || 1;
+const perPage = ref(8); // 一頁要顯示多少的項目數量
+const totalRows = computed(() => filteredProducts.value.length); // 總項目數量
+const maxPage = computed(() =>
+	Math.ceil(filteredProducts.value.length / perPage.value)
+);
+
+// 當currentPage或perPage改變時重新計算當前頁的資料
+const paginatedData = computed(() => {
+	const start = (currentPage.value - 1) * perPage.value;
+	const end = start + perPage.value;
+	return filteredProducts.value.slice(start, end);
+});
+
+// 更新頁碼
+const updatePage = (page: number) => {
+	router.push({ query: { ...route.query, page: page.toString() } });
+};
+
+// 轉換delivery為文字
+const getCategoryID = (categoryName: string) => {
+	switch (categoryName) {
+		case '娛樂':
+			return '1';
+		case '服飾':
+			return '2';
+		case '3C產品':
+			return '3';
+		case '食品':
+			return '4';
+		case '家具':
+			return '5';
+		case '運動用品':
+			return '6';
+		case '寵物用品':
+			return '7';
+		case '生活用品':
+			return '8';
+		case '清潔用品':
+			return '9';
+		default:
+			return '未知分類';
 	}
 };
 
-const navTabs = ref({}) as any;
-const init = ref({}) as any;
+// 增加 loading 狀態
+const loading = ref(true);
 
-const getData = () => {
-	if (route.matched[0].path === '/user') {
-		init.value = userTitleData;
-		navTabs.value = {
-			title: userTitleData.title,
-			schedule: userTitleData.schedule,
-		};
-	}
-};
-onMounted(() => {
-	getData();
+onMounted(async () => {
+	// const category = route.query.category as string; // 從路由的 query 中獲取 categoryId，假設它是一個字串
+	// console.log(route);
+	// if (category) {
+	// 	await shopStore.getAllProductsByCategoryID(getCategoryID(category)); // 將 categoryId 作為參數傳遞給函數
+	// 	console.log(shopStore.sellerProductsData);
+	// } else {
+	// 	// Handle case where categoryId is not provided
+	// 	console.error('categoryId not provided in query params');
+	// }
+
+	loading.value = false; // 資料獲取完成後將 loading 設為 false
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Add custom styles as needed */
+</style>

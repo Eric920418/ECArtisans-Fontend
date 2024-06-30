@@ -36,11 +36,6 @@
 							{{ isExpanded ? '收起' : '展開' }}
 						</button>
 					</div>
-					<div class="mt-2">
-						<button type="button" class="btn btn-primary" @click="getCoupon">
-							點我領取優惠卷
-						</button>
-					</div>
 				</div>
 			</div>
 		</div>

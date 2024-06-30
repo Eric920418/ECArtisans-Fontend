@@ -23,6 +23,7 @@ export const useAuthStore = defineStore({
 	state: () => initialState(),
 	actions: {
 		async login(data: UserDataType): Promise<void> {
+			this.reset();
 			await this.setAccountType();
 			if (data.mail !== '' && data.password !== '') {
 				if (this.accountType !== '') {

@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router';
 import Index from '../views/PageIndex.vue';
 import ShopHome from '../views/ShopHome.vue';
 import ShopProduct from '../views/ShopProduct.vue';
-import TestPage from '../views/TestPage.vue';
+import ProductOverview from '../views/ProductOverview.vue';
 import PaymentSuccess from '../views/PaymentSuccess.vue';
 // import FAQ from '../views/eric/IndexFAQ.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
@@ -45,7 +45,6 @@ import { computed } from 'vue';
 
 const routes = [
 	{ path: '/', name: 'Index', component: Index },
-	{ path: '/test-page', name: 'TestPage', component: TestPage },
 	// { path: '/faq', name: 'FAQ', component: FAQ },
 
 	{ path: '/user-login', name: 'UserLogin', component: Login },
@@ -56,6 +55,11 @@ const routes = [
 		path: '/shop/:id', // 前台商家頁面
 		name: 'ShopHome',
 		component: ShopHome,
+	},
+	{
+		path: '/search', // 前台商品總覽
+    name: 'ProductOverview',
+		component: ProductOverview,
 	},
 	// seller 商家所有頁面 ------------------------- seller 商家所有頁面 --------START
 	{

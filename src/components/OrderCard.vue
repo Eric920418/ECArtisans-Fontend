@@ -3,6 +3,9 @@
 		<div class="row m-0 p-0">
 			<div v-if="data.img" class="productCard-img-100 p-0">
 				<img :src="`${data.img}`" class="img-eca" />
+				<div class="product_count neutral-05 text-center m-0 p-0">
+					{{ data.product_count }}
+				</div>
 			</div>
 			<div class="col p-0 m-0">
 				<div class="border-bottom pb-1 mb-1 d-flex align-items-center">
@@ -21,6 +24,11 @@
 
 				<p v-if="data.date" class="text-date mb-0 mt-1">
 					交易日期： {{ $getDate(data.date.sDate) }}
+				</p>
+				<p class="mb-0">
+					<span class="text-card-coupon btn-Bg-active rounded-1 text-primary">
+						{{ deliveryMethod }}
+					</span>
 				</p>
 				<div class="d-flex justify-content-end align-items-center">
 					<div class="text-enable-total mb-0 text-nowrap">總計：</div>
@@ -66,6 +74,8 @@ export interface OrderCardType {
 	id?: string; //編號
 	price?: number; // 訂單價格
 	pay?: number; // 支付方式
+	product_count: number; //商品類型數量
+	delivery: number;
 	date?: {
 		//交易日期
 		sDate: string;
@@ -82,6 +92,20 @@ const stateText = computed(() => {
 	return props.data.state === 0 ? '未付' : '已付';
 });
 
+// 轉換delivery為文字
+const deliveryMethod = computed(() => {
+	switch (props.data.delivery) {
+		case 1:
+			return '宅配';
+		case 2:
+			return '黑貓宅急便';
+		case 3:
+			return '店到店';
+		default:
+			return '未填寫';
+	}
+});
+
 // 將價格格式帶上千分位字串
 const formatPrice = (price: number | undefined): string => {
 	if (!price) return '';
@@ -90,6 +114,16 @@ const formatPrice = (price: number | undefined): string => {
 </script>
 
 <style lang="scss" scoped>
+.product_count {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	width: 1.5rem;
+	height: 1.5rem;
+	background-color: var(--primary);
+	border-radius: 50%;
+	z-index: 1; /* 確保圓點在圖片上面 */
+}
 .text-enable {
 	padding: 2px 0px;
 	flex-shrink: 0 !important; //禁止擠壓
@@ -125,6 +159,7 @@ const formatPrice = (price: number | undefined): string => {
 	width: 8rem;
 	height: 8rem;
 	margin-right: 12px;
+	position: relative;
 }
 
 .price-block {

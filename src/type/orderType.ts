@@ -46,17 +46,39 @@ export interface DetailedOrderType {
 // 查詢所有訂單的訂單型態
 export interface OrderType {
 	_id: string;
-	products: OrderFormatType[];
-	state: number;  //訂單狀態  0:未付, 1:已付
-	totalPrice: number; //訂單總金額
-	createdAt: string; //訂單建立時間
+	user: string; // user id
+	seller: {
+		_id: string; // seller id
+	};
+	products: OrderProductType[];
+	state: number;  // 訂單狀態 0:未付, 1:已付
+	totalPrice: number; // 訂單總金額
+	pay: number; // 付款方式 1:信用卡付款, 2:ATM匯款, 3:店到店付費
+	address: string; // 地址
+	delivery: number; // 配送方式 1:宅配, 2:黑貓宅急便, 3:店到店
+	fare: number; // 運費
+	createdAt: string; // 訂單建立時間
 	updatedAt: string; // 訂單最後更新時間
 }
 
-export interface OrderFormatType {
-	format: {
-		image: string
-	}
+export interface OrderProductType {
+	product: {
+		_id: string; // 商品id
+	};
+	format: ProductFormatType;
+	quantity: number; // 購買的數量
+	price: number; // 此產品的總價
+	_id: string; // 此訂單產品的唯一id
+}
+
+export interface ProductFormatType {
+	title: string; // 規格名稱
+	price: number; // 價錢
+	cost: number; // 成本
+	stock: number; // 庫存量
+	image: string; // 商品圖片
+	color: string[]; // 顏色
+	_id: string; // 規格的id
 }
 
 export interface ApiResponseType {
