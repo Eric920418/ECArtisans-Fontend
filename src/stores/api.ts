@@ -87,8 +87,8 @@ export const productAll = (category: string) =>
 export const product = (product_id: string) =>
 	handleApiResponse(apiRequest.get(`/product/${product_id}`));
 // 56	post  /products/search	 	 商品搜尋	 	買家端
-export const productSearch = (data: any) =>
-	handleApiResponse(apiRequest.post('/products/search', data));
+export const productSearch = (keyword:string) =>
+	handleApiResponse(apiRequest.get(`/search/products?keyword=${keyword}`));
 
 // 購物商城 ■ 賣家資訊
 // 58	get   /seller/${seller_id}	 	賣家資訊	 	 買家端

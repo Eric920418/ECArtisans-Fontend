@@ -29,50 +29,22 @@
 				<div class="col offset-md-3 col-md-3 col-lg-4 offset-lg-2 mb-2">
 					<h5 class="mb-4">商品總覽</h5>
 					<ul class="nav row">
-						<li class="nav-item mb-3 col-3 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								服飾
-							</a>
-						</li>
-						<li class="nav-item mb-3 col-3 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								食品
-							</a>
-						</li>
-						<li class="nav-item mb-3 col-6 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								娛樂
-							</a>
-						</li>
-						<li class="nav-item mb-3 col-3 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								運動
-							</a>
-						</li>
-						<li class="nav-item mb-3 col-3 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								生活用品
-							</a>
-						</li>
-						<li class="nav-item mb-3 col-6 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								清潔用品
-							</a>
-						</li>
-						<li class="nav-item mb-3 col-3 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								家具
-							</a>
-						</li>
-						<li class="nav-item mb-3 col-3 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								3C電器
-							</a>
-						</li>
-						<li class="nav-item mb-3 col-6 col-md-4">
-							<a href="#" class="nav-link p-0 text-body-secondary white">
-								寵物
-							</a>
+						<li
+							v-for="(item, index) in menulist"
+							:key="index"
+							class="nav-item mb-3 col-6 col-md-4"
+						>
+							<p
+								class="nav-link p-0 text-body-secondary white"
+								@click="
+									$go({
+										name: 'ProductOverview',
+										query: { category: item, page: 1 },
+									})
+								"
+							>
+								{{ item }}
+							</p>
 						</li>
 					</ul>
 				</div>
@@ -95,7 +67,20 @@
 		</div>
 	</div>
 </template>
-
+<script setup lang="ts">
+const menulist = [
+	'娛樂',
+	'服飾',
+	'3C產品',
+	'食品',
+	'家具',
+	'運動',
+	'寵物',
+	'生活用品',
+	'清潔用品',
+	'其他',
+];
+</script>
 <style scoped>
 .spacing {
 	letter-spacing: 0.1rem;

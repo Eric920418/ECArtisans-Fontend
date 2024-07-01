@@ -15,6 +15,7 @@ import {
 	home_newProducts, // 29 get 首頁新品推薦
 	home_followShops, // 30 get 首頁關注商家
 	productAll, // 54	get 商品總覽
+	productSearch // 56 get 商品搜尋
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -189,6 +190,29 @@ export const useShop = defineStore({
 						this.sellerProductsData = res.data;
 					})
 					.catch(err => {
+						this.sellerProductsData = []
+						alertStore.error(err.response.data.message);
+					});
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 獲取商品by 關鍵字
+		async getAllProductsByKeyword(keyword: string): Promise<void> {
+			try {
+				await productSearch(keyword)
+					.then((res) => {
+						// 判斷商品資料的 discount 欄位是否為字串（目前預設只抓陣列），將字串包成陣列後回傳
+						res.data.forEach((product: any) => {
+							if (typeof product.discount === 'string') {
+								product.discount = [product.discount];
+							}
+						});
+		
+						this.sellerProductsData = res.data;
+					})
+					.catch((err) => {
+						this.sellerProductsData = []
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {

@@ -369,6 +369,12 @@
 												:key="menuIndex"
 												style="list-style: none"
 												:class="{ 'col-6 col-sm-3 m-0 p-2': resize < 1200 }"
+												@click="
+													$go({
+														name: 'ProductOverview',
+														query: { category: menu, page: 1 },
+													})
+												"
 											>
 												<RouterLink
 													to="/"
@@ -403,8 +409,9 @@
 									id="search"
 									name="請輸入名稱"
 									type="search"
+									v-model="searchKeyword"
 									class="form-control nav-search-input"
-									aria-label="優惠卷名稱"
+									aria-label="請輸入名稱"
 									placeholder="請輸入名稱..."
 								/>
 								<div class="btn-group">
@@ -433,10 +440,9 @@
 									</div>
 								</div>
 								<button
-									disabled
 									class="btn btn-primary btn-search d-flex align-items-center justify-content-center"
 									type="button"
-									@click="onSubmit1"
+									@click="onSubmit1(searchKeyword)"
 									style="width: 36px; height: 36px"
 								>
 									<font-awesome-icon :icon="['fas', 'magnifying-glass']" />
@@ -643,12 +649,13 @@
 import Collapse from 'bootstrap/js/dist/collapse';
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/index';
+import { useAuthStore, useShop } from '@/stores/index';
 import Logo from './Logo.vue';
 import { useResize, go } from '@/stores/index';
 const { resize } = useResize();
 
 const authStore = useAuthStore();
+const shopStore = useShop();
 
 const route = useRoute();
 const router = useRouter();
@@ -668,6 +675,7 @@ const menulist = [
 
 const searchlist = ['找商品', '找商家'];
 const searchText = ref('找商品');
+const searchKeyword = ref('');
 
 const collapseElement = ref<HTMLElement | null>(null);
 let collapseInstance: Collapse | null = null;
@@ -684,8 +692,12 @@ const hideCollapse = () => {
 	}
 };
 
-function onSubmit1() {
-	// 送出搜尋選單
+async function onSubmit1(searchKeyword: string) {
+	await shopStore.getAllProductsByKeyword(searchKeyword);
+	go({
+		name: 'ProductOverview',
+		query: { keyword: searchKeyword, page: 1 },
+	});
 }
 function getSearchText(value: string) {
 	searchText.value = value;
