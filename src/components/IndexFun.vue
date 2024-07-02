@@ -49,6 +49,12 @@
 					<div class="card h-100 m-0 p-0 bg-transparent">
 						<div
 							class="card-body p-0 position-relative d-flex justify-content-center"
+							@click="
+								$go({
+									name: 'ProductOverview',
+									query: { category: fun_2_Item.name, page: 1 },
+								})
+							"
 						>
 							<img :src="`${fun_2_Item.url}`" class="card-img-top" alt="..." />
 							<p

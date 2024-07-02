@@ -91,7 +91,7 @@ const funData = ref([
 		cols_sm: 4,
 		cols_md: 4,
 		cols_lg: 2,
-		name: '3C電器',
+		name: '3C產品',
 		url: 'images/index/07-3C.png',
 	},
 	{

@@ -59,7 +59,7 @@ import { useResize } from '@/stores/index';
 import { Navigation, Scrollbar, FreeMode, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { ref, computed } from 'vue';
-import { type shopProductsType } from '@/type/orderType';
+import { type ShopProductsType } from '@/type/orderType';
 
 const { resize } = useResize();
 const modules = [FreeMode, Thumbs, Navigation, Scrollbar];

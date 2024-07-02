@@ -180,32 +180,32 @@ const updatePage = (page: number) => {
 };
 
 // 全局的路由前置守衛，處理篩選條件不存在或資料為空的情況
-router.beforeEach((to, from, next) => {
-	const { query } = to;
-	const page = parseInt(query.page as string) || 1;
-	const filterType = (query.type as string) || '1';
+// router.beforeEach((to, from, next) => {
+// 	const { query } = to;
+// 	const page = parseInt(query.page as string) || 1;
+// 	const filterType = (query.type as string) || '1';
 
-	// 確保 navTabs.title 是一個有效的陣列
-	if (Array.isArray(navTabs.value.title) && navTabs.value.title.length > 0) {
-		// 判斷目標文字是否存在於 path.query.type 中
-		const isInNavTabs = navTabs.value.title.some(
-			(tab: any) => tab.path.query.type === filterType
-		);
+// 	// 確保 navTabs.title 是一個有效的陣列
+// 	if (Array.isArray(navTabs.value.title) && navTabs.value.title.length > 0) {
+// 		// 判斷目標文字是否存在於 path.query.type 中
+// 		const isInNavTabs = navTabs.value.title.some(
+// 			(tab: any) => tab.path.query.type === filterType
+// 		);
 
-		// 篩選條件不存在的情況
-		if (!isInNavTabs) {
-			next({ path: to.path, query: { page: 1, type: '1' } });
-			return;
-		}
-		if (page > maxPage.value) {
-			// 判斷大於目前最大的頁數
-			next({ path: to.path, query: { ...query, page: 1 } });
-			return;
-		}
-	}
+// 		// 篩選條件不存在的情況
+// 		if (!isInNavTabs) {
+// 			next({ path: to.path, query: { page: 1, type: '1' } });
+// 			return;
+// 		}
+// 		if (page > maxPage.value) {
+// 			// 判斷大於目前最大的頁數
+// 			next({ path: to.path, query: { ...query, page: 1 } });
+// 			return;
+// 		}
+// 	}
 
-	next();
-});
+// 	next();
+// });
 
 // Fetch data on component mount
 onMounted(() => {
