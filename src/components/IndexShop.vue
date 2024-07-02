@@ -3,7 +3,7 @@
 		<Title :data="titleData" />
 
 		<div class="container p-0">
-			<div class="w-50 mx-auto">
+			<div class="indexShop mx-auto">
 				<swiper
 					slidesPerView="auto"
 					:watchSlidesProgress="true"
@@ -239,6 +239,7 @@ onMounted(async () => {
 }
 
 .indexShop {
+	overflow: visible;
 	width: 100vw;
 	@media (min-width: 576px) {
 		width: 81vw;
@@ -247,7 +248,7 @@ onMounted(async () => {
 		width: 62.5vw;
 	}
 	@media (min-width: 992px) {
-		width: 44.5%;
+		width: 44.5vw;
 	}
 }
 

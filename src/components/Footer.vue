@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-primary position-relative">
+	<div class="bg-primary">
 		<div class="container">
 			<footer
 				class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-12 pt-5 pt-sm-45 border-top-0 white"
@@ -59,12 +59,6 @@
 				</div>
 			</footer>
 		</div>
-		<!-- 聊天室 -->
-		<div class="position-absolute position">
-			<button class="btn btn-secondary rounded-circle btn-size">
-				<i class="bi bi-headset"></i>
-			</button>
-		</div>
 	</div>
 </template>
 <script setup lang="ts">
@@ -84,23 +78,5 @@ const menulist = [
 <style scoped>
 .spacing {
 	letter-spacing: 0.1rem;
-}
-.position {
-	z-index: 10;
-	bottom: 24px;
-	right: 24px;
-	@media (min-width: 768px) {
-		top: -108px;
-		right: calc((100% - 90%) / 2);
-	}
-	@media (min-width: 1200px) {
-		top: -132px;
-		right: calc((100% - 90%) / 2);
-	}
-}
-
-.btn-size {
-	font-size: 40px;
-	padding: 14px 24px;
 }
 </style>
