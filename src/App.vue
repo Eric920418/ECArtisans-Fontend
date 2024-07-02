@@ -12,6 +12,14 @@
 			<!-- 強制重新刷新 -->
 			<RouterView :key="routekey" />
 		</main>
+		<!-- <div class="position"> -->
+		<!-- container -->
+		<button
+			class="btn btn-secondary rounded-circle btn-headset d-flex align-items-center justify-content-center"
+		>
+			<i class="bi bi-headset fs-2"></i>
+		</button>
+		<!-- </div> -->
 		<footer>
 			<FooterViews />
 		</footer>
@@ -47,5 +55,19 @@ const routekey = computed(() => route.path);
 
 main {
 	flex-grow: 1; //撐開
+}
+// 聊天室
+.btn-headset {
+	position: fixed;
+	z-index: 10;
+	bottom: 24px;
+	right: 24px;
+	width: 52px;
+	height: 52px;
+
+	@media (min-width: 1200px) {
+		width: 60px;
+		height: 60px;
+	}
 }
 </style>
