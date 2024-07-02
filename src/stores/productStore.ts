@@ -3,6 +3,7 @@ import { alertStore } from '@/main'; // 導入實例
 import {
 	type DetailedOrderProductType,
 	type DetailedOrderType,
+	type ShopProductsType,
 } from '../type/orderType';
 import { getDate } from '@/setup/globalFunction';
 
@@ -14,6 +15,7 @@ import {
 	sellerProductNew, // 34	post  賣家新增單一商品 (token: string)
 	sellerProductEdit, // 35	put 賣家刪除單一優惠劵 (product_id: string, token: string)
 	sellerProductDelete, // 36  Delete 賣家刪除單一商品(product_id: string, token: string)
+	product,
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -48,6 +50,23 @@ export const useProduct = defineStore({
 	id: 'product',
 	state: () => ({
 		allData: [] as Array<DetailedOrderProductType>, // 賣家所有商品
+		shopData: {
+			products_id: '',
+			products_name: '',
+			products_images: [''],
+			products_info: '',
+			production_material: '',
+			production_method: '',
+			production_country: '',
+			payment: '',
+			freight: 60,
+			stock: 500,
+			price: 3000,
+			total_sales: 12,
+			discount: [''],
+			star: 0,
+			total_collect: 2,
+		} as ShopProductsType,
 		data: {
 			_id: '',
 			seller_id: '',
@@ -141,7 +160,6 @@ export const useProduct = defineStore({
 				alertStore.error('showError');
 			}
 		},
-
 		// 獲取單一商品
 		async getProduct(product_id: string, token: string): Promise<void> {
 			try {
@@ -281,6 +299,29 @@ export const useProduct = defineStore({
 				} else {
 					alertStore.error('找不到資料或登入過期');
 				}
+			} catch (error) {
+				this.isLoading = false;
+				alertStore.error('renewError');
+			}
+		},
+		// 取得 (未登入) 單一商品詳情
+		async getShopProduct(id: string) {
+			try {
+				await product(id)
+					.then(res => {
+						this.shopData = res.data;
+						if (this.shopData.star === null) this.shopData.star = 0;
+
+						// this.shopData.products_images = [];
+						// for (let i = 0; i < res.data.products_images.length; i++) {
+						// 	this.shopData.products_images.push({
+						// 		src: res.data.products_images[i],
+						// 	});
+						// }
+					})
+					.catch(err => {
+						alertStore.error(err.response.data.message);
+					});
 			} catch (error) {
 				this.isLoading = false;
 				alertStore.error('renewError');

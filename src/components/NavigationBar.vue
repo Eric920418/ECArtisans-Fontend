@@ -249,144 +249,150 @@
 							'd-flex justify-content-between w-100 p-0': resize >= 1200,
 						}"
 					>
-						<!-- 買家 選單 -->
 						<div
 							:class="{
-								'col-12 order-2': resize < 1200,
-								'd-flex align-items-center justify-content-center':
-									resize >= 1200,
+								'd-flex align-items-center': resize >= 1200,
 							}"
-							class=""
 						>
-							<ul
+							<!-- 買家 選單 還未判定只有會員中心會出現 -->
+							<div
+								v-if="resize < 1200 && isUser && isUserRoute"
 								:class="{
-									'row m-0 p-0': resize < 1200,
-									'navbar-nav mb-2 mb-lg-0': resize >= 1200,
+									'col-12 order-2': resize < 1200,
+									'd-flex align-items-center justify-content-center':
+										resize >= 1200,
 								}"
-								style="list-style: none"
 							>
-								<li
-									v-if="resize < 992"
+								<ul
 									:class="{
-										'col-12 my-3 fs-5 m-0 p-0': resize < 1200,
-										'nav-item dropdown': resize >= 1200,
+										'row m-0 p-0': resize < 1200,
+										'navbar-nav mb-2 mb-lg-0': resize >= 1200,
 									}"
 									style="list-style: none"
 								>
-									<button
+									<li
+										v-if="resize < 992"
 										:class="{
-											'nav-link mb-3 mb-lg-0 px-3 ': resize < 1200,
-											'nav-link dropdown-toggle text-primary fs-6':
-												resize >= 1200,
+											'col-12 my-3 fs-5 m-0 p-0': resize < 1200,
+											'nav-item dropdown': resize >= 1200,
 										}"
-										id="navbarScrollingDropdown"
-										role="button"
-										data-bs-toggle="dropdown"
-										aria-expanded="false"
+										style="list-style: none"
 									>
-										<span>選單</span>
-									</button>
-									<div
-										class="z-5"
-										:class="{
-											'col-12 d-flex m-0 p-0': resize < 1200,
-											'dropdown-menu md-menu': resize >= 1200,
-										}"
-									>
-										<li
-											v-for="(sMenuItem, sMenuIndex) in userMenu"
-											:key="sMenuIndex"
-											style="list-style: none"
+										<button
 											:class="{
-												'col-6 col-sm-3 m-0 p-2': resize < 1200,
-												'dropdown-item ': resize >= 1200,
+												'nav-link mb-3 mb-lg-0 px-3 ': resize < 1200,
+												'nav-link dropdown-toggle text-primary fs-6':
+													resize >= 1200,
+											}"
+											id="navbarScrollingDropdown"
+											role="button"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+										>
+											<span>選單</span>
+										</button>
+										<div
+											class="z-5"
+											:class="{
+												'col-12 d-flex m-0 p-0': resize < 1200,
+												'dropdown-menu md-menu': resize >= 1200,
 											}"
 										>
-											<RouterLink
-												:to="sMenuItem.path"
-												:class="{
-													'btn btn-Bg rounded-2 text-center w-100 h-100 py-2':
-														resize < 1200,
-													'btn  text-center py-2': resize >= 1200,
-												}"
-												@click="hideCollapse()"
-											>
-												{{ sMenuItem.title }}
-											</RouterLink>
-										</li>
-									</div>
-								</li>
-							</ul>
-						</div>
-						<!-- 買家 商品總覽 -->
-						<div
-							:class="{
-								'col-12 order-2': resize < 1200,
-								'd-flex align-items-center justify-content-center':
-									resize >= 1200,
-							}"
-							class=""
-						>
-							<ul
-								:class="{
-									'row m-0 p-0': resize < 1200,
-									'navbar-nav mb-2 mb-lg-0': resize >= 1200,
-								}"
-								style="list-style: none"
-							>
-								<li
-									:class="{
-										'col-12 my-3 fs-5 m-0 p-0': resize < 1200,
-										'nav-item dropdown': resize >= 1200,
-									}"
-									style="list-style: none"
-								>
-									<button
-										:class="{
-											'nav-link mb-3 mb-lg-0 px-2': resize < 1200,
-											'nav-link dropdown-toggle fs-6': resize >= 1200,
-										}"
-										id="navbarScrollingDropdown"
-										role="button"
-										data-bs-toggle="dropdown"
-										aria-expanded="false"
-										ref=""
-									>
-										商品總覽
-									</button>
-									<div
-										:class="{
-											'col-12 m-0 p-0': resize < 1200,
-											'dropdown-menu md-menu': resize >= 1200,
-										}"
-									>
-										<ol
-											:class="{ 'row m-0 p-0 ': resize < 1200 }"
-											aria-labelledby="navbarScrollingDropdown"
-										>
 											<li
-												v-for="(menu, menuIndex) in menulist"
-												:key="menuIndex"
+												v-for="(sMenuItem, sMenuIndex) in userMenu"
+												:key="sMenuIndex"
 												style="list-style: none"
-												:class="{ 'col-6 col-sm-3 m-0 p-2': resize < 1200 }"
+												:class="{
+													'col-6 col-sm-3 m-0 p-2': resize < 1200,
+													'dropdown-item ': resize >= 1200,
+												}"
 											>
 												<RouterLink
-													to="/"
+													:to="sMenuItem.path"
 													:class="{
 														'btn btn-Bg rounded-2 text-center w-100 h-100 py-2':
 															resize < 1200,
-														'dropdown-item overflow-y-hidden': resize >= 1200,
+														'btn  text-center py-2': resize >= 1200,
 													}"
 													@click="hideCollapse()"
 												>
-													{{ menu }}
-													<div v-if="resize >= 1200" class="dot"></div>
+													{{ sMenuItem.title }}
 												</RouterLink>
 											</li>
-										</ol>
-									</div>
-								</li>
-							</ul>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<!-- 買家 商品總覽 -->
+							<div
+								:class="{
+									'col-12 order-2': resize < 1200,
+									'd-flex align-items-center justify-content-center':
+										resize >= 1200,
+								}"
+								class=""
+							>
+								<ul
+									:class="{
+										'row m-0 p-0': resize < 1200,
+										'navbar-nav mb-2 mb-lg-0': resize >= 1200,
+									}"
+									style="list-style: none"
+								>
+									<li
+										:class="{
+											'col-12 my-3 fs-5 m-0 p-0': resize < 1200,
+											'nav-item dropdown': resize >= 1200,
+										}"
+										style="list-style: none"
+									>
+										<button
+											:class="{
+												'nav-link mb-3 mb-lg-0 px-2': resize < 1200,
+												'nav-link dropdown-toggle fs-6': resize >= 1200,
+											}"
+											id="navbarScrollingDropdown"
+											role="button"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+											ref=""
+										>
+											商品總覽
+										</button>
+										<div
+											:class="{
+												'col-12 m-0 p-0': resize < 1200,
+												'dropdown-menu md-menu': resize >= 1200,
+											}"
+										>
+											<ol
+												:class="{ 'row m-0 p-0 ': resize < 1200 }"
+												aria-labelledby="navbarScrollingDropdown"
+											>
+												<li
+													v-for="(menu, menuIndex) in menulist"
+													:key="menuIndex"
+													style="list-style: none"
+													:class="{ 'col-6 col-sm-3 m-0 p-2': resize < 1200 }"
+												>
+													<RouterLink
+														to="/"
+														:class="{
+															'btn btn-Bg rounded-2 text-center w-100 h-100 py-2':
+																resize < 1200,
+															'dropdown-item overflow-y-hidden': resize >= 1200,
+														}"
+														@click="hideCollapse()"
+													>
+														{{ menu }}
+														<div v-if="resize >= 1200" class="dot"></div>
+													</RouterLink>
+												</li>
+											</ol>
+										</div>
+									</li>
+								</ul>
+							</div>
 						</div>
 						<!-- 搜尋框  搜尋框 --------------------------- -->
 						<div
@@ -726,6 +732,9 @@ const isLoggedIn = computed(() => {
 });
 const isSellerRoute = computed(() => {
 	return route.matched.length > 0 && route.matched[0].path.includes('/seller');
+});
+const isUserRoute = computed(() => {
+	return route.matched.length > 0 && route.matched[0].path.includes('/user');
 });
 
 // 會員選單

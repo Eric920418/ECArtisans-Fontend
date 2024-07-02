@@ -1,13 +1,18 @@
 @charset "UTF-8";
+@import '../../node_modules/vue-loading-overlay/dist/css/index.css';
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@100;900&family=Noto+Sans+TC:wght@100..900&family=Pacifico&display=swap");
+@import '../../node_modules/bootstrap-vue-next/dist/bootstrap-vue-next.css';
+:root {
+  --primary: #14b2be;
+  --secondary: #fde48e;
+}
+
 /* 	備註：
 			文字顏色 直接調整 $gray-900 因為壓不過去。
 			input::placeholder 另外調整。
 			漸層顏色需另外處理
 			linear-gradient(top, $yellow, $primary); //漸層背景
 */
-@import '../../node_modules/vue-loading-overlay/dist/css/index.css';
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@100;900&family=Noto+Sans+TC:wght@100..900&family=Pacifico&display=swap");
-@import '../../node_modules/bootstrap-vue-next/dist/bootstrap-vue-next.css';
 .m-eca-12 {
   margin: 12px !important;
 }

@@ -6,16 +6,18 @@
 					<div class="row m-0 p-0">
 						<div class="col-12 col-md-7 mb-4 mb-md-0 ps-md-0 m-0">
 							<!-- 輪播 -->
-							<SwiperGallery :data="fakeImg" />
+							<SwiperGallery
+								:data="data.products_images"
+								v-if="data && data.products_images"
+							/>
 						</div>
-
-						<div class="col-12 col-md-5">
+						<div class="col-12 col-md-5" v-if="data">
 							<!-- 輪播 右側 商品資訊 -->
 							<div class="row m-0 p-0">
 								<div
 									class="col-12 m-0 p-0 d-flex justify-content-between align-items-start"
 								>
-									<h4 class="pe-3 m-0 text-line-2">標題最多兩標題</h4>
+									<h4 class="pe-3 m-0 text-line-2">{{ data.products_name }}</h4>
 
 									<div
 										class="favorites bg-neutral03 flex-shrink"
@@ -46,22 +48,22 @@
 								<div class="col-12 m-0 p-0 mt-2">
 									<div class="d-flex flex-wrap m-0 p-0">
 										<div class="d-flex">
-											<Star :stars="3" />
+											<Star :stars="parseInt(data.star)" />
 											<div class="vr mx-2"></div>
 										</div>
 										<div class="d-flex">
-											<span class="neutral-02">已出售</span>
-											{{ '100' }}人
+											<span class="neutral-02">已出售&ensp;</span>
+											{{ data.total_sales }}&ensp;人
 											<div class="vr mx-2"></div>
 										</div>
 										<div class="">
-											<span class="neutral-02">收藏人數</span>
-											{{ '8' }} 人
+											<span class="neutral-02">收藏人數&ensp;</span>
+											{{ data.total_collect }}&ensp;人
 										</div>
 									</div>
 								</div>
 								<div class="col-12 m-0 p-0 my-4 fs-2 fw-bold">
-									NT$ {{ '330' }}
+									NT$&ensp;{{ data.price }}
 								</div>
 								<div
 									class="col-12 m-0 p-0 d-flex justify-content-start align-items-center"
@@ -71,12 +73,14 @@
 									</div>
 									<div
 										class="text-card-coupon btn-Bg-active rounded-1 text-primary mb-0 me-2"
+										v-for="(discountIime, discountIndex) in data.discount"
+										:key="discountIndex"
 									>
-										8折優惠
+										{{ discountIime }}
 									</div>
 								</div>
 								<div
-									class="col-12 m-0 p-0 d-flex mt-3 justify-content-start align-items-center"
+									class="col-12 m-0 p-0 d-flex flex-wrap mt-3 justify-content-start align-items-center"
 								>
 									<div class="pe-3 fw-bold" style="width: calc(3em + 16px)">
 										數量
@@ -95,10 +99,20 @@
 													{{ fakeNum }}
 												</p>
 											</button>
-											<ul class="dropdown-menu z-3">
+											<ul v-if="data.stock > 10" class="dropdown-menu z-3">
 												<li v-for="n in 10" :key="n">
 													<a class="dropdown-item" @click="changeQuantity(n)">
 														{{ n === 10 ? '10+' : n }}
+													</a>
+												</li>
+											</ul>
+											<ul
+												v-else-if="data.stock <= 10"
+												class="dropdown-menu z-3"
+											>
+												<li v-for="n in data.stock" :key="n">
+													<a class="dropdown-item" @click="changeQuantity(n)">
+														{{ n }}
 													</a>
 												</li>
 											</ul>
@@ -109,8 +123,13 @@
 												class="form-control form-control-lg text-end me-0 hide-arrows fs-6"
 												type="number"
 												v-model="fakeNum"
+												@input="checkValue(fakeNum, data.stock)"
 											/>
 										</div>
+									</div>
+									<!-- 當數量小於 15 時，顯示 -->
+									<div class="ps-6 ps-xl-3 mt-1 mb-2 mb-xl-0">
+										部份商品剩最後 {{ data.stock }} 件
 									</div>
 								</div>
 								<div
@@ -168,7 +187,10 @@
 				</div>
 			</div>
 			<!-- 商品介紹  -->
-			<div class="col-12 col-md-8 m-0 p-0 mb-4 pe-md-4 order-3 order-md-2">
+			<div
+				class="col-12 col-md-8 m-0 p-0 mb-4 pe-md-4 order-3 order-md-2"
+				v-if="data"
+			>
 				<div class="card p-5">
 					<div class="mb-6">
 						<div
@@ -178,10 +200,8 @@
 						</div>
 						<!-- 不確定後端打出來的格式是否有換行符號  如果有 請找 white-space: pre-line //不確定值是否正確  -->
 						<!-- white-space 可以完成換行，但前提是後端有提供換行符號，要找對應的CSS  -->
-						<div class="">
-							這款戒指的獨特之處在於未固定的零件喔，即使佩戴時偶爾也會改變外觀。
-							材質：925純銀尺寸：#5～#19附件：無交貨時間：此商品在付款確認後
-							1～10 天內發送。 如果您需要進一步的幫助，歡迎隨時詢問喔！
+						<div class="" v-if="data.products_info">
+							{{ data.products_info }}
 						</div>
 					</div>
 					<div class="mb-6">
@@ -194,23 +214,25 @@
 						<div class="">
 							<div class="d-flex mb-2 mt-0">
 								<div class="me-4 neutral-02" style="width: 4em">商品材質</div>
-								<div class="me-4">商品材質</div>
+								<div class="me-4">{{ data.production_material }}</div>
 							</div>
 							<div class="d-flex mb-2 mt-3">
 								<div class="me-4 neutral-02" style="width: 4em">製造方式</div>
-								<div class="me-4">製造方式</div>
+								<div class="me-4">{{ data.production_method }}</div>
 							</div>
 							<div class="d-flex mb-2 mt-3">
 								<div class="me-4 neutral-02" style="width: 4em">商品產地</div>
-								<div class="me-4">商品產地</div>
+								<div class="me-4">{{ data.production_country }}</div>
 							</div>
 							<div class="d-flex mb-2 mt-3">
 								<div class="me-4 neutral-02" style="width: 4em">庫存</div>
-								<div class="me-4">庫存</div>
+								<div class="me-4">{{ data.stock }}</div>
 							</div>
 							<div class="d-flex mb-0 mt-3">
 								<div class="me-4 neutral-02" style="width: 4em">熱門度</div>
-								<div class="me-4">熱門度</div>
+								<div class="me-4">
+									共&ensp;{{ data.total_collect }}&ensp;人收藏
+								</div>
 							</div>
 						</div>
 					</div>
@@ -224,11 +246,11 @@
 						<div class="">
 							<div class="d-flex mb-2 mt-0">
 								<div class="me-4 neutral-02" style="width: 4em">付款方式</div>
-								<div class="me-4">付款方式</div>
+								<div class="me-4">{{ data.payment }}</div>
 							</div>
 							<div class="d-flex mb-2 mt-3">
 								<div class="me-4 neutral-02" style="width: 4em">運費</div>
-								<div class="me-4">運費</div>
+								<div class="me-4">NT$ {{ data.freight }}</div>
 							</div>
 						</div>
 					</div>
@@ -293,6 +315,15 @@
 import { onMounted, ref, computed } from 'vue';
 import SwiperGallery from '@/components/SwiperGallery.vue';
 import Star from '@/components/Star.vue';
+import { useProduct } from '@/stores/index';
+// import router from '@/router';
+import { useRoute, useRouter } from 'vue-router';
+import { alertStore } from '@/main'; // 導入實例
+const router = useRouter();
+const route = useRoute();
+const store = useProduct();
+
+const data = computed(() => store.shopData) as any;
 
 //假圖片
 const fakeImg = ref([
@@ -371,6 +402,18 @@ const fakeNormList = ref<any>([
 function changeNorm(text: string) {
 	fakeNorm.value = text;
 }
+function checkValue(num: number, max: number) {
+	if (num > max) {
+		fakeNum.value = max;
+		alertStore.error('最大庫存為' + fakeNum.value);
+	} else if (num < 1) {
+		fakeNum.value = 1;
+	}
+}
+onMounted(() => {
+	const paramsId = route.params.id as string;
+	if (route.params.id) store.getShopProduct(paramsId);
+});
 </script>
 <style lang="scss">
 .favorites {
