@@ -263,7 +263,7 @@
 										"
 										class="fs-5 p-0 neutral-01 mb-0"
 									>
-										NT$ {{ formatPrice(order.totalPrice) }}
+										NT$ {{ formatPrice(order.totalPrice + order.fare) }}
 									</td>
 								</tr>
 							</tfoot>
