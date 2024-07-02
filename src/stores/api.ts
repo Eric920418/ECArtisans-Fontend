@@ -3,6 +3,7 @@ import axios, { type AxiosResponse } from 'axios';
 // 登入相關的 handleApiResponse(api
 const apiRequest = axios.create({
 	baseURL: 'https://ecartisans-backend-backup.onrender.com',
+	// baseURL: 'http://127.0.0.1:3005',
 });
 
 function headers(token: string) {
@@ -87,7 +88,7 @@ export const productAll = (category: string) =>
 export const product = (product_id: string) =>
 	handleApiResponse(apiRequest.get(`/products/detail/${product_id}`));
 // 56	post  /products/search	 	 商品搜尋	 	買家端
-export const productSearch = (keyword:string) =>
+export const productSearch = (keyword: string) =>
 	handleApiResponse(apiRequest.get(`/search/products?keyword=${keyword}`));
 
 // 購物商城 ■ 賣家資訊
@@ -263,19 +264,20 @@ export const user = (user_id: string) =>
 
 // 購物車 ■
 // 47	get	    /carts/${user_id}	 	買家顯示所有購物車	 	買家端
-export const cartAll = (user_id: string) =>
-	handleApiResponse(apiRequest.get(`/cart/${user_id}`));
+export const cartAll = (token: string) =>
+	handleApiResponse(apiRequest.get(`/cart`, headers(token)));
 // 48	post	  /cart	 	 買家新增購物車	 	 買家端
-export const cartNew = (data: any) =>
-	handleApiResponse(apiRequest.post('/cart', data));
+export const cartNew = (data: any, token: string) =>
+	handleApiResponse(apiRequest.post('/cart', data, headers(token)));
 // 49	put	    /cart/${cart_id}/${user_id}/ X	 	買家修改(編輯)購物車	 	買家端
-// export const handleApiResponse(apiUserLogin = (data: any) => handleApiResponse(apiRequest.put('/cart', data));
+export const cartPut = (data: any, token: string, cart_id: string) =>
+	handleApiResponse(apiRequest.put(`/cart/${cart_id}`, data, headers(token)));
 // 51	delete	/cart/${user_id}	 	 買家刪除所有購物車	 	買家端
-export const cartDeleteAll = (user_id: string) =>
-	handleApiResponse(apiRequest.delete(`/cart/${user_id}`));
+export const cartDeleteAll = (token: string) =>
+	handleApiResponse(apiRequest.delete(`/cart`, headers(token)));
 // 50	delete	/cart/${user_id}/${cart_id}	 	買家刪除單一購物車	 	買家端
-export const cartDelete = (user_id: string, cart_id: string) =>
-	handleApiResponse(apiRequest.delete(`/cart/${user_id}/${cart_id}`));
+export const cartDelete = (token: string, cart_id: string) =>
+	handleApiResponse(apiRequest.delete(`/cart/${cart_id}`, headers(token)));
 
 // 訂單相關 ■ 買家繳費至金流
 // 17	get	  /order/${user_id}	 	 查看訂單紀錄	 	 買家端
