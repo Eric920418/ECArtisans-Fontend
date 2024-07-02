@@ -168,6 +168,7 @@ export const useShop = defineStore({
 		},
 		// 獲取所有賣家頁面資訊
 		async getShopProducts(seller_id: string): Promise<void> {
+			this.sellerProductsData = []
 			try {
 				await shopProducts(seller_id)
 					.then(res => {
@@ -183,6 +184,7 @@ export const useShop = defineStore({
 		},
 		// 獲取商品分類的所有商品
 		async getAllProductsByCategoryID(categoryID:string): Promise<void> {
+			this.sellerProductsData = []
 			try {
 				// 固定抓8 筆
 				await productAll(categoryID)
@@ -190,7 +192,7 @@ export const useShop = defineStore({
 						this.sellerProductsData = res.data;
 					})
 					.catch(err => {
-						this.sellerProductsData = []
+						
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
@@ -209,10 +211,10 @@ export const useShop = defineStore({
 							}
 						});
 		
-						this.sellerProductsData = res.data;
+						return res.data;
 					})
 					.catch((err) => {
-						this.sellerProductsData = []
+						// this.sellerProductsData = []
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {

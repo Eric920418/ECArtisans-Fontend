@@ -131,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, watchEffect } from 'vue';
+import { ref, reactive, computed, onMounted, watchEffect, watch } from 'vue';
 import Card from '@/components/ProductCardHome.vue';
 import Pagenation from '@/components/Pagenation.vue';
 
@@ -149,10 +149,13 @@ const shopStore = useShop();
 const products = computed(() => {
 	return shopStore.sellerProductsData;
 });
-// watchEffect(() => {
-// 	// 监听 sellerProductsData 变化时自动更新 products
-// 	products.value = shopStore.sellerProductsData;
-// });
+
+// 監聽 shopStore.sellerProductsData 的變化，重新計算 products
+watchEffect(() => {
+	// 在這裡可以添加一些邏輯處理，如果需要的話
+	// 這裡只是簡單地重新計算 products
+	products.value; // 這裡觸發 computed 重新計算
+});
 
 console.log(products.value);
 // const products = ref([
@@ -422,7 +425,7 @@ const getCategoryID = (categoryName: string) => {
 			return '1';
 		case '服飾':
 			return '2';
-		case '3C電器':
+		case '3C產品':
 			return '3';
 		case '食品':
 			return '4';
@@ -441,23 +444,33 @@ const getCategoryID = (categoryName: string) => {
 	}
 };
 
-// 增加 loading 狀態
-const loading = ref(true);
-
 onMounted(async () => {
-	const category = route.query.category as string; // 從路由的 query 中獲取 categoryId，假設它是一個字串
-	// console.log(category);
-	// console.log(getCategoryID(category));
-	if (category) {
-		await shopStore.getAllProductsByCategoryID(getCategoryID(category)); // 將 categoryId 作為參數傳遞給函數
-		console.log(shopStore.sellerProductsData);
-	} else {
-		// Handle case where categoryId is not provided
-		console.error('categoryId not provided in query params');
-	}
-
-	loading.value = false; // 資料獲取完成後將 loading 設為 false
+	await fetchData(); // 初次加载时调用一次
 });
+
+// 监视路由的变化
+watch(
+	() => route.query,
+	async () => {
+		await fetchData();
+	}
+);
+
+async function fetchData() {
+	const category = route.query.category as string; // 从路由的 query 中获取 categoryId，假设它是一个字符串
+	const keyword = '運動'; // 从路由的 query 中获取 keyword，假设它是一个字符串
+
+	if (category) {
+		await shopStore.getAllProductsByCategoryID(getCategoryID(category)); // 将 categoryId 作为参数传递给函数
+		console.log(products.value);
+	} else if (keyword) {
+		await shopStore.getAllProductsByKeyword(keyword);
+		console.log(products.value);
+	} else {
+		// Handle case where categoryId or keyword is not provided
+		console.error(route.query);
+	}
+}
 </script>
 
 <style scoped>

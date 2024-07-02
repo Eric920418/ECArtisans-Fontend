@@ -693,7 +693,7 @@ const hideCollapse = () => {
 };
 
 async function onSubmit1(searchKeyword: string) {
-	await shopStore.getAllProductsByKeyword(searchKeyword);
+	// await shopStore.getAllProductsByKeyword(searchKeyword);
 	go({
 		name: 'ProductOverview',
 		query: { keyword: searchKeyword, page: 1 },
