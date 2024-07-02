@@ -8,6 +8,7 @@ import ShopHome from '../views/ShopHome.vue';
 import ShopProduct from '../views/ShopProduct.vue';
 import ProductOverview from '../views/ProductOverview.vue';
 import PaymentSuccess from '../views/PaymentSuccess.vue';
+import ShopActivity from '../views/ShopActivity.vue';
 // import FAQ from '../views/eric/IndexFAQ.vue';
 // 前台商場頁面(非會員中心) ---------------------------------END
 
@@ -65,6 +66,11 @@ const routes = [
 		path: '/product/:id', // 前台商品詳細頁面
 		name: 'ShopProduct',
 		component: ShopProduct,
+	},
+	{
+		path: '/activity/:id', // 前台 活動詳細 頁面(可領取優惠劵)
+		name: 'ShopActivity',
+		component: ShopActivity,
 	},
 	// seller 商家所有頁面 ------------------------- seller 商家所有頁面 --------START
 	{

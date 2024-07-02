@@ -51,7 +51,7 @@ export interface OrderType {
 		_id: string; // seller id
 	};
 	products: OrderProductType[];
-	state: number;  // 訂單狀態 0:未付, 1:已付
+	state: number; // 訂單狀態 0:未付, 1:已付
 	totalPrice: number; // 訂單總金額
 	pay: number; // 付款方式 1:信用卡付款, 2:ATM匯款, 3:店到店付費
 	address: string; // 地址
@@ -92,4 +92,21 @@ export interface FormatType {
 	cost: number;
 	stock: number;
 	color: string[];
+}
+export interface ShopProductsType {
+	products_id: string;
+	products_name: string;
+	products_images: Array<string>;
+	products_info: string;
+	production_material: string;
+	production_method: string;
+	production_country: string;
+	payment: string;
+	freight: number;
+	stock: number;
+	price: number;
+	total_sales: number;
+	discount: string[];
+	star: number;
+	total_collect: number;
 }
