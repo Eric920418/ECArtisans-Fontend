@@ -1,10 +1,15 @@
 <template>
-	<div class="card card-hover" @click="data.go ? $go(data.go) : ''">
+	<div
+		v-for="(order, index) in formattedData"
+		:key="index"
+		class="card card-hover"
+		@click="order.go ? $go(order.go) : ''"
+	>
 		<div class="row m-0 p-0">
-			<div v-if="data.img" class="productCard-img-100 p-0">
-				<img :src="`${data.img}`" class="img-eca" />
+			<div v-if="order.img" class="productCard-img-100 p-0">
+				<img :src="order.img" class="img-eca" />
 				<div class="product_count neutral-05 text-center m-0 p-0">
-					{{ data.product_count }}
+					{{ order.product_count }}
 				</div>
 			</div>
 			<div class="col p-0 m-0">
@@ -12,42 +17,44 @@
 					<h3
 						class="card-title fs-5 m-0 neutral-01 p-0 me-2 flex-grow-1 card-text-hover"
 					>
-						{{ data.title }}
+						{{ order.title }}
 					</h3>
-
 					<div>
 						<p class="text-enable neutral-02 mb-0 text-nowrap">
-							{{ stateText }}
+							{{ order.state === 0 ? '未付' : '已付' }}
 						</p>
 					</div>
 				</div>
 
-				<p v-if="data.date" class="text-date mb-0 mt-1">
-					交易日期： {{ $getDate(data.date.sDate) }}
+				<p v-if="order.date" class="text-date mb-0 mt-1">
+					交易日期： {{ $getDate(order.date.sDate) }}
 				</p>
-				<p class="mb-0">
+				<p class="mb-0" v-if="order.delivery !== undefined">
 					<span class="text-card-coupon btn-Bg-active rounded-1 text-primary">
-						{{ deliveryMethod }}
+						{{ getDeliveryMethod(order.delivery) }}
 					</span>
 				</p>
 				<div class="d-flex justify-content-end align-items-center">
 					<div class="text-enable-total mb-0 text-nowrap">總計：</div>
 					<div class="d-flex">
 						<p class="fs-5 m-0 neutral-01 p-0">NT$</p>
-						<p v-if="data.price" class="fs-5 m-0 neutral-01 p-0 price-block">
-							{{ formatPrice(data.price) }}
+						<p v-if="order.price" class="fs-5 m-0 neutral-01 p-0 price-block">
+							{{ formatPrice(order.price) }}
 						</p>
 					</div>
 				</div>
-				<div v-if="data.btn" class="d-flex p-0 d-flex justify-content-end mt-2">
+				<div
+					v-if="order.btn"
+					class="d-flex p-0 d-flex justify-content-end mt-2"
+				>
 					<button
-						v-for="(btnItme, btnIndex) in data.btn"
+						v-for="(btnItem, btnIndex) in order.btn"
 						:key="btnIndex"
 						class="btn btn-outline-primary px-4 flex-shrink"
-						:class="{ 'me-2': btnIndex + 1 !== data.btn.length }"
-						@click="btnItme.go ? $go(btnItme.go) : ''"
+						:class="{ 'me-2': btnIndex + 1 !== order.btn.length }"
+						@click="btnItem.go ? $go(btnItem.go) : ''"
 					>
-						{{ btnItme.title }}
+						{{ btnItem.title }}
 					</button>
 				</div>
 			</div>
@@ -56,45 +63,109 @@
 </template>
 
 <script setup lang="ts">
-// import { getDate } from '@/stores/index';
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 import router from '@/router';
-import { getCoupon } from '@/stores/index';
 
 export interface BtnType {
-	title: String;
-	go: Object; //轉跳 to 的內容
+	title: string;
+	go: Object;
 }
 
 export interface OrderCardType {
-	go?: Object; // Card 轉跳 to 的內容
-	img?: String;
+	_id: string;
+	products: { format: { image: string } }[];
+	state: number;
+	totalPrice: number;
+	createdAt: string;
+	delivery?: number;
+}
+
+export interface FormattedOrderCardType {
+	btn: BtnType[];
+	go: { name: string; params: { id: string } };
+	img: string;
 	title: string;
-	state?: number; // 狀態：處理中
-	id?: string; //編號
-	price?: number; // 訂單價格
-	pay?: number; // 支付方式
-	product_count: number; //商品類型數量
-	delivery: number;
-	date?: {
-		//交易日期
-		sDate: string;
-	};
-	btn?: Array<BtnType>;
+	state: number;
+	price: number;
+	product_count: number;
+	delivery: number | undefined;
+	date: { sDate: string };
 }
 
 const props = defineProps<{
 	data: OrderCardType;
 }>();
 
-// 轉換state為文字
-const stateText = computed(() => {
-	return props.data.state === 0 ? '未付' : '已付';
-});
+const formattedData = ref<FormattedOrderCardType[]>([]);
 
-// 轉換delivery為文字
-const deliveryMethod = computed(() => {
-	switch (props.data.delivery) {
+const formatCardData = (orderItem: OrderCardType): FormattedOrderCardType => {
+	const commonData = {
+		go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+		img:
+			orderItem.products.length > 0 ? orderItem.products[0].format.image : '',
+		title: orderItem._id,
+		state: orderItem.state,
+		price: orderItem.totalPrice,
+		product_count: orderItem.products.length,
+		delivery: orderItem.delivery,
+		date: { sDate: orderItem.createdAt },
+	};
+
+	if (router.currentRoute.value.matched[0].path === '/seller') {
+		return {
+			...commonData,
+			btn: [
+				{
+					title: '查看訂單',
+					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '聯絡買家',
+					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+				},
+			],
+		};
+	} else {
+		return {
+			...commonData,
+			btn: [
+				{
+					title: '已收到貨',
+					go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '立即評價',
+					go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '查看評價',
+					go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '查看訂單',
+					go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+				},
+				{
+					title: '聯絡賣家',
+					go: { name: 'BuyerOrderCheck', params: { id: orderItem._id } },
+				},
+			],
+		};
+	}
+};
+
+watch(
+	() => props.data,
+	newValue => {
+		if (Array.isArray(newValue)) {
+			formattedData.value = newValue.map(formatCardData);
+		}
+	},
+	{ immediate: true, deep: true }
+);
+
+const getDeliveryMethod = (delivery: number | undefined): string => {
+	switch (delivery) {
 		case 1:
 			return '宅配';
 		case 2:
@@ -104,9 +175,8 @@ const deliveryMethod = computed(() => {
 		default:
 			return '未填寫';
 	}
-});
+};
 
-// 將價格格式帶上千分位字串
 const formatPrice = (price: number | undefined): string => {
 	if (!price) return '';
 	return price.toLocaleString('en-US');

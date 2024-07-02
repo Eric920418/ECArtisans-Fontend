@@ -190,6 +190,7 @@ export const useShop = defineStore({
 				await productAll(categoryID)
 					.then(res => {
 						this.sellerProductsData = res.data;
+						console.log(this.sellerProductsData)
 					})
 					.catch(err => {
 						
@@ -201,6 +202,7 @@ export const useShop = defineStore({
 		},
 		// 獲取商品by 關鍵字
 		async getAllProductsByKeyword(keyword: string): Promise<void> {
+			this.sellerProductsData = [] as SellerPageProductType[]
 			try {
 				await productSearch(keyword)
 					.then((res) => {
@@ -210,8 +212,8 @@ export const useShop = defineStore({
 								product.discount = [product.discount];
 							}
 						});
-		
-						return res.data;
+						this.sellerProductsData = res.data;
+
 					})
 					.catch((err) => {
 						// this.sellerProductsData = []
