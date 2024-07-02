@@ -135,7 +135,7 @@ $radius-8: 0.5rem; //弧度
 	padding: 0;
 	background: #fff;
 	background-clip: padding-box; /* !importanté */
-	border-bottom: solid $border transparent; /* !importanté */
+	border-bottom: solid $border transparent ; /* !importanté */
 	border-radius: $radius-8;
 	margin: $border !important;
 
@@ -149,7 +149,7 @@ $radius-8: 0.5rem; //弧度
 		z-index: -1;
 		margin: -$border; /* !importanté */
 		border-radius: $radius-8; /* !importanté */
-		background: linear-gradient(to right, $yellow, $primary);
+		background: linear-gradient(to right, $secondary, $primary);
 	}
 }
 
@@ -178,7 +178,6 @@ $radius-8: 0.5rem; //弧度
 		border-radius: $radius-8; /* !importanté */
 		background: linear-gradient(to right, $yellow, $primary);
 		box-shadow: 0px 4px 40px 0px #0000000D !important; 
-
 	}
 }
 
@@ -455,6 +454,9 @@ $radius-8: 0.5rem; //弧度
 
 .fs-12 {
 	font-size:  0.75em; //12px
+}
+.fs-14 {
+	font-size:  0.875em; //14px
 }
 .fs-10 {
 	font-size:  0.625em; //10px

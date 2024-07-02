@@ -1,8 +1,9 @@
 <template>
-	<div class="w-100 m-index-title bg-bg">
+	<div class="w-100 m-index-title bg-bg overflow-x-hidden">
 		<Title :data="titleData" />
-		<div class="m-0 p-0 overflow-x-hidden">
-			<div class="container indexShop position-relative p-0">
+
+		<div class="container p-0">
+			<div class="w-50 mx-auto">
 				<swiper
 					slidesPerView="auto"
 					:watchSlidesProgress="true"
@@ -23,6 +24,7 @@
 					:freeMode="false"
 					:mousewheel="false"
 					:keyboard="{ enabled: true }"
+					class="overflow-visible"
 				>
 					<SwiperSlide
 						v-for="(item, index) in recommendSellerList"
@@ -245,7 +247,7 @@ onMounted(async () => {
 		width: 62.5vw;
 	}
 	@media (min-width: 992px) {
-		width: 44.5vw;
+		width: 44.5%;
 	}
 }
 

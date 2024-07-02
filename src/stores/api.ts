@@ -85,7 +85,7 @@ export const productAll = (category: string) =>
 	handleApiResponse(apiRequest.get(`/products/${category}`));
 // 55	get   /product/${product_id}	 	商品詳情	 	買家端
 export const product = (product_id: string) =>
-	handleApiResponse(apiRequest.get(`/product/${product_id}`));
+	handleApiResponse(apiRequest.get(`/products/detail/${product_id}`));
 // 56	post  /products/search	 	 商品搜尋	 	買家端
 export const productSearch = (data: any) =>
 	handleApiResponse(apiRequest.post('/products/search', data));
@@ -229,9 +229,6 @@ export const sellerActivityEdit = (activity_id: string) =>
 // 41	delete  /activity/${activity_id}	 	賣家刪除單一活動/公告	 	賣家端
 export const sellerActivityDelete = (activity_id: string) =>
 	handleApiResponse(apiRequest.delete(`/activity/${activity_id}`));
-// 57	get	    /activity/${activity_id}	 	活動詳情頁	 	買家端
-export const activity = (activity_id: string) =>
-	handleApiResponse(apiRequest.get(`/activity/${activity_id}`));
 
 // 7	post  /shop/orders/string X	 	新增貨運編號	 	 賣家端
 // export const seller = (data: any) => handleApiResponse(apiRequest.post('/login', data));
@@ -240,6 +237,11 @@ export const activity = (activity_id: string) =>
 // export const seller = (data: any) => handleApiResponse(apiRequest.get('/login', data));
 // 11	put   /shop/${seller_id}/users  X	 	顧客管理－修改	 	賣家端
 // export const seller = (data: any) => handleApiResponse(apiRequest.put('/login', data));
+
+// ■ 未登入可以查看的資料 ■ 未登入可以查看的資料 ■ 未登入可以查看的資料 ■
+// 57	get	    /activity/${activity_id}	 	活動詳情頁	 	買家端
+export const activity = (activity_id: string) =>
+	handleApiResponse(apiRequest.get(`/activities/${activity_id}`));
 
 // ■ 買家 ■ 買家 ■ 買家 ■
 
@@ -299,10 +301,14 @@ export const rating = (user_id: string, order_id: string) =>
 export const userCouponall = (user_id: string) =>
 	handleApiResponse(apiRequest.get(`/users/${user_id}/discounts`));
 // 21	get   /users/${user_id}/discounts/${discount_id}	 	優惠劵詳情	 	買家端
-export const userCoupon = (user_id: string, discount_id: string) =>
+export const userCoupon = (user_id: string, coupon_id: string) =>
+	handleApiResponse(apiRequest.get(`/users/${user_id}/discounts/${coupon_id}`));
+// 211	post 買家取得優惠劵功能
+export const addCoupon = (user_id: string, coupon_id: string) =>
 	handleApiResponse(
-		apiRequest.get(`/users/${user_id}/discounts/${discount_id}`)
+		apiRequest.post(`/users/${user_id}/discounts/${coupon_id}`)
 	);
+
 // 22	get 會員收藏商品	 	買家端
 export const userCollect = (user_id: string) =>
 	handleApiResponse(
