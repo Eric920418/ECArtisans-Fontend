@@ -679,7 +679,7 @@ const menulist = [
 	'其他',
 ];
 
-const searchlist = ['找商品', '找商家'];
+const searchlist = ['找商品']; //暫時拿掉
 const searchText = ref('找商品');
 const searchKeyword = ref('');
 

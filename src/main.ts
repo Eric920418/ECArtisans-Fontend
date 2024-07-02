@@ -17,7 +17,7 @@ import VueSlider from 'vue-slider-component';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { LoadingPlugin } from 'vue-loading-overlay';
 
-import { useAlertStore, useAuthStore } from '@/stores';
+import { useAlertStore } from '@/stores';
 
 // 翻譯插件: 全域 t 、 to 兩種功能
 import global from '@/setup/globalFunction';
@@ -46,8 +46,8 @@ app.config.globalProperties.$axios = axios.create({
 
 const pinia = createPinia();
 export const alertStore = useAlertStore(pinia);
-const authStore = useAuthStore();
-authStore.initialize(); // 檢查token 是否過期
+// const authStore = useAuthStore();
+// authStore.initialize(); // 檢查token 是否過期
 
 // Pini 使用localStorage儲存狀態
 pinia.use(piniaPluginPersistedstate);
