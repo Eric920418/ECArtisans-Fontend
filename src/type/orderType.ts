@@ -45,39 +45,39 @@ export interface DetailedOrderType {
 
 // 查詢所有訂單的訂單型態
 export interface OrderType {
-  _id: string;
-  products: {
-    format: ProductFormat;
-  }[];
-  state: number;
-  totalPrice: number;
-  createdAt: string;
-  updatedAt: string;
+	_id: string;
+	products: {
+		format: ProductFormat;
+	}[];
+	state: number;
+	totalPrice: number;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface UserOrderType {
 	_id: string;
 	user: string;
 	seller: {
-			_id: string;
+		_id: string;
 	};
 	products: {
-			product: {
-					_id: string;
-			};
-			format: {
-					title: string;
-					price: number;
-					cost: number;
-					stock: number;
-					image: string;
-					color: string[];
-					_id: string;
-			};
-			quantity: number;
-			price: number;
+		product: {
 			_id: string;
-			review: string;
+		};
+		format: {
+			title: string;
+			price: number;
+			cost: number;
+			stock: number;
+			image: string;
+			color: string[];
+			_id: string;
+		};
+		quantity: number;
+		price: number;
+		_id: string;
+		review: string;
 	}[];
 	state: number;
 	totalPrice: number;
@@ -92,26 +92,26 @@ export interface UserOrderType {
 export interface OrderDetailType {
 	_id: string;
 	user: {
-			_id: string;
+		_id: string;
 	};
 	seller: string; // 假設賣家用字串表示其 ID
 	products: {
-			product: {
-					_id: string; // 商品 ID
-			};
-			format: {
-					title: string;
-					price: number;
-					cost: number;
-					stock: number;
-					image: string;
-					color: string[];
-					_id: string; // 規格 ID
-			};
-			quantity: number;
+		product: {
+			_id: string; // 商品 ID
+		};
+		format: {
+			title: string;
 			price: number;
-			_id: string; // 訂單產品 ID
-			review?: string; // 可能有評論的欄位，可根據需要選擇是否包含
+			cost: number;
+			stock: number;
+			image: string;
+			color: string[];
+			_id: string; // 規格 ID
+		};
+		quantity: number;
+		price: number;
+		_id: string; // 訂單產品 ID
+		review?: string; // 可能有評論的欄位，可根據需要選擇是否包含
 	}[];
 	state: number; // 訂單狀態
 	totalPrice: number; // 訂單總價
@@ -124,7 +124,7 @@ export interface OrderDetailType {
 }
 
 export interface ProductFormat {
-  image: string;
+	image: string;
 }
 
 export interface ApiResponseType {
@@ -139,10 +139,12 @@ export interface FormatType {
 	stock: number;
 	color: string[];
 }
+
 export interface ShopProductsType {
 	products_id: string;
+	products_format: Array<ShopFormatType>;
 	products_name: string;
-	products_images: Array<string>;
+	all_images: any;
 	products_info: string;
 	production_material: string;
 	production_method: string;
@@ -150,9 +152,36 @@ export interface ShopProductsType {
 	payment: string;
 	freight: number;
 	stock: number;
-	price: number;
 	total_sales: number;
-	discount: string[];
+	discount: Array<string>;
 	star: number;
 	total_collect: number;
+	seller_name: string;
+	seller_id: string;
+	shop_image: string;
 }
+
+export interface ShopFormatType {
+	format_id: string;
+	format_title: string;
+	price: number;
+	image: string;
+}
+// // 原本得先保留
+// export interface ShopProductsType {
+// 	products_id: string;
+// 	products_name: string;
+// 	products_images: Array<string>;
+// 	products_info: string;
+// 	production_material: string;
+// 	production_method: string;
+// 	production_country: string;
+// 	payment: string;
+// 	freight: number;
+// 	stock: number;
+// 	price: number;
+// 	total_sales: number;
+// 	discount: string[];
+// 	star: number;
+// 	total_collect: number;
+// }

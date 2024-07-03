@@ -5,6 +5,7 @@ import {
 	type DetailedOrderType,
 	type ShopProductsType,
 } from '../type/orderType';
+
 import { getDate } from '@/setup/globalFunction';
 
 import {
@@ -52,20 +53,23 @@ export const useProduct = defineStore({
 		allData: [] as Array<DetailedOrderProductType>, // 賣家所有商品
 		shopData: {
 			products_id: '',
+			products_format: [],
 			products_name: '',
-			products_images: [''],
+			all_images: [],
 			products_info: '',
 			production_material: '',
 			production_method: '',
 			production_country: '',
 			payment: '',
-			freight: 60,
-			stock: 500,
-			price: 3000,
-			total_sales: 12,
-			discount: [''],
+			freight: 0,
+			discount: [],
 			star: 0,
-			total_collect: 2,
+			stock: 0,
+			total_sales: 0,
+			total_collect: 0,
+			seller_name: '',
+			seller_id: '',
+			shop_image: '',
 		} as ShopProductsType,
 		data: {
 			_id: '',
@@ -310,7 +314,7 @@ export const useProduct = defineStore({
 				await product(id)
 					.then(res => {
 						this.shopData = res.data;
-						if (this.shopData.star === null) this.shopData.star = 0;
+						// if (this.shopData.star === null) this.shopData.star = 0;
 
 						// this.shopData.products_images = [];
 						// for (let i = 0; i < res.data.products_images.length; i++) {

@@ -6,18 +6,18 @@
 					<div class="row m-0 p-0">
 						<div class="col-12 col-md-7 mb-4 mb-md-0 ps-md-0 m-0">
 							<!-- 輪播 -->
-							<SwiperGallery
-								:data="data.products_images"
-								v-if="data && data.products_images"
-							/>
+							<SwiperGallery :data="data.all_images" />
 						</div>
-						<div class="col-12 col-md-5" v-if="data">
+
+						<div class="col-12 col-md-5">
 							<!-- 輪播 右側 商品資訊 -->
 							<div class="row m-0 p-0">
 								<div
 									class="col-12 m-0 p-0 d-flex justify-content-between align-items-start"
 								>
-									<h4 class="pe-3 m-0 text-line-2">{{ data.products_name }}</h4>
+									<h3 class="pe-3 m-0 text-line-2" v-if="data.products_name">
+										{{ data.products_name }}
+									</h3>
 
 									<div
 										class="favorites bg-neutral03 flex-shrink"
@@ -48,7 +48,7 @@
 								<div class="col-12 m-0 p-0 mt-2">
 									<div class="d-flex flex-wrap m-0 p-0">
 										<div class="d-flex">
-											<Star :stars="parseInt(data.star)" />
+											<Star :stars="data.star" />
 											<div class="vr mx-2"></div>
 										</div>
 										<div class="d-flex">
@@ -56,14 +56,25 @@
 											{{ data.total_sales }}&ensp;人
 											<div class="vr mx-2"></div>
 										</div>
-										<div class="">
+										<div>
 											<span class="neutral-02">收藏人數&ensp;</span>
 											{{ data.total_collect }}&ensp;人
 										</div>
 									</div>
 								</div>
-								<div class="col-12 m-0 p-0 my-4 fs-2 fw-bold">
-									NT$&ensp;{{ data.price }}
+
+								<div
+									v-if="
+										fakeNorm === '請選擇…' &&
+										data.products_format &&
+										data.products_format[0]
+									"
+									class="col-12 m-0 p-0 my-4 fs-2 fw-bold"
+								>
+									NT$&ensp;{{ data.products_format[0].price }}
+								</div>
+								<div v-else class="col-12 m-0 p-0 my-4 fs-2 fw-bold">
+									NT$&ensp;{{ nowPrice }}
 								</div>
 								<div
 									class="col-12 m-0 p-0 d-flex justify-content-start align-items-center"
@@ -86,8 +97,8 @@
 										數量
 									</div>
 									<div class="col-5">
-										<!-- 當此商品數量不足 10 時 -->
-										<!-- changeInput 實際使用請改為陣列，儲存該商品的數字狀態 -->
+										<!-- 當此商品數量不足 10 時 changeInput -->
+										<!-- 實際使用請改為陣列，儲存該商品的數字狀態 -->
 										<div class="dropdown" v-if="!changeInput">
 											<button
 												class="form-select form-select-lg d-flex align-items-center justify-content-start dropdown-toggle px-3"
@@ -128,7 +139,7 @@
 										</div>
 									</div>
 									<!-- 當數量小於 15 時，顯示 -->
-									<div class="ps-6 ps-xl-3 mt-1 mb-2 mb-xl-0">
+									<div v-if="data.stock" class="ps-6 ps-xl-3 mt-1 mb-2 mb-xl-0">
 										部份商品剩最後 {{ data.stock }} 件
 									</div>
 								</div>
@@ -139,7 +150,6 @@
 										規格
 									</div>
 									<div class="col-5">
-										<!-- 如果不好用在改一般的清單 -->
 										<div class="dropdown">
 											<button
 												class="form-select form-select-lg d-flex align-items-center justify-content-center dropdown-toggle px-3"
@@ -157,13 +167,17 @@
 												</p>
 											</button>
 											<ul class="dropdown-menu z-3">
-												<li v-for="normItem in fakeNormList" :key="normItem.id">
-													<a
+												<li
+													v-for="(normItme, normIndex) in data.products_format"
+													:key="normIndex"
+												>
+													<button
 														class="dropdown-item"
-														@click="changeNorm(normItem)"
+														v-if="normItme.format_title"
+														@click="changeNorm(normItme)"
 													>
-														<p>{{ normItem.name }}</p>
-													</a>
+														<p>{{ normItme.format_title }}</p>
+													</button>
 												</li>
 											</ul>
 										</div>
@@ -177,10 +191,10 @@
 									>
 										加入購物車
 									</button>
-									<hr style="margin: 0px 12px" />
-									<button type="submit" class="col btn btn-primary">
+									<!-- <hr style="margin: 0px 12px" />
+									<button type="button" class="col btn btn-primary">
 										直接購買
-									</button>
+									</button> -->
 								</div>
 							</div>
 						</div>
@@ -243,7 +257,6 @@
 						>
 							付款與運送資訊
 						</div>
-
 						<div class="">
 							<div class="d-flex mb-2 mt-0">
 								<div class="me-4 neutral-02" style="width: 4em">付款方式</div>
@@ -257,16 +270,17 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="col-12 col-md-4 m-0 p-0 mb-4 order-2 order-md-3">
 				<div class="card p-0 overflow-hidden">
 					<div
 						class="w-100 d-flex align-items-end justify-content-start p-4 bg-img-eca-dack"
 						style="height: 136px"
 						:style="{
-							'background-image': `url(images/shop/banner1.png)`,
+							'background-image': `url(${data.shop_image})`,
 						}"
 					>
-						<div class="text-white fw-medium">
+						<!-- <div class="text-white fw-medium">
 							<div class="fs-5 text-line-1">
 								星辰之耀 — 與你訂下幸福之約星辰之耀 — 與你訂下幸福之約
 							</div>
@@ -274,26 +288,27 @@
 								對戒系列限時優惠中 九折對戒系列限時優惠中 九折對戒系列限時優惠中
 								九折對戒系列限時優惠中 九折對戒系列限時優惠中 九折
 							</div>
-						</div>
+						</div> -->
 					</div>
 					<div
 						class="p-3 d-flex align-items-center justify-content-between border-bottom"
+						@click="$go({ name: 'ShopHome', params: { id: data.seller_id } })"
 					>
 						<div class="d-flex align-items-center justify-content-start">
 							<div
 								class="avatar"
 								:style="{
-									'background-image': `url(images/shop/banner1.png)`,
+									'background-image': `url(${data.shop_image})`,
 								}"
 							></div>
 
-							<div class="text-line-1 fw-medium">大夏製大夏製</div>
+							<div class="text-line-1 fw-medium">{{ data.seller_name }}</div>
 						</div>
 						<div class="icon">
 							<font-awesome-icon :icon="['fas', 'angle-right']" />
 						</div>
 					</div>
-					<div class="p-3 d-flex">
+					<!-- <div class="p-3 d-flex">
 						<button
 							type="button"
 							class="col btn btn-primary"
@@ -305,7 +320,7 @@
 						<button type="button" class="col btn btn-outline-primary">
 							加入關注
 						</button>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -316,76 +331,42 @@
 import { onMounted, ref, computed } from 'vue';
 import SwiperGallery from '@/components/SwiperGallery.vue';
 import Star from '@/components/Star.vue';
-import { useProduct } from '@/stores/index';
+import { useProduct, useAuthStore, go } from '@/stores/index';
+import { type ShopFormatType } from '@/type/orderType';
 // import router from '@/router';
 import { useRoute, useRouter } from 'vue-router';
 import { alertStore } from '@/main'; // 導入實例
 import { useCartStore } from '@/stores/cartStore';
+import { userLogin } from '../stores/api';
 const router = useRouter();
 const route = useRoute();
 const cartStore = useCartStore();
 const store = useProduct();
 
-const data = computed(() => store.shopData) as any;
+const authStore = useAuthStore();
+const isUser = computed(() => {
+	return authStore.accountType === 'user';
+});
 
-//假圖片
-const fakeImg = ref([
-	{
-		src: 'https://swiperjs.com/demos/images/nature-1.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-2.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-3.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-4.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-5.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-6.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-7.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-8.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-9.jpg',
-	},
-	{
-		src: 'https://swiperjs.com/demos/images/nature-10.jpg',
-	},
-]);
+const isLoggedIn = computed(() => {
+	return authStore.isLoggedIn;
+});
+
+const data = computed(() => store.shopData);
 
 const favorited = ref(false); // 預設為未收藏 -> 待補完整資料
 const addToFavorites = () => {
 	// 收藏用
-	// favorited.value = !favorited.value;
-	// if (favorited.value) {
-	// 	// 待補新增邏輯
-	// 	alertStore.success('focusProductOK');
-	// } else {
-	// 	// 待補刪除的邏輯
-	// 	alertStore.success('focusProductFail');
-	// }
 };
 
 const paramsId = route.params.id as string; // 從路由參數獲取 productId
 // 數量下拉選單
-
-// 假資料
 
 //判定是否切換的開關
 const changeInput = ref<boolean>(false);
 
 // 交換目前該商品的數量
 function changeQuantity(num: number) {
-	console.log(num);
 	fakeNum.value = num;
 	if (num === 10) {
 		changeInput.value = true;
@@ -394,6 +375,7 @@ function changeQuantity(num: number) {
 
 // 規格下拉選單 假資料
 const fakeNorm = ref('請選擇…');
+const nowPrice = ref(0);
 
 const fakeNormList = ref([
 	{ id: '6676905db72f97fbc2b55616', name: '黑色，防水30米' },
@@ -405,24 +387,30 @@ const selectedNormId = ref('');
 const fakeNum = ref<number>(1); // 默認數量為 1
 
 // 交換目前該商品的數量
-const changeNorm = (normItem: { id: string; name: string }) => {
-	fakeNorm.value = normItem.name;
-	selectedNormId.value = normItem.id;
+const changeNorm = (normItem: ShopFormatType) => {
+	fakeNorm.value = normItem.format_title;
+	selectedNormId.value = normItem.format_id;
+	nowPrice.value = normItem.price;
 };
 
 const addItemToCart = () => {
-	if (!selectedNormId.value) {
-		alert('請選擇一個規格');
-		return;
-	}
+	// 強制先加入會員才可以 加入購物車
+	if (!isUser && !isLoggedIn) {
+		alertStore.error('請先加入會員');
+		go({ name: 'UserLogin' });
+	} else {
+		if (!selectedNormId.value) {
+			alert('請選擇一個規格');
+			return;
+		}
 
-	const cartItem = {
-		productId: paramsId,
-		formatId: selectedNormId.value,
-		quantity: fakeNum.value,
-	};
-	console.log(cartItem);
-	cartStore.addItemToCart(); //待修
+		const cartItem = {
+			productId: paramsId,
+			formatId: selectedNormId.value,
+			quantity: fakeNum.value,
+		};
+		cartStore.addItemToCart(cartItem); //待修
+	}
 };
 
 function checkValue(num: number, max: number) {
