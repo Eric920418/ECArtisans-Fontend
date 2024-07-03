@@ -36,12 +36,7 @@
 						>
 							<p
 								class="nav-link p-0 text-body-secondary white"
-								@click="
-									$go({
-										name: 'ProductOverview',
-										query: { category: item, page: 1 },
-									})
-								"
+								@click="navigate(item)"
 							>
 								{{ item }}
 							</p>
@@ -62,6 +57,11 @@
 	</div>
 </template>
 <script setup lang="ts">
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+
 const menulist = [
 	'娛樂',
 	'服飾',
@@ -74,6 +74,25 @@ const menulist = [
 	'清潔用品',
 	'其他',
 ];
+
+const scrollToTop = () => {
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const navigate = async (item: string) => {
+	if (
+		route.name !== 'ProductOverview' ||
+		route.query.category !== item ||
+		route.query.page !== '1'
+	) {
+		await router.push({
+			name: 'ProductOverview',
+			query: { category: item, page: 1 },
+			replace: true,
+		});
+	}
+	scrollToTop();
+};
 </script>
 <style scoped>
 .spacing {

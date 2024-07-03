@@ -14,7 +14,7 @@ import {
 import { useAuthStore } from './authStore';
 import router from '@/router';
 
-export const useCart = defineStore({
+export const useCartStore = defineStore({
 	id: 'cart',
 	state: () => ({
 		allData: [] as any,
@@ -23,7 +23,7 @@ export const useCart = defineStore({
 	}),
 
 	actions: {
-		// 獲取　購物車資料
+		// 獲取購物車資料
 		async getAllCart(): Promise<void> {
 			try {
 				const authStore = useAuthStore();
@@ -40,5 +40,8 @@ export const useCart = defineStore({
 				alertStore.error('showError');
 			}
 		},
+		async addItemToCart(): Promise<void> {
+			console.log('待修')
+		}
 	},
 });

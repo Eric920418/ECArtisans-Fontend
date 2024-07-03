@@ -44,7 +44,6 @@
 			<div class="col-12 col-lg-9">
 				<div class="row">
 					<CartCard
-
 						v-for="(shopItme, shopIndex) in fakeData"
 						:key="shopIndex"
 						:data="shopItme"
@@ -61,20 +60,20 @@
 						<!-- 選取商品數量，以 商品名稱 計算數量 -->
 						<p class="mb-2 fs-6">
 							已選取
-							<span>{{ totalItems }}</span>
+							<span>{{ 0 }}</span>
 							個商品
 						</p>
 					</div>
 					<div>
 						<p class="mb-2 fs-6 d-flex justify-content-between">
 							運費總計
-							<span>${{ totalFare }}</span>
+							<span>${{ 0 }}</span>
 						</p>
 					</div>
 					<hr />
 					<p class="d-flex justify-content-between">
 						訂單總金額
-						<span>${{ totalPrice }}</span>
+						<span>${{ 0 }}</span>
 					</p>
 				</div>
 			</div>
@@ -104,8 +103,8 @@ const router = useRouter();
 // 組件
 import CartCard from '@/components/CartCard.vue';
 
-import { useCart } from '@/stores/index';
-const store = useCart();
+import { useCartStore } from '@/stores/index';
+const store = useCartStore();
 
 const fakeData = ref([
 	{

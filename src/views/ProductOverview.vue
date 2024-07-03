@@ -30,8 +30,9 @@
 								:min="minPrice"
 								:max="maxPrice"
 								v-model="filters.priceRange"
+								:lazy="true"
 								:dragging="true"
-								:interval="10"
+								:interval="100"
 								tooltip="always"
 								tooltip-placement="bottom"
 								:enable-cross="false"
@@ -145,19 +146,21 @@ const route = useRoute();
 const router = useRouter();
 
 const shopStore = useShop();
-
+const scrollToTop = () => {
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 const products = computed(() => {
-	return shopStore.sellerProductsData;
+	return shopStore.searchProductsData;
 });
 
-// 監聽 shopStore.sellerProductsData 的變化，重新計算 products
-watchEffect(() => {
-	// 在這裡可以添加一些邏輯處理，如果需要的話
-	// 這裡只是簡單地重新計算 products
-	products.value; // 這裡觸發 computed 重新計算
-});
+// // 監聽 shopStore.sellerProductsData 的變化，重新計算 products
+// watchEffect(() => {
+// 	// 在這裡可以添加一些邏輯處理，如果需要的話
+// 	// 這裡只是簡單地重新計算 products
+// 	products.value; // 這裡觸發 computed 重新計算
+// 	console.log(products.value);
+// });
 
-console.log(products.value);
 // const products = ref([
 // 	{
 // 		products_id: '66769071b72f97fbc2b5561a',
@@ -340,16 +343,25 @@ console.log(products.value);
 // Filter price slider default
 const minPrice = 0;
 // Caculate max price from data
-const maxPrice = products.value.reduce((max, product) => {
-	return product.price > max ? product.price : max;
-}, 0);
+// const maxPrice = products.value.reduce((max, product) => {
+// 	return product.price > max ? product.price : max;
+// }, 0);
+const maxPrice = computed(() => {
+	return products.value.reduce((max, product) => {
+		return product.price > max ? product.price : max;
+	}, 50000);
+});
+
+watch(maxPrice, (newMaxPrice, oldMaxPrice) => {
+	console.log(`maxPrice changed from ${oldMaxPrice} to ${newMaxPrice}`);
+});
 
 // filter & sort condition
 const filters = reactive({
 	selectedDiscount: '',
 	selectedOrigin: '',
 	selectedColor: '',
-	priceRange: [minPrice, maxPrice],
+	priceRange: [minPrice, maxPrice.value],
 	sortBy: '', // default sort
 });
 // Filtered products based on selected filters
@@ -362,6 +374,7 @@ const filteredProducts = computed(() => {
 			return product.discount.includes(filters.selectedDiscount);
 		});
 	}
+
 	/*商品資料尚未有這些 */
 	// if (filters.selectedOrigin) {
 	// 	filteredData = filteredData.filter(
@@ -396,7 +409,7 @@ const resetFilters = () => {
 	filters.selectedDiscount = '';
 	filters.selectedOrigin = '';
 	filters.selectedColor = '';
-	filters.priceRange = [minPrice, maxPrice];
+	filters.priceRange = [minPrice, maxPrice.value];
 };
 
 const currentPage = computed(() => parseInt(route.query.page as string)) || 1;
@@ -446,30 +459,44 @@ const getCategoryID = (categoryName: string) => {
 
 onMounted(async () => {
 	await fetchData(); // 初次加载时调用一次
+	scrollToTop();
 });
 
-// 监视路由的变化
+//监视路由的变化;
 watch(
-	() => route.query,
+	() => route.query.category,
 	async () => {
 		await fetchData();
+		scrollToTop();
+	}
+);
+
+watch(
+	() => route.query.keyword,
+	async () => {
+		await fetchData();
+		scrollToTop();
+	}
+);
+
+watch(
+	() => route.query.page,
+	newPage => {
+		if (newPage === '0') {
+			// 将 page 改为 1
+			router.replace({ query: { ...route.query, page: '1' } });
+		}
 	}
 );
 
 async function fetchData() {
-	// const category = route.query.category as string; // 从路由的 query 中获取 categoryId，假设它是一个字符串
-	// const keyword = '運動'; // 从路由的 query 中获取 keyword，假设它是一个字符串
-
 	if (route.query?.category as string) {
-		const category = route.query.category as string; // 从路由的 query 中获取 categoryId，假设它是一个字符串
-		await shopStore.getAllProductsByCategoryID(getCategoryID(category)); // 将 categoryId 作为参数传递给函数
-		console.log(products.value);
+		const category = route.query.category as string;
+		await shopStore.getAllProductsByCategoryID(getCategoryID(category));
 	} else if (route.query?.keyword as string) {
-		const keyword = route.query.keyword as string; // 从路由的 query 中获取 categoryId，假设它是一个字符串
+		const keyword = route.query.keyword as string;
 		await shopStore.getAllProductsByKeyword(keyword);
-		console.log(products.value);
 	} else {
-		// Handle case where categoryId or keyword is not provided
 		console.error(route.query);
 	}
 }

@@ -698,15 +698,32 @@ const hideCollapse = () => {
 	}
 };
 
-async function onSubmit1(searchKeyword: string) {
-	// await shopStore.getAllProductsByKeyword(searchKeyword);
-	go({
-		name: 'ProductOverview',
-		query: { keyword: searchKeyword, page: 1 },
-	});
-}
+const scrollToTop = () => {
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const onSubmit1 = async (searchKeyword: string) => {
+	if (
+		route.name !== 'ProductOverview' ||
+		route.query.keyword !== searchKeyword ||
+		route.query.page !== '1'
+	) {
+		await router.push({
+			name: 'ProductOverview',
+			query: { keyword: searchKeyword, page: 1 },
+			replace: true,
+		});
+	}
+	clearSearchKeyword();
+	scrollToTop();
+};
+
 function getSearchText(value: string) {
 	searchText.value = value;
+}
+
+function clearSearchKeyword() {
+	searchKeyword.value = '';
 }
 
 function sellerlogin() {

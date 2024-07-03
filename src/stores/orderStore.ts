@@ -97,7 +97,6 @@ export const useOrder = defineStore({
 						const authStore = useAuthStore();
 						await userOrderAll(authStore.token)
 						.then(res => {
-							console.log(res.orders)
 							// 轉換 sellerCategory
 							const processedOrders = res.orders.map((order: { _id: any; products: any[]; state: any; totalPrice: any; createdAt: any; updatedAt: any; }) => ({
 								_id: order._id,

@@ -422,7 +422,7 @@ const addItemToCart = () => {
 		quantity: fakeNum.value,
 	};
 	console.log(cartItem);
-	cartStore.addItemToCart(cartItem);
+	cartStore.addItemToCart(); //待修
 };
 
 function checkValue(num: number, max: number) {

@@ -16,12 +16,7 @@
 			<div v-if="!funItem.data" class="card h-100 m-0 p-0 bg-transparent">
 				<div
 					class="card-body p-0 position-relative d-flex justify-content-center"
-					@click="
-						$go({
-							name: 'ProductOverview',
-							query: { category: funItem.name, page: 1 },
-						})
-					"
+					@click="navigate(funItem.name)"
 				>
 					<img
 						:src="`${funItem.url}`"
@@ -49,12 +44,7 @@
 					<div class="card h-100 m-0 p-0 bg-transparent">
 						<div
 							class="card-body p-0 position-relative d-flex justify-content-center"
-							@click="
-								$go({
-									name: 'ProductOverview',
-									query: { category: fun_2_Item.name, page: 1 },
-								})
-							"
+							@click="navigate(fun_2_Item.name)"
 						>
 							<img :src="`${fun_2_Item.url}`" class="card-img-top" alt="..." />
 							<p
@@ -75,8 +65,24 @@ import { ref, computed, onMounted } from 'vue';
 import Title from './IndexTitle.vue';
 import { useResize } from '@/stores/index';
 const { resize } = useResize();
-// 偵測 螢幕寬、高
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute();
+const router = useRouter();
+// 偵測 螢幕寬、高
+const scrollToTop = () => {
+	window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const navigate = async (item: string) => {
+	await router.push({
+		name: 'ProductOverview',
+		query: { category: item, page: 1 },
+		replace: true,
+	});
+
+	scrollToTop();
+};
 // 傳遞方法，一定要在最後面
 const titleData = {
 	title: '為生活加點樂趣',
