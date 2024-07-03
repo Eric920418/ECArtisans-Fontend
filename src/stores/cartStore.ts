@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
+
 import {
 	type SellerPageType,
 	type SellerPageProductType,

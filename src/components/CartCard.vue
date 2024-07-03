@@ -182,20 +182,10 @@ import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 
 const props = defineProps<{
-	data: any;
-}>();
-const emit = defineEmits(['update-items', 'delete-item']);
-
-const changeInput = ref<boolean[]>(
-	Array.isArray(props.data) ? props.data.map(() => false) : []
-);
-function changeQuantity(index: number, num: number) {
-	props.data.items[index].quantity = num;
-	if (num === 10) {
-		changeInput.value[index] = true;
 	}
 	emit('update-items', props.data);
 }
+
 
 const handleQuantityInput = (index: number, event: any, maxNum: number) => {
 	const inputValue = parseInt(event.target.value);
