@@ -457,13 +457,15 @@ watch(
 );
 
 async function fetchData() {
-	const category = route.query.category as string; // 从路由的 query 中获取 categoryId，假设它是一个字符串
-	const keyword = '運動'; // 从路由的 query 中获取 keyword，假设它是一个字符串
+	// const category = route.query.category as string; // 从路由的 query 中获取 categoryId，假设它是一个字符串
+	// const keyword = '運動'; // 从路由的 query 中获取 keyword，假设它是一个字符串
 
-	if (category) {
+	if (route.query?.category as string) {
+		const category = route.query.category as string; // 从路由的 query 中获取 categoryId，假设它是一个字符串
 		await shopStore.getAllProductsByCategoryID(getCategoryID(category)); // 将 categoryId 作为参数传递给函数
 		console.log(products.value);
-	} else if (keyword) {
+	} else if (route.query?.keyword as string) {
+		const keyword = route.query.keyword as string; // 从路由的 query 中获取 categoryId，假设它是一个字符串
 		await shopStore.getAllProductsByKeyword(keyword);
 		console.log(products.value);
 	} else {

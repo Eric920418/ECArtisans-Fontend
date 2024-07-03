@@ -45,40 +45,86 @@ export interface DetailedOrderType {
 
 // 查詢所有訂單的訂單型態
 export interface OrderType {
+  _id: string;
+  products: {
+    format: ProductFormat;
+  }[];
+  state: number;
+  totalPrice: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserOrderType {
 	_id: string;
-	user: string; // user id
+	user: string;
 	seller: {
-		_id: string; // seller id
+			_id: string;
 	};
-	products: OrderProductType[];
-	state: number; // 訂單狀態 0:未付, 1:已付
-	totalPrice: number; // 訂單總金額
-	pay: number; // 付款方式 1:信用卡付款, 2:ATM匯款, 3:店到店付費
+	products: {
+			product: {
+					_id: string;
+			};
+			format: {
+					title: string;
+					price: number;
+					cost: number;
+					stock: number;
+					image: string;
+					color: string[];
+					_id: string;
+			};
+			quantity: number;
+			price: number;
+			_id: string;
+			review: string;
+	}[];
+	state: number;
+	totalPrice: number;
+	pay: number;
+	address: string;
+	delivery: number;
+	fare: number;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface OrderDetailType {
+	_id: string;
+	user: {
+			_id: string;
+	};
+	seller: string; // 假設賣家用字串表示其 ID
+	products: {
+			product: {
+					_id: string; // 商品 ID
+			};
+			format: {
+					title: string;
+					price: number;
+					cost: number;
+					stock: number;
+					image: string;
+					color: string[];
+					_id: string; // 規格 ID
+			};
+			quantity: number;
+			price: number;
+			_id: string; // 訂單產品 ID
+			review?: string; // 可能有評論的欄位，可根據需要選擇是否包含
+	}[];
+	state: number; // 訂單狀態
+	totalPrice: number; // 訂單總價
+	pay: number; // 付款方式
 	address: string; // 地址
-	delivery: number; // 配送方式 1:宅配, 2:黑貓宅急便, 3:店到店
+	delivery: number; // 配送方式
 	fare: number; // 運費
-	createdAt: string; // 訂單建立時間
-	updatedAt: string; // 訂單最後更新時間
+	createdAt: string; // 建立時間
+	updatedAt: string; // 更新時間
 }
 
-export interface OrderProductType {
-	product: {
-		_id: string; // 商品id
-	};
-	format: ProductFormatType;
-	quantity: number; // 購買的數量
-	price: number; // 此產品的總價
-	_id: string; // 此訂單產品的唯一id
-}
-
-export interface ProductFormatType {
-	title: string; // 規格名稱
-	price: number; // 價錢
-	cost: number; // 成本
-	stock: number; // 庫存量
-	image: string; // 商品圖片
-	color: string[]; // 顏色
-	_id: string; // 規格的id
+export interface ProductFormat {
+  image: string;
 }
 
 export interface ApiResponseType {

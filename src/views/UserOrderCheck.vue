@@ -376,11 +376,11 @@ const formatPrice = (price: number | undefined): string => {
 const navTabs = ref({}) as any;
 // navTab + seller 畫面下所有資料
 const sellerTitleData = {
-	routeName: 'SellerOrderCheck',
+	routeName: 'UserOrderCheck',
 	title: [
 		{
 			title: '訂單',
-			path: { name: 'SellerOrder', query: { page: 1 } },
+			path: { name: 'UserOrder', query: { page: 1 } },
 		},
 		{
 			title: '查看訂單',
@@ -415,7 +415,16 @@ const initData = () => {
 			orderStore.gettingOneOrder(route.params.id as string);
 		}
 	} else if (route.matched[0].path === '/user') {
-		// init.value = userTitleData;
+		if (route.name === 'UserOrderCheck') {
+			// 修改/查看狀態
+			init.value = sellerTitleData;
+			navTabs.value = {
+				title: sellerTitleData.title,
+				schedule: sellerTitleData.schedule,
+				breadcrumb: true,
+			};
+			orderStore.gettingOneOrder(route.params.id as string);
+		}
 	}
 	// userStore.getCouponAll(id, page, token);
 };

@@ -212,7 +212,7 @@ export const sellerOrderAll = (token: string) =>
 // 13	get   /shop/${seller_id}/order/${order_id}	 	 單一訂單管理	 	賣家端
 // export const sellerOrder = (seller_id: string, order_id: string) => handleApiResponse(apiRequest.get(`/shop/${seller_id}/order/${order_id}`));
 export const sellerOrder = (order_id: string, token: string) =>
-	handleApiResponse(apiRequest.get(`/orders/${order_id}`, headers(token)));
+	handleApiResponse(apiRequest.get(`/shop/order/${order_id}`, headers(token)));
 
 // 商家 ■ 活動相關 ■
 // 37	get	    /${seller_id}/activities	 	賣家顯示所有活動管理 	 	賣家端
@@ -281,11 +281,11 @@ export const cartDelete = (token: string, cart_id: string) =>
 
 // 訂單相關 ■ 買家繳費至金流
 // 17	get	  /order/${user_id}	 	 查看訂單紀錄	 	 買家端
-export const userOrderAll = () =>
-	handleApiResponse(apiRequest.get('/order/${user_id}'));
+export const userOrderAll = (token:string) =>
+	handleApiResponse(apiRequest.get('/order', headers(token)));
 // 18	get	  /order/${user_id}/${order_id}	查看訂單詳情	買家端
-export const userOrder = (user_id: string, order_id: string) =>
-	handleApiResponse(apiRequest.get(`/order/${user_id}/${order_id}`));
+export const userOrder = (order_id: string, token: string) =>
+	handleApiResponse(apiRequest.get(`/order/${order_id}`, headers(token)));
 // 52	post	/order	 	 買家建立訂單(待討論)	 	 買家端
 export const userOrderNew = (data: any) =>
 	handleApiResponse(apiRequest.post('/order', data));

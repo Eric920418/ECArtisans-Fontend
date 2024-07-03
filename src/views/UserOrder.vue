@@ -51,23 +51,23 @@ const navTabs = ref({}) as any;
 
 // 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
-	routeName: 'SellerOrder',
+	routeName: 'UserOrder',
 	title: [
 		{
 			title: '全部',
-			path: { name: 'SellerOrder', query: { page: 1, type: '1' } },
+			path: { name: 'UserOrder', query: { page: 1, type: '1' } },
 		},
 		{
 			title: '處理中',
-			path: { name: 'SellerOrder', query: { page: 1, type: '2' } },
+			path: { name: 'UserOrder', query: { page: 1, type: '2' } },
 		},
 		{
 			title: '運送中',
-			path: { name: 'SellerOrder', query: { page: 1, type: '3' } },
+			path: { name: 'UserOrder', query: { page: 1, type: '3' } },
 		},
 		{
 			title: '已完成',
-			path: { name: 'SellerOrder', query: { page: 1, type: '4' } },
+			path: { name: 'UserOrder', query: { page: 1, type: '4' } },
 		},
 	],
 	schedule: computed(() => route.query.type || '1'),
@@ -214,7 +214,13 @@ const updatePage = (page: number) => {
 // Fetch data on component mount
 onMounted(async () => {
 	// 因為要設置路由守衛 會有抓資料的問題，判斷改在這裡獲取 navTabs 的資料
-	if (route.matched[0].path === '/seller') {
+	if (route.matched[0].path === '/user') {
+		navTabs.value = {
+			title: sellerTitleData.title,
+			schedule: sellerTitleData.schedule,
+		};
+		await orderStore.gettingAllOrders();
+	} else {
 		navTabs.value = {
 			title: sellerTitleData.title,
 			schedule: sellerTitleData.schedule,
