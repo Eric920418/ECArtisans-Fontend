@@ -157,15 +157,12 @@
 												</p>
 											</button>
 											<ul class="dropdown-menu z-3">
-												<li
-													v-for="(normItme, normIndex) in fakeNormList"
-													:key="normIndex"
-												>
+												<li v-for="normItem in fakeNormList" :key="normItem.id">
 													<a
 														class="dropdown-item"
-														@click="changeNorm(normItme)"
+														@click="changeNorm(normItem)"
 													>
-														<p>{{ normItme }}</p>
+														<p>{{ normItem.name }}</p>
 													</a>
 												</li>
 											</ul>
@@ -173,7 +170,11 @@
 									</div>
 								</div>
 								<div class="col-12 m-0 p-0 d-flex mt-5">
-									<button type="button" class="col btn btn-outline-primary">
+									<button
+										type="button"
+										class="col btn btn-outline-primary"
+										@click="addItemToCart"
+									>
 										加入購物車
 									</button>
 									<hr style="margin: 0px 12px" />
@@ -319,8 +320,10 @@ import { useProduct } from '@/stores/index';
 // import router from '@/router';
 import { useRoute, useRouter } from 'vue-router';
 import { alertStore } from '@/main'; // 導入實例
+import { useCartStore } from '@/stores/cartStore';
 const router = useRouter();
 const route = useRoute();
+const cartStore = useCartStore();
 const store = useProduct();
 
 const data = computed(() => store.shopData) as any;
@@ -372,9 +375,10 @@ const addToFavorites = () => {
 	// }
 };
 
+const paramsId = route.params.id as string; // 從路由參數獲取 productId
 // 數量下拉選單
+
 // 假資料
-const fakeNum = ref<number>(1);
 
 //判定是否切換的開關
 const changeInput = ref<boolean>(false);
@@ -391,17 +395,36 @@ function changeQuantity(num: number) {
 // 規格下拉選單 假資料
 const fakeNorm = ref('請選擇…');
 
-const fakeNormList = ref<any>([
-	'假清單1',
-	'假清單2',
-	'假清單3',
-	'假清單4',
-	'假清單5',
+const fakeNormList = ref([
+	{ id: '6676905db72f97fbc2b55616', name: '黑色，防水30米' },
+	{ id: '667878fe90b7b2344f9ad486', name: 'asd' },
+	// 其他規格
 ]);
+
+const selectedNormId = ref('');
+const fakeNum = ref<number>(1); // 默認數量為 1
+
 // 交換目前該商品的數量
-function changeNorm(text: string) {
-	fakeNorm.value = text;
-}
+const changeNorm = (normItem: { id: string; name: string }) => {
+	fakeNorm.value = normItem.name;
+	selectedNormId.value = normItem.id;
+};
+
+const addItemToCart = () => {
+	if (!selectedNormId.value) {
+		alert('請選擇一個規格');
+		return;
+	}
+
+	const cartItem = {
+		productId: paramsId,
+		formatId: selectedNormId.value,
+		quantity: fakeNum.value,
+	};
+	console.log(cartItem);
+	cartStore.addItemToCart(); //待修
+};
+
 function checkValue(num: number, max: number) {
 	if (num > max) {
 		fakeNum.value = max;

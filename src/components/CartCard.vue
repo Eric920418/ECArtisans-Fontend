@@ -139,11 +139,7 @@
 											type="number"
 											v-model="item.quantity"
 											@input="
-												handleQuantityInput(
-													index,
-													$event,
-													parseInt(item.format.stock)
-												)
+												handleQuantityInput(index, $event, item.format.stock)
 											"
 										/>
 										<br />
@@ -156,8 +152,8 @@
 								>
 									{{
 										item.format.stock === 0
-											? '0'
-											: parseInt(item.quantity) * parseInt(item.format.price)
+											? 0
+											: item.quantity * item.format.price
 									}}
 								</div>
 							</div>
@@ -181,43 +177,84 @@ import { computed, onMounted, ref } from 'vue';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 
+import { defineProps, defineEmits } from 'vue';
+
+interface Seller {
+	_id: string;
+	brand: string;
+}
+
+interface Product {
+	_id: string;
+	sellerOwned: Seller;
+	productName: string;
+	fare: number;
+	pay: number[];
+	image: string[];
+}
+
+interface Format {
+	title: string;
+	price: number;
+	cost: number;
+	stock: number;
+	image: string;
+	color: string[];
+	_id: string;
+}
+
+interface Item {
+	product: Product;
+	format: Format;
+	quantity: number;
+	price: number;
+	_id: string;
+}
+
+interface Data {
+	seller: Seller;
+	items: Item[];
+}
+
 const props = defineProps<{
-	data: any;
+	data: Data;
 }>();
+
 const emit = defineEmits(['update-items', 'delete-item']);
 
+// 使用 ref 创建本地状态
+const localData = ref(props.data);
+
 const changeInput = ref<boolean[]>(
-	Array.isArray(props.data) ? props.data.map(() => false) : []
+	new Array(props.data.items.length).fill(false)
 );
+
+const handleQuantityInput = (index: number, event: any, maxNum: number) => {
+	const inputValue = parseInt(event.target.value, 10);
+
+	if (isNaN(inputValue) || inputValue <= 0 || inputValue > maxNum) {
+		localData.value.items[index].quantity = 1;
+	} else {
+		localData.value.items[index].quantity = inputValue;
+	}
+
+	emit('update-items', localData.value);
+};
+
 function changeQuantity(index: number, num: number) {
-	props.data.items[index].quantity = num;
+	localData.value.items[index].quantity = num;
 	if (num === 10) {
 		changeInput.value[index] = true;
 	}
 	emit('update-items', props.data);
 }
 
-const handleQuantityInput = (index: number, event: any, maxNum: number) => {
-	const inputValue = parseInt(event.target.value);
-
-	console.log('maxNum', maxNum);
-	if (inputValue > maxNum) {
-		props.data.items[index].quantity = maxNum;
-	} else if (inputValue === 0 || event.target.value === '') {
-		props.data.items[index].quantity = 1;
-	} else {
-		props.data.items[index].quantity = inputValue;
-	}
-
-	emit('update-items', props.data);
-};
-
-function updateQuantity(index: number) {
-	if (props.data.items[index].quantity < 10) {
+const updateQuantity = (index: number) => {
+	if (localData.value.items[index].quantity < 10) {
 		changeInput.value[index] = false;
 	}
-	emit('update-items', props.data);
-}
+	emit('update-items', localData.value);
+};
 
 const handleDeleteItem = (itemIndex: number) => {
 	emit('delete-item', itemIndex);

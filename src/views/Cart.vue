@@ -60,20 +60,20 @@
 						<!-- 選取商品數量，以 商品名稱 計算數量 -->
 						<p class="mb-2 fs-6">
 							已選取
-							<span>1</span>
+							<span>{{ 0 }}</span>
 							個商品
 						</p>
 					</div>
 					<div>
 						<p class="mb-2 fs-6 d-flex justify-content-between">
 							運費總計
-							<span>$50</span>
+							<span>${{ 0 }}</span>
 						</p>
 					</div>
 					<hr />
 					<p class="d-flex justify-content-between">
 						訂單總金額
-						<span>$50</span>
+						<span>${{ 0 }}</span>
 					</p>
 				</div>
 			</div>
@@ -96,14 +96,15 @@
 import { onMounted, ref, computed } from 'vue';
 
 import { useRoute, useRouter } from 'vue-router';
+
 const route = useRoute();
 const router = useRouter();
 
 // 組件
 import CartCard from '@/components/CartCard.vue';
 
-import { useCart } from '@/stores/index';
-const store = useCart();
+import { useCartStore } from '@/stores/index';
+const store = useCartStore();
 
 const fakeData = ref([
 	{
