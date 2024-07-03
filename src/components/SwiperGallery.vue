@@ -21,8 +21,6 @@
 			<swiper-slide v-for="(swiperImg, swiperIndex) in data" :key="swiperIndex">
 				<img :src="swiperImg" class="img-eca" />
 			</swiper-slide>
-			<div class="swiper-button-next"></div>
-			<div class="swiper-button-prev"></div>
 		</swiper>
 		<swiper
 			@swiper="setThumbsSwiper"
@@ -63,8 +61,7 @@ import { type ShopProductsType } from '@/type/orderType';
 
 const { resize } = useResize();
 const modules = [FreeMode, Thumbs, Navigation, Scrollbar];
-const prevEl = () => {};
-const nextEl = () => {};
+
 const thumbsSwiper = ref(null);
 
 const nowData = computed(() => props.data) as any;

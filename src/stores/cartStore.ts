@@ -10,6 +10,7 @@ import { getDate } from '@/setup/globalFunction';
 
 import {
 	cartAll, // 47 買家顯示所有購物車
+	cartNew, // 48 新增購物車
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -40,8 +41,17 @@ export const useCartStore = defineStore({
 				alertStore.error('showError');
 			}
 		},
-		async addItemToCart(): Promise<void> {
-			console.log('待修')
-		}
+		async addItemToCart(data: any): Promise<void> {
+			// console.log('待修')
+			const authStore = useAuthStore();
+			await cartNew(data, authStore.token)
+				.then(res => {
+					alertStore.success('商品加入購物車');
+				})
+				.catch(err => {
+					// this.sellerProductsData = []
+					alertStore.error(err.response.data.message);
+				});
+		},
 	},
 });
