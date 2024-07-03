@@ -92,12 +92,12 @@ const routes = [
 				component: UserProfile,
 				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
 			},
-			{
-				path: 'overview', // 商家總覽
-				name: 'SellerOverview',
-				component: SellerOverview,
-				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
-			},
+			// {
+			// 	path: 'overview', // 商家總覽
+			// 	name: 'SellerOverview',
+			// 	component: SellerOverview,
+			// 	meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
+			// },
 			{
 				path: 'order', // 訂單管理
 				name: 'SellerOrder',

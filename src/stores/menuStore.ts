@@ -1,9 +1,9 @@
 export const sellerMenu = [
 	//商家頁面的目錄
-	{
-		title: '商家中心',
-		path: { name: 'SellerOverview' },
-	},
+	// {
+	// 	title: '商家中心',
+	// 	path: { name: 'SellerOverview' },
+	// },
 	{
 		title: '商家資訊',
 		path: { name: 'SellerProfile' },
@@ -20,10 +20,10 @@ export const sellerMenu = [
 		title: '優惠劵管理',
 		path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
 	},
-	{
-		title: '活動管理',
-		path: { name: 'SellerActivity', query: { page: 1, type: '1' } },
-	},
+	// {
+	// 	title: '活動管理',
+	// 	path: { name: 'SellerActivity', query: { page: 1, type: '1' } },
+	// },
 	/*
     {
       title: '業績分析',

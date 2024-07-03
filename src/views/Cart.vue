@@ -44,9 +44,11 @@
 			<div class="col-12 col-lg-9">
 				<div class="row">
 					<CartCard
-						v-for="(shopItme, shopIndex) in fakeDate.carts"
+						v-for="(shopItme, shopIndex) in fakeData"
 						:key="shopIndex"
 						:data="shopItme"
+						@update-items="handleUpdateItems(shopIndex, $event)"
+						@delete-item="handleDeleteItem(shopIndex, $event)"
 					/>
 				</div>
 			</div>
@@ -92,119 +94,103 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
+
 import { useRoute, useRouter } from 'vue-router';
+const route = useRoute();
+const router = useRouter();
 
 // 組件
 import CartCard from '@/components/CartCard.vue';
 
-const route = useRoute();
-const router = useRouter();
+import { useCart } from '@/stores/index';
+const store = useCart();
 
-const fakeDate = {
-	carts: [
-		{
-			id: '-LATwxc_bIJu-AR4AlNj',
-			product: {
-				product_id: '560165060adf',
-				seller_id: '5465461sda',
-				productName: '草莓醬',
-				category: '果醬',
-				sellerCategory: '食品',
-				format: [
-					{
-						title: '草莓',
-						cost: 50,
-						price: 150,
-						color: '紅色',
-						qty: 2,
-					},
-				],
-				introduce: '好吃的草莓醬',
-				fare: 50,
-				pay: 1,
-				image: ['url1', 'url2', 'url3', 'url4'],
-			},
-			coupon: {
-				title: '超級特惠價格',
-				coupon_id: '546sdf1sda',
-				seller_id: '5465461sda',
-				start_date: 1694705214,
-				due_date: 6547658,
-				priceOver: 300,
-				productType: 0,
-				is_enabled: 1,
-				percentage: 80,
-			},
-			total: 300,
-			finalTotal: 240,
+const fakeData = ref([
+	{
+		seller: {
+			_id: '66768f98b72f97fbc2b55610',
+			brand: 'EcoShop',
 		},
-		{
-			id: '-LATwxc_bIJu-AR4AlNj',
-			product: {
-				product_id: '560165060adf',
-				seller_id: '5465461sda',
-				productName: '草莓醬333333',
-				category: '果醬',
-				sellerCategory: '食品',
-				format: [
-					{
-						title: '草莓',
-						cost: 50,
-						price: 150,
-						color: '紅色',
-						qty: 2,
+		items: [
+			{
+				product: {
+					_id: '6676905db72f97fbc2b55615',
+					sellerOwned: {
+						_id: '66768f98b72f97fbc2b55610',
+						brand: 'EcoShop',
 					},
-				],
-				introduce: '好吃的草莓醬',
-				fare: 50,
-				pay: 1,
-				image: ['url1', 'url2', 'url3', 'url4'],
+					productName: '智能運動手環',
+					fare: 50,
+					pay: [1, 2, 3],
+					image: [
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/8cfcbb71-97f2-4945-9f1b-daf0f7fee42a.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=lqjXCZid%2FTa9gfchnBexeBFoR7Hq0zHp%2BTQDyokBWUv2OouHbzupvrb8ATEKCsqZ2v4%2BTWVcJFCVbOercpCG7yq%2B2bF83Br0yzCCOFfD6fdSTgWMGKC1JeJxe39gsV1g6xGDtNNUzNWxYndXJ3T%2BX0m%2FbhAuU0a7svZxpkR2ANTGl4gSCQ1w0dB7XvKKgu006UJ%2Fxe6F8Hzf2tW1jdzTvxq8L0HW7s0gTKQIo0NPUpBsH1K8aNd%2Foth6vfIgYCy1dHCyqrFrf61s7GimZXvQRey3vpAE%2F2jfEyGkCit07zTBCNIRRqIY3hxQOF07H9XIOQIvHksCn8NlmnZMSf9iZQ%3D%3D',
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/76634046-e2a8-49d2-a278-801966e12626.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ulA3TWoQCX0S2ZyK3E6o%2F1D2U04CyqinS4efHRnSRCM4TCwumOGSTfihPqF58j8XW2reWrg6IAmegarz7r4xZfdqtUnMgXUnNzdYUD5BvIeK7qeXpRuJfMI%2FpMZXneNWZeyt9vmHVcW%2FI8Vtm62b85uusUvVaX2KHw23yjMhyIe4qt83U63I31SnGYZ45Mf%2BkQzeh3rd4e6Bz2RRFUtFViss%2B8xcB3EkH5OFrS1B8S2pnGsPN8VBSYE0tbfshv3MmmetdnBGuhEdQ7noQpTzl4AF%2B%2FXcfHak3ejn3WUGnbnOSSZCv0dkm0vbsqfwWm2EtvnwgpJt0Gvsc2sdm0BGKQ%3D%3D',
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/c968f8ba-aac1-4682-af54-afdc1ecbb647.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ZZzJ3lrx88kPUbO5bcoK1ZHaeTJv1HP6jADwR2jZHgi90EfArzV1Hxj33zLQSzLZhNdb3blI9zwoRNQ1%2Bo2QD5pwcH1yJK%2BqQOMb3If25QcAh7hOrWf7xRGRi5odZMicBsxtevfG%2BvGNlEHkLKc4pLXteF8F026ySkvZiCQPeCOBXQaUGrMOr22gCcQgRaxTXaRwPyDK%2FoYx3VDAt%2FruMvM%2BOx2u85d9Q0EHIjcjxN82tKHah1fJ5o8do%2B1bJhKgX9mNw%2FrnGrHBl%2BFxxBCqZInn%2FK0q%2FqjO8nTy936jLHXqFO5DpsYTOjv5gcCtZbaGkSgfAaurj8h%2F8ouV%2BEyDfw%3D%3D',
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/b77dc5b9-390d-4aa9-a276-a188c57b84ae.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=I3224zq4GBlgwurP2t5xrCZRBjy06AmIK6aqTuuccbHOxPxeXuFO3d%2F%2FG6Rra3jhGhBZUTcO1NSbOFZG5rU9Dt%2Fl3N2TtnRjE3XyeCQqSkdme4G5fG%2FwIo9AhD2OZoznniyjgu1PESkpzZMWCjn8Iv9li9IcbkNDTVelAbFzuQPBdLUj%2BbWm9i3zxV1aXwAd7xP9xgx5ob2S5ZLE%2BKJ%2Fs4RiH1IyfhgfZSgpoe88%2BzFiWBbuSJM4k4fGM1l2aR8Z3%2B8G7sAZbV8wFW%2FAAQ0g9en7gVqLdacTCQPHNG1%2FDrEwLiobZ2zkXwpoJ8UuzVZQqxfwMerfJOxjkopSM%2BOPKA%3D%3D',
+					],
+				},
+				format: {
+					title: '黑色，防水30米',
+					price: 350,
+					cost: 200,
+					stock: 500,
+					image:
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/8cfcbb71-97f2-4945-9f1b-daf0f7fee42a.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=lqjXCZid%2FTa9gfchnBexeBFoR7Hq0zHp%2BTQDyokBWUv2OouHbzupvrb8ATEKCsqZ2v4%2BTWVcJFCVbOercpCG7yq%2B2bF83Br0yzCCOFfD6fdSTgWMGKC1JeJxe39gsV1g6xGDtNNUzNWxYndXJ3T%2BX0m%2FbhAuU0a7svZxpkR2ANTGl4gSCQ1w0dB7XvKKgu006UJ%2Fxe6F8Hzf2tW1jdzTvxq8L0HW7s0gTKQIo0NPUpBsH1K8aNd%2Foth6vfIgYCy1dHCyqrFrf61s7GimZXvQRey3vpAE%2F2jfEyGkCit07zTBCNIRRqIY3hxQOF07H9XIOQIvHksCn8NlmnZMSf9iZQ%3D%3D',
+					color: ['黑色'],
+					_id: '6676905db72f97fbc2b55616',
+				},
+				quantity: 1,
+				price: 350,
+				_id: '668472637330684c8cde9b3f',
 			},
-			total: 300,
-			finalTotal: 240,
-		},
-		{
-			id: '-LATwxc_bIJu-AR4AlNj',
-			product: {
-				product_id: '560165060adf',
-				seller_id: '5465461sda',
-				productName: '草莓醬2222222222',
-				category: '果醬',
-				sellerCategory: '食品',
-				format: [
-					{
-						title: '草莓',
-						cost: 50,
-						price: 150,
-						color: '紅色',
-						qty: 2,
+			{
+				product: {
+					_id: '6676905db72f97fbc2b55615',
+					sellerOwned: {
+						_id: '66768f98b72f97fbc2b55610',
+						brand: 'EcoShop',
 					},
-				],
-				introduce: '好吃的草莓醬',
-				fare: 50,
-				pay: 1,
-				image: ['url1', 'url2', 'url3', 'url4'],
+					productName: '智能運動手環',
+					fare: 50,
+					pay: [1, 2, 3],
+					image: [
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/8cfcbb71-97f2-4945-9f1b-daf0f7fee42a.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=lqjXCZid%2FTa9gfchnBexeBFoR7Hq0zHp%2BTQDyokBWUv2OouHbzupvrb8ATEKCsqZ2v4%2BTWVcJFCVbOercpCG7yq%2B2bF83Br0yzCCOFfD6fdSTgWMGKC1JeJxe39gsV1g6xGDtNNUzNWxYndXJ3T%2BX0m%2FbhAuU0a7svZxpkR2ANTGl4gSCQ1w0dB7XvKKgu006UJ%2Fxe6F8Hzf2tW1jdzTvxq8L0HW7s0gTKQIo0NPUpBsH1K8aNd%2Foth6vfIgYCy1dHCyqrFrf61s7GimZXvQRey3vpAE%2F2jfEyGkCit07zTBCNIRRqIY3hxQOF07H9XIOQIvHksCn8NlmnZMSf9iZQ%3D%3D',
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/76634046-e2a8-49d2-a278-801966e12626.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ulA3TWoQCX0S2ZyK3E6o%2F1D2U04CyqinS4efHRnSRCM4TCwumOGSTfihPqF58j8XW2reWrg6IAmegarz7r4xZfdqtUnMgXUnNzdYUD5BvIeK7qeXpRuJfMI%2FpMZXneNWZeyt9vmHVcW%2FI8Vtm62b85uusUvVaX2KHw23yjMhyIe4qt83U63I31SnGYZ45Mf%2BkQzeh3rd4e6Bz2RRFUtFViss%2B8xcB3EkH5OFrS1B8S2pnGsPN8VBSYE0tbfshv3MmmetdnBGuhEdQ7noQpTzl4AF%2B%2FXcfHak3ejn3WUGnbnOSSZCv0dkm0vbsqfwWm2EtvnwgpJt0Gvsc2sdm0BGKQ%3D%3D',
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/c968f8ba-aac1-4682-af54-afdc1ecbb647.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ZZzJ3lrx88kPUbO5bcoK1ZHaeTJv1HP6jADwR2jZHgi90EfArzV1Hxj33zLQSzLZhNdb3blI9zwoRNQ1%2Bo2QD5pwcH1yJK%2BqQOMb3If25QcAh7hOrWf7xRGRi5odZMicBsxtevfG%2BvGNlEHkLKc4pLXteF8F026ySkvZiCQPeCOBXQaUGrMOr22gCcQgRaxTXaRwPyDK%2FoYx3VDAt%2FruMvM%2BOx2u85d9Q0EHIjcjxN82tKHah1fJ5o8do%2B1bJhKgX9mNw%2FrnGrHBl%2BFxxBCqZInn%2FK0q%2FqjO8nTy936jLHXqFO5DpsYTOjv5gcCtZbaGkSgfAaurj8h%2F8ouV%2BEyDfw%3D%3D',
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/b77dc5b9-390d-4aa9-a276-a188c57b84ae.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=I3224zq4GBlgwurP2t5xrCZRBjy06AmIK6aqTuuccbHOxPxeXuFO3d%2F%2FG6Rra3jhGhBZUTcO1NSbOFZG5rU9Dt%2Fl3N2TtnRjE3XyeCQqSkdme4G5fG%2FwIo9AhD2OZoznniyjgu1PESkpzZMWCjn8Iv9li9IcbkNDTVelAbFzuQPBdLUj%2BbWm9i3zxV1aXwAd7xP9xgx5ob2S5ZLE%2BKJ%2Fs4RiH1IyfhgfZSgpoe88%2BzFiWBbuSJM4k4fGM1l2aR8Z3%2B8G7sAZbV8wFW%2FAAQ0g9en7gVqLdacTCQPHNG1%2FDrEwLiobZ2zkXwpoJ8UuzVZQqxfwMerfJOxjkopSM%2BOPKA%3D%3D',
+					],
+				},
+				format: {
+					title: 'asd',
+					price: 350,
+					cost: 200,
+					stock: 0,
+					image:
+						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/76634046-e2a8-49d2-a278-801966e12626.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ulA3TWoQCX0S2ZyK3E6o%2F1D2U04CyqinS4efHRnSRCM4TCwumOGSTfihPqF58j8XW2reWrg6IAmegarz7r4xZfdqtUnMgXUnNzdYUD5BvIeK7qeXpRuJfMI%2FpMZXneNWZeyt9vmHVcW%2FI8Vtm62b85uusUvVaX2KHw23yjMhyIe4qt83U63I31SnGYZ45Mf%2BkQzeh3rd4e6Bz2RRFUtFViss%2B8xcB3EkH5OFrS1B8S2pnGsPN8VBSYE0tbfshv3MmmetdnBGuhEdQ7noQpTzl4AF%2B%2FXcfHak3ejn3WUGnbnOSSZCv0dkm0vbsqfwWm2EtvnwgpJt0Gvsc2sdm0BGKQ%3D%3D',
+					color: [''],
+					_id: '667878fe90b7b2344f9ad486',
+				},
+				quantity: 1,
+				price: 350,
+				_id: '6684854b2554898593f12cbc',
 			},
-			coupon: {
-				title: '超級特惠價格',
-				coupon_id: '546sdf1sda',
-				seller_id: '5465461sda',
-				start_date: 1694705214,
-				due_date: 6547658,
-				priceOver: 300,
-				productType: 0,
-				is_enabled: 1,
-				percentage: 80,
-			},
-			total: 300,
-			finalTotal: 240,
-		},
-	],
-	totalAll: 300,
-	finalTotalAll: 240,
+		],
+	},
+]);
+function handleUpdateItems(shopIndex: number, updatedItems: any) {
+	// 做一些額外的檢查以及更新處理
+	if (updatedItems && updatedItems.items) {
+		fakeData.value[shopIndex].items = updatedItems.items;
+	}
+}
+
+const handleDeleteItem = (shopIndex: number, itemIndex: number) => {
+	// 刪除對應的商品項目
+	fakeData.value[shopIndex].items.splice(itemIndex, 1);
 };
-
-onMounted(async () => {});
+onMounted(async () => {
+	// await store.getAllCart();
+});
 </script>
 
 <style lang="scss" scoped></style>

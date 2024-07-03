@@ -6,6 +6,7 @@ export * from './couponStore';
 export * from './activityStore';
 export * from './productStore';
 export * from './shopStore';
+export * from './cartStore';
 
 // setup 引入資料
 export * from '../setup/globalFunction';
