@@ -9,9 +9,26 @@
 					<div
 						class="nav-item mb-0 d-flex align-items-center justify-content-center"
 					>
-						<div>狀態</div>
-						<div>分類</div>
-						<div>搜尋</div>
+						<div
+							class="d-flex align-items-center justify-content-center m-0 me-3 nav-search bg-white rounded rounded-pill px-2"
+						>
+							<input
+								id="search"
+								name="請輸入名稱"
+								type="search"
+								v-model="searchKeyword"
+								class="form-control nav-search-input border-0"
+								aria-label="請輸入名稱"
+								placeholder="請輸入名稱..."
+							/>
+							<button
+								class="btn btn-primary btn-search d-flex align-items-center justify-content-center ms-2"
+								type="button"
+								style="width: 36px; height: 36px"
+							>
+								<font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+							</button>
+						</div>
 					</div>
 				</div>
 				<div class="text-end">
@@ -23,209 +40,13 @@
 					</router-link>
 				</div>
 			</div>
-
-			<div class="p-4 table table-responsive">
-				<!-- table table-striped table-bordered table-rwd -->
-				<table class="table-bordered">
-					<!-- :class="{
-						'table align-middle table-hover': resize >= 768,
-					}" -->
-					<!-- 'table-rwd w-100': resize < 768, -->
-					<thead v-if="resize >= 768">
-						<tr
-							:class="{
-								'tr-only-hide text-canter': resize >= 768,
-							}"
-						>
-							<th
-								v-for="(thItem, thIndex) in tableThead"
-								:key="thIndex"
-								:class="thItem.class"
-							>
-								{{ thItem.text }}
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr
-							v-for="(tdItem, tdIndex) in tableTbody"
-							:key="tdIndex"
-							:class="{
-								card: resize < 768,
-							}"
-						>
-							<!-- d-flex flex-nowrap -->
-							<!-- :class="tableThead[0].class" -->
-							<th
-								:data-th="tableThead[0].text"
-								:class="{
-									'order-1 no': resize < 768,
-								}"
-							>
-								{{ tdIndex + 1 }}
-							</th>
-							<!-- :class="tableThead[1].class" -->
-							<td
-								:data-th="tableThead[1].text"
-								:class="{
-									'order-0 img  p-0': resize < 768,
-									'product-img p-3': resize >= 768,
-								}"
-							>
-								<!-- <div
-									:class="{
-										'product-img p-0': resize >= 768,
-									}"
-								> -->
-								<img :src="tdItem.image[0]" class="img-eca" />
-								<!-- </div> -->
-							</td>
-							<!-- :class="tableThead[2].class" -->
-							<td
-								:data-th="tableThead[2].text"
-								:class="{
-									'order-1 isOnshelf': resize < 768,
-								}"
-							>
-								<p class="m-0">{{ tdItem.isOnshelf }}</p>
-							</td>
-							<!-- :class="tableThead[3].class" -->
-							<td
-								:data-th="tableThead[3].text"
-								:class="{
-									'category order-1 ': resize < 768,
-								}"
-							>
-								<p class="m-0 categoryIcon">{{ tdItem.sellerCategory }}</p>
-							</td>
-							<!-- :class="tableThead[4].class" -->
-							<td
-								:data-th="tableThead[4].text"
-								:class="{
-									'order-0 itle ': resize < 768,
-								}"
-								class=""
-							>
-								<h3 class="m-0 text-hidden">{{ tdItem.productName }}</h3>
-							</td>
-							<!-- :class="tableThead[5].class" -->
-							<td
-								:data-th="tableThead[5].text"
-								:class="{
-									'order-0  id': resize < 768,
-								}"
-							>
-								{{ tdItem._id }}
-							</td>
-							<td
-								:data-th="tableThead[6].text"
-								:class="{
-									'order-0  cost': resize < 768,
-								}"
-							>
-								<!-- class="order-1"
-								:class="tableThead[6].class" -->
-								{{ tdItem.format[0].cost }}
-							</td>
-							<td
-								:data-th="tableThead[7].text"
-								:class="{
-									'order-1 profit': resize < 768,
-								}"
-							>
-								<!-- :class="tableThead[7].class" -->
-								{{ tdItem.format[0].price - tdItem.format[0].cost }}
-							</td>
-							<td
-								:data-th="tableThead[8].text"
-								:class="{
-									'order-1 price': resize < 768,
-								}"
-							>
-								<p
-									class="m-0"
-									:class="{
-										'fs-5 fw-bold text-end ': resize < 768,
-									}"
-								>
-									{{ tdItem.format[0].price }}
-								</p>
-							</td>
-							<td
-								:data-th="tableThead[9].text"
-								:class="{
-									'order-1 stock': resize < 768,
-								}"
-							>
-								{{ tdItem.format[0].stock }}
-							</td>
-							<td
-								:data-th="tableThead[10].text"
-								:class="{
-									'order-1 icon': resize < 768,
-								}"
-							>
-								<a
-									class="hover-icon"
-									@click="
-										$go({
-											name: 'SellerProductCheck',
-											params: { id: tdItem._id },
-										})
-									"
-								>
-									<font-awesome-icon
-										:icon="['fas', 'pen-to-square']"
-										class="fs-5 p-2"
-									/>
-								</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="p-4 table table-responsive" v-if="tableTbody">
+				<Card
+					v-for="(tableItme, tableIndex) in tableTbody"
+					:key="tableIndex"
+					:data="tableItme"
+				/>
 			</div>
-			<!-- 商品 清單 table -->
-			<!-- <div class="my-0 row m-0 p-3">
-				<div class="col-12">
-					<table class="table">
-						<thead class="table-light">
-							<tr>
-								<th scope="col-12">#</th>
-								<th
-									scope="col-12"
-									v-for="(thItem, thIndex) in tableThead"
-									:key="thIndex"
-								>
-									{{ thItem }}
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr
-								v-for="(tdItem, tdIndex) in tableTbody"
-								:key="tdIndex"
-								@click="
-									$go({
-										name: 'SellerProductCheck',
-										params: { id: tdItem._id },
-									})
-								"
-							>
-								<th scope="row">{{ tdIndex + 1 }}</th>
-		
-							</tr>
-						</tbody>
-					</table>
-				</div>
-
-				<div class="row m-0 p-0" v-if="data"></div>
-				<div class="col-12">
-					<p>
-						{{ data }}
-					</p>
-					<Page :data="paginationData" :path="path" />
-				</div>
-			</div> -->
 		</div>
 	</div>
 </template>
@@ -235,12 +56,14 @@ import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { useRoute, useRouter } from 'vue-router';
 
+import Card from '../components/SellerProductCard.vue';
 // 組件
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
 
 // stores
 import { useProduct, useAuthStore, useResize } from '@/stores/index';
+import { table } from 'console';
 
 const { resize } = useResize();
 const route = useRoute();
@@ -341,6 +164,8 @@ function add() {
 	if (addNum.value === false) addNum.value = true;
 	else addNum.value = false;
 }
+
+const searchKeyword = ref('');
 
 // // 刪除，待檢查
 // function inputBadgeClose(id: string) {
@@ -589,6 +414,9 @@ onMounted(async () => {
 	margin-right: 10px;
 	font-size: 0.85em;
 	// color: #d20b2a;
+}
+.border {
+	border-radius: 50%;
 }
 // @media (max-width: 736px) {
 // 	.table-rwd {

@@ -87,7 +87,7 @@ export const productAll = (category: string) =>
 export const product = (product_id: string) =>
 	handleApiResponse(apiRequest.get(`/products/detail/${product_id}`));
 // 56	post  /products/search	 	 商品搜尋	 	買家端
-export const productSearch = (keyword:string) =>
+export const productSearch = (keyword: string) =>
 	handleApiResponse(apiRequest.get(`/search/products?keyword=${keyword}`));
 
 // 購物商城 ■ 賣家資訊
@@ -263,8 +263,8 @@ export const user = (user_id: string) =>
 
 // 購物車 ■
 // 47	get	    /carts/${user_id}	 	買家顯示所有購物車	 	買家端
-export const cartAll = (user_id: string) =>
-	handleApiResponse(apiRequest.get(`/cart/${user_id}`));
+export const cartAll = (token: string) =>
+	handleApiResponse(apiRequest.get(`/cart`, headers(token)));
 // 48	post	  /cart	 	 買家新增購物車	 	 買家端
 export const cartNew = (data: any) =>
 	handleApiResponse(apiRequest.post('/cart', data));

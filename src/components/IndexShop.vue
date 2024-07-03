@@ -3,7 +3,7 @@
 		<Title :data="titleData" />
 
 		<div class="container p-0">
-			<div class="indexShop mx-auto">
+			<div class="d-flex">
 				<swiper
 					slidesPerView="auto"
 					:watchSlidesProgress="true"
@@ -24,7 +24,7 @@
 					:freeMode="false"
 					:mousewheel="false"
 					:keyboard="{ enabled: true }"
-					class="overflow-visible"
+					class="overflow-visible indexShop"
 				>
 					<SwiperSlide
 						v-for="(item, index) in recommendSellerList"
@@ -240,15 +240,15 @@ onMounted(async () => {
 
 .indexShop {
 	overflow: visible;
-	width: 100vw;
-	@media (min-width: 576px) {
-		width: 81vw;
+	max-width: 100vw;
+	@media (max-width: 576px) {
+		max-width: 81vw;
 	}
 	@media (min-width: 768px) {
-		width: 62.5vw;
+		max-width: 62.5vw;
 	}
 	@media (min-width: 992px) {
-		width: 44.5vw;
+		max-width: 44.5vw;
 	}
 }
 
