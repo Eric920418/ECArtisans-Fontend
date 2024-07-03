@@ -85,7 +85,6 @@ function categorized(allData: OrderType[]) {
 	} else if (filterText === '4') {
 		data = data.filter(order => order.state === 3);
 	}
-	console.log(data);
 	return data;
 }
 
@@ -215,12 +214,6 @@ const updatePage = (page: number) => {
 onMounted(async () => {
 	// 因為要設置路由守衛 會有抓資料的問題，判斷改在這裡獲取 navTabs 的資料
 	if (route.matched[0].path === '/user') {
-		navTabs.value = {
-			title: sellerTitleData.title,
-			schedule: sellerTitleData.schedule,
-		};
-		await orderStore.gettingAllOrders();
-	} else {
 		navTabs.value = {
 			title: sellerTitleData.title,
 			schedule: sellerTitleData.schedule,

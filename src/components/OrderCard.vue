@@ -100,7 +100,6 @@ const formattedData = ref<FormattedOrderCardType[]>([]);
 
 const formatCardData = (orderItem: OrderCardType): FormattedOrderCardType => {
 	const commonData = {
-		go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
 		img:
 			orderItem.products.length > 0 ? orderItem.products[0].format.image : '',
 		title: orderItem._id,
@@ -111,45 +110,69 @@ const formatCardData = (orderItem: OrderCardType): FormattedOrderCardType => {
 		date: { sDate: orderItem.createdAt },
 	};
 
-	if (router.currentRoute.value.matched[0].path === '/seller') {
+	const getButtons = (routePath: string) => {
+		const userButtons = [
+			{
+				title: '已收到貨',
+				go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+				showInStates: [1], // 待填符合的狀態值
+			},
+			{
+				title: '立即評價',
+				go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+				showInStates: [2], // 待填符合的狀態值
+			},
+			{
+				title: '查看評價',
+				go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+				showInStates: [3], // 待填符合的狀態值
+			},
+			{
+				title: '查看訂單',
+				go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+				showInStates: [0, 1, 2, 3], // 一定要出現，包含各種狀態
+			},
+			{
+				title: '聯絡賣家',
+				go: { name: 'BuyerOrderCheck', params: { id: orderItem._id } },
+				showInStates: [0, 1, 2, 3], // 一定要出現，包含各種狀態
+			},
+		];
+
+		const sellerButtons = [
+			{
+				title: '查看訂單',
+				go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+			},
+			{
+				title: '聯絡買家',
+				go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+			},
+		];
+
+		if (routePath === '/seller') {
+			return sellerButtons;
+		} else {
+			return userButtons.filter(
+				btn => btn.showInStates.includes(orderItem.state) // 如果有被包含在上述的狀況就篩選出對應的按鈕
+			);
+		}
+	};
+
+	const routePath = router.currentRoute.value.matched[0].path;
+	const buttons = getButtons(routePath);
+
+	if (routePath === '/seller') {
 		return {
 			...commonData,
-			btn: [
-				{
-					title: '查看訂單',
-					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
-				},
-				{
-					title: '聯絡買家',
-					go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
-				},
-			],
+			go: { name: 'SellerOrderCheck', params: { id: orderItem._id } },
+			btn: buttons,
 		};
 	} else {
 		return {
 			...commonData,
-			btn: [
-				{
-					title: '已收到貨',
-					go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
-				},
-				{
-					title: '立即評價',
-					go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
-				},
-				{
-					title: '查看評價',
-					go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
-				},
-				{
-					title: '查看訂單',
-					go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
-				},
-				{
-					title: '聯絡賣家',
-					go: { name: 'BuyerOrderCheck', params: { id: orderItem._id } },
-				},
-			],
+			go: { name: 'UserOrderCheck', params: { id: orderItem._id } },
+			btn: buttons,
 		};
 	}
 };

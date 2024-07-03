@@ -2,7 +2,7 @@
 	<div class="d-flex align-items-center">
 		<!-- me-2 用後面撐開間距會比較好，如果有遇到 RWD 前面才不會無法對齊 -->
 		<p class="mb-0 me-2">
-			{{ stars?.toFixed(1) }}
+			{{ (stars !== null ? stars : 0).toFixed(1) }}
 		</p>
 		<!-- 改這樣是，因為 ul 應該是要清單文字，但這裡應該只是個圖片 -->
 		<div class="d-flex align-items-center">

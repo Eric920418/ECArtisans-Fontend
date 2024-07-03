@@ -60,6 +60,7 @@ export const useShop = defineStore({
 		] as unknown as SellerPageType[],
 		sellerHomeData: {} as SellerPageType,
 		sellerProductsData: [] as SellerPageProductType[],
+		searchProductsData: [] as SellerPageProductType[],
 		recommendShopData: [] as RecommendShopType[],
 		followShopData: [] as RecommendShopType[],
 		isLoading: false, // 請求狀態
@@ -184,16 +185,16 @@ export const useShop = defineStore({
 		},
 		// 獲取商品分類的所有商品
 		async getAllProductsByCategoryID(categoryID:string): Promise<void> {
-			this.sellerProductsData = []
+			this.searchProductsData = []
 			try {
 				// 固定抓8 筆
 				await productAll(categoryID)
 					.then(res => {
-						this.sellerProductsData = res.data;
-						console.log(this.sellerProductsData)
+						this.searchProductsData = res.data;
 					})
 					.catch(err => {
-						
+						this.searchProductsData = [] 
+
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
@@ -202,7 +203,7 @@ export const useShop = defineStore({
 		},
 		// 獲取商品by 關鍵字
 		async getAllProductsByKeyword(keyword: string): Promise<void> {
-			this.sellerProductsData = [] as SellerPageProductType[]
+			this.searchProductsData = [] 
 			try {
 				await productSearch(keyword)
 					.then((res) => {
@@ -212,11 +213,11 @@ export const useShop = defineStore({
 								product.discount = [product.discount];
 							}
 						});
-						this.sellerProductsData = res.data;
+						this.searchProductsData = res.data;
 
 					})
 					.catch((err) => {
-						// this.sellerProductsData = []
+						this.sellerProductsData = []
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
