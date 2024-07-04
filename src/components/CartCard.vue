@@ -1,11 +1,9 @@
 <template>
 	<div class="col-12 card mb-4 p-4 py-5">
 		<div class="row m-0 p-0 table-responsive overflow-visible">
-			<!-- PS.手機板切的沒有很好看，我先放棄www -->
-			<!-- 以下為商品修改 -->
 			<div class="d-flex align-items-center justify-content-center">
 				<div class="pe-3">
-					<input type="checkbox" />
+					<input type="checkbox" v-model="isAllSelected" />
 				</div>
 				<div class="flex-grow-1">
 					<div class="row m-0 p-0">
@@ -31,11 +29,15 @@
 			</div>
 			<div
 				v-for="(item, index) in data.items"
-				:key="index"
+				:key="item.product._id + '-' + item.format._id"
 				class="mt-4 mt-md-5 d-flex align-items-center justify-content-center"
 			>
 				<div class="pe-3">
-					<input type="checkbox" :disabled="item.format.stock === 0" />
+					<input
+						type="checkbox"
+						v-model="item.selected"
+						:disabled="item.format.stock === 0"
+					/>
 				</div>
 				<div class="flex-grow-1">
 					<div class="row m-0 p-0">
@@ -73,8 +75,6 @@
 									{{ item.format.price }}
 								</div>
 								<div class="pe-3 col-4 col-md-6 m-0 p-0" data-th="數量">
-									<!-- 當此商品數量不足 10 時 -->
-									<!-- changeInput 實際使用請改為陣列，儲存該商品的數字狀態 -->
 									<div class="dropdown" v-if="item.format.stock === 0">
 										<button
 											class="form-select form-select-sm d-flex align-items-center justify-content-center px-3"
@@ -132,28 +132,30 @@
 										</ul>
 									</div>
 
-									<!-- 當此商品數量為 10 時，改為輸入數字，且不再改變 -->
 									<div v-else>
 										<input
 											class="form-control form-control-sm text-end me-0 hide-arrows"
 											type="number"
 											v-model="item.quantity"
 											@input="
-												handleQuantityInput(index, $event, item.format.stock)
+												handleQuantityInput(
+													index,
+													$event,
+													parseInt(item.format.stock)
+												)
 											"
 										/>
 										<br />
 									</div>
 								</div>
-								<!-- {{ item.format.stock }} -->
 								<div
 									class="pe-3 col-4 col-md-3 m-0 p-0 text-end pe-5"
 									data-th="價格"
 								>
 									{{
 										item.format.stock === 0
-											? 0
-											: item.quantity * item.format.price
+											? '0'
+											: parseInt(item.quantity) * parseInt(item.format.price)
 									}}
 								</div>
 							</div>
@@ -165,101 +167,90 @@
 						type="button"
 						class="btn-close"
 						aria-label="Close"
-						@click="handleDeleteItem(index)"
+						@click="handleDeleteItem(item.product._id, item.format._id)"
 					></button>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
+
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
-import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/vue';
-
-import { defineProps, defineEmits } from 'vue';
-
-interface Seller {
-	_id: string;
-	brand: string;
-}
-
-interface Product {
-	_id: string;
-	sellerOwned: Seller;
-	productName: string;
-	fare: number;
-	pay: number[];
-	image: string[];
-}
-
-interface Format {
-	title: string;
-	price: number;
-	cost: number;
-	stock: number;
-	image: string;
-	color: string[];
-	_id: string;
-}
-
-interface Item {
-	product: Product;
-	format: Format;
-	quantity: number;
-	price: number;
-	_id: string;
-}
-
-interface Data {
-	seller: Seller;
-	items: Item[];
-}
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useCartStore } from '@/stores/index';
 
 const props = defineProps<{
-	data: Data;
+	data: any;
 }>();
 
-const emit = defineEmits(['update-items', 'delete-item']);
+const emit = defineEmits<{
+	(event: 'update-items', data: any): void;
+	(event: 'delete-item', index: number): void;
+}>();
 
-// 使用 ref 创建本地状态
-const localData = ref(props.data);
+const changeInput = ref<boolean[]>(Array(props.data.items.length).fill(false));
+const store = useCartStore();
+const router = useRouter();
 
-const changeInput = ref<boolean[]>(
-	new Array(props.data.items.length).fill(false)
-);
-
-const handleQuantityInput = (index: number, event: any, maxNum: number) => {
-	const inputValue = parseInt(event.target.value, 10);
-
-	if (isNaN(inputValue) || inputValue <= 0 || inputValue > maxNum) {
-		localData.value.items[index].quantity = 1;
-	} else {
-		localData.value.items[index].quantity = inputValue;
+// 确保每个商品都有 selected 属性
+props.data.items.forEach(item => {
+	if (typeof item.selected === 'undefined') {
+		item.selected = false;
 	}
+});
 
-	emit('update-items', localData.value);
-};
+// 计算是否所有项目都被选中
+const isAllSelected = computed({
+	get() {
+		return props.data.items.every(item => item.selected);
+	},
+	set(value) {
+		props.data.items.forEach(item => {
+			item.selected = value;
+		});
+	},
+});
+
+function toggleAll() {
+	const allSelected = isAllSelected.value;
+	props.data.items.forEach(item => {
+		item.selected = !allSelected;
+	});
+}
 
 function changeQuantity(index: number, num: number) {
-	localData.value.items[index].quantity = num;
-	if (num === 10) {
-		changeInput.value[index] = true;
+	props.data.items[index].quantity = num;
+	updateCartItem(index);
+}
+
+function handleQuantityInput(index: number, event: any, maxNum: number) {
+	const inputValue = parseInt(event.target.value);
+	if (inputValue > maxNum) {
+		props.data.items[index].quantity = maxNum;
+	} else if (inputValue === 0 || event.target.value === '') {
+		props.data.items[index].quantity = 1;
+	} else {
+		props.data.items[index].quantity = inputValue;
 	}
+	updateCartItem(index);
+}
+
+function updateCartItem(index: number) {
+	const item = props.data.items[index];
+	const data = {
+		quantity: item.quantity,
+	};
+	store.updateItemInCart(data, item.product._id, item.format._id);
 	emit('update-items', props.data);
 }
 
-const updateQuantity = (index: number) => {
-	if (localData.value.items[index].quantity < 10) {
-		changeInput.value[index] = false;
-	}
-	emit('update-items', localData.value);
-};
-
-const handleDeleteItem = (itemIndex: number) => {
-	emit('delete-item', itemIndex);
-};
+function handleDeleteItem(productId: string, formatId: string) {
+	store.removeItemFromCart(productId, formatId);
+	emit('delete-item', productId);
+}
 </script>
+
 <style lang="scss">
 .cartImg {
 	width: 80px;
@@ -276,15 +267,13 @@ const handleDeleteItem = (itemIndex: number) => {
 	.table-responsive [data-th]::before {
 		content: attr(data-th) ': ';
 		font-weight: bold;
-		// display: inline-block;
-		// width: 100px; /* 這裡可以根據需要調整 */
 	}
 
 	.table-responsive .row > div {
 		display: block;
 		width: 100%;
 		box-sizing: border-box;
-		margin-bottom: 10px; /* 為了在小屏幕上有一些間距 */
+		margin-bottom: 10px;
 	}
 }
 </style>

@@ -39,9 +39,6 @@ import UserProfile from '../views/UserProfile.vue';
 import UserCollect from '../views/UserCollect.vue';
 import UserCoupon from '../views/UserCoupon.vue';
 import UserCouponNew from '../views/UserCouponNew.vue';
-import UserOrder from '../views/UserOrder.vue';
-import UserOrderCheck from '../views/UserOrderCheck.vue';
-
 import Component from 'vue-loading-overlay';
 import { computed } from 'vue';
 
@@ -92,12 +89,12 @@ const routes = [
 				component: UserProfile,
 				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
 			},
-			// {
-			// 	path: 'overview', // 商家總覽
-			// 	name: 'SellerOverview',
-			// 	component: SellerOverview,
-			// 	meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
-			// },
+			{
+				path: 'overview', // 商家總覽
+				name: 'SellerOverview',
+				component: SellerOverview,
+				meta: { requiresAuth: true, role: 'seller', seller: true }, // 商家身份登入後才能訪問
+			},
 			{
 				path: 'order', // 訂單管理
 				name: 'SellerOrder',
@@ -193,19 +190,6 @@ const routes = [
 				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 			},
 			{
-				path: 'order', // 會員中心
-				name: 'UserOrder',
-				component: UserOrder,
-				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
-			},
-			{
-				path: 'order/:id', // 單筆訂單管理
-				name: 'UserOrderCheck',
-				component: UserOrderCheck,
-				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
-				props: true, // 將orderID參數作為'props'傳遞給其他組件
-			},
-			{
 				path: 'collect', // 收藏商品
 				name: 'UserCollect',
 				component: UserCollect,
@@ -223,6 +207,7 @@ const routes = [
 		path: '/cart-check',
 		name: 'CartCheck',
 		component: CartCheck,
+		props: route => ({ orderData: route.params.orderData }),
 		// meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 	},
 

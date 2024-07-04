@@ -38,14 +38,13 @@
 				</div>
 			</div>
 		</div>
-		<!-- <h2 class="fs-3 my-3 mt-4 px-3">購物車</h2> -->
 		<div class="row px-3 m-0 mt-4">
 			<div class="col-12">
 				<div class="row">
 					<CartCard
-						v-for="(shopItme, shopIndex) in fakeData"
-						:key="shopIndex"
-						:data="shopItme"
+						v-for="(shopItem, shopIndex) in orderData.selectedItems"
+						:key="shopItem._id"
+						:data="shopItem"
 					/>
 				</div>
 			</div>
@@ -53,7 +52,7 @@
 				<div class="card p-3">
 					<div class="row m-0 p-0 p-2 p-sm-3 p-md-4">
 						<div class="col-12">
-							<h3 class="p-0 neutral-01 fs-5">訂單資訊</h3>
+							<h3 class="p-0 neutral-01 fs-5">订单信息</h3>
 						</div>
 						<div
 							class="col-12 col-md-4 col-lg-5 mt-4 d-flex justify-content-start align-items-center"
@@ -61,12 +60,12 @@
 							<div class="mb-3 pe-3">寄送方式</div>
 							<div class="mb-3">
 								<button
-									v-for="(sendItme, sendIndex) in send"
+									v-for="(sendItem, sendIndex) in send"
 									:key="sendIndex"
 									type="button"
 									class="btn btn-primary rounded-3 mb-0 me-2"
 								>
-									{{ sendItme.text }}
+									{{ sendItem.text }}
 								</button>
 							</div>
 						</div>
@@ -75,19 +74,18 @@
 						>
 							<div class="mb-3" style="min-width: 4rem">付款方式</div>
 							<div class="mb-3 ps-3">
-								<!-- payNow:是假資料，使用者所選的送出方法 -->
 								<button
-									v-for="(payItme, payIndex) in pay"
+									v-for="(payItem, payIndex) in pay"
 									:key="payIndex"
 									type="button"
 									class="btn rounded-3 mb-0 me-2 mb-2"
 									:class="{
-										'btn-outline-primary': payNow !== payItme.value,
-										'btn-primary': payNow === payItme.value,
+										'btn-outline-primary': payNow !== payItem.value,
+										'btn-primary': payNow === payItem.value,
 									}"
-									@click="payNow = payItme.value"
+									@click="payNow = payItem.value"
 								>
-									{{ payItme.text }}
+									{{ payItem.text }}
 								</button>
 							</div>
 						</div>
@@ -103,7 +101,7 @@
 								class="form-control"
 								:class="{ 'is-invalid': errors['address'] }"
 								rules="address|need:地址"
-								placeholder="請輸入地址"
+								placeholder="请输入地址"
 								autocomplete="street-address"
 							></v-field>
 							<error-message
@@ -112,37 +110,34 @@
 							></error-message>
 						</div>
 						<div class="col-12 col-md-6 pe-3 mt-4" style="min-height: 100px">
-							<!-- 依情況改輸入框 -->
-							<label for="coupon" class="mb-1">優惠劵</label>
+							<label for="coupon" class="mb-1">优惠券</label>
 							<v-field
 								class="my-auto form-select"
 								id="gender"
-								aria-label="優惠劵"
-								name="優惠劵"
+								aria-label="优惠券"
+								name="优惠券"
 								:class="{
-									'is-invalid': errors['優惠劵'],
+									'is-invalid': errors['优惠券'],
 								}"
 								as="select"
 							>
-								<option value="" disabled>請選擇優惠劵</option>
+								<option value="" disabled>请选择优惠券</option>
 							</v-field>
-							<!-- 如果要驗證可以再問我↓ 如果 優惠劵 改輸入框可先用這個替代 -->
-							<!-- <input class="form-control" type="text" /> -->
 						</div>
 						<div class="col-12 text-end pe-3 mt-0">
 							<div class="d-flex">
 								<div class="pe-4 flex-grow-1">
-									<div>運費</div>
-									<div class="mt-2">優惠折扣</div>
+									<div>运费</div>
+									<div class="mt-2">优惠折扣</div>
 								</div>
 								<div>
 									<div>
 										NT$&nbsp;
-										<span>-300</span>
+										<span>{{ orderData.fare }}</span>
 									</div>
 									<div class="mt-2">
 										NT$&nbsp;
-										<span>300</span>
+										<span>-300</span>
 									</div>
 								</div>
 							</div>
@@ -152,10 +147,10 @@
 							<div
 								class="d-flex justify-content-center align-items-center fs-5"
 							>
-								<div class="pe-4 flex-grow-1 fw-bold">訂單總金額</div>
+								<div class="pe-4 flex-grow-1 fw-bold">订单总金额</div>
 								<div>
 									NT$&nbsp;
-									<span>5000</span>
+									<span>{{ orderData.totalPrice }}</span>
 								</div>
 							</div>
 						</div>
@@ -169,123 +164,60 @@
 			<button
 				type="button"
 				class="btn btn-outline-primary px-5 mx-1 mx-sm-2 me-md-4"
-				@click="
-					() => {
-						router.go(-1);
-					}
-				"
+				@click="router.go(-1)"
 			>
 				返回
 			</button>
 			<button type="submit" class="btn btn-primary px-5 m-0 mx-1 mx-sm-2">
-				前往結帳
+				前往结帐
 			</button>
 		</div>
 	</v-form>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 
-// 組件
+// 组件
 import CartCard from '@/components/CartCard.vue';
 
 const route = useRoute();
 const router = useRouter();
 
-const fakeData = ref([
-	{
-		seller: {
-			_id: '66768f98b72f97fbc2b55610',
-			brand: 'EcoShop',
-		},
-		items: [
-			{
-				product: {
-					_id: '6676905db72f97fbc2b55615',
-					sellerOwned: {
-						_id: '66768f98b72f97fbc2b55610',
-						brand: 'EcoShop',
-					},
-					productName: '智能運動手環',
-					fare: 50,
-					pay: [1, 2, 3],
-					image: [
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/8cfcbb71-97f2-4945-9f1b-daf0f7fee42a.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=lqjXCZid%2FTa9gfchnBexeBFoR7Hq0zHp%2BTQDyokBWUv2OouHbzupvrb8ATEKCsqZ2v4%2BTWVcJFCVbOercpCG7yq%2B2bF83Br0yzCCOFfD6fdSTgWMGKC1JeJxe39gsV1g6xGDtNNUzNWxYndXJ3T%2BX0m%2FbhAuU0a7svZxpkR2ANTGl4gSCQ1w0dB7XvKKgu006UJ%2Fxe6F8Hzf2tW1jdzTvxq8L0HW7s0gTKQIo0NPUpBsH1K8aNd%2Foth6vfIgYCy1dHCyqrFrf61s7GimZXvQRey3vpAE%2F2jfEyGkCit07zTBCNIRRqIY3hxQOF07H9XIOQIvHksCn8NlmnZMSf9iZQ%3D%3D',
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/76634046-e2a8-49d2-a278-801966e12626.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ulA3TWoQCX0S2ZyK3E6o%2F1D2U04CyqinS4efHRnSRCM4TCwumOGSTfihPqF58j8XW2reWrg6IAmegarz7r4xZfdqtUnMgXUnNzdYUD5BvIeK7qeXpRuJfMI%2FpMZXneNWZeyt9vmHVcW%2FI8Vtm62b85uusUvVaX2KHw23yjMhyIe4qt83U63I31SnGYZ45Mf%2BkQzeh3rd4e6Bz2RRFUtFViss%2B8xcB3EkH5OFrS1B8S2pnGsPN8VBSYE0tbfshv3MmmetdnBGuhEdQ7noQpTzl4AF%2B%2FXcfHak3ejn3WUGnbnOSSZCv0dkm0vbsqfwWm2EtvnwgpJt0Gvsc2sdm0BGKQ%3D%3D',
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/c968f8ba-aac1-4682-af54-afdc1ecbb647.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ZZzJ3lrx88kPUbO5bcoK1ZHaeTJv1HP6jADwR2jZHgi90EfArzV1Hxj33zLQSzLZhNdb3blI9zwoRNQ1%2Bo2QD5pwcH1yJK%2BqQOMb3If25QcAh7hOrWf7xRGRi5odZMicBsxtevfG%2BvGNlEHkLKc4pLXteF8F026ySkvZiCQPeCOBXQaUGrMOr22gCcQgRaxTXaRwPyDK%2FoYx3VDAt%2FruMvM%2BOx2u85d9Q0EHIjcjxN82tKHah1fJ5o8do%2B1bJhKgX9mNw%2FrnGrHBl%2BFxxBCqZInn%2FK0q%2FqjO8nTy936jLHXqFO5DpsYTOjv5gcCtZbaGkSgfAaurj8h%2F8ouV%2BEyDfw%3D%3D',
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/b77dc5b9-390d-4aa9-a276-a188c57b84ae.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=I3224zq4GBlgwurP2t5xrCZRBjy06AmIK6aqTuuccbHOxPxeXuFO3d%2F%2FG6Rra3jhGhBZUTcO1NSbOFZG5rU9Dt%2Fl3N2TtnRjE3XyeCQqSkdme4G5fG%2FwIo9AhD2OZoznniyjgu1PESkpzZMWCjn8Iv9li9IcbkNDTVelAbFzuQPBdLUj%2BbWm9i3zxV1aXwAd7xP9xgx5ob2S5ZLE%2BKJ%2Fs4RiH1IyfhgfZSgpoe88%2BzFiWBbuSJM4k4fGM1l2aR8Z3%2B8G7sAZbV8wFW%2FAAQ0g9en7gVqLdacTCQPHNG1%2FDrEwLiobZ2zkXwpoJ8UuzVZQqxfwMerfJOxjkopSM%2BOPKA%3D%3D',
-					],
-				},
-				format: {
-					title: '黑色，防水30米',
-					price: 350,
-					cost: 200,
-					stock: 500,
-					image:
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/8cfcbb71-97f2-4945-9f1b-daf0f7fee42a.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=lqjXCZid%2FTa9gfchnBexeBFoR7Hq0zHp%2BTQDyokBWUv2OouHbzupvrb8ATEKCsqZ2v4%2BTWVcJFCVbOercpCG7yq%2B2bF83Br0yzCCOFfD6fdSTgWMGKC1JeJxe39gsV1g6xGDtNNUzNWxYndXJ3T%2BX0m%2FbhAuU0a7svZxpkR2ANTGl4gSCQ1w0dB7XvKKgu006UJ%2Fxe6F8Hzf2tW1jdzTvxq8L0HW7s0gTKQIo0NPUpBsH1K8aNd%2Foth6vfIgYCy1dHCyqrFrf61s7GimZXvQRey3vpAE%2F2jfEyGkCit07zTBCNIRRqIY3hxQOF07H9XIOQIvHksCn8NlmnZMSf9iZQ%3D%3D',
-					color: ['黑色'],
-					_id: '6676905db72f97fbc2b55616',
-				},
-				quantity: 1,
-				price: 350,
-				_id: '668472637330684c8cde9b3f',
-			},
-			{
-				product: {
-					_id: '6676905db72f97fbc2b55615',
-					sellerOwned: {
-						_id: '66768f98b72f97fbc2b55610',
-						brand: 'EcoShop',
-					},
-					productName: '智能運動手環',
-					fare: 50,
-					pay: [1, 2, 3],
-					image: [
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/8cfcbb71-97f2-4945-9f1b-daf0f7fee42a.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=lqjXCZid%2FTa9gfchnBexeBFoR7Hq0zHp%2BTQDyokBWUv2OouHbzupvrb8ATEKCsqZ2v4%2BTWVcJFCVbOercpCG7yq%2B2bF83Br0yzCCOFfD6fdSTgWMGKC1JeJxe39gsV1g6xGDtNNUzNWxYndXJ3T%2BX0m%2FbhAuU0a7svZxpkR2ANTGl4gSCQ1w0dB7XvKKgu006UJ%2Fxe6F8Hzf2tW1jdzTvxq8L0HW7s0gTKQIo0NPUpBsH1K8aNd%2Foth6vfIgYCy1dHCyqrFrf61s7GimZXvQRey3vpAE%2F2jfEyGkCit07zTBCNIRRqIY3hxQOF07H9XIOQIvHksCn8NlmnZMSf9iZQ%3D%3D',
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/76634046-e2a8-49d2-a278-801966e12626.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ulA3TWoQCX0S2ZyK3E6o%2F1D2U04CyqinS4efHRnSRCM4TCwumOGSTfihPqF58j8XW2reWrg6IAmegarz7r4xZfdqtUnMgXUnNzdYUD5BvIeK7qeXpRuJfMI%2FpMZXneNWZeyt9vmHVcW%2FI8Vtm62b85uusUvVaX2KHw23yjMhyIe4qt83U63I31SnGYZ45Mf%2BkQzeh3rd4e6Bz2RRFUtFViss%2B8xcB3EkH5OFrS1B8S2pnGsPN8VBSYE0tbfshv3MmmetdnBGuhEdQ7noQpTzl4AF%2B%2FXcfHak3ejn3WUGnbnOSSZCv0dkm0vbsqfwWm2EtvnwgpJt0Gvsc2sdm0BGKQ%3D%3D',
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/c968f8ba-aac1-4682-af54-afdc1ecbb647.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ZZzJ3lrx88kPUbO5bcoK1ZHaeTJv1HP6jADwR2jZHgi90EfArzV1Hxj33zLQSzLZhNdb3blI9zwoRNQ1%2Bo2QD5pwcH1yJK%2BqQOMb3If25QcAh7hOrWf7xRGRi5odZMicBsxtevfG%2BvGNlEHkLKc4pLXteF8F026ySkvZiCQPeCOBXQaUGrMOr22gCcQgRaxTXaRwPyDK%2FoYx3VDAt%2FruMvM%2BOx2u85d9Q0EHIjcjxN82tKHah1fJ5o8do%2B1bJhKgX9mNw%2FrnGrHBl%2BFxxBCqZInn%2FK0q%2FqjO8nTy936jLHXqFO5DpsYTOjv5gcCtZbaGkSgfAaurj8h%2F8ouV%2BEyDfw%3D%3D',
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/b77dc5b9-390d-4aa9-a276-a188c57b84ae.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=I3224zq4GBlgwurP2t5xrCZRBjy06AmIK6aqTuuccbHOxPxeXuFO3d%2F%2FG6Rra3jhGhBZUTcO1NSbOFZG5rU9Dt%2Fl3N2TtnRjE3XyeCQqSkdme4G5fG%2FwIo9AhD2OZoznniyjgu1PESkpzZMWCjn8Iv9li9IcbkNDTVelAbFzuQPBdLUj%2BbWm9i3zxV1aXwAd7xP9xgx5ob2S5ZLE%2BKJ%2Fs4RiH1IyfhgfZSgpoe88%2BzFiWBbuSJM4k4fGM1l2aR8Z3%2B8G7sAZbV8wFW%2FAAQ0g9en7gVqLdacTCQPHNG1%2FDrEwLiobZ2zkXwpoJ8UuzVZQqxfwMerfJOxjkopSM%2BOPKA%3D%3D',
-					],
-				},
-				format: {
-					title: 'asd',
-					price: 350,
-					cost: 200,
-					stock: 0,
-					image:
-						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/76634046-e2a8-49d2-a278-801966e12626.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=ulA3TWoQCX0S2ZyK3E6o%2F1D2U04CyqinS4efHRnSRCM4TCwumOGSTfihPqF58j8XW2reWrg6IAmegarz7r4xZfdqtUnMgXUnNzdYUD5BvIeK7qeXpRuJfMI%2FpMZXneNWZeyt9vmHVcW%2FI8Vtm62b85uusUvVaX2KHw23yjMhyIe4qt83U63I31SnGYZ45Mf%2BkQzeh3rd4e6Bz2RRFUtFViss%2B8xcB3EkH5OFrS1B8S2pnGsPN8VBSYE0tbfshv3MmmetdnBGuhEdQ7noQpTzl4AF%2B%2FXcfHak3ejn3WUGnbnOSSZCv0dkm0vbsqfwWm2EtvnwgpJt0Gvsc2sdm0BGKQ%3D%3D',
-					color: [''],
-					_id: '667878fe90b7b2344f9ad486',
-				},
-				quantity: 1,
-				price: 350,
-				_id: '6684854b2554898593f12cbc',
-			},
-		],
-	},
-]);
+// 解析 orderData
+let orderData;
+try {
+	orderData = JSON.parse(route.params.orderData);
+	console.log('接收到的订单数据:', orderData);
+} catch (e) {
+	console.error('解析订单数据失败:', e);
+	orderData = null;
+}
 
 // 宅配方式
 const send = [{ text: '宅配', value: 1 }];
 
 const payNow = ref<null | number>(null);
 
-// 付款方式方式
+// 付款方式
 const pay = [
 	{ text: '信用卡付款', value: 1 },
-	{ text: 'ATM匯款', value: 2 },
-	{ text: '店到店付費', value: 3 },
+	{ text: 'ATM汇款', value: 2 },
+	{ text: '店到店付费', value: 3 },
 ];
 
-//送出表單 --------------------
+// 送出表单
 function onSubmit(value: any): any {
-	console.log('資料填寫正常');
-	console.log('資料', value);
+	console.log('资料填写正常');
+	console.log('资料', value);
+	console.log('orderData', orderData);
 }
-onMounted(async () => {});
-</script>
 
-<style lang="scss" scoped></style>
+onMounted(() => {
+	if (!orderData) {
+		router.replace({ name: 'CartPage' });
+	}
+});
+</script>
