@@ -28,3 +28,38 @@ export interface RecommendShopType {
 	star: number,
 	total_comments: number,
 }
+
+
+/* 商品總覽、搜尋bar */
+export interface ProductFormat {
+	format_id: string;
+	format_price: number;
+	format_color: string[];
+}
+
+export interface Product {
+	products_id: string;
+	products_name: string;
+	products_image: string;
+	shop_name: string;
+	price: number[];
+	origin: string;
+	total_sales: number;
+	discount: string[];
+	star: number | null;
+	products_format: ProductFormat[];
+}
+
+// 最終型態
+export interface SearchProduct {
+	products_id: string;
+	products_name: string;
+	products_images: string;
+	shop_name: string;
+	price: number;
+	origin: string;
+	total_sales: number;
+	discount: string[];
+	star: number;
+	color: string[];
+}

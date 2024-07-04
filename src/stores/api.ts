@@ -280,14 +280,30 @@ export const cartAll = (token: string) =>
 export const cartNew = (data: any, token: string) =>
 	handleApiResponse(apiRequest.post('/cart', data, headers(token)));
 // 49	put	    /cart/${cart_id}/${user_id}/ X	 	買家修改(編輯)購物車	 	買家端
-export const cartPut = (data: any, token: string, cart_id: string) =>
-	handleApiResponse(apiRequest.put(`/cart/${cart_id}`, data, headers(token)));
+export const cartPut = (
+	data: any,
+	token: string,
+	productId: string,
+	formatId: string
+) =>
+	handleApiResponse(
+		apiRequest.put(`/cart/${productId}/${formatId}`, data, headers(token))
+	);
 // 51	delete	/cart/${user_id}	 	 買家刪除所有購物車	 	買家端
 export const cartDeleteAll = (token: string) =>
 	handleApiResponse(apiRequest.delete(`/cart`, headers(token)));
 // 50	delete	/cart/${user_id}/${cart_id}	 	買家刪除單一購物車	 	買家端
-export const cartDelete = (token: string, cart_id: string) =>
-	handleApiResponse(apiRequest.delete(`/cart/${cart_id}`, headers(token)));
+export const cartDelete = (
+	token: string,
+	productId: string,
+	formatId: string
+) =>
+	handleApiResponse(
+		apiRequest.delete(`/cart/${productId}/${formatId}`, headers(token))
+	);
+
+export const selectItemsCart = (data: any, token: string) =>
+	handleApiResponse(apiRequest.post('/cart/select', data, headers(token)));
 
 // 訂單相關 ■ 買家繳費至金流
 // 17	get	  /order/${user_id}	 	 查看訂單紀錄	 	 買家端
