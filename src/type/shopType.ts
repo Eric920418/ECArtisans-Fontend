@@ -12,7 +12,7 @@ export interface SellerPageProductType {
 	products_id: string;
 	products_name: string;
 	products_images?: string;
-	seller_name: string;
+	seller_name?: string;
 	total_sales: number;
 	price: number;
   discount:string[],
@@ -51,15 +51,21 @@ export interface Product {
 }
 
 // 最終型態
-export interface SearchProduct {
-	products_id: string;
-	products_name: string;
-	products_images: string;
-	shop_name: string;
-	price: number;
+// export interface SearchProduct {
+// 	products_id: string;
+// 	products_name: string;
+// 	products_images: string;
+// 	shop_name: string;
+// 	price: number;
+// 	origin: string;
+// 	total_sales: number;
+// 	discount: string[];
+// 	star: number;
+// 	color: string[];
+// }
+
+export interface SearchProduct extends SellerPageProductType {
 	origin: string;
-	total_sales: number;
-	discount: string[];
-	star: number;
 	color: string[];
+	shop_name: string; // Assuming shop_name is part of SellerPageProductType
 }
