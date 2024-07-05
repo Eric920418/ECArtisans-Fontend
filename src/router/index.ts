@@ -207,7 +207,7 @@ const routes = [
 		path: '/cart-check',
 		name: 'CartCheck',
 		component: CartCheck,
-		props: route => ({ orderData: route.params.orderData }),
+		props: (route: { params: { orderData: any; }; }) => ({ orderData: route.params.orderData }),
 		// meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 	},
 

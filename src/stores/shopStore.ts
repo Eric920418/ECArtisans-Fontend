@@ -4,6 +4,8 @@ import {
 	type SellerPageType,
 	type SellerPageProductType,
 	type RecommendShopType,
+	type Product,
+	type SearchProduct
 } from '../type/shopType';
 import { getDate } from '@/setup/globalFunction';
 
@@ -26,6 +28,27 @@ import router from '@/router';
 // }
 // https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__
 
+/* 整理前端商品總覽、搜尋bar資料  */
+function formatProduct(products: Product[]): SearchProduct[] {
+	return products.map(product => {
+		const lowestPrice = Math.min(...product.price);
+		const starValue = product.star !== null ? product.star : 0;
+		const colors = product.products_format.flatMap(format => format.format_color);
+
+		return {
+			products_id: product.products_id,
+			products_name: product.products_name,
+			products_images: product.products_image,
+			shop_name: product.shop_name,
+			price: lowestPrice,
+			origin: product.origin,
+			total_sales: product.total_sales,
+			discount: product.discount,
+			star: starValue,
+			color: colors
+		};
+	});
+}
 export const useShop = defineStore({
 	id: 'shop',
 	state: () => ({
@@ -60,17 +83,21 @@ export const useShop = defineStore({
 		] as unknown as SellerPageType[],
 		sellerHomeData: {} as SellerPageType,
 		sellerProductsData: [] as SellerPageProductType[],
-		searchProductsData: [] as SellerPageProductType[],
+		searchProductsData: [] as SearchProduct[],
 		recommendShopData: [] as RecommendShopType[],
 		followShopData: [] as RecommendShopType[],
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
 	getters: {
-		// // 獲取所有訂單
-		// gettingAllOrders(state) {
-		// 	return state.allOrders;
-		// },
+		// 計算商品總覽所需的maxPrice
+    maxPrice: (state): number => {
+      if (state.searchProductsData.length === 0) return 50000; // 預設
+
+      return state.searchProductsData.reduce((maxPrice, product) => {
+        return Math.max(maxPrice, product.price);
+      }, 0);
+    }
 		// // 獲取單筆訂單
 		// gettingSingleOrder(state) {
 		// 	return state.oneOrder;
@@ -185,16 +212,15 @@ export const useShop = defineStore({
 		},
 		// 獲取商品分類的所有商品
 		async getAllProductsByCategoryID(categoryID:string): Promise<void> {
-			this.searchProductsData = []
+			this.searchProductsData = [] 
 			try {
 				// 固定抓8 筆
 				await productAll(categoryID)
 					.then(res => {
-						this.searchProductsData = res.data;
+						this.searchProductsData = formatProduct(res.data);
 					})
 					.catch(err => {
 						this.searchProductsData = [] 
-
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
@@ -207,14 +233,7 @@ export const useShop = defineStore({
 			try {
 				await productSearch(keyword)
 					.then((res) => {
-						// 判斷商品資料的 discount 欄位是否為字串（目前預設只抓陣列），將字串包成陣列後回傳
-						res.data.forEach((product: any) => {
-							if (typeof product.discount === 'string') {
-								product.discount = [product.discount];
-							}
-						});
-						this.searchProductsData = res.data;
-
+						this.searchProductsData = formatProduct(res.data);
 					})
 					.catch((err) => {
 						this.sellerProductsData = []
