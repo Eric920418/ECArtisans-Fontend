@@ -13,13 +13,13 @@
 		</h2>
 		<div class="d-flex position-absolute bottom-0 end-0" v-if="data.openBtn">
 			<div
-				class="prev btn-eca d-none d-sm-flex me-3"
+				class="prev btn-eca d-none d-sm-flex me-3 shadow-sm"
 				@click.stop="data.openBtn ? data.openBtn.prev() : () => {}"
 			>
 				<font-awesome-icon :icon="['fas', 'angle-left']" />
 			</div>
 			<div
-				class="next btn-eca d-none d-sm-flex"
+				class="next btn-eca d-none d-sm-flex shadow-sm"
 				@click.stop="data.openBtn ? data.openBtn.next() : () => {}"
 			>
 				<font-awesome-icon :icon="['fas', 'angle-right']" />

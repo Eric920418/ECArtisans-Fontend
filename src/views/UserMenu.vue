@@ -5,7 +5,7 @@
 				v-if="route.name !== 'SellerHome'"
 				class="d-none d-lg-block col-lg-2 p-0 m-0"
 			>
-				<ul class="list-group userMenu mt-5">
+				<ul class="list-group userMenu mt-5 shadow-sm">
 					<li
 						v-for="(menuItem, menuIndex) in menu"
 						:key="menuIndex"

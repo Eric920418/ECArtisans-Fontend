@@ -3,6 +3,7 @@ export * from './authStore';
 export * from './userStore';
 export * from './orderStore';
 export * from './couponStore';
+export * from './collectStore';
 export * from './activityStore';
 export * from './productStore';
 export * from './shopStore';

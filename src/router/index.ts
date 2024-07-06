@@ -207,28 +207,23 @@ const routes = [
 		path: '/cart-check',
 		name: 'CartCheck',
 		component: CartCheck,
-		props: (route: { params: { orderData: any; }; }) => ({ orderData: route.params.orderData }),
 		// meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 	},
 
 	// 以上需會員登入。
 
-	// {
-	// 	path: '/:pathMatch(.*)*',
-	// 	component: () => import('../views/NotFound.vue'),
-	// },
-	// 重新導向
 	{
 		path: '/paymentSuccess',
 		name: 'PaymentSuccess',
 		component: PaymentSuccess,
 	},
+	// 重新導向 前往錯誤頁面版本
 	// {
 	// 	path: '/:pathMatch(.*)*',
-	// 	redirect: {
-	// 		name: 'Index',
-	// 	},
+	// 	component: () => import('../views/NotFound.vue'),
 	// },
+	// 重新導向 首頁版本 path 決定階層 ? 不確定是否會有用↓
+	// 	path: '/:pathMatch(.*)*',
 	{
 		path: '/newPage/:pathMatch(.*)*',
 		redirect: {

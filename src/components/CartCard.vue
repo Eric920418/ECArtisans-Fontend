@@ -1,8 +1,8 @@
 <template>
-	<div class="col-12 card mb-4 p-4 py-5">
+	<div class="col-12 card shadow-sm mb-4 p-4 py-5">
 		<div class="row m-0 p-0 table-responsive overflow-visible">
 			<div class="d-flex align-items-center justify-content-center">
-				<div class="pe-3">
+				<div class="pe-3" v-if="!check">
 					<input type="checkbox" v-model="isAllSelected" />
 				</div>
 				<div class="flex-grow-1">
@@ -32,7 +32,7 @@
 				:key="item.product._id + '-' + item.format._id"
 				class="mt-4 mt-md-5 d-flex align-items-center justify-content-center"
 			>
-				<div class="pe-3">
+				<div class="pe-3" v-if="!check">
 					<input
 						type="checkbox"
 						v-model="item.selected"
@@ -43,22 +43,26 @@
 					<div class="row m-0 p-0">
 						<div
 							class="col-12 col-md-7 m-0 p-0 d-flex align-items-center justify-content-center"
-							@click="
-								$go({ name: 'ShopProduct', params: { id: item.product._id } })
-							"
 						>
 							<div class="col-2 flex-shrink-0 cartImg">
 								<img :src="item.format.image" alt="..." class="img-eca" />
 							</div>
 							<div class="px-3 flex-grow-1">
-								<h4 class="text-line-2 fs-5 fw-bold">
+								<h4
+									class="text-line-2 fs-5 fw-bold hover-icon"
+									@click="
+										$go({
+											name: 'ShopProduct',
+											params: { id: item.product._id },
+										})
+									"
+								>
 									{{ item.product.productName }}
 								</h4>
 								<div class="d-flex">
 									<p
 										v-if="item.format.color[0]"
-										class="text-line-2 mb-1 neutral-02"
-										style="width: 3em"
+										class="text-line-2 mb-1 neutral-02 me-3"
 									>
 										{{ item.format.color[0] }}
 									</p>
@@ -84,6 +88,7 @@
 											<p class="text-start flex-fill mb-0">缺貨中</p>
 										</button>
 									</div>
+
 									<div
 										class="dropdown"
 										v-else-if="!changeInput[index] && item.format.stock <= 10"
@@ -93,6 +98,7 @@
 											type="button"
 											data-bs-toggle="dropdown"
 											aria-expanded="false"
+											:disabled="check"
 										>
 											<p class="text-start flex-fill mb-0">
 												{{ item.quantity }}
@@ -115,6 +121,7 @@
 											type="button"
 											data-bs-toggle="dropdown"
 											aria-expanded="false"
+											:disabled="check"
 										>
 											<p class="text-start flex-fill mb-0">
 												{{ item.quantity }}
@@ -137,11 +144,12 @@
 											class="form-control form-control-sm text-end me-0 hide-arrows"
 											type="number"
 											v-model="item.quantity"
+											:disabled="check"
 											@input="
 												handleQuantityInput(
 													index,
 													$event,
-													parseInt(item.format.stock)
+													parseInt(item.format.stock.toString())
 												)
 											"
 										/>
@@ -155,14 +163,16 @@
 									{{
 										item.format.stock === 0
 											? '0'
-											: parseInt(item.quantity) * parseInt(item.format.price)
+											: parseInt(item.quantity.toString()) *
+												parseInt(item.format.price.toString())
 									}}
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="">
+
+				<div v-if="!check && item.format._id">
 					<button
 						type="button"
 						class="btn-close"
@@ -179,9 +189,10 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/index';
-
+import { type CartSellerType } from '@/type/orderType';
 const props = defineProps<{
-	data: any;
+	data: CartSellerType;
+	check: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -220,6 +231,9 @@ function toggleAll() {
 }
 
 function changeQuantity(index: number, num: number) {
+	if (props.data.items[index].format.stock > 10 && num === 10) {
+		changeInput.value[index] = true;
+	}
 	props.data.items[index].quantity = num;
 	updateCartItem(index);
 }
@@ -241,7 +255,10 @@ function updateCartItem(index: number) {
 	const data = {
 		quantity: item.quantity,
 	};
-	store.updateItemInCart(data, item.product._id, item.format._id);
+	// 即時更新購物車 api 我清除，因為選取的項目會消失。
+	// if (item.format._id) {
+	// 	store.updateItemInCart(data, item.product._id, item.format._id);
+	// }
 	emit('update-items', props.data);
 }
 

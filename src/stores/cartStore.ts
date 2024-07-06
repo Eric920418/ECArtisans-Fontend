@@ -15,6 +15,7 @@ import {
 	cartDeleteAll,
 	cartDelete,
 	selectItemsCart,
+	userOrderNew, // 52 成立訂單
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -23,6 +24,7 @@ export const useCartStore = defineStore({
 	id: 'cart',
 	state: () => ({
 		cart: [] as any,
+		selectdata: {} as any,
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
@@ -128,10 +130,44 @@ export const useCartStore = defineStore({
 
 			try {
 				this.isLoading = true;
-				await selectItemsCart(data, token);
-				alertStore.success('商品送去確認訂單頁面');
+				selectItemsCart(JSON.stringify(data), token)
+					.then(res => {
+						this.selectdata = res.groupedItems;
+						alertStore.success('商品送去確認訂單頁面');
+						router.push({ name: 'CartCheck' });
+					})
+					.catch(err => {
+						alertStore.error(err.response.data.message);
+					});
 			} catch (error) {
 				alertStore.error('商品送去確認訂單頁面失敗');
+			} finally {
+				this.isLoading = false;
+			}
+		},
+		async orderNew(data: any): Promise<void> {
+			const authStore = useAuthStore();
+			const token = authStore.token;
+
+			if (!token) {
+				alertStore.error('使用者未登入');
+				router.push('/user-login');
+				return;
+			}
+
+			try {
+				this.isLoading = true;
+				console.log(data);
+
+				userOrderNew(JSON.stringify(data), token)
+					.then(res => {
+						console.log(res);
+					})
+					.catch(err => {
+						alertStore.error(err.response.data.message);
+					});
+			} catch (error) {
+				alertStore.error('訂單成立失敗');
 			} finally {
 				this.isLoading = false;
 			}

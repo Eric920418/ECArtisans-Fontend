@@ -72,7 +72,7 @@
 					</div>
 					<div class="btn btn-primary" @click="handleDelivery">點我送貨</div>
 				</div>
-				<div class="m-3 card m-3 p-4 p-sm-5">
+				<div class="m-3 card shadow-sm m-3 p-4 p-sm-5">
 					<!-- 購買者資料 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
 						<!-- @submit="onSubmit" -->
@@ -86,7 +86,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="m-3 card m-3 p-4 p-sm-5">
+				<div class="m-3 card shadow-sm m-3 p-4 p-sm-5">
 					<!-- 訂單資訊 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
 						<!-- @submit="onSubmit" -->
@@ -271,7 +271,7 @@
 					</div>
 				</div>
 				<div
-					class="col bg-white p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end"
+					class="col bg-white shadow-sm p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end"
 				>
 					<button
 						type="button"

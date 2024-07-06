@@ -45,13 +45,13 @@
 					class="swiper-pagination position-absolute bottom-0 start-50 translate-middle-x pb-3"
 				/>
 				<div
-					class="swiper-button-prev btn-eca-l d-none d-sm-flex position-absolute top-50 start-0 translate-middle"
+					class="swiper-button-prev btn-eca-l d-none d-sm-flex position-absolute top-50 start-0 translate-middle shadow-sm"
 					@click.stop="prevEl()"
 				>
 					<font-awesome-icon :icon="['fas', 'angle-left']" />
 				</div>
 				<div
-					class="swiper-button-next btn-eca-l d-none d-sm-flex position-absolute top-50 start-100 translate-middle"
+					class="swiper-button-next btn-eca-l d-none d-sm-flex position-absolute top-50 start-100 translate-middle shadow-sm"
 					@click.stop="nextEl"
 				>
 					<font-awesome-icon :icon="['fas', 'angle-right']" />

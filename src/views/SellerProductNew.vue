@@ -3,7 +3,7 @@
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" />
 			<v-form @submit="onSubmit" v-slot="{ errors }" class="m-0 p-0">
-				<div class="m-3 card m-3 p-4 p-sm-5">
+				<div class="m-3 card shadow-sm m-3 p-4 p-sm-5">
 					<!-- 表格 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
 						<!-- @submit="onSubmit" -->
@@ -171,6 +171,7 @@
 								class="invalid-feedback"
 							></error-message>
 						</div>
+
 						<div
 							class="col-6 col-sm-6 ps-0 pe-3 m-0 mb-2"
 							style="min-height: 100px"
@@ -368,7 +369,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="m-3 card m-3 p-4 p-sm-5">
+				<div class="m-3 card shadow-sm m-3 p-4 p-sm-5">
 					<!-- 標題 銷售資訊 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
 						<div
@@ -604,7 +605,7 @@
 					</div>
 				</div>
 				<div
-					class="col bg-white p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end"
+					class="col bg-white p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end shadow-sm"
 				>
 					<button
 						type="button"
@@ -843,13 +844,7 @@ const getData = () => {
 				ingredient: '',
 				introduction: '',
 				format: [
-					{
-						title: '',
-						price: 0,
-						cost: 0,
-						stock: 0,
-						color: [],
-					},
+					{ title: '', price: 0, cost: 0, stock: 0, color: [], image: '' },
 				],
 				introduce: '',
 				production: '',

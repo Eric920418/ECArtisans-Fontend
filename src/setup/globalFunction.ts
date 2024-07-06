@@ -45,11 +45,11 @@ export function getISO(
 }
 
 export function dayAndToDay(
-	text: string | null | Date,
+	text: String | null | Date,
 	isType: '>' | '<' | '<=' | '>=' | '='
 ): boolean {
 	if (text) {
-		const date = new Date(text);
+		const date = new Date(text.toString());
 		const toDay = new Date();
 		date.setHours(0, 0, 0, 0);
 		toDay.setHours(0, 0, 0, 0); //設置為當天的 23:59:59.999

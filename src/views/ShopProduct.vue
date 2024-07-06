@@ -2,16 +2,21 @@
 	<div class="container">
 		<div class="row m-0 p-0 mt-5 mb-6">
 			<div class="col-12 m-0 p-0 mb-4 order-1 order-md-1">
-				<div class="card p-4">
+				<div class="card shadow-sm p-4">
 					<div class="row m-0 p-0">
 						<div class="col-12 col-md-7 mb-4 mb-md-0 ps-md-0 m-0">
 							<!-- 輪播 -->
-							<SwiperGallery :data="data.all_images" />
+							<SwiperGallery
+								:data="data.all_images"
+								:selected-img="selectedImage"
+							/>
 						</div>
 
 						<div class="col-12 col-md-5">
 							<!-- 輪播 右側 商品資訊 -->
 							<div class="row m-0 p-0">
+								{{ isUser }} ///
+								{{ isLoggedIn }}
 								<div
 									class="col-12 m-0 p-0 d-flex justify-content-between align-items-start"
 								>
@@ -21,7 +26,7 @@
 
 									<div
 										class="favorites bg-neutral03 flex-shrink"
-										@click="addToFavorites"
+										@click="addToFavorites(data.products_id)"
 									>
 										<!-- 需命名 icon + 後面的 farHeart 才會有hover -->
 										<svg
@@ -206,7 +211,7 @@
 				class="col-12 col-md-8 m-0 p-0 mb-4 pe-md-4 order-3 order-md-2"
 				v-if="data"
 			>
-				<div class="card p-5">
+				<div class="card shadow-sm p-5">
 					<div class="mb-6">
 						<div
 							class="fs-5 text-primary fw-medium border-bottom border-primary pb-2 mb-4"
@@ -272,24 +277,14 @@
 			</div>
 
 			<div class="col-12 col-md-4 m-0 p-0 mb-4 order-2 order-md-3">
-				<div class="card p-0 overflow-hidden">
+				<div class="card shadow-sm p-0 overflow-hidden">
 					<div
 						class="w-100 d-flex align-items-end justify-content-start p-4 bg-img-eca-dack"
 						style="height: 136px"
 						:style="{
 							'background-image': `url(${data.shop_image})`,
 						}"
-					>
-						<!-- <div class="text-white fw-medium">
-							<div class="fs-5 text-line-1">
-								星辰之耀 — 與你訂下幸福之約星辰之耀 — 與你訂下幸福之約
-							</div>
-							<div class="text-line-2">
-								對戒系列限時優惠中 九折對戒系列限時優惠中 九折對戒系列限時優惠中
-								九折對戒系列限時優惠中 九折對戒系列限時優惠中 九折
-							</div>
-						</div> -->
-					</div>
+					></div>
 					<div
 						class="p-3 d-flex align-items-center justify-content-between border-bottom"
 						@click="$go({ name: 'ShopHome', params: { id: data.seller_id } })"
@@ -298,7 +293,7 @@
 							<div
 								class="avatar"
 								:style="{
-									'background-image': `url(${data.shop_image})`,
+									'background-image': `url(${data.seller_avatar})`,
 								}"
 							></div>
 
@@ -331,17 +326,24 @@
 import { onMounted, ref, computed } from 'vue';
 import SwiperGallery from '@/components/SwiperGallery.vue';
 import Star from '@/components/Star.vue';
-import { useProduct, useAuthStore, go } from '@/stores/index';
+import {
+	useProduct,
+	useAuthStore,
+	useCartStore,
+	useCollect,
+	go,
+} from '@/stores/index';
 import { type ShopFormatType } from '@/type/orderType';
 // import router from '@/router';
 import { useRoute, useRouter } from 'vue-router';
 import { alertStore } from '@/main'; // 導入實例
-import { useCartStore } from '@/stores/cartStore';
 import { userLogin } from '../stores/api';
+import Swal from 'sweetalert2';
 const router = useRouter();
 const route = useRoute();
 const cartStore = useCartStore();
 const store = useProduct();
+const collect = useCollect();
 
 const authStore = useAuthStore();
 const isUser = computed(() => {
@@ -355,9 +357,33 @@ const isLoggedIn = computed(() => {
 const data = computed(() => store.shopData);
 
 const favorited = ref(false); // 預設為未收藏 -> 待補完整資料
-const addToFavorites = () => {
-	// 收藏用
+function goUserLogin() {
+	Swal.fire({
+		text: '請先加入會員',
+		confirmButtonText: '確定',
+		customClass: {
+			confirmButton: 'sweetalert2-btn-primary',
+		},
+	}).then(result => {
+		if (result.isConfirmed) {
+			go({ name: 'UserLogin' });
+		}
+	});
+}
+
+const addToFavorites = (products_id: string) => {
+	if (!isUser.value || !isLoggedIn.value) {
+		goUserLogin();
+	} else {
+		favorited.value = !favorited.value;
+		if (favorited.value) {
+			collect.addCollect(products_id);
+		} else {
+			collect.deleteCollect(products_id);
+		}
+	}
 };
+const selectedImage = ref<string | null>(null);
 
 const paramsId = route.params.id as string; // 從路由參數獲取 productId
 // 數量下拉選單
@@ -377,30 +403,27 @@ function changeQuantity(num: number) {
 const fakeNorm = ref('請選擇…');
 const nowPrice = ref(0);
 
-const fakeNormList = ref([
-	{ id: '6676905db72f97fbc2b55616', name: '黑色，防水30米' },
-	{ id: '667878fe90b7b2344f9ad486', name: 'asd' },
-	// 其他規格
-]);
-
 const selectedNormId = ref('');
 const fakeNum = ref<number>(1); // 默認數量為 1
 
-// 交換目前該商品的數量
+// 商品規格
 const changeNorm = (normItem: ShopFormatType) => {
 	fakeNorm.value = normItem.format_title;
 	selectedNormId.value = normItem.format_id;
 	nowPrice.value = normItem.price;
+	selectedImage.value = normItem.image;
 };
 
 const addItemToCart = () => {
 	// 強制先加入會員才可以 加入購物車
 	if (!isUser && !isLoggedIn) {
-		alertStore.error('請先加入會員');
-		go({ name: 'UserLogin' });
+		goUserLogin();
 	} else {
 		if (!selectedNormId.value) {
-			alert('請選擇一個規格');
+			Swal.fire({
+				icon: 'error',
+				text: '請選擇一個規格',
+			});
 			return;
 		}
 

@@ -1,10 +1,11 @@
 <template>
-	<div class="card shadow-sm card-hover" @click="data.go ? $go(data.go) : ''">
+	<div class="card shadow-sm card-hover">
 		<div class="row m-0 p-0">
+			<!-- @click="data.go ? $go(data.go) : ''" -->
 			<div v-if="data.img" class="productCard-img-100 p-0">
 				<img :src="`${data.img}`" class="img-eca" />
 			</div>
-			<div class="col p-0 m-0">
+			<div class="col p-0 m-0" v-if="data">
 				<div class="border-bottom pb-1 mb-1 d-flex align-items-center">
 					<h3
 						class="card-title fs-5 m-0 neutral-01 p-0 me-2 flex-grow-1 card-text-hover"
@@ -18,30 +19,17 @@
 							class="text-enable neutral-02 mb-0 text-nowrap"
 						>
 							{{
-								!data.state
-									? '停止'
-									: $dayAndToDay(data.date.eDate, '>')
-										? '已過期'
-										: $dayAndToDay(data.date.sDate, '>=')
-											? '進行中'
-											: '預約中'
+								$dayAndToDay(data.date.eDate, '>')
+									? '已過期'
+									: $dayAndToDay(data.date.sDate, '>=')
+										? '進行中'
+										: '預約中'
 							}}
 						</p>
 					</div>
 				</div>
 
 				<div class="d-flex" v-if="data.type !== undefined || data.id">
-					<!-- 如果數字 0 會當 false -->
-					<p
-						v-if="data.type !== undefined && data.type !== null"
-						class="text-card-coupon btn-Bg-active rounded-1 text-primary mb-0 me-2"
-					>
-						{{
-							data.percentage && data.type === 0
-								? getCoupon(data.type, data.percentage)
-								: getCoupon(data.type)
-						}}
-					</p>
 					<p v-if="data.id" class="mb-0 mt-1 text-no neutral-02">
 						編號：{{ data.id }}
 					</p>

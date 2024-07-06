@@ -70,7 +70,7 @@ export const useProduct = defineStore({
 			seller_name: '',
 			seller_id: '',
 			shop_image: '',
-		} as ShopProductsType,
+		} as unknown as ShopProductsType,
 		data: {
 			_id: '',
 			seller_id: '',

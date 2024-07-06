@@ -137,6 +137,7 @@ export interface FormatType {
 	price: number;
 	cost: number;
 	stock: number;
+	image: string;
 	color: string[];
 }
 
@@ -157,6 +158,7 @@ export interface ShopProductsType {
 	star: number;
 	total_collect: number;
 	seller_name: string;
+	seller_avatar: string;
 	seller_id: string;
 	shop_image: string;
 }
@@ -167,21 +169,27 @@ export interface ShopFormatType {
 	price: number;
 	image: string;
 }
-// // 原本得先保留
-// export interface ShopProductsType {
-// 	products_id: string;
-// 	products_name: string;
-// 	products_images: Array<string>;
-// 	products_info: string;
-// 	production_material: string;
-// 	production_method: string;
-// 	production_country: string;
-// 	payment: string;
-// 	freight: number;
-// 	stock: number;
-// 	price: number;
-// 	total_sales: number;
-// 	discount: string[];
-// 	star: number;
-// 	total_collect: number;
-// }
+
+export interface CartProductType {
+	product: {
+		_id: string;
+		sellerOwned: {
+			_id: string;
+			brand: string;
+		};
+		productName: string;
+		fare: number;
+		pay: Array<number>;
+		image: Array<string>;
+	};
+	format: FormatType;
+	quantity: number;
+	price: number;
+	_id: string;
+	selected: boolean;
+}
+
+export interface CartSellerType {
+	seller: { _id: string; brand: string };
+	items: Array<CartProductType>;
+}

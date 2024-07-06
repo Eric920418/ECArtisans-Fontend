@@ -3,7 +3,7 @@
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" />
 			<v-form @submit="onSubmit" v-slot="{ errors }" class="m-0 p-0">
-				<div class="m-3 card m-3 p-4 p-sm-5">
+				<div class="m-3 card shadow-sm m-3 p-4 p-sm-5">
 					<!-- 表格 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
 						<div
@@ -427,7 +427,7 @@
 					</div>
 				</div>
 				<div
-					class="col bg-white p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end"
+					class="col bg-white shadow-sm p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end"
 				>
 					<button
 						type="button"
@@ -531,10 +531,10 @@ function updateEndDateMin() {
 	}
 }
 function getTomorrow() {
-	const today = new Date('Thu Jun 27 2024 01:24:19 GMT+0800');
+	const today = new Date();
 	const year = today.getFullYear();
 	const month = (today.getMonth() + 1).toString().padStart(2, '0');
-	const day = today.getDate().toString().padStart(2, '0');
+	const day = (today.getDate() + 1).toString().padStart(2, '0');
 	const localDate = `${year}-${month}-${day}`;
 	return localDate;
 }

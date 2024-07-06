@@ -20,24 +20,48 @@
 					最推薦
 					<font-awesome-icon :icon="['fas', 'thumbs-up']" class="m-1" />
 				</div>
-				<div class="card row text-center p-2 p-sm-3 py-4 m-0 p-0">
+				<div class="card row text-center p-2 py-4 m-0 p-0">
 					<div
 						class="col-12 fs-sm-3 fw-bold my-3 text-center"
-						:class="{ 'fs-5': resize < 1200, 'fs-4': resize >= 1200 }"
+						:class="{ 'fs-6': resize < 365, 'fs-5': resize >= 365 }"
 					>
-						{{ planItem.plan }}
+						續 {{ getTitle(planItem.plan) }}
 					</div>
 					<div class="col-12 d-flex w-100 justify-content-center my-1 px-0">
-						<div
+						<div class="d-flex flex-wrap align-items-stretch">
+							<div
+								class="align-self-start text-primary"
+								:class="{ 'fs-10': resize < 365, 'fs-6': resize >= 365 }"
+							>
+								NT$
+							</div>
+							<div
+								class="align-self-end text-primary px-1 fw-bold"
+								:class="{
+									'fs-4': resize < 365,
+									'fs-2': resize >= 365,
+								}"
+							>
+								{{ planItem.cost }}
+							</div>
+							<div
+								class="align-self-end"
+								:class="{ 'fs-10': resize < 365, 'fs-6': resize >= 365 }"
+							>
+								/{{ planItem.unit }}
+							</div>
+						</div>
+
+						<!-- <div
 							class="px-0"
-							:class="{ 'row m-0 p-0': resize < 350, 'd-flex': resize < 1200 }"
+							:class="{ 'row m-0 p-0': resize < 365, 'd-flex': resize < 365 }"
 						>
 							<div
 								class="fs-5 text-primary d-flex align-items-start"
 								:class="{
-									'col-12 p-0': resize < 350,
-									'fs-6': resize < 1200,
-									'fs-5': resize >= 1200,
+									'col-12 p-0': resize < 365,
+									'fs-6': resize < 365,
+									'fs-5': resize >= 365,
 								}"
 							>
 								NT$
@@ -45,9 +69,9 @@
 							<div
 								class="fs-1 text-primary fw-bold d-flex align-items-center my-0"
 								:class="{
-									'col-8 p-0 justify-content-end pe-1': resize < 350,
-									'fs-2': resize < 1200,
-									'fs-1': resize >= 1200,
+									'col-8 p-0 justify-content-end pe-1': resize < 365,
+									'fs-2': resize < 365,
+									'fs-1': resize >= 365,
 								}"
 							>
 								{{ planItem.cost }}
@@ -55,14 +79,14 @@
 							<div
 								class="fs-5 d-flex align-items-end"
 								:class="{
-									'col-4 p-0': resize < 350,
-									'fs-6': resize < 1200,
-									'fs-5': resize >= 1200,
+									'col-4 p-0': resize < 365,
+									'fs-6': resize < 365,
+									'fs-5': resize >= 365,
 								}"
 							>
 								/{{ planItem.unit }}
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -94,6 +118,14 @@ const buyPlan: PlanItem[] = [
 	{ plan: 'ECArtisans 單月訂費會員 6 個月', cost: '600', unit: '月' },
 	{ plan: 'ECArtisans 單月訂費會員 1 個年', cost: '500', unit: '月' },
 ];
+
+function getTitle(text: string) {
+	text = text.replace('ECArtisans 單月訂費會員 ', '');
+	text = text.replace('個', '');
+
+	return text;
+}
+
 const subscribePayment = async (planItem: PlanItem) => {
 	try {
 		const email = props.email; // 後續看怎麼抓email資料

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { alertStore } from '@/main'; // 導入實例
 import { type UserDataType } from '../type/userType';
 import { userMenu, sellerMenu } from './menuStore';
-
+import { useAuthStore } from '@/stores/index';
 import {
 	user,
 	userEdit,
@@ -41,17 +41,17 @@ export const useUserStore = defineStore({
 			}
 		},
 		// 取得資料
-		async getUserAccount(id: string) {
+		async getUserAccount() {
 			try {
+				const authStore = useAuthStore();
+				const token = authStore.token;
+				const id = authStore.id;
 				await this.setAccountType();
 				let res;
-				if (id && this.accountType === 'seller') {
-					await sellerAccount(id)
+				if (token && this.accountType === 'seller') {
+					await sellerAccount(token)
 						.then(res => {
-							this.user = {
-								name: res.thisShop.bossName,
-								...res.thisShop,
-							};
+							this.user = res.thisShop;
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
@@ -82,26 +82,29 @@ export const useUserStore = defineStore({
 				await this.setAccountType();
 				let res;
 				let updateData = {};
-				const id = this.user?._id;
+				const authStore = useAuthStore();
+				const token = authStore.token;
+				const id = authStore.id;
 				let avatar;
-
 				if (this.updateStatus === true && pwData) updateData = { ...pwData };
 				if (this.user.avatar === this.imageError) avatar = '';
 				else avatar = this.user.avatar;
-				if (id && this.accountType === 'seller') {
+				if (token && this.accountType === 'seller') {
 					updateData = {
+						...updateData,
 						bossName: this.user.bossName,
-						phone: this.user.phone,
+						gender: this.user.gender,
 						brand: this.user.brand,
+						phone: this.user.phone,
 						address: this.user.address,
 						collection: this.user.collection,
 						salesType: this.user.salesType,
 						introduce: this.user.introduce,
-						avatar: avatar,
-						...updateData,
+						avatar: this.user.avatar,
 					};
-					await sellerAccountEdit(id, updateData)
+					await sellerAccountEdit(updateData, token)
 						.then(res => {
+							// console.log(res);
 							alertStore.success('renewOK');
 							// this.user = res.data;
 						})
