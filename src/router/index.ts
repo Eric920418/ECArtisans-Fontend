@@ -40,6 +40,9 @@ import SellerCouponNew from '../views/SellerCouponNew.vue';
 import UserProfile from '../views/UserProfile.vue';
 import UserCollect from '../views/UserCollect.vue';
 import UserFollow from '../views/UserFollow.vue';
+import UserOrder from '../views/UserOrder.vue';
+import UserOrderCheck from '../views/UserOrderCheck.vue';
+
 import Component from 'vue-loading-overlay';
 import { computed } from 'vue';
 
@@ -202,6 +205,20 @@ const routes = [
 				component: UserFollow,
 				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 			},
+			{
+				path: 'order', // 訂單管理
+				name: 'UserOrder',
+				component: UserOrder,
+				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
+			},
+			{
+				path: 'order/:id', // 單筆訂單管理
+				name: 'UserOrderCheck',
+				component: UserOrderCheck,
+				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
+				props: true, // 將orderID參數作為'props'傳遞給其他組件
+			},
+
 		],
 	},
 	{

@@ -29,9 +29,9 @@
 					:virtualIndex="index"
 				>
 					<div
-						class="overflow-x-hidden banner"
+						class="overflow-x-hidden banner clickable"
 						:style="{
-							'background-image': `url(${item.src})`,
+							'background-image': `url(${item.activity_image})`,
 							'background-repeat': 'no-repeat',
 							'background-attachment': 'fixed',
 							'background-position': 'center',
@@ -39,6 +39,9 @@
 							'background-color': 'rgba(0, 0, 0, .1)',
 							'background-blend-mode': 'multiply',
 						}"
+						@click="
+							$go({ name: 'ShopActivity', params: { id: item.activity_id } })
+						"
 					></div>
 				</SwiperSlide>
 				<div
@@ -62,18 +65,18 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import { useRoute, useRouter } from 'vue-router';
+const route = useRoute();
+const router = useRouter();
 
-const bannerList = ref([
-	{ src: 'images/shop/banner2.png' },
-	{ src: 'images/shop/banner1.png' },
-	{ src: 'images/shop/banner3.png' },
-	{ src: 'https://picsum.photos/id/20/1296/650' },
-	{ src: 'https://picsum.photos/id/10/609/600' },
-	{ src: 'https://picsum.photos/id/11/1296/650' },
-]);
+import { useShop } from '@/stores/index';
+const shopStore = useShop();
+
+const bannerList = computed(() => shopStore.bannerData);
+
 const navigation = ref({
 	nextEl: '.swiper-button-next',
 	prevEl: '.swiper-button-prev',
@@ -82,6 +85,13 @@ const modules = [Autoplay, Pagination, Navigation, Scrollbar];
 
 const prevEl = () => {};
 const nextEl = () => {};
+
+// 增加 loading 狀態
+const loading = ref(true);
+onMounted(async () => {
+	await shopStore.getActivityBanner();
+	loading.value = false; // 當資料獲取完成後將 loading 設為 false
+});
 </script>
 <style lang="scss" scoped>
 .banner {
@@ -93,5 +103,9 @@ const nextEl = () => {};
 
 .swiper-backface-hidden {
 	overflow: initial !important;
+}
+
+.clickable:hover {
+	cursor: pointer;
 }
 </style>
