@@ -11,16 +11,9 @@ export interface activityType {
 export interface activityAllType {
 	activity_id?: String;
 	activity_name: String;
-	activity_image: String;
-	start_date: String;
-	end_date: String;
-	activity_info?: string | null;
-	coupon_id?: string | null;
+	activity_image: String | null;
+	start_date: String | Date | null;
+	end_date: String | Date | null;
+	activity_info?: String | null;
+	coupon_id?: String | null;
 }
-// export interface activityAllType {
-// 	activity_id: String;
-// 	activity_name: String;
-// 	activity_image: String;
-// 	start_date: String;
-// 	end_date: String;
-// }

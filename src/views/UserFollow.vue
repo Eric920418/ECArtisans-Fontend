@@ -9,7 +9,7 @@
 						v-for="(item, index) in filteredData"
 						:key="index"
 					>
-						<Card :item="item" @remove="removeItem(item._id)" />
+						<Card :item="item" @remove="removeItem" />
 					</div>
 					<div class="col-12">
 						<Pagenation
@@ -29,7 +29,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 // 組件
 import NavTabs from '@/components/NavTabs.vue';
-import Card from '@/components/CollectCard.vue';
+import Card from '@/components/FollowCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
 
 import { useCollect, useAuthStore, dayAndToDay } from '@/stores/index';
@@ -38,20 +38,21 @@ import { type collectType } from '../type/collectType';
 const route = useRoute();
 const router = useRouter();
 
-const { id } = useAuthStore();
 const authStore = useAuthStore();
 const collect = useCollect();
 const navTabs = ref({}) as any;
 
+// 刪除
 function removeItem(id: string) {
-	collect.allData = collect.allData.filter(
+	collect.allDataF = collect.allDataF.filter(
 		(item: { _id: string }) => item._id !== id
 	);
 }
 
 // 封裝分類邏輯的函數，想要入口統一，之後比較好撰寫內容
-function categorized(allData: Array<collectType>): Array<collectType> {
+function categorized(allData: Array<any>): Array<any> {
 	let data = allData;
+	// let filterText = navTabs.value.schedule; //固定篩選條件
 
 	//如果要更多篩選條件 可寫在這裡
 	// if (filterText === '2') {
@@ -109,7 +110,7 @@ function categorized(allData: Array<collectType>): Array<collectType> {
 }
 
 // 接收篩選後的結果
-const filteredData = computed(() => categorized(collect.allData));
+const filteredData = computed(() => categorized(collect.allDataF));
 
 // 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
@@ -117,10 +118,10 @@ const sellerTitleData = {
 	title: [
 		{
 			title: '收藏商品',
+			path: { name: 'UserCollect', query: { page: 1 } },
 		},
 		{
 			title: '關注商家',
-			path: { name: 'UserFollow', query: { page: 1 } },
 		},
 	],
 };
@@ -173,7 +174,7 @@ onMounted(async () => {
 		navTabs.value = {
 			title: sellerTitleData.title,
 		};
-		await collect.getCollectAll();
+		await collect.getFollowAll();
 	}
 });
 </script>

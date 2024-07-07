@@ -20,10 +20,10 @@ export const sellerMenu = [
 		title: '優惠劵管理',
 		path: { name: 'SellerCoupon', query: { page: 1, type: '1' } },
 	},
-	// {
-	// 	title: '活動管理',
-	// 	path: { name: 'SellerActivity', query: { page: 1, type: '1' } },
-	// },
+	{
+		title: '活動管理',
+		path: { name: 'SellerActivity', query: { page: 1, type: '1' } },
+	},
 	/*
     {
       title: '業績分析',
@@ -42,12 +42,12 @@ export const userMenu = [
 		title: '會員資訊',
 		path: { name: 'UserProfile' },
 	},
-	{
-		title: '購物清單',
-		path: { name: 'UserOrder', query: { page: 1, type: '1' } },
-	},
+	// {
+	// 	title: '購物清單',
+	// 	path: { name: 'UserOrder', query: { page: 1, type: '1' } },
+	// },
 	{
 		title: '收藏清單',
-		path: { name: 'UserCollect', query: { page: 1, type: '1' } },
+		path: { name: 'UserCollect', query: { page: 1 } },
 	},
 ];

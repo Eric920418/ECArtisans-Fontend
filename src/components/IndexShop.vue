@@ -1,7 +1,6 @@
 <template>
 	<div class="w-100 m-index-title bg-bg overflow-x-hidden">
 		<Title :data="titleData" />
-
 		<div class="container p-0">
 			<div class="d-flex">
 				<swiper
@@ -32,7 +31,7 @@
 						:virtualIndex="index"
 					>
 						<div
-							class="card p-0 indexShopCard overflow-x-hidden mx-eca-12 mx-sm-2 d-flex"
+							class="card shadow-sm p-0 indexShopCard overflow-x-hidden mx-eca-12 mx-sm-2 d-flex"
 						>
 							<div
 								class="indexShopCard-top col-12 d-flex justify-content-center align-items-center bg-img-eca-dack"
@@ -81,13 +80,13 @@
 						class="swiper-pagination d-flex-column d-sm-none swiper-page-bottom"
 					/>
 					<div
-						class="swiper-button-prev btn-eca d-none d-sm-flex start-0 translate-middle + 6px"
+						class="swiper-button-prev btn-eca d-none d-sm-flex start-0 translate-middle shadow-sm"
 						@click.stop="prevEl()"
 					>
 						<font-awesome-icon :icon="['fas', 'angle-left']" />
 					</div>
 					<div
-						class="swiper-button-next btn-eca d-none d-sm-flex start-100 translate-middle"
+						class="swiper-button-next btn-eca d-none d-sm-flex start-100 translate-middle shadow-sm"
 						@click.stop="nextEl"
 					>
 						<font-awesome-icon :icon="['fas', 'angle-right']" />
@@ -162,13 +161,13 @@
 					</div>
 				</swiper>
 				<div
-					class="prev btn-eca-s position-absolute d-none d-md-flex top-40 translate-middle"
+					class="prev btn-eca-s position-absolute d-none d-md-flex top-40 translate-middle shadow-sm"
 					@click.stop="getPrev()"
 				>
 					<font-awesome-icon :icon="['fas', 'angle-left']" />
 				</div>
 				<div
-					class="next btn-eca-s position-absolute d-none d-md-flex top-40 translate-middle"
+					class="next btn-eca-s position-absolute d-none d-md-flex top-40 translate-middle shadow-sm"
 					@click.stop="getNext()"
 				>
 					<font-awesome-icon :icon="['fas', 'angle-right']" />

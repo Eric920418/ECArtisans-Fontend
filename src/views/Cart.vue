@@ -47,6 +47,7 @@
 						v-for="(shopItem, shopIndex) in cart"
 						:key="shopItem.seller._id"
 						:data="shopItem"
+						:check="false"
 						@update-items="handleUpdateItems(shopIndex, $event)"
 						@delete-item="handleDeleteItem(shopIndex, $event)"
 					/>
@@ -68,11 +69,15 @@
 							運費總計
 							<span>${{ highestFare }}</span>
 						</p>
+						<p class="mb-2 fs-6 d-flex justify-content-between">
+							小記
+							<span>${{ totalPrice }}</span>
+						</p>
 					</div>
 					<hr />
 					<p class="d-flex justify-content-between">
 						訂單總金額
-						<span>${{ totalPrice }}</span>
+						<span>${{ totalPrice + highestFare }}</span>
 					</p>
 				</div>
 			</div>
@@ -95,38 +100,50 @@
 import { onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import CartCard from '@/components/CartCard.vue';
-import { useCartStore } from '@/stores/index';
+import { useCartStore, useAuthStore } from '@/stores/index';
+import { alertStore } from '@/main'; // 導入實例
+import Swal from 'sweetalert2';
 
+const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const store = useCartStore();
 
-const cart = computed(() => store.cart); // 从 Pinia store 获取购物车数据
+const cart = computed(() => store.cart); // 獲取選取物件
 
 const progress = computed(() => {
-	// 计算进度条的进度
+	// 計算進度條
 	return 50;
 });
 
 const totalItems = computed(() => {
-	// 计算总商品数量
-	return cart.value.reduce((total, shop) => total + shop.items.length, 0);
+	// 計算總數量
+	return cart.value.reduce(
+		(total: any, shop: { items: string | any[] }) => total + shop.items.length,
+		0
+	);
 });
 
 const highestFare = computed(() => {
-	const allFares = cart.value.flatMap(shop =>
-		shop.items.map(item => item.product.fare)
-	);
-	return allFares.length > 0 ? Math.max(...allFares) : 0;
+	const maxFare = cart.value.reduce((max: number, order: { items: any[] }) => {
+		const maxFareInOrder = order.items.reduce((maxFareInItems, item) => {
+			return item.selected && item.product.fare > maxFareInItems
+				? item.product.fare
+				: maxFareInItems;
+		}, 0);
+		return maxFareInOrder > max ? maxFareInOrder : max;
+	}, 0);
+	return maxFare;
 });
 
 const totalPrice = computed(() => {
-	// 计算订单总金额
+	// 訂單總金額，只計算 selected === true 的項目
 	return cart.value.reduce(
-		(total, shop) =>
+		(total: any, shop: { items: any[] }) =>
 			total +
 			shop.items.reduce(
-				(subTotal, item) => subTotal + item.quantity * item.format.price,
+				(subTotal, item) =>
+					subTotal + (item.selected ? item.quantity * item.format.price : 0),
 				0
 			),
 		0
@@ -143,14 +160,13 @@ function handleDeleteItem(shopIndex: number, itemIndex: number) {
 	cart.value[shopIndex].items.splice(itemIndex, 1);
 }
 
-// 计算选定的商品
-
+// 計算選定商品
 const selectedItems = computed(() => {
 	return {
-		selectedItems: cart.value.flatMap(shop =>
+		selectedItems: cart.value.flatMap((shop: { items: any[] }) =>
 			shop.items
-				.filter(item => item.selected)
-				.map(item => ({
+				.filter((item: { selected: any }) => item.selected)
+				.map((item: { product: { _id: any }; format: { _id: any } }) => ({
 					productId: item.product._id,
 					formatId: item.format._id,
 				}))
@@ -159,21 +175,37 @@ const selectedItems = computed(() => {
 });
 
 async function checkout() {
+	const uniqueSellers = new Set();
+
+	cart.value.forEach(
+		(sellerObj: { items: any[]; seller: { _id: unknown } }) => {
+			const selectedItems = sellerObj.items.filter(item => item.selected);
+			if (selectedItems.length > 0) {
+				uniqueSellers.add(sellerObj.seller._id);
+			}
+		}
+	);
+
+	const uniqueSellersCount = uniqueSellers.size;
+
 	try {
-		const responseData = await store.selectedCart(selectedItems.value);
-		console.log(responseData);
-		// router.push({
-		// 	name: 'CartCheck',
-		// 	params: {
-		// 		orderData: JSON.stringify(responseData),
-		// 	},
-		// });
+		if (uniqueSellersCount > 1) {
+			Swal.fire({
+				icon: 'error',
+				text: '目前無法一次結帳您選擇的全部商品,可能是不支援跨店結帳。您可以嘗試分開結帳後再試一次',
+				customClass: {
+					confirmButton: 'sweetalert2-btn-primary',
+				},
+			});
+		} else {
+			await store.selectedCart(selectedItems.value);
+		}
 	} catch (error) {
 		console.error('選擇商品失敗:', error);
 	}
 }
 
 onMounted(async () => {
-	await store.getAllCart(); // 从 Pinia 存储中获取所有购物车数据
+	await store.getAllCart();
 });
 </script>

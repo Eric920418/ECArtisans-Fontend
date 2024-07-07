@@ -2,7 +2,7 @@
 	<div
 		v-for="(order, index) in formattedData"
 		:key="index"
-		class="card card-hover"
+		class="card shadow-sm card-hover"
 		@click="order.go ? $go(order.go) : ''"
 	>
 		<div class="row m-0 p-0">

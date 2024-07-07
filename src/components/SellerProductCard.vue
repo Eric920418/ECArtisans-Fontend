@@ -1,5 +1,5 @@
 <template>
-	<div class="card card-hover mb-4">
+	<div class="card shadow-sm card-hover mb-4">
 		<div class="row m-0 p-0">
 			<div class="productCard-img-100 p-0 position-relative">
 				<div
@@ -21,68 +21,75 @@
 						{{ data.isOnshelf ? '上架' : '下架' }}
 					</div>
 				</div>
-				<div>
-					<div class="d-flex mb-1 justify-content-between">
-						<div class="d-flex">
-							<div
-								v-if="data.origin !== ''"
-								class="text-card-coupon btn-Bg-active rounded-1 me-3"
-							>
-								{{ data.origin }}
-							</div>
-							<div class="text-card-coupon btn-Bg-active rounded-1 me-3">
-								{{ data.sellerCategory }}
-							</div>
-							<div
-								v-for="(categoryItme, categoryIndex) in data.category"
-								:key="categoryIndex"
-								class="text-card-coupon btn-Bg-active rounded-1 me-3"
-							>
-								{{ categoryItme }}
-							</div>
+				<div
+					class="d-flex flex-wrap justify-content-between align-items-center mb-2"
+				>
+					<div class="d-flex flex-wrap align-items-center">
+						<div class="d-flex mb-1 align-items-center me-5">
+							<div class="neutral-02" style="width: 3em">編號</div>
+							{{ data._id }}
 						</div>
-						<div class="d-flex mb-1">
-							<div class="neutral-02" style="width: 4.75em">出售數量</div>
-							{{ data.sold }}
+						<div class="d-flex mb-2">
+							<div class="d-flex">
+								<div
+									v-if="data.origin !== ''"
+									class="text-card-coupon btn-Bg-active rounded-1 me-2"
+								>
+									{{ data.origin }}
+								</div>
+								<div class="text-card-coupon btn-Bg-active rounded-1 me-2">
+									{{ data.sellerCategory }}
+								</div>
+								<div
+									v-for="(categoryItme, categoryIndex) in data.category"
+									:key="categoryIndex"
+									class="text-card-coupon btn-Bg-active rounded-1 me-2"
+								>
+									{{ categoryItme }}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="d-flex mb-1">
-						<div class="neutral-02" style="width: 3em">編號</div>
-						{{ data._id }}
+						<div class="neutral-02" style="width: 4.75em">出售數量</div>
+						{{ data.sold }}
 					</div>
-					<div class="d-flex justify-content-between align-items-center">
-						<div class="d-flex flex-wrap">
-							<div class="d-flex me-5">
-								<div class="pt-2" style="width: 2.75em">成本</div>
-								<div class="fs-2 fw-bold">{{ data.format[0].cost }}</div>
-							</div>
-							<div class="d-flex me-5">
-								<div class="pt-2" style="width: 2.75em">毛利</div>
-								<div class="fs-2 fw-bold">
-									{{
-										parseInt(data.format[0].price) -
-										parseInt(data.format[0].cost)
-									}}
-								</div>
-							</div>
-							<div class="d-flex me-5">
-								<div class="pt-2" style="width: 2.75em">售價</div>
-								<div class="fs-2 fw-bold">{{ data.format[0].price }}</div>
-							</div>
-							<div class="d-flex me-5">
-								<div class="pt-2" style="width: 2.75em">庫存</div>
-								<div class="fs-2 fw-bold">{{ data.format[0].stock }}</div>
+				</div>
+				<div
+					class="d-flex flex-wrap justify-content-between align-items-center"
+				>
+					<div class="d-flex flex-wrap mb-2">
+						<div class="d-flex me-3">
+							<div class="pt-2 fs-12 pe-2">成本</div>
+							<div class="fs-3 fw-bold">{{ data.format[0].cost }}</div>
+						</div>
+						<div class="d-flex me-3">
+							<div class="pt-2 fs-12 pe-2">毛利</div>
+							<div class="fs-3 fw-bold">
+								{{
+									parseInt(data.format[0].price) - parseInt(data.format[0].cost)
+								}}
 							</div>
 						</div>
-						<div class="d-flex justify-content-center align-items-center m-0">
-							<div
-								class="btn btn-outline-primary px-4 flex-shrink"
-								@click="
-									$go({ name: 'SellerProductCheck', params: { id: data._id } })
-								"
-							>
-								查看商品詳情
-							</div>
+						<div class="d-flex me-3">
+							<div class="pt-2 fs-12 pe-2">售價</div>
+							<div class="fs-3 fw-bold">{{ data.format[0].price }}</div>
+						</div>
+						<div class="d-flex me-3">
+							<div class="pt-2 fs-12 pe-2">庫存</div>
+							<div class="fs-3 fw-bold">{{ data.format[0].stock }}</div>
+						</div>
+					</div>
+					<div
+						class="d-flex justify-content-end align-items-center flex-grow-1 m-0"
+					>
+						<div
+							class="btn btn-outline-primary px-4 flex-shrink"
+							@click="
+								$go({ name: 'SellerProductCheck', params: { id: data._id } })
+							"
+						>
+							查看商品詳情
 						</div>
 					</div>
 				</div>

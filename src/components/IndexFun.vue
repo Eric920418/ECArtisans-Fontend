@@ -13,7 +13,10 @@
 				funItem.cols_md
 			} col-lg-${funItem.cols_lg} ${funItem.data ? `p-0` : 'funCard'}`"
 		>
-			<div v-if="!funItem.data" class="card h-100 m-0 p-0 bg-transparent">
+			<div
+				v-if="!funItem.data"
+				class="card shadow-sm h-100 m-0 p-0 bg-transparent"
+			>
 				<div
 					class="card-body p-0 position-relative d-flex justify-content-center"
 					@click="navigate(funItem.name)"
@@ -41,7 +44,7 @@
 					class="funCard m-0"
 					:class="`col-${fun_2_Item.cols} col-sm-${fun_2_Item.cols_sm} col-md-${fun_2_Item.cols_md} col-lg-${fun_2_Item.cols_lg}`"
 				>
-					<div class="card h-100 m-0 p-0 bg-transparent">
+					<div class="card shadow-sm h-100 m-0 p-0 bg-transparent">
 						<div
 							class="card-body p-0 position-relative d-flex justify-content-center"
 							@click="navigate(fun_2_Item.name)"

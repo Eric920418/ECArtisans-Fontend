@@ -4,7 +4,7 @@
 			<!-- Sidebar for filters -->
 			<div class="col-lg-2">
 				<!-- Filter options -->
-				<div class="card mb-4">
+				<div class="card shadow-sm mb-4">
 					<h3 class="fs-5 neutral-01 mb-0 me-3">篩選</h3>
 					<div class="card-body">
 						<!-- Discount Activities Dropdown -->
@@ -88,7 +88,7 @@
 				</div>
 				<!-- Sidebar for sorting  -->
 				<!-- Sorting Options -->
-				<div class="card mb-4">
+				<div class="card shadow-sm mb-4">
 					<h3 class="fs-5 neutral-01 mb-0 me-3">排序</h3>
 					<div class="card-body">
 						<select
@@ -114,17 +114,13 @@
 						</span>
 						的商品
 					</h3>
+					<!-- 上下間距加高 增加 z-1 把 card-line 推上來 如果不要 hover 就取消 z-1 -->
 					<div
 						v-for="(item, index) in paginatedData"
 						:key="index"
-						class="col-6 col-md-4 col-lg-4 col-xl-3 p-1 m-0"
+						class="col-6 col-md-4 col-lg-4 col-xl-3 p-1 pb-4 m-0 z-1"
 					>
-						<Card
-							:item="item"
-							@click="
-								$go({ name: 'ShopProduct', params: { id: item.products_id } })
-							"
-						/>
+						<Card :item="item" />
 					</div>
 					<div class="col-12 mt-5">
 						<!-- 使用 Pagenation 子組件來顯示分頁 -->
@@ -340,7 +336,7 @@ watch(
 	() => route.query.page,
 	newPage => {
 		if (newPage === '0') {
-			// 将 page 改为 1
+			// 將 page 改为 1
 			router.replace({ query: { ...route.query, page: '1' } });
 		}
 	}

@@ -16,9 +16,16 @@
 			}"
 			:thumbs="{ swiper: thumbsSwiper }"
 			:modules="modules"
+			:pagination="{
+				el: '.swiper-pagination',
+				dynamicBullets: false,
+				clickable: true,
+			}"
+			:slideToClickedSlide="true"
 			class="swiper-container gallery-top p-0 m-0 order-2"
+			@swiper="onSwiper"
 		>
-			<swiper-slide v-for="(swiperImg, swiperIndex) in data" :key="swiperIndex">
+			<swiper-slide v-for="swiperImg in data" :key="swiperImg">
 				<img :src="swiperImg" class="img-eca" />
 			</swiper-slide>
 		</swiper>
@@ -43,35 +50,60 @@
 			class="swiper-container gallery-thumbs p-0 m-0 order-1"
 		>
 			<swiper-slide
-				v-for="(dataItmeaaa, dataIndexaaa) in data"
-				:key="dataIndexaaa"
+				v-for="(dataItme, index) in data"
+				:key="index"
+				:id="index + '_img'"
 				class="m-0 pb-3 pe-3 pt-3 pt-md-0"
 			>
-				<img :src="dataItmeaaa" class="img-eca" />
+				<img :src="dataItme" class="img-eca" />
 			</swiper-slide>
 		</swiper>
 	</div>
 </template>
+
 <script lang="ts" setup>
-import { useResize } from '@/stores/index';
 import { Navigation, Scrollbar, FreeMode, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { ref, computed } from 'vue';
-import { type ShopProductsType } from '@/type/orderType';
+import { ref, watch, nextTick } from 'vue';
 
-const { resize } = useResize();
 const modules = [FreeMode, Thumbs, Navigation, Scrollbar];
+const thumbsSwiper = ref<any>(null);
+const onthumbsSwiper = ref<any>(null);
 
-const thumbsSwiper = ref(null);
-
-const nowData = computed(() => props.data) as any;
 // 定義從父組件接收的props
 const props = defineProps<{
 	data: Array<string>;
+	selectedImg: string | null;
 }>();
+
+const emit = defineEmits(['select-image']);
 const setThumbsSwiper = (swiper: any) => {
 	thumbsSwiper.value = swiper;
 };
+const onSwiper = (swiper: any) => {
+	onthumbsSwiper.value = swiper;
+};
+
+// 交換圖片
+// :slideToClickedSlide="true" 啟動 slideTo 功能
+// onthumbsSwiper.value 裡面包了所有功能跟方法?
+const exchange = (index: number) => {
+	onthumbsSwiper.value.slideTo(index);
+};
+
+// 監聽是否有新的值
+watch(
+	() => props.selectedImg,
+	async (newImg: string | null) => {
+		if (newImg !== null) {
+			await nextTick();
+			const index = props.data.indexOf(newImg);
+			if (index !== -1) {
+				exchange(index);
+			}
+		}
+	}
+);
 </script>
 <style lang="scss" scoped>
 .swiper-box {

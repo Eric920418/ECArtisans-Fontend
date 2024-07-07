@@ -40,9 +40,9 @@
 					</router-link>
 				</div>
 			</div>
-			<div class="p-4 table table-responsive" v-if="tableTbody">
+			<div class="p-4 table table-responsive">
 				<Card
-					v-for="(tableItme, tableIndex) in tableTbody"
+					v-for="(tableItme, tableIndex) in filteredData"
 					:key="tableIndex"
 					:data="tableItme"
 				/>
@@ -64,43 +64,61 @@ import router from '@/router';
 // stores
 import { useProduct, useAuthStore, useResize } from '@/stores/index';
 import { table } from 'console';
+import { type DetailedOrderProductType } from '@/type/orderType';
 
 const { resize } = useResize();
 const route = useRoute();
 
 const authStore = useAuthStore();
 const userStore = useProduct();
-// table
-const tableThead = [
-	{ text: '排序', class: 'text-center' },
-	{ text: '預覽', class: 'text-center' },
-	{ text: '狀態', class: 'text-center' },
-	{ text: '分類', class: 'text-center' },
-	{ text: '商品名稱', class: 'ps-2 text-start' },
-	{ text: '商品編號', class: 'ps-2 text-start' },
-	{ text: '成本', class: 'text-center' },
-	{ text: '毛利', class: 'text-center' },
-	{ text: '售價', class: 'text-center' },
-	{ text: '庫存', class: 'text-center' },
-	{ text: '管理', class: 'text-center' },
-];
 
-const tableBody = [
-	{ text: '排序', class: 'text-center' },
-	{ text: '預覽', class: 'text-center' },
-	{ text: '狀態', class: 'text-center' },
-	{ text: '分類', class: 'text-center' },
-	{ text: '商品名稱', class: 'ps-2 text-start' },
-	{ text: '商品編號', class: 'ps-2 text-start' },
-	{ text: '成本', class: 'text-center' },
-	{ text: '毛利', class: 'text-center' },
-	{ text: '售價', class: 'text-center' },
-	{ text: '庫存', class: 'text-center' },
-	{ text: '管理', class: 'text-center' },
-];
+// 封裝分類邏輯的函數，想要入口統一，之後比較好撰寫內容
+function categorized(
+	allData: Array<DetailedOrderProductType>,
+	keyword: string
+) {
+	let data = allData;
+	// let filterText = navTabs.value.schedule; //固定篩選條件
+	if (keyword && keyword !== null) {
+		data = data.filter(item => item.productName.includes(keyword));
+	}
+	//如果要更多篩選條件 可寫在這裡
 
-// 基本
-const tableTbody = computed(() => userStore.allData);
+	if (data.length > 1) {
+		data.sort((a, b) => {
+			// 先按 isOnshelf 排序，true 在前
+			if (a.isOnshelf && !b.isOnshelf) return -1;
+			if (!a.isOnshelf && b.isOnshelf) return 1;
+
+			// // 然后按 isOnshelf && $dayAndToDay(endDate, '<=') 排序，true 在前
+			// const aEndDateValid = a.isOnshelf && dayAndToDay(a.endDate, '<=');
+			// const bEndDateValid = b.isOnshelf && dayAndToDay(b.endDate, '<=');
+
+			// if (aEndDateValid && !bEndDateValid) return -1;
+			// if (!aEndDateValid && bEndDateValid) return 1;
+
+			// // 最后按 isOnshelf && $dayAndToDay(startDate, '>=') 排序，true 在前
+			// const aStartDateValid = a.isOnshelf && dayAndToDay(a.startDate, '>=');
+			// const bStartDateValid = b.isOnshelf && dayAndToDay(b.startDate, '>=');
+
+			// if (aStartDateValid && !bStartDateValid) return -1;
+			// if (!aStartDateValid && bStartDateValid) return 1;
+
+			// 如果都相同，保持原顺序
+			return 0;
+		});
+	}
+
+	return data;
+}
+
+// 接收篩選後的結果
+const filteredData = computed(() =>
+	categorized(userStore.allData, searchKeyword.value)
+);
+
+// // 基本
+// const tableTbody = computed(() => userStore.allData);
 
 function trytry() {
 	alertStore.success('couponDelete');
@@ -418,43 +436,4 @@ onMounted(async () => {
 .border {
 	border-radius: 50%;
 }
-// @media (max-width: 736px) {
-// 	.table-rwd {
-// 		min-width: 100%;
-// 	}
-// 	/*針對tr去做隱藏*/
-// 	tr.tr-only-hide {
-// 		display: none !important;
-// 	}
-// 	/*讓tr變成區塊主要讓他有個區塊*/
-// 	.table-rwd tr {
-// 		display: block;
-// 		// border: 1px solid #f7f7f7;
-// 		margin-top: 5px;
-// 	}
-// 	.table-rwd td {
-// 		text-align: left;
-// 		font-size: 15px;
-// 		overflow: hidden;
-// 		width: 100%;
-// 		display: block;
-// 	}
-// 	.table-rwd td:before {
-// 		/*最重要的就是這串*/
-// 		content: attr(data-th) ' : ';
-// 		/*最重要的就是這串*/
-// 		display: inline-block;
-// 		text-transform: uppercase;
-// 		font-weight: bold;
-// 		margin-right: 10px;
-// 		// color: #d20b2a;
-// 	}
-
-// 	/*當RWD縮小的時候.table-bordered 會有兩條線，所以針對.table-bordered去做修正*/
-// 	.table-rwd.table-bordered td,
-// 	.table-rwd.table-bordered th,
-// 	.table-rwd.table-bordered {
-// 		border: 0;
-// 	}
-// }
 </style>

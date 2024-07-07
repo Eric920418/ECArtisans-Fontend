@@ -42,12 +42,7 @@
 					ref="swiperContainerRef"
 				>
 					<SwiperSlide v-for="(item, index) in ProductList" :key="index">
-						<Card
-							:item="item"
-							@click="
-								$go({ name: 'ShopProduct', params: { id: item.products_id } })
-							"
-						/>
+						<Card class="shadow-sm" :item="item" />
 					</SwiperSlide>
 					<div
 						class="swiper-pagination d-flex-column d-sm-none swiper-page-bottom"

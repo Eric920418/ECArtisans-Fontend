@@ -10,165 +10,232 @@
 						<div
 							class="d-flex justify-content-between align-items-center mb-4 p-0"
 						>
-							<h3 class="fs-5 p-0 neutral-01 mb-0">{{ init.schedule }}</h3>
-							<a class="mb-0" v-if="route.name === 'SellerActivityCheck'">
-								立即停止
+							<h3
+								class="m-0 p-0 p-0 neutral-01 mb-3 mb-sm-0"
+								:class="{
+									'fs-6': isCheck,
+									'fs-5': !isCheck,
+								}"
+							>
+								{{ !isCheck ? '新增活動' : '編號：' + data.coupon_id }}
+								<br />
+							</h3>
+							<a
+								class="mb-0"
+								v-if="
+									isCheck &&
+									data.start_date &&
+									$dayAndToDay(data.start_date.toString(), '<')
+								"
+								@click="deleteData()"
+							>
+								立即刪除
 							</a>
 						</div>
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
-							<label for="couponName" class="mb-1">
-								封面圖片
-								<span class="text-danger">*</span>
-							</label>
-							<div class="d-flex" style="margin-bottom: 34px">
-								<div class="card-newImg" @click="uploadFile">
-									<font-awesome-icon :icon="['fas', 'image']" />
-									<p>選擇圖片</p>
-									<p>(n/n)</p>
-								</div>
-								<input
-									class="form-control"
-									type="file"
-									id="formFile"
-									ref="inputFieldRef"
-									hidden
-									@change="getFile"
-									autocomplete="photo"
-									accept="image/*"
-								/>
-								<div class="card-directions">
-									<ul>
-										<li>圖片大小：600 x 600</li>
-										<li>檔案限制：JPEG, PNG</li>
-										<li>拖拉商品圖片至第一張以設定封面圖片</li>
-									</ul>
+							<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
+								<label for="activityName" class="mb-1">
+									封面圖片
+									<span class="text-danger">*</span>
+								</label>
+								<div class="row m-0" style="margin-bottom: 38px" v-if="data">
+									<div
+										v-if="data.activity_image"
+										class="card-newImg-delete me-3 my-2 p-0 d-flex align-items-center justify-content-center position-relative"
+										:style="{
+											'background-image': `url(${data.activity_image})`,
+										}"
+									>
+										<!-- 刪除 手機板 右上角的刪除 -->
+										<font-awesome-icon
+											v-if="
+												isCheck &&
+												data.start_date &&
+												$dayAndToDay(data.start_date.toString(), '<')
+													? false
+													: resize < 768
+											"
+											@click="closeItem()"
+											:icon="['fas', 'circle-xmark']"
+											class="fs-5 d-md-none position-absolute top-0 start-100 translate-middle gray p-2"
+										/>
+
+										<!-- 刪除 滑鼠移入時出現 -->
+										<font-awesome-icon
+											v-if="
+												isCheck &&
+												data.start_date &&
+												$dayAndToDay(data.start_date.toString(), '<')
+													? false
+													: resize >= 768
+											"
+											:icon="['fas', 'trash-can']"
+											class="fs-4 icon"
+											@click="closeItem()"
+										/>
+									</div>
+									<div v-else class="card-newImg me-3 my-2" @click="uploadFile">
+										<font-awesome-icon
+											:icon="['fas', 'image']"
+											class="fa-image"
+										/>
+										<p>選擇圖片</p>
+										<p>({{ data.activity_image ? 1 : 0 }}/1)</p>
+									</div>
+									<input
+										class="form-control"
+										type="file"
+										id="formFile"
+										ref="inputFieldRef"
+										hidden
+										@change="getFile"
+										autocomplete="photo"
+										accept="image/*"
+									/>
+									<div class="card-directions w-fit py-3">
+										<ul>
+											<li>圖片大小：3MB 內</li>
+											<li>檔案限制：JPEG, PNG</li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
-							<label for="couponName" class="mb-1">
-								封面圖片
-								<span class="text-danger">*</span>
-							</label>
-							<div class="d-flex" style="margin-bottom: 34px">
-								<div class="card-newImg-disabled">
-									<font-awesome-icon :icon="['fas', 'image']" />
-									<p>選擇圖片</p>
-									<p>(n/n)</p>
-								</div>
-								<div class="card-directions">
-									<ul>
-										<li>封面照片將自動顯示上方第一張商品圖片</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
-							<label for="couponName" class="mb-1">
+							<label for="activityName" class="mb-1">
 								名稱
 								<span class="text-danger">*</span>
 							</label>
 							<v-field
-								id="couponName"
+								id="activityName"
 								name="名稱"
 								type="text"
 								class="form-control"
 								:class="{ 'is-invalid': errors['名稱'] }"
 								rules="required"
-								v-model="newData.activity_name"
+								v-model="data.activity_name"
+								:disabled="getDisabled()"
 								aria-label="名稱"
-								placeholder="請輸入活動/公告名稱"
+								placeholder="請輸入活動名稱"
 							></v-field>
 						</div>
-						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
-							<label for="start_date" class="mb-1">
+						<div class="col-12 col-xl-6 p-0 m-0 mb-2" style="min-height: 100px">
+							<label for="startDate" class="mb-1">
 								發布日期
+
 								<span class="text-danger">*</span>
 							</label>
 							<div class="d-flex">
 								<div>
 									<v-field
-										id="start_date"
-										name="起始日"
+										id="startDate"
+										name="startDate"
 										type="date"
 										class="form-control col-2"
-										:class="{ 'is-invalid': errors['起始日'] }"
-										rules="startDate|required"
-										v-model="newData.start_date"
-										aria-label="起始日"
-										placeholder="請輸入優惠卷使用期限"
+										:class="{ 'is-invalid': errors['startDate'] }"
+										:rules="
+											!isCheck || $dayAndToDay(data.startDate, '<')
+												? 'startDate|need:開始日期'
+												: ''
+										"
+										v-model="data.start_date"
+										:disabled="getDisabled()"
+										aria-label="startDate"
+										placeholder="請輸入活動開始日期"
 									></v-field>
 									<p class="fs-12">* 開始於每日 00:00:00</p>
 									<error-message
-										name="起始日"
+										v-if="getDisabled()"
+										name="startDate"
 										class="invalid-feedback"
 									></error-message>
 								</div>
 								<p class="mx-3 fs-3">~</p>
 								<div>
 									<v-field
-										id="end_date"
-										name="到期日"
+										id="endDate"
+										name="endDate"
 										type="date"
 										class="form-control col-2"
-										:class="{ 'is-invalid': errors['到期日'] }"
-										rules="endDate:起始日|required"
-										v-model="newData.end_date"
-										aria-label="到期日"
-										placeholder="請輸入優惠卷使用期限"
+										:class="{ 'is-invalid': errors['endDate'] }"
+										:rules="
+											!isCheck || $dayAndToDay(data.startDate, '<')
+												? 'endDate:startDate|need:結束日期'
+												: ''
+										"
+										v-model="data.end_date"
+										:disabled="getDisabled()"
+										aria-label="endDate"
+										placeholder="請輸入優惠劵使用期限"
 									></v-field>
 									<p class="fs-12">* 結束於每日 23:59:59</p>
 									<error-message
-										name="到期日"
+										name="endDate"
 										class="invalid-feedback"
 									></error-message>
 								</div>
 							</div>
 						</div>
-						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
-							<p>
-								發布
+						<div class="col-12 col-xl-6 p-0 m-0 mb-2" style="min-height: 100px">
+							<label for="start_date" class="mb-1">
+								優惠劵
 								<span class="text-danger">*</span>
-							</p>
-							<div class="d-flex">
-								<v-field
-									class="form-check-input me-2"
-									type="radio"
-									v-model="newData.activity_type"
-									:class="{ 'is-invalid': errors['type'] }"
-									id="announcement"
-									name="type"
-									rules="policy|required"
-									value="公告"
-									as="input"
-								></v-field>
-								<label class="form-check-label me-4" for="announcement">
-									公告
-								</label>
-								<v-field
-									class="form-check-input me-2"
-									type="radio"
-									v-model="newData.activity_type"
-									:class="{ 'is-invalid': errors['type'] }"
-									id="activity"
-									name="type"
-									rules="policy|required"
-									value="活動"
-									as="input"
-								></v-field>
-								<label class="form-check-label" for="activity">活動</label>
+							</label>
+							<div class="dropdown">
+								<button
+									class="form-select d-flex align-items-center justify-content-center dropdown-toggle px-3"
+									type="button"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+									:disabled="getDisabled()"
+								>
+									<p
+										class="text-start flex-fill mb-0"
+										:class="{
+											'text-placeholder': !isCoupon,
+										}"
+									>
+										{{
+											isCoupon && isCoupon.couponName
+												? isCoupon.couponName
+												: '請選擇...'
+										}}
+									</p>
+								</button>
+								<ul class="dropdown-menu z-5">
+									<li>
+										<a
+											@click="
+												() => {
+													isNewCoupon = null;
+													data.coupon_id = null;
+												}
+											"
+											class="dropdown-item"
+										>
+											請選擇...
+										</a>
+									</li>
+									<li
+										v-for="(couponItme, couponIndex) in coupon"
+										:key="couponIndex"
+									>
+										<a class="dropdown-item" @click="changeCoupon(couponItme)">
+											{{ couponItme.couponName }}
+										</a>
+									</li>
+								</ul>
 							</div>
 						</div>
-
 						<div class="col-12 p-0 m-0 mb-2">
 							<label class="mb-1 me-3">
-								注意事項
+								活動內容
 								<span class="text-danger">*</span>
 							</label>
 							活動折扣金額以結算時為準,不可與其他優惠同時使用。
 							<v-field
 								v-slot="{ field, errors }"
-								v-model="newData.activity_info"
+								v-model="data.activity_info"
 								name="comment"
 								rules="required"
 							>
@@ -177,13 +244,12 @@
 									class="form-control"
 									:class="{ 'is-invalid': errors[0] }"
 									name="comment"
-									style="height: 6.5em; resize: none"
+									style="height: 6.5em; resize: none; whitespace: pre-wrap"
+									:disabled="getDisabled()"
 								/>
 							</v-field>
 						</div>
-						<p class="text-wrap">
-							{{ newData }}
-						</p>
+						<p class="text-wrap"></p>
 					</div>
 				</div>
 				<div
@@ -196,8 +262,12 @@
 					>
 						取消
 					</button>
-					<button type="submit" class="btn btn-primary px-5 m-0 ms-1 ms-sm-2">
-						{{ init.btn }}
+					<button
+						type="submit"
+						class="btn btn-primary px-5 m-0 ms-1 ms-sm-2"
+						:disabled="getDisabled()"
+					>
+						{{ init['end-bottom-btn'] }}
 					</button>
 				</div>
 			</v-form>
@@ -205,75 +275,67 @@
 	</div>
 </template>
 <script setup lang="ts">
+import { alertStore } from '@/main'; // 導入實例
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
-import { useCoupon, useAuthStore, getDate, useResize } from '@/stores/index';
+import { useRoute, useRouter } from 'vue-router';
+import { type CouponType } from '@/type/couponType';
+
+// 組件
 import NavTabs from '../components/NavTabs.vue';
-import { useRoute } from 'vue-router';
 import router from '@/router';
 
-const { resize } = useResize();
+// stores
+import {
+	useActivity,
+	useCoupon,
+	useAuthStore,
+	useResize,
+	dayAndToDay,
+} from '@/stores/index';
+
+function getDisabled() {
+	const startDate = data.value.start_date;
+	return isCheck && startDate ? dayAndToDay(startDate, '>') : false;
+}
 
 const route = useRoute();
+// const router = useRouter();
+const { resize } = useResize();
+
 const authStore = useAuthStore();
-const userStore = useCoupon();
+const userStore = useActivity();
+const couponStore = useCoupon();
 
-// 完成後送出
-function onSubmit() {
-	console.log('成功');
+// 資料完成後送出
+function onSubmit(isValue: any | void) {
+	if (route.matched[0].path === '/seller') {
+		let check = true;
+		if (!data.value.activity_image || data.value.activity_image === '') {
+			check = false;
+			alertStore.error('請選擇封面圖片');
+		}
+		if (!isCoupon.value?._id) {
+			check = false;
+			alertStore.error('請選擇優惠劵');
+		}
+		if (route.name === 'SellerActivityNew') {
+			if (check) {
+				userStore.data.coupon_id = isCoupon.value?._id;
+				userStore.newActivity();
+			}
+		} else if (route.name === 'SellerActivityCheck') {
+			if (check) {
+				userStore.data.coupon_id = isCoupon.value?._id;
+				userStore.editActivity(route.params.id as string);
+			}
+		}
+	}
 }
 
-// 基本
-const token = authStore.token;
-const id = authStore.id;
-// const data = ref(userStore.allData) as any;
-const dropdownBtn = ref<HTMLButtonElement | null>(null);
-const dropdown = ref<HTMLDivElement | null>(null);
-
-// 刪除
-// function inputBadgeClose(id: string) {
-// 	newData.value.productChoose?.filter(item => item !== id);
-// 	// newData.value.productChoose = newData.value.productChoose?.filter(
-// 	// 	item => item !== id
-// 	// );
-// }
-
-// 回傳的假資料格式
-export interface CouponNewDataType {
-	activity_id: string | null;
-	activity_name: string | null;
-	activity_images: string | null;
-	activity_type: string | null;
-	activity_info: string | null;
-	start_date: number | null;
-	end_date: number | null;
-	discount: string | null;
+function deleteData() {
+	userStore.deleteActivity(route.params.id as string);
 }
-const data = ref({
-	introduce: '',
-});
-
-// 回傳的假資料
-const newData = ref<CouponNewDataType>({
-	activity_id: '',
-	activity_name: '',
-	activity_images: '',
-	activity_type: '',
-	activity_info: '',
-	start_date: null,
-	end_date: null,
-	discount: '',
-	// activity_id: '20240318-00028',
-	// activity_name: '滿千折百,最高折$500!',
-	// activity_images:
-	// 	'YWZkZmRnZmRnYXNkaGZhO2RzamdmZGxrZ2pma2wnZ2p3ZXBvaWZ3J29la0pSRmpmJ2RzZmY=',
-	// activity_type: '活動',
-	// activity_info:
-	// 	'親愛的食客們, 隨著春風拂面,我們迎來了一場美食盛宴!2024年春日美食嘉年華即將於4月10日至4月15日盛大開幕!這將是一場讓您的味蕾狂歡的盛宴,一個讓您品味各國美食的絕佳機會! 我們的網上商城將為您帶來來自世界各地的頂級美食,從濃郁的義大利意粉到清新的日式壽司,從香辣的泰式料理到精緻的法式點心,應有盡有!我們的食品來源於最優質的供應商,保證新鮮、美味、安全! 在春日美食嘉年華期間,您還可以參加各種精彩的活動!我們將舉辦線上烹飪課程,讓您學習到各種國家的美食烹飪技巧;我們還有抽獎活動,豐富的獎品等您拿!無論您是美食愛好者還是廚藝高手,這都是您不容錯過的一次盛會! 請即訪問我們的網上商城,準備好迎接一場美食之旅!記得在4月10日至4月15日期間蒞臨,與我們一同共享春日美食嘉年華的樂趣! 期待與您共度美好時光!',
-	// start_date: 202401200000,
-	// end_date: 202402202359,
-	// discount: '滿千折百',
-});
 
 // 會員頭像 --------------------
 const inputFieldRef = ref<HTMLInputElement | null>(null); //上傳用的input
@@ -289,84 +351,182 @@ function getFile() {
 	if (inputField && inputField!.files) {
 		let file = inputField.files[0];
 		// 發api 傳回去 +token
-		// userStore.getImgUrl(file, authStore.token);
+		userStore.getImgUrl(file);
 	}
 }
 
-// navTab + seller 畫面下所有資料
+function onStop() {
+	console.log('停止');
+}
+
+function onDelete() {
+	// userStore.deleteActivity();
+}
+
+const isCheck = computed(() => route.name === 'SellerActivityCheck');
+// 選取
+const isNewCoupon = ref<CouponType | null>(null);
+const isCoupon = computed(() => {
+	if (isCheck) {
+		if (
+			isNewCoupon.value === null &&
+			userStore.data.coupon_id &&
+			userStore.data.coupon_id !== null
+		) {
+			return couponStore.allData.find(
+				item => item._id === data.value.coupon_id
+			);
+		}
+	}
+	if (isNewCoupon && isNewCoupon.value !== null) {
+		return isNewCoupon.value;
+	}
+	return null;
+});
+
+// 交換
+function changeCoupon(item: CouponType) {
+	isNewCoupon.value = item;
+}
+
+const coupon = computed(() => {
+	return couponStore.allData.filter(item => {
+		if (!item.startDate || !item.endDate) {
+			return false;
+		}
+		let today = new Date();
+		const startDateISO = new Date(item.startDate);
+		startDateISO.setHours(0, 0, 0, 0);
+		return today < startDateISO;
+	});
+});
+const data = computed(() => userStore.data);
+
+function closeItem() {
+	userStore.data.activity_image = null;
+}
+
+// 下拉篩選 Tabs 功能
+const dropdownBtn = ref<HTMLButtonElement | null>(null);
+const dropdown = ref<HTMLDivElement | null>(null);
+
+const addNum = ref(false);
+function add() {
+	if (addNum.value === false) addNum.value = true;
+	else addNum.value = false;
+}
+
 const sellerTitleNewData = {
-	routeName: 'SellerActivityNew',
-	title: [
-		{
-			title: '活動管理',
-			path: { name: 'SellerActivity', query: { page: 1 } },
-		},
-		{
-			title: '新增活動/公告',
-		},
-	],
-	schedule: '新增活動/公告', //目前頁面
-	btn: '新增',
+	init: { 'end-bottom-btn': '儲存' },
+	navTabs: {
+		routeName: 'SellerActivityNew',
+		title: [
+			{
+				title: '活動',
+				path: { name: 'SellerActivity', query: { page: 1, type: '1' } },
+			},
+			{
+				title: '新增活動',
+			},
+		],
+		schedule: '', //目前頁面
+		breadcrumb: true,
+	},
 };
 
-// navTab + seller 畫面下所有資料
+// 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
-	routeName: 'SellerActivityNew',
-	title: [
-		{
-			title: '活動管理',
-			path: { name: 'SellerActivity', query: { page: 1 } },
-		},
-		{
-			title: '修改活動',
-		},
-	],
-	schedule: '修改活動', //目前頁面
-	btn: '新增',
+	init: { 'end-bottom-btn': '修改' },
+	navTabs: {
+		routeName: 'SellerActivityCheck',
+		title: [
+			{
+				title: '活動',
+				path: { name: 'SellerActivity', query: { page: 1, type: '1' } },
+			},
+			{
+				title: '修改活動',
+			},
+		],
+		breadcrumb: true,
+		schedule: '',
+	},
 };
-
 const navTabs = ref({}) as any;
-const init2 = ref({
-	shopTypeText: [
-		'娛樂',
-		'服飾',
-		'3C產品',
-		'食品',
-		'家具',
-		'運動',
-		'寵物',
-		'生活用品',
-		'清潔用品',
-		'其他',
-	],
-}) as any;
 const init = ref({}) as any;
-const getData = () => {
+
+// 全局的路由前置守衛，處理篩選條件不存在或資料為空的情況
+router.beforeEach((to, from, next) => {
+	next();
+});
+
+// 判斷起始日期 min
+function updateStartDateMin() {
+	const start_dateInput = document.getElementById(
+		'startDate'
+	) as HTMLInputElement | null;
+	if (start_dateInput) {
+		start_dateInput.min = getTomorrow();
+	}
+}
+
+// 判斷結束日期 min
+function updateEndDateMin() {
+	const endDateInput = document.getElementById(
+		'endDate'
+	) as HTMLInputElement | null;
+	if (endDateInput) {
+		if (typeof data.value.start_date === 'string') {
+			endDateInput.min = data.value.start_date;
+		} else {
+			endDateInput.min = getTomorrow();
+		}
+	}
+}
+
+function getTomorrow() {
+	let today = new Date();
+	const year = today.getFullYear();
+	const month = (today.getMonth() + 1).toString().padStart(2, '0');
+	const day = (today.getDate() + 1).toString().padStart(2, '0');
+	const localDate = `${year}-${month}-${day}`;
+	return localDate;
+}
+
+onMounted(() => {
+	updateStartDateMin();
+	updateEndDateMin();
+});
+
+watch(
+	() => data.value.start_date,
+	() => {
+		updateEndDateMin();
+	}
+);
+onMounted(() => {
 	if (route.matched[0].path === '/seller') {
 		if (route.name === 'SellerActivityNew') {
 			// 新增狀態
-			init.value = sellerTitleNewData;
-			navTabs.value = {
-				title: sellerTitleNewData.title,
-				schedule: sellerTitleNewData.schedule,
-				breadcrumb: true,
+			init.value = sellerTitleNewData.init;
+			navTabs.value = sellerTitleNewData.navTabs;
+			// 清空資料
+			userStore.data = {
+				activity_name: '',
+				activity_image: '',
+				start_date: null,
+				end_date: null,
+				activity_info: '',
+				coupon_id: '',
 			};
 		} else if (route.name === 'SellerActivityCheck') {
 			// 修改/查看狀態
-			init.value = sellerTitleData;
-			navTabs.value = {
-				title: sellerTitleData.title,
-				schedule: sellerTitleData.schedule,
-				breadcrumb: true,
-			};
+			init.value = sellerTitleData.init;
+			navTabs.value = sellerTitleData.navTabs;
+			userStore.getActivity(route.params.id as string);
 		}
-	} else if (route.matched[0].path === '/user') {
-		// init.value = userTitleData;
 	}
-	// userStore.getActivityAll(id, page, token);
-};
-onMounted(() => {
-	getData();
+	couponStore.getCouponAll(authStore.token);
 });
 </script>
 
@@ -379,15 +539,5 @@ onMounted(() => {
 }
 .text-date {
 	flex-shrink: 0; //禁止擠壓
-}
-.dropdown-menu {
-	height: 250px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	z-index: 10;
-	position: sticky;
-	@media (min-width: 768px) {
-		height: 200px;
-	}
 }
 </style>

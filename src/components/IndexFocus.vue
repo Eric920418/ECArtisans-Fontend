@@ -28,14 +28,12 @@
 					:keyboard="{ enabled: true }"
 					:spaceBetween="24"
 				>
-					<!-- class="indexShopSwiper" -->
 					<SwiperSlide
 						v-for="(item, index) in focusShopList"
 						:key="index"
 						:virtualIndex="index"
 						class="indexShopSwiperSlide"
 					>
-						<!-- focusShopList shopName shopAvatar product -->
 						<div class="card p-0">
 							<div
 								class="card-top d-flex justify-content-center align-items-center p-3 border-bottom"

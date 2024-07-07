@@ -60,9 +60,22 @@
 }
 
 // 按鈕設定
+.sweetalert2-btn-primary{
+ color: #fff ;
+ background-color: $primary !important;
+ border: none !important;
+ border-radius: 50rem !important;
+ padding: 8px 16px !important;
+}
+.sweetalert2-btn-primary:focus{
+ border: none !important;
+}
+
 .btn-primary{
  color: #fff ;
+ background-color: $primary ;
 }
+
 .btn{
 	border: none;
 	border-radius: 50rem;
@@ -96,7 +109,6 @@
 		color: $Neutral-03;
 	}
 }
-
 
 .form-disabled{
 	--bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
@@ -163,8 +175,7 @@ $radius-8: 0.5rem; //弧度
 	border-bottom: solid $border transparent; /* !importanté */
 	border-radius: $radius-8;
 	margin: $border;
-	box-shadow: 0px 4px 40px 0px #0000000D !important; 
-
+	// box-shadow: 0px 4px 40px 0px #0000000D !important; 
 
 	&:before {
 		content: '';
@@ -516,6 +527,10 @@ $radius-8: 0.5rem; //弧度
 	border: 2px solid $Neutral-03;
 }
 
+.icon .farTalk ,
+.icon .farTalk ,
+.icon .fasBell ,
+.icon .farBell ,
 .icon .fasHeart ,
 .icon .farHeart {
 	stroke: white;
@@ -523,11 +538,26 @@ $radius-8: 0.5rem; //弧度
 	transition: fill 0.3s ease, stroke 0.3s ease;
 	fill: $gray-900;
 }
+.icon .farTalk ,
+.icon .farTalk ,
+.icon .fasBell ,
+.icon .farBell {
+	stroke-width: 2;
+}
+
+.icon .fasHeart ,
 .icon:hover .farHeart {
 	fill: $red;
 }
-.icon .fasHeart {
-	fill: $red;
+
+.icon .fasBell ,
+.icon:hover .farBell {
+	fill: $primary;
+}
+
+.icon .fasTalk ,
+.icon:hover .farTalk {
+	fill: $secondary;
 }
 
 

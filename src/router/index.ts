@@ -31,14 +31,15 @@ import SellerActivity from '../views/SellerActivity.vue';
 import SellerActivityNew from '../views/SellerActivityNew.vue';
 import SellerProduct from '../views/SellerProduct.vue';
 import SellerProductNew from '../views/SellerProductNew.vue';
+import SellerCoupon from '../views/SellerCoupon.vue';
+import SellerCouponNew from '../views/SellerCouponNew.vue';
 
 // seller 商家所有頁面 ---------------------------------END
 
 // user
 import UserProfile from '../views/UserProfile.vue';
 import UserCollect from '../views/UserCollect.vue';
-import UserCoupon from '../views/UserCoupon.vue';
-import UserCouponNew from '../views/UserCouponNew.vue';
+import UserFollow from '../views/UserFollow.vue';
 import Component from 'vue-loading-overlay';
 import { computed } from 'vue';
 
@@ -118,19 +119,19 @@ const routes = [
 			{
 				path: 'coupon', // 優惠劵
 				name: 'SellerCoupon',
-				component: UserCoupon,
+				component: SellerCoupon,
 				meta: { requiresAuth: true, role: 'seller', seller: true },
 			},
 			{
 				path: 'coupon-new', // 新增優惠劵
 				name: 'SellerCouponNew',
-				component: UserCouponNew,
+				component: SellerCouponNew,
 				meta: { requiresAuth: true, role: 'seller', seller: true },
 			},
 			{
 				path: 'coupon/:id', // 修改/查看優惠劵
 				name: 'SellerCouponCheck',
-				component: UserCouponNew,
+				component: SellerCouponNew,
 				meta: { requiresAuth: true, role: 'seller', seller: true },
 				props: true,
 			},
@@ -195,6 +196,12 @@ const routes = [
 				component: UserCollect,
 				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 			},
+			{
+				path: 'follow', // 收藏商品
+				name: 'UserFollow',
+				component: UserFollow,
+				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
+			},
 		],
 	},
 	{
@@ -207,28 +214,22 @@ const routes = [
 		path: '/cart-check',
 		name: 'CartCheck',
 		component: CartCheck,
-		props: (route: { params: { orderData: any; }; }) => ({ orderData: route.params.orderData }),
 		// meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 	},
 
 	// 以上需會員登入。
-
-	// {
-	// 	path: '/:pathMatch(.*)*',
-	// 	component: () => import('../views/NotFound.vue'),
-	// },
-	// 重新導向
 	{
 		path: '/paymentSuccess',
 		name: 'PaymentSuccess',
 		component: PaymentSuccess,
 	},
+	// 重新導向 前往錯誤頁面版本
 	// {
 	// 	path: '/:pathMatch(.*)*',
-	// 	redirect: {
-	// 		name: 'Index',
-	// 	},
+	// 	component: () => import('../views/NotFound.vue'),
 	// },
+	// 重新導向 首頁版本 path 決定階層 ? 不確定是否會有用↓
+	// 	path: '/:pathMatch(.*)*',
 	{
 		path: '/newPage/:pathMatch(.*)*',
 		redirect: {

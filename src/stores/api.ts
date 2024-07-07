@@ -121,17 +121,12 @@ export const sellerPayment = () =>
 	handleApiResponse(apiRequest.post(`/shop/payment`));
 
 // 商家(會員)資訊	 ■
-// 9	get   /shop/${seller_id}/information	 	 商家資訊	 	 賣家端
-export const sellerAccount = (seller_id: string) =>
-	handleApiResponse(
-		apiRequest.get(
-			`/shop/${seller_id}/information`
-			// ,headers(token)
-		)
-	);
-// 9.1(補)	put   /shop/${seller_id}/information	 	 修改商家資訊	 	 賣家端
-export const sellerAccountEdit = (seller_id: string, data: any) =>
-	handleApiResponse(apiRequest.put(`/shop/${seller_id}/information`, data));
+// 9	get   /shop/information	 	 商家資訊	 	 賣家端
+export const sellerAccount = (token: string) =>
+	handleApiResponse(apiRequest.get(`/shop/information`, headers(token)));
+// 9.1(補)	put   /shop/information	 	 修改商家資訊	 	 賣家端
+export const sellerAccountEdit = (data: any, token: string) =>
+	handleApiResponse(apiRequest.put(`/shop/information`, data, headers(token)));
 
 // 商家 ■ 會員首頁 ■
 // 8	get   /shop/${seller_id}/home	 	 商家導覽	 	賣家端
@@ -343,9 +338,18 @@ export const userCollect = (user_id: string) =>
 		apiRequest.get(`/users/${user_id}/collect`)
 		// , headers(token)
 	);
+
+// 221	post  會員新增收藏商品	 	 買家端
+export const addCollect = (user_id: string, data: any) =>
+	handleApiResponse(apiRequest.post(`/users/${user_id}/collect`, data));
+
 // 23	get     /users/${user_id}/collect-shop	 	 會員關注店家	 	 買家端
 export const userFollowShops = (user_id: string) =>
 	handleApiResponse(apiRequest.get(`/users/${user_id}/collect-shop`));
+// 231	post  會員新增關注商品	 	 買家端
+export const addFollowShops = (user_id: string, data: any) =>
+	handleApiResponse(apiRequest.post(`/users/${user_id}/collect-shop`, data));
+
 // 24	delete  /users/${user_id}/collect/${product_id}	 	會員取消收藏商品 	 	買家端
 export const userCollectDelete = (user_id: string, product_id: string) =>
 	handleApiResponse(
