@@ -69,3 +69,9 @@ export interface SearchProduct extends SellerPageProductType {
 	color: string[];
 	shop_name: string; // Assuming shop_name is part of SellerPageProductType
 }
+
+export interface BannerType {
+	activity_id: string,
+	seller_id: string,
+	activity_image: string
+}

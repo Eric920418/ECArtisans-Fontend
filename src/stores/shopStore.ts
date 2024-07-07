@@ -5,7 +5,8 @@ import {
 	type SellerPageProductType,
 	type RecommendShopType,
 	type Product,
-	type SearchProduct
+	type SearchProduct,
+	type BannerType
 } from '../type/shopType';
 import { getDate } from '@/setup/globalFunction';
 
@@ -17,7 +18,8 @@ import {
 	home_newProducts, // 29 get 首頁新品推薦
 	home_followShops, // 30 get 首頁關注商家
 	productAll, // 54	get 商品總覽
-	productSearch // 56 get 商品搜尋
+	productSearch, // 56 get 商品搜尋
+	home_activities // 26 get 首頁活動圖
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -86,6 +88,7 @@ export const useShop = defineStore({
 		searchProductsData: [] as SearchProduct[],
 		recommendShopData: [] as RecommendShopType[],
 		followShopData: [] as RecommendShopType[],
+		bannerData: [] as BannerType[],
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
@@ -237,6 +240,22 @@ export const useShop = defineStore({
 					})
 					.catch((err) => {
 						this.sellerProductsData = []
+						alertStore.error(err.response.data.message);
+					});
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 獲取Banner活動
+		async getActivityBanner(): Promise<void> {
+			this.bannerData = [] 
+			try {
+				await home_activities()
+					.then((res) => {
+						this.bannerData = res.data;
+					})
+					.catch((err) => {
+						this.bannerData = []
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
