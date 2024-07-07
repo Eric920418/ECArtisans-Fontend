@@ -101,7 +101,6 @@ import {
 } from '../type/shopType';
 import Swal from 'sweetalert2';
 const collect = useCollect();
-const auth = useAuthStore();
 
 // 定義從父組件接收的props
 // const props = defineProps<{

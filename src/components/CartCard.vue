@@ -197,7 +197,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
 	(event: 'update-items', data: any): void;
-	(event: 'delete-item', index: number): void;
+	(event: 'delete-item', index: any): void;
 }>();
 
 const changeInput = ref<boolean[]>(Array(props.data.items.length).fill(false));

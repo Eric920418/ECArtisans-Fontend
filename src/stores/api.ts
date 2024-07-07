@@ -346,6 +346,10 @@ export const addCollect = (user_id: string, data: any) =>
 // 23	get     /users/${user_id}/collect-shop	 	 會員關注店家	 	 買家端
 export const userFollowShops = (user_id: string) =>
 	handleApiResponse(apiRequest.get(`/users/${user_id}/collect-shop`));
+// 231	post  會員新增關注商品	 	 買家端
+export const addFollowShops = (user_id: string, data: any) =>
+	handleApiResponse(apiRequest.post(`/users/${user_id}/collect-shop`, data));
+
 // 24	delete  /users/${user_id}/collect/${product_id}	 	會員取消收藏商品 	 	買家端
 export const userCollectDelete = (user_id: string, product_id: string) =>
 	handleApiResponse(

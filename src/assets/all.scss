@@ -527,6 +527,10 @@ $radius-8: 0.5rem; //弧度
 	border: 2px solid $Neutral-03;
 }
 
+.icon .farTalk ,
+.icon .farTalk ,
+.icon .fasBell ,
+.icon .farBell ,
 .icon .fasHeart ,
 .icon .farHeart {
 	stroke: white;
@@ -534,11 +538,26 @@ $radius-8: 0.5rem; //弧度
 	transition: fill 0.3s ease, stroke 0.3s ease;
 	fill: $gray-900;
 }
+.icon .farTalk ,
+.icon .farTalk ,
+.icon .fasBell ,
+.icon .farBell {
+	stroke-width: 2;
+}
+
+.icon .fasHeart ,
 .icon:hover .farHeart {
 	fill: $red;
 }
-.icon .fasHeart {
-	fill: $red;
+
+.icon .fasBell ,
+.icon:hover .farBell {
+	fill: $primary;
+}
+
+.icon .fasTalk ,
+.icon:hover .farTalk {
+	fill: $secondary;
 }
 
 

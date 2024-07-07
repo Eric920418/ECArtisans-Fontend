@@ -17033,6 +17033,22 @@ textarea.form-control-lg {
   fill: #ff5959;
 }
 
+.icon .fasBell,
+.icon .farBell {
+  stroke: white;
+  stroke-width: 40px;
+  transition: fill 0.3s ease, stroke 0.3s ease;
+  fill: #454545;
+}
+
+.icon:hover .farBell {
+  fill: #14b2be;
+}
+
+.icon .fasBell {
+  fill: #14b2be;
+}
+
 /* 通用的隱藏數字輸入框箭頭的樣式 */
 .hide-arrows {
   -moz-appearance: textfield; /* Firefox */

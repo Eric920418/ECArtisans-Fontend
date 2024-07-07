@@ -46,8 +46,8 @@ export const userMenu = [
 	// 	title: '購物清單',
 	// 	path: { name: 'UserOrder', query: { page: 1, type: '1' } },
 	// },
-	// {
-	// 	title: '收藏清單',
-	// 	path: { name: 'UserCollect', query: { page: 1, type: '1' } },
-	// },
+	{
+		title: '收藏清單',
+		path: { name: 'UserCollect', query: { page: 1 } },
+	},
 ];

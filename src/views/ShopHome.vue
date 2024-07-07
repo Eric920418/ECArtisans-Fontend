@@ -11,15 +11,46 @@
 					<div class="shop-img" :class="{ 'w-100': resize >= 576 }">
 						<img :src="data.seller_image" class="img-eca" />
 					</div>
-					<div>
-						<font-awesome-icon
-							:icon="['fas', 'circle-plus']"
-							class="p-2 fs-3"
-						/>
-						<font-awesome-icon
-							:icon="['fas', 'comment-dots']"
-							class="p-2 fs-3"
-						/>
+					<div class="d-flex my-2">
+						<!-- 開啟小鈴鐺?  -->
+						<svg
+							class="icon"
+							width="36"
+							height="36"
+							viewBox="0 0 36 36"
+							fill="none"
+							@click="addToFollow(data.seller_id)"
+						>
+							<!-- 背景↓ -->
+							<rect width="36" height="36" rx="18" fill="#E4E9F2" />
+							<path
+								class="farBell"
+								v-if="!follow"
+								d="M10.8643 20.5665L10.8633 20.5677L10.3936 21.1479C10.393 21.1488 10.3923 21.1496 10.3917 21.1504C9.96095 21.6786 9.87934 22.406 10.1773 23.0147C10.474 23.6207 11.0915 24 11.7612 24H15.0787C15.0787 24.7993 15.3989 25.5654 15.9708 26.1283C16.5421 26.6906 17.3128 27 18.1104 27C18.908 27 19.6787 26.6906 20.25 26.1283C20.8219 25.5654 21.1421 24.7993 21.1421 24H24.4596C25.1293 24 25.7468 23.6207 26.0435 23.0147C26.3417 22.4056 26.2597 21.6776 25.8282 21.1493C25.8279 21.1488 25.8275 21.1484 25.8272 21.1479L25.3574 20.5707C25.3571 20.5704 25.3569 20.5701 25.3567 20.5698C24.6012 19.6366 24.1898 18.4804 24.1898 17.2938V16.5C24.1898 13.8722 22.4817 11.6523 20.1196 10.8357C20.0352 9.79496 19.1553 9 18.1104 9C17.0655 9 16.1856 9.79496 16.1012 10.8357C13.7391 11.6523 12.031 13.8722 12.031 16.5V17.2938C12.031 18.481 11.6192 19.6369 10.8643 20.5665Z"
+							/>
+							<path
+								class="fasBell"
+								v-else
+								d="M10.8643 20.5665L10.8633 20.5677L10.3936 21.1479C10.393 21.1488 10.3923 21.1496 10.3917 21.1504C9.96095 21.6786 9.87934 22.406 10.1773 23.0147C10.474 23.6207 11.0915 24 11.7612 24H15.0787C15.0787 24.7993 15.3989 25.5654 15.9708 26.1283C16.5421 26.6906 17.3128 27 18.1104 27C18.908 27 19.6787 26.6906 20.25 26.1283C20.8219 25.5654 21.1421 24.7993 21.1421 24H24.4596C25.1293 24 25.7468 23.6207 26.0435 23.0147C26.3417 22.4056 26.2597 21.6776 25.8282 21.1493C25.8279 21.1488 25.8275 21.1484 25.8272 21.1479L25.3574 20.5707C25.3571 20.5704 25.3569 20.5701 25.3567 20.5698C24.6012 19.6366 24.1898 18.4804 24.1898 17.2938V16.5C24.1898 13.8722 22.4817 11.6523 20.1196 10.8357C20.0352 9.79496 19.1553 9 18.1104 9C17.0655 9 16.1856 9.79496 16.1012 10.8357C13.7391 11.6523 12.031 13.8722 12.031 16.5V17.2938C12.031 18.481 11.6192 19.6369 10.8643 20.5665Z"
+							/>
+						</svg>
+
+						<!-- 聊聊?  -->
+						<svg
+							class="icon"
+							width="36"
+							height="36"
+							viewBox="0 0 36 36"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<!-- 背景↓ -->
+							<rect width="36" height="36" rx="18" fill="#E4E9F2" />
+							<path
+								class="farTalk"
+								d="M13.4484 25.3137L13.4495 25.3132C14.0068 25.0708 14.5047 24.7955 14.9002 24.5443C15.869 24.8392 16.9132 24.9992 18.0005 24.9992C22.7672 24.9992 27 21.8264 27 17.4996C27 13.1729 22.7672 10 18.0005 10C13.2338 10 9.00093 13.1729 9.00093 17.4996C9.00093 19.0184 9.54096 20.4149 10.4393 21.5712C10.3489 21.9912 10.1704 22.3846 9.96733 22.722C9.81917 22.9651 9.67545 23.1577 9.57451 23.2808L9.57449 23.2808L9.56984 23.2865C9.52075 23.3473 9.48205 23.3905 9.45751 23.4173L9.44625 23.4295L9.44165 23.4349L9.43754 23.439L9.4375 23.439L9.42983 23.4468C9.01538 23.8705 8.87924 24.5078 9.11535 25.0744C9.34736 25.6313 9.89051 25.9992 10.5009 25.9992C11.5896 25.9992 12.6358 25.6657 13.4484 25.3137Z"
+							/>
+						</svg>
 					</div>
 				</div>
 				<div class="p-3 flex-grow-1">
@@ -42,7 +73,7 @@
 		<div
 			class="col-12 d-flex justify-content-center align-items-center my-sm-3 my-md-5 p-0"
 		>
-			<div class="row container m-0 p-0">
+			<div class="row container m-0 p-0 z-1">
 				<div
 					class="col-6 col-md-4 col-xl-3 px-2 py-3"
 					v-for="(item, index) in paginatedData"
@@ -77,17 +108,25 @@ import {
 	type SellerPageProductType,
 	type RecommendShopType,
 } from '../type/shopType';
-
+import Swal from 'sweetalert2';
 // stores
-import { useShop, useProduct, useAuthStore, useResize } from '@/stores/index';
+import {
+	useShop,
+	useProduct,
+	useAuthStore,
+	useResize,
+	useCollect,
+	go,
+} from '@/stores/index';
 
 const { resize } = useResize();
 const route = useRoute();
 const router = useRouter();
 
 const authStore = useAuthStore();
-const userStore = useProduct();
+const collectStore = useCollect();
 const shopStore = useShop();
+
 interface ProductType {
 	avatar: string;
 	comment: string;
@@ -97,169 +136,43 @@ interface ProductType {
 	price: number;
 	stars: number;
 }
-const ProductList = ref<ProductType[]>([
-	{
-		avatar:
-			'https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__',
-		comment: '【當日出貨】鞋子防水收納袋 加厚 升級版',
-		company: '生活小舖',
-		name: 'Lina執行長',
-		sold: 100,
-		price: 100,
-		stars: 5.0,
-	},
-	{
-		avatar:
-			'https://s3-alpha-sig.figma.com/img/f443/14cb/95829dd257c8bbdc7bad432a3950f897?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NL6Zl40xRyI2F-B8kMnTb00FjuousDku2R182mh7DOyVFd6s6ugPN4fIG8TNJa0MFnKkD2q6Q6I1MFGI1wJu7loxezMpt-gcDfIMSG7N1c1jcSJK-WJVA8YgkwVQmYYnQVUWhfSywrr6jHezYHGcpbezAav-grhBYvHFDHZ8FDlDN73iCq0NX1CkrSwMYkAP8iYRcz8TH2VX~RFllrL6zM6NzlETuW0ab7T-c7rJvM6U1A-meiKRPe5NDz-cIbovJTLvUoWVl0oZRT8~vr7sQ6-JCy-pwDQ~zqFogelcqfIRQdHWB834y0xI0X5MvUJdkf4EBGgH6eaiWffkQK2Ecg__',
-		comment: '【招財轉運】純銀 六字箴言 戒指 女生 ',
-		company: 'subwhat行銷公司',
-		name: 'Zoe活動長',
-		sold: 20,
-		price: 2000,
-		stars: 4.3,
-	},
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
-		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
-		company: '油土伯',
-		name: 'HowBig',
-		sold: 100,
-		price: 100,
-		stars: 1.2,
-	},
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user01.jpg?raw=true',
-		comment: '讓我們公司的產品以更活潑的方式讓使用者認識。 ',
-		company: '清心寡欲設計公司',
-		name: 'Lina執行長',
-		sold: 100,
-		price: 100,
-		stars: 5.0,
-	},
 
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user02.jpg?raw=true',
-		comment: '讓我們一個月內提高10000個追踪者，客戶體驗反饋很正面！ ',
-		company: 'subwhat行銷公司',
-		name: 'Zoe活動長',
-		sold: 100,
-		price: 100,
-		stars: 2.3,
-	},
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
-		comment: '可以用聊天機器人玩這麼豐富的行銷活動！ 太贊拉～',
-		company: '油土伯',
-		name: 'HowBig',
-		sold: 1220,
-		price: 100,
-		stars: 3.6,
-	},
-	{
-		avatar:
-			'https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__',
-		comment: '【當日出貨】鞋子防水收納袋 加厚 升級版',
-		company: '生活小舖',
-		name: 'Lina執行長',
-		sold: 100,
-		price: 100,
-		stars: 2.6,
-	},
-	{
-		avatar:
-			'https://s3-alpha-sig.figma.com/img/f443/14cb/95829dd257c8bbdc7bad432a3950f897?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NL6Zl40xRyI2F-B8kMnTb00FjuousDku2R182mh7DOyVFd6s6ugPN4fIG8TNJa0MFnKkD2q6Q6I1MFGI1wJu7loxezMpt-gcDfIMSG7N1c1jcSJK-WJVA8YgkwVQmYYnQVUWhfSywrr6jHezYHGcpbezAav-grhBYvHFDHZ8FDlDN73iCq0NX1CkrSwMYkAP8iYRcz8TH2VX~RFllrL6zM6NzlETuW0ab7T-c7rJvM6U1A-meiKRPe5NDz-cIbovJTLvUoWVl0oZRT8~vr7sQ6-JCy-pwDQ~zqFogelcqfIRQdHWB834y0xI0X5MvUJdkf4EBGgH6eaiWffkQK2Ecg__',
-		comment: '【招財轉運】純銀 六字箴言 戒指 女生 ',
-		company: 'subwhat行銷公司',
-		name: 'Zoe活動長',
-		sold: 20,
-		price: 2000,
-		stars: 2.2,
-	},
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
-		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
-		company: '油土伯',
-		name: 'HowBig',
-		sold: 130,
-		price: 100,
-		stars: 3.6,
-	},
-	{
-		avatar:
-			'https://s3-alpha-sig.figma.com/img/40ae/f695/e5547364fad7cdc20181105b21f13ca9?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=E5lf~SCzrEZPaG8NHjip5RNEiifTHGBN~JK-e6Akpy3KdYbeQdVTzPSBCZ5pgk96escSZlka2~dLIGum8ZNcupC9Pg70q2DH5V6NiLR9ZnuC5LaHt-7DmR91Xim~X2U2ujDuYX67GqihFFCUFO2rhGwwPeSWdTXoGcOy-A3RQivFQkS5G0SQIQ5yY9c3-8tSwWqcb6RGdlAnEtDnJas~r3ph-WivS53TdEFzV870EjOgEOcmLX8uz6JPr-U~vt3TAWeW26JLQexAi6v5UgXCFDHuUAch6WuTYzoicvcihnohmCALU6Xa7R4y8xD~wLSva-UAInZ8Phjf1tj1dw-dtQ__',
-		comment: '【當日出貨】鞋子防水收納袋 加厚 升級版',
-		company: '生活小舖',
-		name: 'Lina執行長',
-		sold: 5000,
-		price: 100,
-		stars: 5.0,
-	},
-	{
-		avatar:
-			'https://s3-alpha-sig.figma.com/img/f443/14cb/95829dd257c8bbdc7bad432a3950f897?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NL6Zl40xRyI2F-B8kMnTb00FjuousDku2R182mh7DOyVFd6s6ugPN4fIG8TNJa0MFnKkD2q6Q6I1MFGI1wJu7loxezMpt-gcDfIMSG7N1c1jcSJK-WJVA8YgkwVQmYYnQVUWhfSywrr6jHezYHGcpbezAav-grhBYvHFDHZ8FDlDN73iCq0NX1CkrSwMYkAP8iYRcz8TH2VX~RFllrL6zM6NzlETuW0ab7T-c7rJvM6U1A-meiKRPe5NDz-cIbovJTLvUoWVl0oZRT8~vr7sQ6-JCy-pwDQ~zqFogelcqfIRQdHWB834y0xI0X5MvUJdkf4EBGgH6eaiWffkQK2Ecg__',
-		comment: '【招財轉運】純銀 六字箴言 戒指 女生 ',
-		company: 'subwhat行銷公司',
-		name: 'Zoe活動長',
-		sold: 20,
-		price: 2000,
-		stars: 4.3,
-	},
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
-		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
-		company: '油土伯',
-		name: 'HowBig',
-		sold: 100,
-		price: 100,
-		stars: 1.2,
-	},
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user01.jpg?raw=true',
-		comment: '讓我們公司的產品以更活潑的方式讓使用者認識。 ',
-		company: '清心寡欲設計公司',
-		name: 'Lina執行長',
-		sold: 100,
-		price: 100,
-		stars: 5.0,
-	},
-	{
-		avatar:
-			'https://s3-alpha-sig.figma.com/img/f443/14cb/95829dd257c8bbdc7bad432a3950f897?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NL6Zl40xRyI2F-B8kMnTb00FjuousDku2R182mh7DOyVFd6s6ugPN4fIG8TNJa0MFnKkD2q6Q6I1MFGI1wJu7loxezMpt-gcDfIMSG7N1c1jcSJK-WJVA8YgkwVQmYYnQVUWhfSywrr6jHezYHGcpbezAav-grhBYvHFDHZ8FDlDN73iCq0NX1CkrSwMYkAP8iYRcz8TH2VX~RFllrL6zM6NzlETuW0ab7T-c7rJvM6U1A-meiKRPe5NDz-cIbovJTLvUoWVl0oZRT8~vr7sQ6-JCy-pwDQ~zqFogelcqfIRQdHWB834y0xI0X5MvUJdkf4EBGgH6eaiWffkQK2Ecg__',
-		comment: '【招財轉運】純銀 六字箴言 戒指 女生 ',
-		company: 'subwhat行銷公司',
-		name: 'Zoe活動長',
-		sold: 20,
-		price: 2000,
-		stars: 4.3,
-	},
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user03.jpg?raw=true',
-		comment: '經營了好久的IG，一直無法提升粉絲數！ 太贊拉～',
-		company: '油土伯',
-		name: 'HowBig',
-		sold: 100,
-		price: 100,
-		stars: 1.2,
-	},
-	{
-		avatar:
-			'https://github.com/hexschool/webLayoutTraining1st/blob/master/chatTalker_images/user01.jpg?raw=true',
-		comment: '讓我們公司的產品以更活潑的方式讓使用者認識。 ',
-		company: '清心寡欲設計公司',
-		name: 'Lina執行長',
-		sold: 100,
-		price: 100,
-		stars: 5.0,
-	},
-]);
+const isUser = computed(() => {
+	return authStore.accountType === 'user';
+});
+
+const isLoggedIn = computed(() => {
+	return authStore.isLoggedIn;
+});
+
+const follow = ref(false); // 預設為未收藏 -> 待補完整資料
+
+function goUserLogin() {
+	Swal.fire({
+		text: '請先加入會員',
+		confirmButtonText: '確定',
+		customClass: {
+			confirmButton: 'sweetalert2-btn-primary',
+		},
+	}).then(result => {
+		if (result.isConfirmed) {
+			go({ name: 'UserLogin' });
+		}
+	});
+}
+
+const addToFollow = (shop_id: string) => {
+	if (!isUser.value || !isLoggedIn.value) {
+		goUserLogin();
+	} else {
+		follow.value = !follow.value;
+		if (follow.value) {
+			collectStore.addFollow(shop_id);
+		} else {
+			collectStore.deleteFollow(shop_id);
+		}
+	}
+};
 
 const isExpanded = ref(false);
 const showButton = ref(false);

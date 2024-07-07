@@ -120,12 +120,7 @@
 						:key="index"
 						class="col-6 col-md-4 col-lg-4 col-xl-3 p-1 pb-4 m-0 z-1"
 					>
-						<Card
-							:item="item"
-							@click="
-								$go({ name: 'ShopProduct', params: { id: item.products_id } })
-							"
-						/>
+						<Card :item="item" />
 					</div>
 					<div class="col-12 mt-5">
 						<!-- 使用 Pagenation 子組件來顯示分頁 -->
@@ -341,7 +336,7 @@ watch(
 	() => route.query.page,
 	newPage => {
 		if (newPage === '0') {
-			// 将 page 改为 1
+			// 將 page 改为 1
 			router.replace({ query: { ...route.query, page: '1' } });
 		}
 	}

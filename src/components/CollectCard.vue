@@ -1,13 +1,8 @@
 <template>
-	<div v-if="item" class="card shadow-sm card-line h-100">
-		<!-- SVG 更換顏色相關：
-				https://uu9924079.medium.com/%E5%9C%A8-hover-%E6%99%82%E6%9B%B4%E6%94%B9-svg-%E9%A1%8F%E8%89%B2%E7%9A%84%E5%B9%BE%E7%A8%AE%E6%96%B9%E5%BC%8F-15eb425c4977 
-				https://css-tricks.com/change-color-of-svg-on-hover/
-				備註：因為有外框線，如要調整比較複雜，故這裡直接使用<svg>調整。	
-			-->
-		<button
-			class="position-absolute top-0 end-0 p-1 me-1"
-			@click="addToFavorites"
+	<div v-if="item" class="card shadow-sm card-line">
+		<div
+			class="position-absolute top-0 end-0 p-1 me-1 z-5"
+			@click="addToFavorites(item._id)"
 		>
 			<!-- 需命名 icon + 後面的 farHeart 才會有hover -->
 			<svg
@@ -29,21 +24,16 @@
 					d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"
 				/>
 			</svg>
-		</button>
-		<div
-			@click="$go({ name: 'ShopProduct', params: { id: item.products_id } })"
-		>
-			<!-- overflow-hidden 雖然可以超出隱藏，但線條會不見，所以直接對圖片導圓角 -->
-			<!-- 使用 圖片 的寫法 img-eca 是為了讓內容滿版置中，外層 card-top 限制圖片高度跟大小 -->
-			<div class="card-top overflow-hidden position-relative">
-				<img :src="item.avatar" class="img-eca" alt="..." />
+		</div>
+		<div @click="$go({ name: 'ShopProduct', params: { id: item._id } })">
+			<div class="card-top overflow-hidden">
+				<img :src="item.image[0]" class="img-eca" alt="..." />
 			</div>
-			<!-- 使用 背景圖 的寫法 img-eca 是為了讓內容滿版置中，外層 div 限制圖片高度跟大小 -->
 			<div class="card-body m-0 row">
 				<div class="mx-0 px-0">
-					<h3 class="title mb-1 p-0">{{ item.comment }}</h3>
+					<h3 class="title mb-1 p-0">{{ item.productName }}</h3>
 				</div>
-				<div
+				<!--	<div
 					class="d-flex align-items-center justify-content-between mb-1 p-0 neutral-02 text-card-shop"
 				>
 					<p class="text-shop mb-0">
@@ -51,20 +41,20 @@
 					</p>
 					<p class="text-sold mb-0">&emsp;已售出 {{ item.sold }}</p>
 				</div>
-				<p class="text-card-price p-0">NT${{ item.price }}</p>
+				<p class="text-card-price p-0">NT${{ item.price }}</p> -->
 				<div class="row align-items-center justify-content-between m-0 p-0">
-					<div class="col-12 col-sm-3 p-0 mb-1 mb-sm-0 d-flex">
+					<!-- <div class="col-12 col-sm-3 p-0 mb-1 mb-sm-0 d-flex">
 						<p
 							class="text-card-coupon btn-Bg-active rounded-1 text-primary mb-0"
 						>
 							免運券
 						</p>
-					</div>
-					<div class="col-12 col-sm-9 p-0 d-flex justify-content-sm-end">
+					</div> -->
+					<!-- <div class="col-12 col-sm-9 p-0 d-flex justify-content-sm-end">
 						<Star :stars="item.stars" />
-					</div>
+					</div> -->
 				</div>
-				<div class="mt-3 mb-1" v-if="goCart">
+				<div class="mt-3 mb-1">
 					<button class="btn btn-outline-primary w-100">加入購物車</button>
 				</div>
 			</div>
@@ -73,37 +63,39 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { useCollect } from '@/stores/index';
+import { computed, ref } from 'vue';
+import { useCollect, useAuthStore, go } from '@/stores/index';
 import { alertStore } from '@/main';
 import Star from './Star.vue';
-
+import { type collectType } from '../type/collectType';
+import Swal from 'sweetalert2';
 const collect = useCollect();
-
+const emit = defineEmits<{
+	(event: 'remove', seller_id: string): void;
+}>();
 // 定義從父組件接收的props
 const props = defineProps<{
-	item: {
-		products_id: string;
-		avatar: string;
-		comment: string;
-		company: string;
-		sold: number;
-		price: number;
-		stars: number;
-	};
-	goCart?: boolean;
+	item: collectType;
 }>();
 
-const favorited = ref(false); // 預設為未收藏 -> 待補完整資料
+const authStore = useAuthStore();
+const isUser = computed(() => {
+	return authStore.accountType === 'user';
+});
 
-const addToFavorites = () => {
+const isLoggedIn = computed(() => {
+	return authStore.isLoggedIn;
+});
+
+const favorited = ref(true); // 預設為未收藏 -> 待補完整資料
+
+const addToFavorites = (products_id: string) => {
 	favorited.value = !favorited.value;
 	if (favorited.value) {
-		// 待補新增邏輯
-		alertStore.success('focusProductOK');
+		collect.addCollect(products_id);
 	} else {
-		// 待補刪除的邏輯
-		alertStore.success('focusProductFail');
+		collect.deleteCollect(products_id);
+		emit('remove', products_id);
 	}
 };
 </script>
@@ -121,11 +113,11 @@ const addToFavorites = () => {
 }
 .card-body {
 	padding: 8px 8px 12px 8px !important;
-	min-height: 176px;
+	// min-height: 176px;
 	@media (min-width: 768px) {
 		//依照 Breakpoints md以上 高度是 204px
 		padding: 12px 12px 12px 12px !important;
-		min-height: 196px;
+		// min-height: 196px;
 	}
 }
 .text-shop,

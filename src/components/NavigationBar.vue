@@ -607,6 +607,9 @@
 															resize < 1200,
 														'dropdown-item overflow-y-hidden': resize >= 1200,
 													}"
+													@click="
+														$go({ name: 'UserCollect', query: { page: 1 } })
+													"
 												>
 													收藏商品
 												</a>
@@ -621,6 +624,9 @@
 															resize < 1200,
 														'dropdown-item overflow-y-hidden': resize >= 1200,
 													}"
+													@click="
+														$go({ name: 'UserFollow', query: { page: 1 } })
+													"
 												>
 													關注商家
 												</a>
