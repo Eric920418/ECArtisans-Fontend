@@ -1,10 +1,5 @@
 <template>
-	<div
-		v-for="(order, index) in formattedData"
-		:key="index"
-		class="card shadow-sm card-hover"
-		@click="order.go ? $go(order.go) : ''"
-	>
+	<div class="card shadow-sm card-hover" @click="order.go ? $go(order.go) : ''">
 		<div class="row m-0 p-0">
 			<div v-if="order.img" class="productCard-img-100 p-0">
 				<img :src="order.img" class="img-eca" />
@@ -43,10 +38,7 @@
 						</p>
 					</div>
 				</div>
-				<div
-					v-if="order.btn"
-					class="d-flex p-0 d-flex justify-content-end mt-2"
-				>
+				<div class="d-flex p-0 d-flex justify-content-end mt-2">
 					<button
 						v-for="(btnItem, btnIndex) in order.btn"
 						:key="btnIndex"
@@ -63,8 +55,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import router from '@/router';
+import { confirmed } from '@vee-validate/rules';
 
 export interface BtnType {
 	title: string;
@@ -96,7 +89,8 @@ const props = defineProps<{
 	data: OrderCardType;
 }>();
 
-const formattedData = ref<FormattedOrderCardType[]>([]);
+// const formattedData = ref<FormattedOrderCardType[]>([]);
+const order = computed(() => formatCardData(props.data));
 
 const formatCardData = (orderItem: OrderCardType): FormattedOrderCardType => {
 	const commonData = {
@@ -177,15 +171,15 @@ const formatCardData = (orderItem: OrderCardType): FormattedOrderCardType => {
 	}
 };
 
-watch(
-	() => props.data,
-	newValue => {
-		if (Array.isArray(newValue)) {
-			formattedData.value = newValue.map(formatCardData);
-		}
-	},
-	{ immediate: true, deep: true }
-);
+// watch(
+// 	() => props.data,
+// 	newValue => {
+// 		if (Array.isArray(newValue)) {
+// 			formattedData.value = newValue.map(formatCardData);
+// 		}
+// 	},
+// 	{ immediate: true, deep: true }
+// );
 
 const getDeliveryMethod = (delivery: number | undefined): string => {
 	switch (delivery) {

@@ -423,6 +423,10 @@ const addItemToCart = () => {
 			Swal.fire({
 				icon: 'error',
 				text: '請選擇一個規格',
+				confirmButtonText: '確定',
+				customClass: {
+					confirmButton: 'sweetalert2-btn-primary',
+				},
 			});
 			return;
 		}

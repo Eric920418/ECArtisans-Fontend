@@ -255,7 +255,7 @@
 											<span class="text-danger">*</span>
 										</label>
 										<textarea
-											class="form-control"
+											class="form-control scrollbar"
 											placeholder="請輸入..."
 											id="introduce"
 											v-model="data.introduce"

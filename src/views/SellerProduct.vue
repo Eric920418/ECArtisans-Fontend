@@ -40,7 +40,8 @@
 					</router-link>
 				</div>
 			</div>
-			<div class="p-4 table table-responsive">
+			<NoData text="快來新增商品吧!" v-if="filteredData.length === 0" />
+			<div class="p-4 table table-responsive" v-else>
 				<Card
 					v-for="(tableItme, tableIndex) in filteredData"
 					:key="tableIndex"
@@ -60,6 +61,7 @@ import Card from '../components/SellerProductCard.vue';
 // 組件
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
+import NoData from '@/components/NoData.vue';
 
 // stores
 import { useProduct, useAuthStore, useResize } from '@/stores/index';

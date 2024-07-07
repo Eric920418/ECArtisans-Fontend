@@ -2,15 +2,17 @@
 	<div class="row g-3 mx-0 mb-0 pb-0">
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" />
-			<div class="my-0">
-				<div class="row m-0 p-0">
-					<div
-						v-for="orderItem in paginatedData"
-						:key="orderItem._id"
-						class="col-12 col-md-6 p-3 m-0"
-					>
-						<Card :data="orderItem" />
-					</div>
+			<NoData
+				text="還沒有人購買商品，快去建立活動增加曝光度吧!"
+				v-if="filteredData.length === 0"
+			/>
+			<div class="row m-0 p-2" v-else>
+				<div
+					v-for="orderItem in filteredData"
+					:key="orderItem._id"
+					class="col-12 col-md-6 p-3 m-0"
+				>
+					<Card :data="orderItem" />
 				</div>
 				<div class="col-12">
 					<!-- 使用 Pagenation 子組件來顯示分頁 -->
@@ -32,6 +34,7 @@ import { onMounted, ref, computed } from 'vue';
 import NavTabs from '@/components/NavTabs.vue';
 import Card from '@/components/OrderCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
+import NoData from '@/components/NoData.vue';
 
 import { useRoute, useRouter } from 'vue-router';
 

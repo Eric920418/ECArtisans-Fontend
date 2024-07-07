@@ -3,7 +3,11 @@
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" />
 			<div class="my-0">
-				<div class="row m-0 p-0">
+				<NoData
+					text="嗷嗷待哺的買家缺優惠劵!"
+					v-if="paginatedData.length === 0"
+				/>
+				<div class="row m-0 p-0" v-else>
 					<div
 						v-for="couponItem in paginatedData"
 						:key="couponItem._id"
@@ -11,16 +15,16 @@
 					>
 						<Card :data="formatCardData(couponItem)" />
 					</div>
-				</div>
-				<div class="col-12">
-					<!-- 使用 Pagenation 子組件來顯示分頁 -->
-					<!-- 當 Pagenation 組件中的頁碼更新時，子組件傳遞"update:currentPage"事件並觸發 updatePage 方法 -->
-					<Pagenation
-						:currentPage="currentPage"
-						:perPage="perPage"
-						:totalRows="totalRows"
-						@update:currentPage="updatePage"
-					/>
+					<div class="col-12">
+						<!-- 使用 Pagenation 子組件來顯示分頁 -->
+						<!-- 當 Pagenation 組件中的頁碼更新時，子組件傳遞"update:currentPage"事件並觸發 updatePage 方法 -->
+						<Pagenation
+							:currentPage="currentPage"
+							:perPage="perPage"
+							:totalRows="totalRows"
+							@update:currentPage="updatePage"
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -33,6 +37,7 @@ import { useRoute, useRouter } from 'vue-router';
 import NavTabs from '@/components/NavTabs.vue';
 import Card from '@/components/ActivityCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
+import NoData from '@/components/NoData.vue';
 
 import { useCoupon, useAuthStore, dayAndToDay } from '@/stores/index';
 import { type CouponType } from '@/type/couponType';

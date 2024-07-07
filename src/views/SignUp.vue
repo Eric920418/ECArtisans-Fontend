@@ -478,7 +478,7 @@
 									v-bind="field"
 									placeholder="請輸入..."
 									id="introduce"
-									class="form-control"
+									class="form-control scrollbar"
 									style="height: 6.5em; resize: none"
 									:class="{ 'is-invalid': errors[0] }"
 									name="comment"

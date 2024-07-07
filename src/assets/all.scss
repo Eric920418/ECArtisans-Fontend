@@ -472,6 +472,7 @@ $radius-8: 0.5rem; //弧度
 .fs-10 {
 	font-size:  0.625em; //10px
 }
+.minImg ,
 .card-newImg-delete, // 可以刪除
 .card-newImg-disabled,// 不可修正
 .card-newImg{
@@ -491,6 +492,7 @@ $radius-8: 0.5rem; //弧度
 		margin: 0px;
 	}
 }
+
 .w-fit{
 	width: fit-content;
 }
@@ -526,7 +528,12 @@ $radius-8: 0.5rem; //弧度
 	color: $Neutral-03;
 	border: 2px solid $Neutral-03;
 }
-
+.minImg {
+	width: 50px;
+	height: 50px;
+	color: $Neutral-03;
+	border: 2px solid $Neutral-03;
+}
 .icon .farTalk ,
 .icon .farTalk ,
 .icon .fasBell ,
@@ -542,7 +549,7 @@ $radius-8: 0.5rem; //弧度
 .icon .farTalk ,
 .icon .fasBell ,
 .icon .farBell {
-	stroke-width: 2;
+	stroke-width: 1.5;
 }
 
 .icon .fasHeart ,

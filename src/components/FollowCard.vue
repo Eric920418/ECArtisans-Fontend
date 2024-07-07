@@ -3,15 +3,15 @@
 		<div class="position-absolute top-0 end-0 p-1 me-1 z-5">
 			<!-- 開啟小鈴鐺?  -->
 			<svg
-				class="icon"
+				class="icon p-0 m-0"
 				width="36"
 				height="36"
-				viewBox="0 0 36 36"
+				viewBox="-2 5 30 30"
 				fill="none"
 				@click="addToFollow(item._id)"
 			>
 				<!-- 背景↓ -->
-				<rect width="36" height="36" rx="18" fill="#E4E9F2" />
+				<!-- <rect width="36" height="36" rx="18" fill="#E4E9F2" /> -->
 				<path
 					class="farBell"
 					v-if="!follow"

@@ -6,101 +6,118 @@
 				<div class="m-3 card shadow-sm m-3 p-4 p-sm-5">
 					<!-- 表格 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
-						<!-- @submit="onSubmit" -->
 						<div
 							class="d-flex justify-content-between align-items-center mb-4 p-0"
 						>
-							<h3 class="fs-5 p-0 neutral-01 mb-0">{{ init.schedule }}</h3>
+							<h3 class="fs-5 p-0 neutral-01 mb-0">
+								{{ init.schedule }}
+							</h3>
+
 							<div
 								v-if="data._id"
 								class="d-flex justify-content-center align-items-center"
 							>
-								<!-- ↓之後會靠邏輯判斷只會出現一個 -->
-								<!-- <a class="a me-3" @click="deleteProduct()">
-									刪除商品
-								</a> -->
 								<button
-									disabled
 									class="btn btn-primary px-4"
 									v-if="data.isOnshelf === false"
-									@click="isOnshelf(true)"
+									@click="isOnshelf(data.isOnshelf)"
 								>
 									商品上架
 								</button>
 								<button
-									disabled
 									class="btn btn-primary px-4"
 									v-if="data.isOnshelf === true"
-									@click="isOnshelf(false)"
+									@click="isOnshelf(data.isOnshelf)"
 								>
 									立即下架
 								</button>
 							</div>
 						</div>
 						<div class="col-12 p-0 m-0 mb-4" v-if="data._id">
-							<p>編號：{{ data._id }}</p>
+							<div class="d-flex justify-content-start align-items-center">
+								<div
+									v-if="data.isOnshelf === false"
+									class="icon-delete d-flex justify-content-center align-items-center me-2"
+									@click="deleteProduct"
+								>
+									<font-awesome-icon :icon="['fas', 'trash']" class="icon" />
+								</div>
+								<p class="m-0">編號：{{ data._id }}</p>
+							</div>
 						</div>
+
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
 							<label for="couponName" class="mb-1">
 								上傳圖片
 								<span class="text-danger">*</span>
 							</label>
 							<div class="row m-0" style="margin-bottom: 38px">
-								<template v-if="data.image.length !== 0">
+								<div class="col-12 d-flex p-0 flex-wrap flex-xl-nowrap">
+									<template v-if="data.image.length !== 0">
+										<VueDraggable
+											ref="el"
+											v-model="data.image"
+											:disabled="data.image.length === 1"
+											:animation="150"
+											ghostClass="ghost"
+											class="d-flex flex-wrap p-0"
+										>
+											<div
+												v-for="(imageItme, imageIndex) in data.image"
+												:key="imageIndex"
+												class="card-newImg-delete me-3 my-2 p-0 d-flex align-items-center justify-content-center position-relative"
+												:style="{
+													'background-image': `url(${imageItme})`,
+												}"
+											>
+												<!-- 刪除 手機板 右上角的刪除 -->
+												<font-awesome-icon
+													v-if="resize < 768"
+													@click="closeItem('image', imageIndex)"
+													:icon="['fas', 'circle-xmark']"
+													class="fs-5 d-md-none position-absolute top-0 start-100 translate-middle gray p-2"
+												/>
+
+												<!-- 刪除 滑鼠移入時出現 -->
+												<font-awesome-icon
+													v-if="resize >= 768"
+													:icon="['fas', 'trash-can']"
+													class="fs-4 icon"
+													@click="closeItem('image', imageIndex)"
+												/>
+											</div>
+										</VueDraggable>
+									</template>
+
 									<div
-										v-for="(imageItme, imageIndex) in data.image"
-										:key="imageIndex"
-										class="card-newImg-delete me-3 my-2 p-0 d-flex align-items-center justify-content-center position-relative"
-										:style="{
-											'background-image': `url(${imageItme})`,
-										}"
+										v-if="data.image.length < 4"
+										class="card-newImg me-3 my-2"
+										@click="uploadFile"
 									>
-										<!-- 刪除 手機板 右上角的刪除 -->
 										<font-awesome-icon
-											v-if="resize < 768"
-											@click="closeItem('image', imageIndex)"
-											:icon="['fas', 'circle-xmark']"
-											class="fs-5 d-md-none position-absolute top-0 start-100 translate-middle gray p-2"
+											:icon="['fas', 'image']"
+											class="fa-image"
 										/>
-
-										<!-- 刪除 滑鼠移入時出現 -->
-										<font-awesome-icon
-											v-if="resize >= 768"
-											:icon="['fas', 'trash-can']"
-											class="fs-4 icon"
-											@click="closeItem('image', imageIndex)"
-										/>
+										<p>選擇圖片</p>
+										<p>({{ data.image ? data.image.length : 0 }}/4)</p>
 									</div>
-								</template>
-
-								<div
-									v-if="data.image.length < 4"
-									class="card-newImg me-3 my-2"
-									@click="uploadFile"
-								>
-									<font-awesome-icon
-										:icon="['fas', 'image']"
-										class="fa-image"
+									<input
+										class="form-control"
+										type="file"
+										id="formFile"
+										ref="inputFieldRef"
+										hidden
+										@change="getFile"
+										autocomplete="photo"
+										accept="image/*"
 									/>
-									<p>選擇圖片</p>
-									<p>({{ data.image ? data.image.length : 0 }}/4)</p>
-								</div>
-								<input
-									class="form-control"
-									type="file"
-									id="formFile"
-									ref="inputFieldRef"
-									hidden
-									@change="getFile"
-									autocomplete="photo"
-									accept="image/*"
-								/>
-								<div class="card-directions w-fit py-3">
-									<ul>
-										<li>圖片大小：3MB 內</li>
-										<li>檔案限制：JPEG, PNG</li>
-										<li>拖拉商品圖片至第一張以設定封面圖片</li>
-									</ul>
+									<div class="card-directions w-fit py-3">
+										<ul>
+											<li>圖片大小：3MB 內</li>
+											<li>檔案限制：JPEG, PNG</li>
+											<li>拖拉商品圖片至第一張以設定封面圖片</li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -357,7 +374,7 @@
 								<textarea
 									id="introduce"
 									v-bind="field"
-									class="form-control"
+									class="form-control scrollbar"
 									:class="{ 'is-invalid': errors[0] }"
 									name="comment"
 									maxlength="500"
@@ -410,133 +427,205 @@
 										:disabled="formatIndex === 0"
 									></button>
 								</div>
-								<div class="col-12 ps-0 pe-0 pe-md-3">
-									<label :for="'Specification_' + formatIndex" class="mb-1">
-										規格
-										<span class="text-danger">*</span>
-									</label>
 
-									<div class="d-flex form-control-end">
-										<!-- rules: max:10 限制字數 -->
-										<input
-											:id="'Specification_' + formatIndex"
-											name="規格"
-											type="text"
-											v-model="formatItem.title"
-											class="form-control"
-											aria-label="規格"
-											placeholder="請輸入"
-											maxlength="20"
-											:class="{
-												'is-invalid': formatItem.title === '',
-											}"
-										/>
-										<span
-											class="input-group-text ps-0"
-											:class="{
-												'is-invalid-text': formatItem.title === '',
-											}"
-										>
-											<p class="m-0 p-0 ps-2 border-start border-start-1 fs-12">
-												{{ formatItem.title ? formatItem.title.length : 0 }} /
-												20
-											</p>
-										</span>
-									</div>
-								</div>
 								<div
-									class="col-6 col-md-3 ps-0 pe-3 mt-2"
-									v-if="formatItem.color"
+									class="col-12 ps-0 pe-0 d-flex align-items-center justify-content-center flex-wrap flex-md-nowrap"
 								>
-									<label :for="'color_' + formatIndex" class="mb-1">顏色</label>
-									<select
-										class="my-auto form-select"
-										:id="'color_' + formatIndex"
-										aria-label="顏色"
-										name="顏色"
-										v-model="formatItem.color[0]"
-									>
-										<option value="" disabled>請選擇...</option>
-										<option
-											:value="colorItme"
-											v-for="(colorItme, colorIndex) in init2.colorText"
-											:key="colorIndex"
-										>
-											{{ colorItme }}
-										</option>
-									</select>
-								</div>
-								<div class="col-6 col-md-3 ps-0 pe-3 mt-2">
-									<label :for="'inStock_' + formatIndex" class="mb-1">
-										庫存
-										<span class="text-danger">*</span>
-									</label>
-									<input
-										:id="'inStock_' + formatIndex"
-										name="庫存"
-										v-model="formatItem.stock"
-										@input="validateStock(formatIndex, 'stock')"
-										type="number"
-										class="form-control text-end me-0 hide-arrows"
-										:class="{
-											'is-invalid': formatItem.stock === null,
-										}"
-										aria-label="庫存"
-										placeholder="請輸入"
-										min="0"
-									/>
-								</div>
-								<div class="col-6 col-md-3 ps-0 pe-3 mt-2">
-									<label :for="'cost_' + formatIndex" class="mb-1">
-										成本
-										<span class="text-danger">*</span>
-									</label>
-									<input
-										:id="'cost_' + formatIndex"
-										name="成本"
-										v-model="formatItem.cost"
-										@input="validateStock(formatIndex, 'cost')"
-										type="number"
-										class="form-control text-end me-0 hide-arrows"
-										:class="{
-											'is-invalid': formatItem.stock === null,
-										}"
-										aria-label="成本"
-										placeholder="請輸入"
-										min="0"
-									/>
-								</div>
-
-								<div class="col-6 col-md-3 ps-0 pe-0 mt-2">
-									<label :for="'price_' + formatIndex" class="mb-1">
-										售價
-										<span class="text-danger">*</span>
-									</label>
-									<div class="d-flex form-control-start">
-										<span
-											class="input-group-text pe-0"
-											:class="{ 'is-invalid-text': errors['售價'] }"
-										>
-											<p class="m-0 p-0 pe-2 border-end border-end-1 fs-12">
-												NT$
-											</p>
-										</span>
-										<!-- numeric:true 只能是數字 -->
-										<input
-											:id="'price_' + formatIndex"
-											name="售價"
-											v-model="formatItem.price"
-											@input="validateStock(formatIndex, 'price')"
-											type="number"
-											class="form-control text-end me-0 hide-arrows"
+									<!-- 左側縮圖 -->
+									<div class="btn-group">
+										<div
+											class="me-3 my-2 btn-danger dropdown-toggle"
 											:class="{
-												'is-invalid': formatItem.stock === null,
+												'card-newImg ': !formatItem.image,
+												'card-newImg-delete pb-2 d-flex justify-content-center flex-wrap align-items-end':
+													formatItem.image,
 											}"
-											aria-label="售價"
-											placeholder="請輸入"
-											min="0"
-										/>
+											:style="{
+												minWidth: '96px',
+												'background-image': formatItem.image
+													? `url(${formatItem.image})`
+													: '',
+											}"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+											data-bs-auto-close="true"
+										>
+											<font-awesome-icon
+												v-if="!formatItem.image"
+												:icon="['fas', 'image']"
+												class="fa-image"
+											/>
+											<p v-if="!formatItem.image">選擇圖片</p>
+										</div>
+										<ul class="dropdown-menu scrollbar">
+											<li
+												v-for="(imageItme, imageIndex) in data.image"
+												:key="imageIndex"
+												class="px-2 dropdown-item"
+											>
+												<div
+													class="dropdown-item w-100"
+													@click="selectUrl(formatIndex, imageItme)"
+												>
+													<div
+														class="minImg me-3 my-2 p-0 bg-img-eca"
+														:style="{
+															'background-image': `url(${imageItme})`,
+														}"
+													></div>
+												</div>
+											</li>
+										</ul>
 									</div>
+
+									<dir class="flex-grow-1 m-0 p-0 d-flex">
+										<div class="row m-0 p-0">
+											<!-- 規格 -->
+											<div class="col-12 col-md-9 p-0 pe-md-3 mt-2">
+												<label
+													:for="'Specification_' + formatIndex"
+													class="mb-1"
+												>
+													規格
+													<span class="text-danger">*</span>
+												</label>
+
+												<div class="d-flex form-control-end">
+													<!-- rules: max:10 限制字數 -->
+													<input
+														:id="'Specification_' + formatIndex"
+														name="規格"
+														type="text"
+														v-model="formatItem.title"
+														class="form-control"
+														aria-label="規格"
+														placeholder="請輸入"
+														maxlength="20"
+														:class="{
+															'is-invalid': formatItem.title === '',
+														}"
+													/>
+													<span
+														class="input-group-text ps-0"
+														:class="{
+															'is-invalid-text': formatItem.title === '',
+														}"
+													>
+														<p
+															class="m-0 p-0 ps-2 border-start border-start-1 fs-12"
+														>
+															{{
+																formatItem.title ? formatItem.title.length : 0
+															}}
+															/ 20
+														</p>
+													</span>
+												</div>
+											</div>
+											<!-- 顏色 -->
+											<div
+												class="col-6 col-md-3 ps-0 pe-3 mt-2"
+												v-if="formatItem.color"
+											>
+												<label :for="'color_' + formatIndex" class="mb-1">
+													顏色
+												</label>
+												<select
+													class="my-auto form-select"
+													:id="'color_' + formatIndex"
+													aria-label="顏色"
+													name="顏色"
+													v-model="formatItem.color[0]"
+												>
+													<option value="" disabled>請選擇...</option>
+													<option
+														:value="colorItme"
+														v-for="(colorItme, colorIndex) in init2.colorText"
+														:key="colorIndex"
+													>
+														{{ colorItme }}
+													</option>
+												</select>
+											</div>
+											<!-- 庫存 -->
+											<div class="col-6 col-md-4 ps-0 pe-0 pe-md-3 mt-2">
+												<label :for="'inStock_' + formatIndex" class="mb-1">
+													庫存
+													<span class="text-danger">*</span>
+												</label>
+												<input
+													:id="'inStock_' + formatIndex"
+													name="庫存"
+													v-model="formatItem.stock"
+													@input="validateStock(formatIndex, 'stock')"
+													type="number"
+													class="form-control text-end me-0 hide-arrows"
+													:class="{
+														'is-invalid': formatItem.stock === null,
+													}"
+													aria-label="庫存"
+													placeholder="請輸入"
+													min="0"
+												/>
+											</div>
+											<!-- 成本 -->
+											<div class="col-6 col-md-4 ps-0 pe-3 mt-2">
+												<label :for="'cost_' + formatIndex" class="mb-1">
+													成本
+													<span class="text-danger">*</span>
+												</label>
+												<input
+													:id="'cost_' + formatIndex"
+													name="成本"
+													v-model="formatItem.cost"
+													@input="validateStock(formatIndex, 'cost')"
+													type="number"
+													class="form-control text-end me-0 hide-arrows"
+													:class="{
+														'is-invalid': formatItem.stock === null,
+													}"
+													aria-label="成本"
+													placeholder="請輸入"
+													min="0"
+												/>
+											</div>
+
+											<!-- 售價 -->
+											<div class="col-6 col-md-4 ps-0 pe-0 mt-2">
+												<label :for="'price_' + formatIndex" class="mb-1">
+													售價
+													<span class="text-danger">*</span>
+												</label>
+												<div class="d-flex form-control-start">
+													<span
+														class="input-group-text pe-0"
+														:class="{ 'is-invalid-text': errors['售價'] }"
+													>
+														<p
+															class="m-0 p-0 pe-2 border-end border-end-1 fs-12"
+														>
+															NT$
+														</p>
+													</span>
+													<!-- numeric:true 只能是數字 -->
+													<input
+														:id="'price_' + formatIndex"
+														name="售價"
+														v-model="formatItem.price"
+														@input="validateStock(formatIndex, 'price')"
+														type="number"
+														class="form-control text-end me-0 hide-arrows"
+														:class="{
+															'is-invalid': formatItem.stock === null,
+														}"
+														aria-label="售價"
+														placeholder="請輸入"
+														min="0"
+													/>
+												</div>
+											</div>
+										</div>
+									</dir>
 								</div>
 							</div>
 						</div>
@@ -626,6 +715,7 @@
 import { onMounted, ref, computed, watch } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { alertStore } from '@/main'; // 導入實例
+import { VueDraggable } from 'vue-draggable-plus';
 
 import {
 	type FormatType,
@@ -634,6 +724,7 @@ import {
 
 import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
+import Swal from 'sweetalert2';
 
 import { useProduct, useAuthStore, useResize, getDate } from '@/stores/index';
 
@@ -650,7 +741,10 @@ function closeItem(key: keyof DetailedOrderProductType, index: number) {
 		property.splice(index, 1);
 	}
 }
-
+// 選擇圖片更換 使用 vee-會出錯
+function selectUrl(index: number, imgUrl: string) {
+	data.value.format[index].image = imgUrl;
+}
 const addFormatData = () => {
 	// 新增資料 使用 vee-會出錯
 	const newFormat = {
@@ -687,7 +781,13 @@ const addNum = ref(false);
 
 // 修改上下架的狀態
 function isOnshelf(onshelf: boolean) {
-	// userStore.onshelfEdit(onshelf);
+	if (onshelf) {
+		console.log('我要下架');
+		userStore.onshelfEdit(false);
+	} else {
+		console.log('我要上架');
+		userStore.onshelfEdit(true);
+	}
 }
 
 // 刪除，待檢查
@@ -889,7 +989,17 @@ function getFile() {
 }
 
 const deleteProduct = async () => {
-	await userStore.deleteProduct();
+	Swal.fire({
+		text: '一旦刪除後就無法復原，是否確定要刪除',
+		confirmButtonText: '確定',
+		customClass: {
+			confirmButton: 'sweetalert2-btn-primary',
+		},
+	}).then(result => {
+		if (result.isConfirmed) {
+			userStore.deleteProduct();
+		}
+	});
 };
 onMounted(() => {
 	getData();
@@ -966,5 +1076,21 @@ onMounted(() => {
 		border: 1px solid #ff5959 !important;
 		border-right-width: 0px !important;
 	}
+}
+.icon-delete {
+	width: 32px;
+	height: 32px;
+	background-color: #f0f4f7;
+	border-radius: 50%;
+}
+.icon-delete:hover {
+	width: 32px;
+	height: 32px;
+	background-color: #f0f4f7;
+	svg {
+		color: #37bec8;
+	}
+	border-radius: 50%;
+	transition: border-color 0.15s ease-in-out;
 }
 </style>

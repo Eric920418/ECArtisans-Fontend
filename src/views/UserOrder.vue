@@ -2,7 +2,13 @@
 	<div class="row g-3 mx-0 mb-0 pb-0">
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" />
-			<div class="my-0">
+			<!-- 再麻煩測試一下，目前有資料 -->
+			<!-- 建議找不到訂單紀錄不要回傳404 -->
+			<NoData
+				text="快把錢變成喜歡的東西吧!"
+				v-if="paginatedData.length === 0"
+			/>
+			<div class="my-0" v-else>
 				<div class="row m-0 p-0">
 					<div
 						v-for="orderItem in paginatedData"
@@ -13,8 +19,6 @@
 					</div>
 				</div>
 				<div class="col-12">
-					<!-- 使用 Pagenation 子組件來顯示分頁 -->
-					<!-- 當 Pagenation 組件中的頁碼更新時，子組件傳遞"update:currentPage"事件並觸發 updatePage 方法 -->
 					<Pagenation
 						:currentPage="currentPage"
 						:perPage="perPage"
@@ -32,7 +36,7 @@ import { onMounted, ref, computed } from 'vue';
 import NavTabs from '@/components/NavTabs.vue';
 import Card from '@/components/OrderCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
-
+import NoData from '@/components/NoData.vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useOrder } from '@/stores/index';
