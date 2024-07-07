@@ -168,6 +168,15 @@ export const sellerProductEdit = (
 	handleApiResponse(
 		apiRequest.put(`/shop/product/${product_id}`, data, headers(token))
 	);
+// 35.1	put   /shop/product/{product_id}	PATCH 	賣家修改(編輯)單一商品 	 	賣家端
+export const sellerProductOnShelf = (
+	product_id: string,
+	data: any,
+	token: string
+) =>
+	handleApiResponse(
+		apiRequest.patch(`/shop/product/${product_id}`, data, headers(token))
+	);
 // 36	delete  /shop/product/${product_id}	 	賣家刪除單一商品	 	賣家端
 export const sellerProductDelete = (product_id: string, token: string) =>
 	handleApiResponse(

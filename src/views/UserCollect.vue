@@ -3,6 +3,7 @@
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" />
 			<div class="my-0">
+				<NoData text="快來收藏新商品吧!" v-if="filteredData.length === 0" />
 				<div class="row m-0 p-2">
 					<div
 						class="col-6 col-md-4 col-lg-4 col-xl-3 p-1 pb-2 m-0 z-1"
@@ -31,7 +32,7 @@ import { useRoute, useRouter } from 'vue-router';
 import NavTabs from '@/components/NavTabs.vue';
 import Card from '@/components/CollectCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
-
+import NoData from '@/components/NoData.vue';
 import { useCollect, useAuthStore, dayAndToDay } from '@/stores/index';
 import { type collectType } from '../type/collectType';
 

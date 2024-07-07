@@ -11,6 +11,7 @@ import { getDate } from '@/setup/globalFunction';
 import {
 	uploadImage,
 	sellerProductAll, // 31	get  賣家顯示所有商品管理 (token: string)
+	sellerProductOnShelf, // 32	get 賣家商品管理(數量)	 (	seller_id: string, page: number, qty: number, category: string, token: string)
 	sellerProductData, // 32	get 賣家商品管理(數量)	 (	seller_id: string, page: number, qty: number, category: string, token: string)
 	sellerProduct, // 33	get  賣家單一商品管理 (product_id: string, token: string)
 	sellerProductNew, // 34	post  賣家新增單一商品 (token: string)
@@ -248,9 +249,8 @@ export const useProduct = defineStore({
 			try {
 				const authStore = useAuthStore();
 				let res;
-
 				console.log(onshelf);
-				await sellerProductEdit(
+				await sellerProductOnShelf(
 					this.data._id,
 					JSON.stringify({ isOnshelf: onshelf }),
 					authStore.token

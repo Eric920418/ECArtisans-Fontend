@@ -1,9 +1,10 @@
 <template>
 	<div class="row g-3 mx-0 mb-0 pb-0">
 		<div class="col-12 m-0 p-0">
-			<NavTabs :data="navTabs" />
+			<NavTabs :data="navTabs" title="" />
 			<div class="my-0">
-				<div class="row m-0 p-2">
+				<NoData text="快來關注商家吧!" v-if="filteredData.length === 0" />
+				<div class="row m-0 p-2" v-else>
 					<div
 						class="col-6 col-md-4 col-lg-4 col-xl-3 p-1 pb-2 m-0 z-1"
 						v-for="(item, index) in filteredData"
@@ -31,6 +32,7 @@ import { useRoute, useRouter } from 'vue-router';
 import NavTabs from '@/components/NavTabs.vue';
 import Card from '@/components/FollowCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
+import NoData from '@/components/NoData.vue';
 
 import { useCollect, useAuthStore, dayAndToDay } from '@/stores/index';
 import { type collectType } from '../type/collectType';

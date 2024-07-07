@@ -3,8 +3,11 @@
 		<div class="col-12 m-0 p-0">
 			<NavTabs :data="navTabs" />
 			<div class="my-0">
-				<div class="row m-0 p-0">
-					<!-- {{ paginatedData[0] }} -->
+				<NoData
+					text="快建立活動增加曝光度!"
+					v-if="paginatedData.length === 0"
+				/>
+				<div class="row m-0 p-0" v-else>
 					<div
 						v-for="(activityItem, activityIndex) in paginatedData"
 						:key="activityIndex"
@@ -12,16 +15,16 @@
 					>
 						<ActivityCard :data="formatCardData(activityItem)" />
 					</div>
-				</div>
-				<div class="col-12">
-					<!-- 使用 Pagenation 子組件來顯示分頁 -->
-					<!-- 當 Pagenation 組件中的頁碼更新時，子組件傳遞"update:currentPage"事件並觸發 updatePage 方法 -->
-					<Pagenation
-						:currentPage="currentPage"
-						:perPage="perPage"
-						:totalRows="totalRows"
-						@update:currentPage="updatePage"
-					/>
+					<div class="col-12">
+						<!-- 使用 Pagenation 子組件來顯示分頁 -->
+						<!-- 當 Pagenation 組件中的頁碼更新時，子組件傳遞"update:currentPage"事件並觸發 updatePage 方法 -->
+						<Pagenation
+							:currentPage="currentPage"
+							:perPage="perPage"
+							:totalRows="totalRows"
+							@update:currentPage="updatePage"
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -34,6 +37,7 @@ import { useRoute, useRouter } from 'vue-router';
 import NavTabs from '@/components/NavTabs.vue';
 import ActivityCard from '@/components/SellerActivityCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
+import NoData from '@/components/NoData.vue';
 
 import { useActivity, useAuthStore, dayAndToDay } from '@/stores/index';
 import { type activityAllType } from '@/type/activityType';
