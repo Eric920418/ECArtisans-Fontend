@@ -91,15 +91,20 @@ const props = defineProps<{
 
 // const formattedData = ref<FormattedOrderCardType[]>([]);
 const order = computed(() => formatCardData(props.data));
+console.log(order);
 
 const formatCardData = (orderItem: OrderCardType): FormattedOrderCardType => {
 	const commonData = {
 		img:
-			orderItem.products.length > 0 ? orderItem.products[0].format.image : '',
+			orderItem.products &&
+			orderItem.products.length > 0 &&
+			orderItem.products[0].format
+				? orderItem.products[0].format.image
+				: '',
 		title: orderItem._id,
 		state: orderItem.state,
 		price: orderItem.totalPrice,
-		product_count: orderItem.products.length,
+		product_count: orderItem.products?.length,
 		delivery: orderItem.delivery,
 		date: { sDate: orderItem.createdAt },
 	};

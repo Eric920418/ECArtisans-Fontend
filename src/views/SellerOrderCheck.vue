@@ -98,7 +98,6 @@
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
 							<p class="fs-5 p-0 mb-0 mb-4 p-0" style="color: var(--primary)">
 								訂單編號：{{ order._id }}
-								{{ order.createdAt }}
 							</p>
 						</div>
 						<!-- 訂單詳細資訊 -->

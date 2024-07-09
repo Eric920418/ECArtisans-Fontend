@@ -95,7 +95,7 @@ function categorized(allData: OrderType[]) {
 // Initialize filtered orders based on initial tab selection
 // 接收篩選後的結果
 const filteredData = computed(() => categorized(orders.value));
-
+console.log(filteredData.value);
 // // Function to initialize data on component mount
 // const initData = () => {
 // 	// 因為要設置路由守衛 會有抓資料的問題，判斷改在這裡獲取 navTabs 的資料

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Banner :data="funData" />
+		<Banner :data="bannerList" />
 		<div class="bg-fun">
 			<div class="container">
 				<Fun :data="funData" />
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import Focus from '@/components/IndexFocus.vue';
 import Fun from '@/components/IndexFun.vue';
 import Shop from '@/components/IndexShop.vue';
@@ -28,6 +28,11 @@ import { gsap } from 'gsap';
 const block = ref();
 const box = ref();
 const shopData = ref([]);
+
+import { useShop } from '@/stores/index';
+const shopStore = useShop();
+
+const bannerList = computed(() => shopStore.bannerData);
 
 const funData = ref([
 	{
@@ -112,6 +117,11 @@ const funData = ref([
 	},
 ]);
 
+const loading = ref(true);
+onMounted(async () => {
+	await shopStore.getActivityBanner();
+	loading.value = false; // 當資料獲取完成後將 loading 設為 false
+});
 onMounted(() => {
 	gsap.to(box.value, { rotation: '+=360' });
 	gsap.to(block.value, { x: 300, repeat: -1, duration: 3 });

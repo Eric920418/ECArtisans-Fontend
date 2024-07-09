@@ -322,8 +322,8 @@ export const userOrderNew = (data: any, token: string) =>
 
 // 評價 ■
 // 19	post	  /comment/${user_id}/${order_id}	 	商品評價	 	 買家端
-export const rating = (user_id: string, order_id: string) =>
-	handleApiResponse(apiRequest.post(`/comment/${user_id}/${order_id}`));
+export const rating = (order_id: string, product_id: string, token: string, rate: any) =>
+	handleApiResponse(apiRequest.post(`/order/${order_id}/products/${product_id}/review`,rate,  headers(token)));
 
 // 優惠劵 ■
 // 20	get   /users/${user_id}/discounts	 	 優惠劵紀錄	 	 買家端

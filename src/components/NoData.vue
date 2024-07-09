@@ -1,7 +1,7 @@
 <template>
 	<div class="row">
 		<div class="col-12 text-center my-5">
-			<img src="../../public/images/no-data.svg" alt="no data" class="nodata" />
+			<img src="/images/no-data.svg" alt="no data" class="nodata" />
 		</div>
 		<div class="col-12 text-center mb-5 white-space">
 			<h3>找不到資料</h3>
