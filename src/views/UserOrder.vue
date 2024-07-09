@@ -224,6 +224,7 @@ onMounted(async () => {
 		};
 		await orderStore.gettingAllOrders();
 	}
+	console.log(paginatedData.value);
 });
 
 // 註冊一個提取所有訂單的方法，先寫死的資料測試

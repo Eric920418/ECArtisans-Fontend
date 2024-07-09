@@ -12,6 +12,7 @@ import {
 	sellerOrder, // 13	get  商家單一訂單管理
 	userOrderAll, // 17 get 買家訂單管理
 	userOrder, //18 get 買家訂單詳情
+	rating, // 19 post 買家評價
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -67,6 +68,7 @@ export const useOrder = defineStore({
 					const authStore = useAuthStore();
 					await sellerOrderAll(authStore.token)
 						.then(res => {
+							console.log(res.orders);
 							// 轉換 sellerCategory
 							const processedOrders = res.orders.map(
 								(orderGroup: { order: OrderType[] }) => {
@@ -96,6 +98,8 @@ export const useOrder = defineStore({
 					const authStore = useAuthStore();
 					await userOrderAll(authStore.token)
 						.then(res => {
+							console.log(res.orders);
+
 							// 轉換 sellerCategory
 							const processedOrders = res.orders.map(
 								(order: {
@@ -118,7 +122,9 @@ export const useOrder = defineStore({
 									updatedAt: order.updatedAt,
 								})
 							);
-							this.allData = [processedOrders];
+							this.allData = processedOrders;
+							console.log('Processed Orders:', this.allData); // 打印调试信息
+
 							alertStore.success('訂單取得成功');
 						})
 						.catch(err => {
@@ -148,7 +154,30 @@ export const useOrder = defineStore({
 					await userOrder(order_id, authStore.token)
 						.then(res => {
 							this.orderDetail = res.order;
+							console.log(res.order);
 							alertStore.success('詳細訂單取得成功');
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+				}
+			} catch (error) {
+				alertStore.error('showError');
+			}
+		},
+		// 新增買家評價
+		async rating(order_id: string, product_id: string): Promise<void> {
+			console.log(order_id, product_id)
+
+			try {
+				await this.setAccountType();
+				if (this.accountType === 'user') {
+					const authStore = useAuthStore();
+					const rate = '5'
+					await rating(order_id, product_id, authStore.token, {"rate":rate})
+						.then(res => {
+							console.log(res);
+							alertStore.success('評價成功');
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);

@@ -1,7 +1,7 @@
 <template>
 	<div class="row justify-content-center align-items-center m-0 p-0">
 		<div class="col-12 m-0 p-0">
-			<Banner :data="funData" />
+			<Banner :data="data.activities_images" />
 		</div>
 		<div
 			class="col-12 d-md-flex justify-content-md-center align-items-md-center my-5 m-0 p-0"
@@ -421,6 +421,7 @@ router.beforeEach((to, from, next) => {
 
 onMounted(async () => {
 	await shopStore.getShop(route.params.id as string);
+	console.log(shopStore.sellerHomeData);
 });
 
 onMounted(async () => {

@@ -98,7 +98,6 @@
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
 							<p class="fs-5 p-0 mb-0 mb-4 p-0" style="color: var(--primary)">
 								訂單編號：{{ order._id }}
-								{{ order.createdAt }}
 							</p>
 						</div>
 						<!-- 訂單詳細資訊 -->
@@ -280,6 +279,12 @@
 					>
 						取消
 					</button>
+					<a
+						class="btn btn-outline-primary px-5 mx-1 mx-sm-2 me-md-4"
+						@click="rate(order._id, order.products[0].product._id)"
+					>
+						評價
+					</a>
 					<button type="submit" class="btn btn-primary px-5 m-0 ms-1 ms-sm-2">
 						{{ init.btn }}
 					</button>
@@ -428,7 +433,10 @@ const initData = () => {
 	}
 	// userStore.getCouponAll(id, page, token);
 };
-
+// rating 函数示例
+const rate = async (order_id: string, product_id: string) => {
+	await orderStore.rating(order_id, product_id);
+};
 onMounted(async () => {
 	// pinia沒有這筆資料，就重新呼叫function
 	// if (!orderStore.oneOrder || orderStore.oneOrder._id !== props.id) {

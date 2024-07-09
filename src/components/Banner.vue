@@ -24,7 +24,7 @@
 				:keyboard="{ enabled: true }"
 			>
 				<SwiperSlide
-					v-for="(item, index) in bannerList"
+					v-for="(item, index) in props.data"
 					:key="index"
 					:virtualIndex="index"
 				>
@@ -72,11 +72,10 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
-import { useShop } from '@/stores/index';
-const shopStore = useShop();
-
-const bannerList = computed(() => shopStore.bannerData);
-
+// 接收傳入的值
+const props = defineProps<{
+	data: any; // Banner
+}>();
 const navigation = ref({
 	nextEl: '.swiper-button-next',
 	prevEl: '.swiper-button-prev',
@@ -86,11 +85,8 @@ const modules = [Autoplay, Pagination, Navigation, Scrollbar];
 const prevEl = () => {};
 const nextEl = () => {};
 
-// 增加 loading 狀態
-const loading = ref(true);
-onMounted(async () => {
-	await shopStore.getActivityBanner();
-	loading.value = false; // 當資料獲取完成後將 loading 設為 false
+onMounted(() => {
+	console.log(props.data);
 });
 </script>
 <style lang="scss" scoped>
