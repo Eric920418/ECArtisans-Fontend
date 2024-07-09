@@ -1,7 +1,7 @@
 <template>
 	<div class="row justify-content-center align-items-center m-0 p-0">
 		<div class="col-12 m-0 p-0">
-			<Banner :data="data.activities_images" />
+			<Banner :data="bannerList" />
 		</div>
 		<div
 			class="col-12 d-md-flex justify-content-md-center align-items-md-center my-5 m-0 p-0"
@@ -193,89 +193,6 @@ const checkTextOverflow = () => {
 	}
 };
 
-const funData = ref([
-	{
-		cols: 6,
-		cols_sm: 6,
-		cols_md: 3,
-		cols_lg: 2,
-		name: '娛樂',
-		url: 'images/index/01-clothing.png',
-	},
-	{
-		cols: 6,
-		cols_sm: 6,
-		cols_md: 3,
-		cols_lg: 2,
-		name: '運動',
-		url: 'images/index/02-sports.png',
-	},
-	{
-		cols: 12,
-		cols_sm: 12,
-		cols_md: 6,
-		cols_lg: 3,
-		data: [
-			{
-				cols: 4,
-				cols_sm: 4,
-				cols_md: 4,
-				cols_lg: 4,
-				name: '食品',
-				url: 'images/index/03-food.png',
-			},
-			{
-				cols: 4,
-				cols_sm: 4,
-				cols_md: 4,
-				cols_lg: 4,
-				name: '生活用品',
-				url: 'images/index/04-DailyNecessities.png',
-			},
-			{
-				cols: 4,
-				cols_sm: 4,
-				cols_md: 4,
-				cols_lg: 4,
-				name: '娛樂',
-				url: 'images/index/05-entertainment.png',
-			},
-			{
-				cols: 12,
-				cols_sm: 12,
-				cols_md: 12,
-				cols_lg: 12,
-				name: '家具',
-				url: 'images/index/06-furniture.png',
-			},
-		],
-	},
-	{
-		cols: 4,
-		cols_sm: 4,
-		cols_md: 4,
-		cols_lg: 2,
-		name: '3C產品',
-		url: 'images/index/07-3C.png',
-	},
-	{
-		cols: 4,
-		cols_sm: 4,
-		cols_md: 4,
-		cols_lg: 2,
-		name: '寵物',
-		url: 'images/index/08-pet.png',
-	},
-	{
-		cols: 4,
-		cols_sm: 4,
-		cols_md: 4,
-		cols_lg: 1,
-		name: '清潔用品',
-		url: 'images/index/09-clean.png',
-	},
-]);
-
 // 封裝分類邏輯的函數，想要入口統一，之後比較好撰寫內容
 function categorized(allData: SellerPageProductType[]) {
 	let data = allData;
@@ -337,6 +254,9 @@ function categorized(allData: SellerPageProductType[]) {
 const data = computed(() => shopStore.sellerHomeData);
 // 接收篩選後的結果
 const filteredData = computed(() => categorized(shopStore.sellerProductsData));
+
+// 接收商家banner資料
+const bannerList = computed(() => shopStore.bannerData);
 
 // 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
@@ -421,7 +341,6 @@ router.beforeEach((to, from, next) => {
 
 onMounted(async () => {
 	await shopStore.getShop(route.params.id as string);
-	console.log(shopStore.sellerHomeData);
 });
 
 onMounted(async () => {
