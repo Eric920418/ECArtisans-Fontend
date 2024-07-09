@@ -33,27 +33,44 @@ export const useCartStore = defineStore({
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
-
+	getters: {
+    totalItems: (state) => {
+      return state.cart.reduce((total: any, cartGroup: { items: string | any[]; }) => {
+        return total + cartGroup.items.length;
+      }, 0);
+    },
+    cartNum: (state) => {
+      const totalItems = state.cart.reduce((total: any, cartGroup: { items: string | any[]; }) => {
+        return total + cartGroup.items.length;
+      }, 0);
+      return totalItems > 100 ? '99+' : totalItems.toString();
+    }
+  },
 	actions: {
 		// 獲取購物車資料
 		async getAllCart(): Promise<void> {
 			const authStore = useAuthStore();
 			const token = authStore.token;
-			if (!token) {
-				alertStore.error('使用者未登入');
-				// router.push('/user-login');
-				return;
-			}
+			const accountType = authStore.accountType;
+			// if (!token) {
+			// 	alertStore.error('使用者未登入');
+			// 	// router.push('/user-login');
+			// 	return;
+			// }
 
-			try {
-				this.isLoading = true;
-				const response = await cartAll(token);
-				console.log(response);
-				this.cart = response.cart;
-			} catch (error) {
-				alertStore.error('取資料失敗');
-			} finally {
-				this.isLoading = false;
+			if (accountType == 'user') {
+				try {
+					this.isLoading = true;
+					const response = await cartAll(token);
+					console.log(response);
+					this.cart = response.cart;
+				} catch (error) {
+					alertStore.error('取資料失敗');
+				} finally {
+					this.isLoading = false;
+				}
+			} else {
+				this.cart = [];
 			}
 		},
 		async addItemToCart(data: any): Promise<void> {

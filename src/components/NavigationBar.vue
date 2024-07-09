@@ -68,7 +68,7 @@
 					<span
 						class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger rounded-circle"
 					>
-						99+
+						{{ cartNum }}
 						<span class="visually-hidden">purchase car list</span>
 					</span>
 				</button>
@@ -642,9 +642,13 @@
 								>
 									<i class="bi bi-bag"></i>
 									<span
+										v-if="isUser"
 										class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger rounded-circle"
 									>
-										99+
+										{{ cartNum }}
+										<span class="visually-hidden">purchase car list</span>
+									</span>
+									<span v-else>
 										<span class="visually-hidden">purchase car list</span>
 									</span>
 								</button>
@@ -659,15 +663,15 @@
 
 <script lang="ts" setup>
 import Collapse from 'bootstrap/js/dist/collapse';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useAuthStore, useShop } from '@/stores/index';
+import { useAuthStore, useCartStore } from '@/stores/index';
 import Logo from './Logo.vue';
 import { useResize, go } from '@/stores/index';
 const { resize } = useResize();
 
 const authStore = useAuthStore();
-const shopStore = useShop();
+const useCart = useCartStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -790,6 +794,13 @@ onMounted(() => {
 	} else if (route && route.name === 'UserProfile') {
 		// init.value = userTitleData;
 	}
+});
+
+//
+const cartNum = computed(() => useCart.cartNum);
+
+onMounted(async () => {
+	await useCart.getAllCart();
 });
 </script>
 

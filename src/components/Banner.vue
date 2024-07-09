@@ -84,10 +84,6 @@ const modules = [Autoplay, Pagination, Navigation, Scrollbar];
 
 const prevEl = () => {};
 const nextEl = () => {};
-
-onMounted(() => {
-	console.log(props.data);
-});
 </script>
 <style lang="scss" scoped>
 .banner {

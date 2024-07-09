@@ -189,7 +189,18 @@ export const useShop = defineStore({
 				await shop(seller_id)
 					.then(res => {
 						this.sellerHomeData = res.data[0];
+						// 整理資料取出banner data
+						const transformActivities = (activities: any[], seller_id: string): BannerType[] => {
+							return activities.map((activity: any) => ({
+								activity_id: activity.activity_id,
+								seller_id: seller_id,
+								activity_image: activity.activity_image
+							}));
+						};
+						this.bannerData = transformActivities(this.sellerHomeData.activities, this.sellerHomeData.seller_id);
+
 					})
+
 					.catch(err => {
 						alertStore.error(err.response.data.message);
 					});

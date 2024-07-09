@@ -1,7 +1,7 @@
 // 查詢賣家頁面所有資訊
 export interface SellerPageType {
 	seller_id: string;
-	activities_images?: string[];
+	activities: any[];
   seller_image?: string;
   seller_name: ''
 	seller_info: string;
@@ -73,7 +73,6 @@ export interface SearchProduct extends SellerPageProductType {
 export interface BannerType {
 	activity_id: string,
 	seller_id: string,
-	activity_image?: string
-	activity_images?: string[]
-
+	activity_image: string
 }
+
