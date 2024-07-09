@@ -317,11 +317,8 @@ export const userOrderAll = (token: string) =>
 export const userOrder = (order_id: string, token: string) =>
 	handleApiResponse(apiRequest.get(`/order/${order_id}`, headers(token)));
 // 52	post	/order	 	 買家建立訂單(待討論)	 	 買家端
-export const userOrderNew = (data: any) =>
-	handleApiResponse(apiRequest.post('/order', data));
-// 53	post	/order/${user_id}/pay/${order_id}	 	 買家繳費至金流(待討論)	 	買家端
-export const userOrderPay = (user_id: string, order_id: string) =>
-	handleApiResponse(apiRequest.post(`/order/${user_id}/pay/${order_id}`));
+export const userOrderNew = (data: any, token: string) =>
+	handleApiResponse(apiRequest.post('/order', data, headers(token)));
 
 // 評價 ■
 // 19	post	  /comment/${user_id}/${order_id}	 	商品評價	 	 買家端
@@ -379,3 +376,7 @@ interface PaymentData {
 // 藍新金流API
 export const paymentCreate = async (paymentData: PaymentData) =>
 	handleApiResponse(apiRequest.post('/payment', paymentData));
+
+// 53	post	/payment/user	 	 買家繳費至金流	 	買家端
+export const userOrderPay = async (data: any, token: string) =>
+	handleApiResponse(apiRequest.post(`/payment/user`, data, headers(token)));

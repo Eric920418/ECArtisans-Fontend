@@ -16,9 +16,14 @@ import {
 	cartDelete,
 	selectItemsCart,
 	userOrderNew, // 52 成立訂單
+	userOrderPay, // 金流
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
+
+// interface Order {
+// 	_id: string;
+// }
 
 export const useCartStore = defineStore({
 	id: 'cart',
@@ -156,20 +161,23 @@ export const useCartStore = defineStore({
 			}
 
 			try {
-				this.isLoading = true;
-				console.log(data);
-
-				userOrderNew(JSON.stringify(data), token)
-					.then(res => {
-						console.log(res);
-					})
-					.catch(err => {
-						alertStore.error(err.response.data.message);
-					});
-			} catch (error) {
+				console.log('資料結果:', data, token);
+				const res = await userOrderNew(data, token);
+				console.log(res);
+				await this.orderPay({ orderId: res.order._id });
+			} catch (err) {
 				alertStore.error('訂單成立失敗');
 			} finally {
 				this.isLoading = false;
+			}
+		},
+		async orderPay(data: any): Promise<void> {
+			const authStore = useAuthStore();
+			const token = authStore.token;
+			try {
+				await userOrderPay(data, token);
+			} catch (err) {
+				console.log(err);
 			}
 		},
 	},
