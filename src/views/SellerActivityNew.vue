@@ -134,7 +134,8 @@
 										class="form-control col-2"
 										:class="{ 'is-invalid': errors['startDate'] }"
 										:rules="
-											!isCheck || $dayAndToDay(data.startDate, '<')
+											!isCheck ||
+											$dayAndToDay(data.start_date as string | Date | null, '<')
 												? 'startDate|need:開始日期'
 												: ''
 										"
@@ -159,7 +160,8 @@
 										class="form-control col-2"
 										:class="{ 'is-invalid': errors['endDate'] }"
 										:rules="
-											!isCheck || $dayAndToDay(data.startDate, '<')
+											!isCheck ||
+											$dayAndToDay(data.start_date as string | Date | null, '<')
 												? 'endDate:startDate|need:結束日期'
 												: ''
 										"
@@ -296,7 +298,7 @@ import {
 
 function getDisabled() {
 	const startDate = data.value.start_date;
-	return isCheck && startDate ? dayAndToDay(startDate, '>') : false;
+	return isCheck.value && startDate ? dayAndToDay(startDate, '>') : false;
 }
 
 const route = useRoute();
@@ -367,7 +369,7 @@ const isCheck = computed(() => route.name === 'SellerActivityCheck');
 // 選取
 const isNewCoupon = ref<CouponType | null>(null);
 const isCoupon = computed(() => {
-	if (isCheck) {
+	if (isCheck.value) {
 		if (
 			isNewCoupon.value === null &&
 			userStore.data.coupon_id &&
@@ -378,7 +380,7 @@ const isCoupon = computed(() => {
 			);
 		}
 	}
-	if (isNewCoupon && isNewCoupon.value !== null) {
+	if (isNewCoupon.value && isNewCoupon.value !== null) {
 		return isNewCoupon.value;
 	}
 	return null;
