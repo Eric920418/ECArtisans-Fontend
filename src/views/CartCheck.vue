@@ -140,7 +140,7 @@
 								<div>
 									<div>
 										NT$&nbsp;
-										<span>{{ getTota('fare') }}</span>
+										<span>{{ getTotal('fare') }}</span>
 										<!-- <span>{{ orderData }}</span> -->
 									</div>
 									<div class="mt-2">
@@ -160,7 +160,7 @@
 									NT$&nbsp;
 									<!-- <span>{{ orderData.totalPrice }}</span> -->
 									<span>
-										{{ getTota('totalPrice') + getTota('fare') }} 未減優惠折扣
+										{{ getTotal('totalPrice') + getTotal('fare') }} 未減優惠折扣
 									</span>
 								</div>
 							</div>
@@ -236,7 +236,7 @@ const orderData = computed(() => store.selectdata);
 // 	},
 // ]);
 
-function getTota(text: string): number {
+function getTotal(text: string): number {
 	if (text === 'fare' && store.selectdata) {
 		const maxFare = orderData.value.reduce(
 			(max: number, order: { items: any[] }) => {
@@ -310,7 +310,7 @@ const form = computed(() => {
 		pay: payNow.value,
 		address: address.value,
 		delivery: sendNow.value,
-		fare: getTota('fare'),
+		fare: getTotal('fare'),
 	};
 });
 
