@@ -6,7 +6,6 @@
 				<div class="m-3 card m-3 p-4 p-sm-5">
 					<!-- 表格 -->
 					<div class="row mx-0 mb-0 pb-0 p-0">
-						<!-- @submit="onSubmit" -->
 						<div
 							class="d-flex justify-content-between align-items-center mb-4 p-0"
 						>
@@ -20,17 +19,7 @@
 								{{ !isCheck ? '新增活動' : '編號：' + data.coupon_id }}
 								<br />
 							</h3>
-							<a
-								class="mb-0"
-								v-if="
-									isCheck &&
-									data.start_date &&
-									$dayAndToDay(data.start_date.toString(), '<')
-								"
-								@click="deleteData()"
-							>
-								立即刪除
-							</a>
+							<a class="mb-0" v-if="isCheck" @click="deleteData()">立即刪除</a>
 						</div>
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
 							<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">

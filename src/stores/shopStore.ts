@@ -6,7 +6,7 @@ import {
 	type RecommendShopType,
 	type Product,
 	type SearchProduct,
-	type BannerType
+	type BannerType,
 } from '../type/shopType';
 import { getDate } from '@/setup/globalFunction';
 
@@ -19,7 +19,7 @@ import {
 	home_followShops, // 30 get 首頁關注商家
 	productAll, // 54	get 商品總覽
 	productSearch, // 56 get 商品搜尋
-	home_activities // 26 get 首頁活動圖
+	home_activities, // 26 get 首頁活動圖
 } from './api';
 import { useAuthStore } from './authStore';
 import router from '@/router';
@@ -35,7 +35,9 @@ function formatProduct(products: Product[]): SearchProduct[] {
 	return products.map(product => {
 		const lowestPrice = Math.min(...product.price);
 		const starValue = product.star !== null ? product.star : 0;
-		const colors = product.products_format.flatMap(format => format.format_color);
+		const colors = product.products_format.flatMap(
+			format => format.format_color
+		);
 
 		return {
 			products_id: product.products_id,
@@ -47,7 +49,7 @@ function formatProduct(products: Product[]): SearchProduct[] {
 			total_sales: product.total_sales,
 			discount: product.discount,
 			star: starValue,
-			color: colors
+			color: colors,
 		};
 	});
 }
@@ -94,13 +96,13 @@ export const useShop = defineStore({
 	}),
 	getters: {
 		// 計算商品總覽所需的maxPrice
-    maxPrice: (state): number => {
-      if (state.searchProductsData.length === 0) return 50000; // 預設
+		maxPrice: (state): number => {
+			if (state.searchProductsData.length === 0) return 50000; // 預設
 
-      return state.searchProductsData.reduce((maxPrice, product) => {
-        return Math.max(maxPrice, product.price);
-      }, 0);
-    }
+			return state.searchProductsData.reduce((maxPrice, product) => {
+				return Math.max(maxPrice, product.price);
+			}, 0);
+		},
 		// // 獲取單筆訂單
 		// gettingSingleOrder(state) {
 		// 	return state.oneOrder;
@@ -175,10 +177,9 @@ export const useShop = defineStore({
 							// alertStore.error(err.response.data.message);
 							this.followShopData = [];
 						});
-					}
-					else{
-						console.log(authStore.accountType)
-					}
+				} else {
+					console.log(authStore.accountType);
+				}
 			} catch (error) {
 				alertStore.error('showError');
 			}
@@ -190,15 +191,20 @@ export const useShop = defineStore({
 					.then(res => {
 						this.sellerHomeData = res.data[0];
 						// 整理資料取出banner data
-						const transformActivities = (activities: any[], seller_id: string): BannerType[] => {
+						const transformActivities = (
+							activities: any[],
+							seller_id: string
+						): BannerType[] => {
 							return activities.map((activity: any) => ({
 								activity_id: activity.activity_id,
 								seller_id: seller_id,
-								activity_image: activity.activity_image
+								activity_image: activity.activity_image,
 							}));
 						};
-						this.bannerData = transformActivities(this.sellerHomeData.activities, this.sellerHomeData.seller_id);
-
+						this.bannerData = transformActivities(
+							this.sellerHomeData.activities,
+							this.sellerHomeData.seller_id
+						);
 					})
 
 					.catch(err => {
@@ -210,7 +216,7 @@ export const useShop = defineStore({
 		},
 		// 獲取所有賣家頁面資訊
 		async getShopProducts(seller_id: string): Promise<void> {
-			this.sellerProductsData = []
+			this.sellerProductsData = [];
 			try {
 				await shopProducts(seller_id)
 					.then(res => {
@@ -225,8 +231,8 @@ export const useShop = defineStore({
 			}
 		},
 		// 獲取商品分類的所有商品
-		async getAllProductsByCategoryID(categoryID:string): Promise<void> {
-			this.searchProductsData = [] 
+		async getAllProductsByCategoryID(categoryID: string): Promise<void> {
+			this.searchProductsData = [];
 			try {
 				// 固定抓8 筆
 				await productAll(categoryID)
@@ -234,7 +240,7 @@ export const useShop = defineStore({
 						this.searchProductsData = formatProduct(res.data);
 					})
 					.catch(err => {
-						this.searchProductsData = [] 
+						this.searchProductsData = [];
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
@@ -243,14 +249,14 @@ export const useShop = defineStore({
 		},
 		// 獲取商品by 關鍵字
 		async getAllProductsByKeyword(keyword: string): Promise<void> {
-			this.searchProductsData = [] 
+			this.searchProductsData = [];
 			try {
 				await productSearch(keyword)
-					.then((res) => {
+					.then(res => {
 						this.searchProductsData = formatProduct(res.data);
 					})
-					.catch((err) => {
-						this.sellerProductsData = []
+					.catch(err => {
+						this.sellerProductsData = [];
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {
@@ -259,14 +265,14 @@ export const useShop = defineStore({
 		},
 		// 獲取Banner活動
 		async getActivityBanner(): Promise<void> {
-			this.bannerData = [] 
+			this.bannerData = [];
 			try {
 				await home_activities()
-					.then((res) => {
+					.then(res => {
 						this.bannerData = res.data;
 					})
-					.catch((err) => {
-						this.bannerData = []
+					.catch(err => {
+						this.bannerData = [];
 						alertStore.error(err.response.data.message);
 					});
 			} catch (error) {

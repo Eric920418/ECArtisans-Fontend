@@ -11,7 +11,6 @@
 								:selected-img="selectedImage"
 							/>
 						</div>
-
 						<div class="col-12 col-md-5">
 							<!-- 輪播 右側 商品資訊 -->
 							<div class="row m-0 p-0">
@@ -142,7 +141,10 @@
 										</div>
 									</div>
 									<!-- 當數量小於 15 時，顯示 -->
-									<div v-if="data.stock" class="ps-6 ps-xl-3 mt-1 mb-2 mb-xl-0">
+									<div
+										v-if="data.stock && data.stock < 10"
+										class="ps-6 ps-xl-3 mt-1 mb-2 mb-xl-0"
+									>
 										部份商品剩最後 {{ data.stock }} 件
 									</div>
 								</div>

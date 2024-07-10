@@ -3,7 +3,7 @@
 		v-if="authStore.accountType === 'user'"
 		class="w-100 m-index-title pb-8 pb-xl-10"
 	>
-		<Title :data="titleData" />
+		<Title :data="focusShopList.length > 3 ? titleData : titleData_noBtn" />
 		<div class="m-0 p-0">
 			<div class="container px-eca-12 px-sm-0">
 				<swiper
@@ -27,14 +27,17 @@
 					:mousewheel="false"
 					:keyboard="{ enabled: true }"
 					:spaceBetween="24"
+					:class="{
+						minlength: focusShopList.length <= 3 && resize < 768,
+					}"
 				>
 					<SwiperSlide
 						v-for="(item, index) in focusShopList"
 						:key="index"
 						:virtualIndex="index"
-						class="indexShopSwiperSlide"
+						class="indexShopSwiperSlide py-2"
 					>
-						<div class="card p-0">
+						<div class="card p-0 shadow-sm z-1">
 							<div
 								class="card-top d-flex justify-content-center align-items-center p-3 border-bottom"
 								@click="
@@ -96,10 +99,10 @@ import Title from './IndexTitle.vue';
 import { useResize } from '@/stores/index';
 const { resize } = useResize();
 import { useShop, useAuthStore } from '@/stores/index';
-
+import { type RecommendShopType } from '../type/shopType';
 const authStore = useAuthStore();
 const userStore = useShop();
-const focusShopList = computed(() => userStore.followShopData);
+const focusShopList = computed(() => props.data);
 
 const navigation = ref({
 	nextEl: '.swiper-button-next',
@@ -127,13 +130,16 @@ const titleData = {
 		next: getNext,
 	},
 };
-
-onMounted(async () => {
-	await userStore.getFollowShops();
-});
+const titleData_noBtn = {
+	title: '關注商家',
+	titleEn: 'Focus',
+};
+const props = defineProps<{
+	data: RecommendShopType[];
+}>();
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card-bottom {
 	margin: 10px;
 }

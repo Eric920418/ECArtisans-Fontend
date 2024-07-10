@@ -10,7 +10,7 @@
 		<Shop :data="shopData" />
 		<div class="bg-focus">
 			<New :data="shopData" />
-			<Focus :data="shopData" />
+			<Focus v-if="followList.length > 0" :data="followList" />
 		</div>
 	</div>
 </template>
@@ -33,6 +33,7 @@ import { useShop } from '@/stores/index';
 const shopStore = useShop();
 
 const bannerList = computed(() => shopStore.bannerData);
+const followList = computed(() => shopStore.followShopData);
 
 const funData = ref([
 	{
@@ -121,6 +122,7 @@ const loading = ref(true);
 onMounted(async () => {
 	await shopStore.getActivityBanner();
 	loading.value = false; // 當資料獲取完成後將 loading 設為 false
+	await shopStore.getFollowShops();
 });
 onMounted(() => {
 	gsap.to(box.value, { rotation: '+=360' });

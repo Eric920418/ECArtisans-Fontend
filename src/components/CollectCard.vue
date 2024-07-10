@@ -25,7 +25,8 @@
 				/>
 			</svg>
 		</div>
-		<div @click="$go({ name: 'ShopProduct', params: { id: item._id } })">
+		<!-- <div @click="$go({ name: 'ShopProduct', params: { id: item._id } })"> -->
+		<div>
 			<div class="card-top overflow-hidden">
 				<img :src="item.image[0]" class="img-eca" alt="..." />
 			</div>
@@ -56,7 +57,13 @@
 					</div>
 				</div>
 				<div class="mt-3 mb-1">
-					<button class="btn btn-outline-primary w-100">加入購物車</button>
+					<button
+						@click="getStock() > 0 ? getCart() : ''"
+						class="btn btn-outline-primary w-100"
+						:disabled="getStock() > 0 ? false : true"
+					>
+						加入購物車
+					</button>
 				</div>
 			</div>
 		</div>
@@ -64,12 +71,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, createApp, ref } from 'vue';
 import { useCollect, useAuthStore, go } from '@/stores/index';
 import { alertStore } from '@/main';
 import Star from './Star.vue';
 import { type collectType, type collectFormatType } from '../type/collectType';
 import Swal from 'sweetalert2';
+import PopUpCart from '@/components/PopUpCart.vue';
+
 const collect = useCollect();
 const emit = defineEmits<{
 	(event: 'remove', seller_id: string): void;
@@ -108,6 +117,32 @@ const addToFavorites = (products_id: string) => {
 		emit('remove', products_id);
 	}
 };
+
+// 目前選擇的商品數量
+const getStock = () => {
+	const maxStock = props.item.format.reduce(
+		(max, item) => (item.stock > max ? item.stock : max),
+		-Infinity
+	);
+	return maxStock;
+};
+
+function getCart() {
+	Swal.fire({
+		width: '80vw',
+		showCloseButton: true,
+		showConfirmButton: false,
+		html: '<div id="modal" data="props.item" ></div>',
+		didOpen: () => {
+			const app = createApp(PopUpCart, { data: props.item });
+			app.mount('#modal');
+		},
+	}).then(result => {
+		if (result.isConfirmed) {
+			console.log('gg');
+		}
+	});
+}
 </script>
 
 <style lang="scss" scoped>
