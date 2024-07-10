@@ -17,20 +17,20 @@
 								v-if="data._id"
 								class="d-flex justify-content-center align-items-center"
 							>
-								<button
+								<a
 									class="btn btn-primary px-4"
 									v-if="data.isOnshelf === false"
 									@click="isOnshelf(data.isOnshelf)"
 								>
 									商品上架
-								</button>
-								<button
+								</a>
+								<a
 									class="btn btn-primary px-4"
 									v-if="data.isOnshelf === true"
 									@click="isOnshelf(data.isOnshelf)"
 								>
 									立即下架
-								</button>
+								</a>
 							</div>
 						</div>
 						<div class="col-12 p-0 m-0 mb-4" v-if="data._id">
@@ -131,22 +131,11 @@
 
 								<div
 									v-if="data.image.length !== 0"
-									class="card-newImg-delete me-3 my-2 p-0 d-flex align-items-center justify-content-center position-relative"
+									class="card-newImg-disabled me-3 my-2 p-0 d-flex align-items-center justify-content-center position-relative"
 									:style="{
 										'background-image': `url(${data.image[0]})`,
 									}"
-								>
-									<font-awesome-icon
-										:icon="['fas', 'circle-xmark']"
-										class="fs-5 d-md-none position-absolute top-0 start-100 translate-middle gray p-2"
-									/>
-
-									<font-awesome-icon
-										v-if="resize >= 768"
-										:icon="['fas', 'trash-can']"
-										class="fs-4 icon"
-									/>
-								</div>
+								></div>
 
 								<div
 									v-if="data.image.length === 0"
@@ -432,8 +421,35 @@
 									class="col-12 ps-0 pe-0 d-flex align-items-center justify-content-center flex-wrap flex-md-nowrap"
 								>
 									<!-- 左側縮圖 -->
-									<div class="btn-group">
-										<div
+									<div class="btn-group text-center me-3">
+										<div class="m-0 p-0">
+											<div
+												v-if="
+													data.image[formatIndex] &&
+													data.image[formatIndex] !== ''
+												"
+												class="card-newImg-disabled my-2 p-0 d-flex align-items-center justify-content-center position-relative"
+												:style="{
+													'background-image': `url(${data.image[formatIndex]})`,
+												}"
+											></div>
+											<div
+												v-else
+												class="card-newImg-disabled me-3 my-2"
+												@click="uploadFile"
+											>
+												<font-awesome-icon
+													:icon="['fas', 'image']"
+													class="fa-image"
+												/>
+											</div>
+											<div class="fs-12 text-center p-0 m-0">
+												<p class="m-0 p-0">取上傳的</p>
+												<p class="m-0 p-0">第 {{ formatIndex + 1 }} 張圖片</p>
+											</div>
+										</div>
+
+										<!-- <div
 											class="me-3 my-2 btn-danger dropdown-toggle"
 											:class="{
 												'card-newImg ': !formatItem.image,
@@ -475,7 +491,7 @@
 													></div>
 												</div>
 											</li>
-										</ul>
+										</ul> -->
 									</div>
 
 									<dir class="flex-grow-1 m-0 p-0 d-flex">
@@ -659,7 +675,7 @@
 							</div>
 						</div>
 						<div class="col-12 col-md-6 ps-0 m-0 mb-2">
-							<label class="mb-3">
+							<label class="mb-1">
 								付款方式
 								<span class="text-danger">*</span>
 							</label>
@@ -741,10 +757,10 @@ function closeItem(key: keyof DetailedOrderProductType, index: number) {
 		property.splice(index, 1);
 	}
 }
-// 選擇圖片更換 使用 vee-會出錯
-function selectUrl(index: number, imgUrl: string) {
-	data.value.format[index].image = imgUrl;
-}
+// // 選擇圖片更換 使用 vee-會出錯
+// function selectUrl(index: number, imgUrl: string) {
+// 	data.value.format[index].image = imgUrl;
+// }
 const addFormatData = () => {
 	// 新增資料 使用 vee-會出錯
 	const newFormat = {

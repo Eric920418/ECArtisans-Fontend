@@ -66,6 +66,7 @@
 				>
 					<i class="bi bi-bag"></i>
 					<span
+						v-if="isUser"
 						class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger rounded-circle"
 					>
 						{{ cartNum }}

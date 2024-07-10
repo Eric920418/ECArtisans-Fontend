@@ -2,8 +2,8 @@
 export interface SellerPageType {
 	seller_id: string;
 	activities: any[];
-  seller_image?: string;
-  seller_name: ''
+	seller_image?: string;
+	seller_name: '';
 	seller_info: string;
 }
 
@@ -15,20 +15,20 @@ export interface SellerPageProductType {
 	seller_name?: string;
 	total_sales: number;
 	price: number;
-  discount:string[],
+	discount: string[];
 	star: number;
 }
 
 // 查詢推薦商家
 export interface RecommendShopType {
-	seller_id: string,
-	shop_name: string,
-	shop_image: string,
-	product_images: string[],
-	star: number,
-	total_comments: number,
+	seller_id: string;
+	shop_name: string;
+	seller_avatar: string;
+	product_images: Array<string>;
+	shop_image: string;
+	star: number;
+	total_comments: number;
 }
-
 
 /* 商品總覽、搜尋bar */
 export interface ProductFormat {
@@ -71,8 +71,7 @@ export interface SearchProduct extends SellerPageProductType {
 }
 
 export interface BannerType {
-	activity_id: string,
-	seller_id: string,
-	activity_image: string
+	activity_id: string;
+	seller_id: string;
+	activity_image: string;
 }
-

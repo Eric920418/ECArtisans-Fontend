@@ -10,6 +10,7 @@ import {
 	sellerCouponNew, // 44	post 	賣家新增優惠劵 (data: any)
 	sellerCouponEdit, // 45	put  	賣家修改優惠劵 (coupon_id: string)
 	sellerCouponDelete, // 46	delete 賣家刪除單一優惠劵 (coupon_id: string)
+	userCouponAll, // 20	get  顯示所有優惠劵
 } from './api';
 import router from '@/router';
 
@@ -51,6 +52,15 @@ export const useCoupon = defineStore({
 					await sellerCouponAll(token)
 						.then(res => {
 							this.allData = res.Coupons;
+						})
+						.catch(err => {
+							alertStore.error(err.response.data.message);
+						});
+				} else if (this.accountType === 'user') {
+					await userCouponAll(token)
+						.then(res => {
+							console.log(res);
+							this.allData = res.data;
 						})
 						.catch(err => {
 							alertStore.error(err.response.data.message);
