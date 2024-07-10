@@ -47,6 +47,10 @@ export const userMenu = [
 		path: { name: 'UserOrder', query: { page: 1, type: '1' } },
 	},
 	{
+		title: '優惠劵紀錄',
+		path: { name: 'UserCoupon', query: { page: 1, type: '1' } },
+	},
+	{
 		title: '收藏清單',
 		path: { name: 'UserCollect', query: { page: 1 } },
 	},

@@ -14,7 +14,7 @@
 					<div class="d-flex my-2">
 						<!-- 開啟小鈴鐺?  -->
 						<svg
-							class="icon"
+							class="icon me-2"
 							width="36"
 							height="36"
 							viewBox="0 0 36 36"

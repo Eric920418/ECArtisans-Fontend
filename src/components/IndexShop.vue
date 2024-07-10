@@ -36,7 +36,7 @@
 							<div
 								class="indexShopCard-top col-12 d-flex justify-content-center align-items-center bg-img-eca-dack"
 								:style="{
-									'background-image': `url(${item.shop_image})`,
+									'background-image': `url(${checkImg(item.shop_image, 'activity', index)})`,
 								}"
 							>
 								<div
@@ -46,14 +46,18 @@
 									"
 								>
 									<div
+										v-if="item"
 										class="avatar-l avatar-border ma-12"
 										:style="{
-											'background-image': `url(${item.shop_image})`,
+											'background-image': `url(${checkImg(item.seller_avatar, 'avatar', index)})`,
 										}"
 									></div>
 									<div class="text-white ma-12">
 										<h3 class="mb-2">{{ item.shop_name }}</h3>
-										<Star :stars="item.star" />
+										<div class="m-0 p-0 d-flex">
+											<Star :stars="item.star" />
+											( {{ item.total_comments }} )
+										</div>
 									</div>
 								</div>
 							</div>
@@ -122,7 +126,7 @@
 					:keyboard="{ enabled: true }"
 				>
 					<SwiperSlide
-						v-for="(item, index) in shopList"
+						v-for="(item, index) in recommendSellerList"
 						:key="index"
 						:virtualIndex="index"
 						class="indexShopSwiperSlide"
@@ -134,7 +138,7 @@
 							<div
 								class="avatar-l"
 								:style="{
-									'background-image': `url(${item.shop_image})`,
+									'background-image': `url(${checkImg(item.seller_avatar, 'avatar', index)})`,
 								}"
 							></div>
 							<p class="indexShopTitle text-center mb-0">
@@ -190,21 +194,31 @@ const { resize } = useResize();
 import { useShop } from '@/stores/index';
 const userStore = useShop();
 
-interface Shop {
-	seller_id: string;
-	shop_name: string;
-	shop_image: string;
-}
-
 const recommendSellerList = computed(() => userStore.recommendShopData);
 
-const shopList = computed<Shop[]>(() => {
-	return recommendSellerList.value.map(shopData => ({
-		seller_id: shopData.seller_id,
-		shop_name: shopData.shop_name,
-		shop_image: shopData.shop_image,
-	}));
-});
+// const shopList = computed<Array<Shop>>(() => {
+// 	// return recommendSellerList.value.map(shopData => ({
+// 	// 	seller_id: shopData.seller_id,
+// 	// 	shop_name: shopData.shop_name,
+// 	// 	shop_image: shopData.shop_image,
+// 	// }));
+// 	return recommendSellerList;
+// });
+function checkImg(url: any, text: string, index: number): string {
+	if (
+		text === 'activity' &&
+		!url &&
+		recommendSellerList.value[index].seller_avatar
+	) {
+		return recommendSellerList.value[index].seller_avatar;
+	} else if (text === 'activity' && !url) {
+		return 'public/images/noActivity.jpg';
+	}
+	if (text === 'avatar' && !url) {
+		return 'public/images/user-img.svg';
+	}
+	return url;
+}
 
 const modules = [Autoplay, Pagination, Navigation, Scrollbar];
 const prevEl = () => {};

@@ -2,6 +2,58 @@
 	<div class="container">
 		<!-- 立即註冊 --------------------------------------------------------- START -->
 		<div
+			v-if="init.type === 'seller'"
+			class="row px-3 m-0 justify-content-center align-items-center"
+		>
+			<div class="col-8 my-3">
+				<div class="position-relative m-4">
+					<div
+						class="progress"
+						role="progressbar"
+						aria-label="Progress"
+						aria-valuenow="50"
+						aria-valuemin="0"
+						aria-valuemax="100"
+						style="height: 1px"
+					>
+						<div class="progress-bar" :style="{ width: `${progress}%` }"></div>
+					</div>
+					<button
+						type="button"
+						class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-circle"
+						style="width: 2rem; height: 2rem"
+					>
+						1
+					</button>
+					<button
+						type="button"
+						class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-circle"
+						:class="{
+							'btn-secondary': progress <= 50,
+							'btn-primary':
+								progress > 50 ||
+								(init.schedule === 'shopType' && addUserStatus === false) ||
+								init.schedule === 'OK',
+						}"
+						style="width: 2rem; height: 2rem"
+					>
+						2
+					</button>
+					<button
+						type="button"
+						class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-circle"
+						:class="{
+							'btn-secondary': progress < 100,
+							'btn-primary': progress === 100 || init.schedule === 'OK',
+						}"
+						style="width: 2rem; height: 2rem"
+					>
+						3
+					</button>
+				</div>
+			</div>
+		</div>
+		<div
 			v-if="init.schedule === 'info' && addUserStatus === false"
 			class="row g-3 py-4 px-4 d-flex justify-content-center"
 		>
@@ -86,7 +138,6 @@
 						</div>
 					</div>
 					<!-- 性別 END-->
-
 					<!-- 密碼 START-->
 					<div class="mb-2 d-flex col-sm-12 col-md-6">
 						<div>
@@ -372,7 +423,7 @@
 				</div>
 				<!-- 隱私權政策 checkbox START-->
 				<div class="mb-2 d-flex col-sm-12 d-flex justify-content-center">
-					<div class="form-check">
+					<div class="form-check d-flex align-items-center">
 						<v-field
 							class="form-check-input me-2"
 							type="checkbox"
@@ -429,7 +480,7 @@
 						</div>
 						<div class="row m-0 p-0">
 							<div
-								class="form-check col-4 col-sm-4 col-md-3 mb-2"
+								class="form-check col-4 col-sm-4 col-md-3 mb-2 d-flex align-items-center"
 								v-for="(stt, sttIndex) in init.shopTypeText"
 								:key="sttIndex"
 							>
@@ -437,9 +488,10 @@
 									class="form-check-input me-2"
 									type="checkbox"
 									v-model="data.salesType"
-									:class="{ 'is-invalid': errors['policy'] }"
+									:class="{ 'is-invalid': errors['salesType'] }"
 									:value="stt.value"
 									:id="stt.value"
+									rules="required"
 									name="salesType"
 									as="input"
 								></v-field>
@@ -549,7 +601,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, createApp, toValue } from 'vue';
-import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
+import {
+	VForm,
+	VField,
+	ErrorMessage,
+	isName,
+	isGender,
+	isPhone,
+	isPassword,
+	isNeed,
+	isCollection,
+} from '@/setup/vee-validate';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore, useUserStore } from '@/stores/index';
 import Loading from 'vue-loading-overlay';
@@ -566,6 +628,26 @@ const userStore = useUserStore();
 const isLoading = computed(() => authStore.isLoading);
 const addUserStatus = computed(() => userStore.addUserStatus); //判斷註冊是否有成功
 // const isLoading = authStore.isLoading;
+
+const progress = computed(() => {
+	let num = 0;
+	const addNum = 50 / 9;
+	if (data.value.name && isName(data.value.name) === true) num += addNum;
+	if (data.value.gender && isGender(data.value.gender) === true) num += addNum;
+	if (data.value.phone && isPhone(data.value.phone) === true) num += addNum;
+	if (data.value.mail) num += addNum;
+	if (data.value.password && isPassword(data.value.password) === true)
+		num += addNum;
+	if (data.value.confirmPassword) num += addNum;
+	if (data.value.brand && isNeed(data.value.brand, '商家名稱') === true)
+		num += addNum;
+	if (data.value.collection && isCollection(data.value.collection) === true)
+		num += addNum;
+	if (!policy.value) num += addNum;
+	if (data.value.introduce && data.value.introduce !== '') num += 25;
+	if (data.value.salesType.length > 0) num += 25;
+	return num;
+});
 
 // 驗證資料
 const eye = ref(false);

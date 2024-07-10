@@ -4,7 +4,7 @@
 			class="col-6 col-md-3 p-2 p-sm-3 d-flex align-items-end m-0 p-0"
 			v-for="(planItem, planIndex) in buyPlan"
 			:key="planIndex"
-			@click="subscribePayment(planItem)"
+			@click="email ? subscribePayment(planItem) : ''"
 		>
 			<div
 				class="p-1 card w-100 m-0 p-0"
@@ -51,42 +51,6 @@
 								/{{ planItem.unit }}
 							</div>
 						</div>
-
-						<!-- <div
-							class="px-0"
-							:class="{ 'row m-0 p-0': resize < 365, 'd-flex': resize < 365 }"
-						>
-							<div
-								class="fs-5 text-primary d-flex align-items-start"
-								:class="{
-									'col-12 p-0': resize < 365,
-									'fs-6': resize < 365,
-									'fs-5': resize >= 365,
-								}"
-							>
-								NT$
-							</div>
-							<div
-								class="fs-1 text-primary fw-bold d-flex align-items-center my-0"
-								:class="{
-									'col-8 p-0 justify-content-end pe-1': resize < 365,
-									'fs-2': resize < 365,
-									'fs-1': resize >= 365,
-								}"
-							>
-								{{ planItem.cost }}
-							</div>
-							<div
-								class="fs-5 d-flex align-items-end"
-								:class="{
-									'col-4 p-0': resize < 365,
-									'fs-6': resize < 365,
-									'fs-5': resize >= 365,
-								}"
-							>
-								/{{ planItem.unit }}
-							</div>
-						</div> -->
 					</div>
 				</div>
 			</div>
@@ -101,7 +65,7 @@ import { useResize } from '@/stores/index';
 const { resize } = useResize();
 
 interface Props {
-	email: string;
+	email?: string;
 }
 
 const props = defineProps<Props>();

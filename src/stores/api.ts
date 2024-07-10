@@ -327,7 +327,7 @@ export const rating = (order_id: string, product_id: string, token: string, rate
 
 // 優惠劵 ■
 // 20	get   /users/${user_id}/discounts	 	 優惠劵紀錄	 	 買家端
-export const userCouponall = (user_id: string) =>
+export const userCouponAll = (user_id: string) =>
 	handleApiResponse(apiRequest.get(`/users/${user_id}/discounts`));
 // 21	get   /users/${user_id}/discounts/${discount_id}	 	優惠劵詳情	 	買家端
 export const userCoupon = (user_id: string, coupon_id: string) =>

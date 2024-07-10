@@ -15,8 +15,6 @@
 						<div class="col-12 col-md-5">
 							<!-- 輪播 右側 商品資訊 -->
 							<div class="row m-0 p-0">
-								{{ isUser }} ///
-								{{ isLoggedIn }}
 								<div
 									class="col-12 m-0 p-0 d-flex justify-content-between align-items-start"
 								>
@@ -279,10 +277,19 @@
 			<div class="col-12 col-md-4 m-0 p-0 mb-4 order-2 order-md-3">
 				<div class="card shadow-sm p-0 overflow-hidden">
 					<div
+						v-if="data.shop_image && data.shop_image !== ''"
 						class="w-100 d-flex align-items-end justify-content-start p-4 bg-img-eca-dack"
 						style="height: 136px"
 						:style="{
 							'background-image': `url(${data.shop_image})`,
+						}"
+					></div>
+					<div
+						v-else
+						class="w-100 d-flex align-items-end justify-content-start p-4 bg-img-eca-dack"
+						style="height: 136px"
+						:style="{
+							'background-image': `url(${data.seller_avatar})`,
 						}"
 					></div>
 					<div
@@ -303,19 +310,21 @@
 							<font-awesome-icon :icon="['fas', 'angle-right']" />
 						</div>
 					</div>
-					<!-- <div class="p-3 d-flex">
-						<button
-							type="button"
-							class="col btn btn-primary"
-							style="visibility: hidden"
-						>
-							賣家聊聊
-						</button>
-						<hr style="margin: 0px 8px" />
-						<button type="button" class="col btn btn-outline-primary">
-							加入關注
-						</button>
-					</div> -->
+					<!-- 
+						<div class="p-3 d-flex">
+							<button
+								type="button"
+								class="col btn btn-primary"
+								style="visibility: hidden"
+							>
+								賣家聊聊
+							</button>
+							<hr style="margin: 0px 8px" />
+							<button type="button" class="col btn btn-outline-primary">
+								加入關注
+							</button>
+						</div> 
+					-->
 				</div>
 			</div>
 		</div>

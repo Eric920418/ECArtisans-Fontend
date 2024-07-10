@@ -218,7 +218,12 @@ const routes = [
 				meta: { requiresAuth: true, role: 'user', user: true }, // 買家身份登入後才能訪問
 				props: true, // 將orderID參數作為'props'傳遞給其他組件
 			},
-
+			{
+				path: 'coupon', // 優惠劵
+				name: 'UserCoupon',
+				component: SellerCoupon,
+				meta: { requiresAuth: true, role: 'user', seller: true },
+			},
 		],
 	},
 	{

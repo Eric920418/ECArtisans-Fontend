@@ -51,7 +51,10 @@
 					<span v-if="data.date.sDate && data.date.eDate">~</span>
 					{{ data.date.eDate ? $getDate(data.date.eDate) : '' }}
 				</p>
-				<div v-if="data.btn" class="d-flex p-0 d-flex justify-content-end mt-2">
+				<div
+					v-if="data.btn && route.matched[0].path === '/seller'"
+					class="d-flex p-0 d-flex justify-content-end mt-2"
+				>
 					<button
 						v-for="(btnItme, btnIndex) in data.btn"
 						:key="btnIndex"
@@ -60,6 +63,17 @@
 						@click="btnItme.go ? $go(btnItme.go) : ''"
 					>
 						{{ btnItme.title }}
+					</button>
+				</div>
+				<div
+					v-if="data.btn && route.matched[0].path === '/user'"
+					class="d-flex p-0 d-flex justify-content-end mt-2"
+				>
+					<button
+						class="btn btn-outline-primary px-4 flex-shrink"
+						@click="$go({ name: 'ShopHome', params: { id: data.seller } })"
+					>
+						商家賣場
 					</button>
 				</div>
 			</div>
@@ -72,7 +86,8 @@
 import router from '@/router';
 import { getCoupon } from '@/stores/index';
 import { type ActivityCardType } from '@/type/ActivityCardType';
-
+import { useRoute, useRouter } from 'vue-router';
+const route = useRoute();
 const props = defineProps<{
 	data: ActivityCardType;
 }>();
