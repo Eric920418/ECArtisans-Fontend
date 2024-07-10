@@ -52,13 +52,13 @@ export const useCartStore = defineStore({
 			const authStore = useAuthStore();
 			const token = authStore.token;
 			const accountType = authStore.accountType;
-			// if (!token) {
-			// 	alertStore.error('使用者未登入');
-			// 	// router.push('/user-login');
-			// 	return;
-			// }
+			if (!token) {
+				alertStore.error('使用者未登入');
+				// router.push('/user-login');
+				return;
+			}
 
-			if (accountType == 'user') {
+			if (accountType == 'user' && token) {
 				try {
 					this.isLoading = true;
 					const response = await cartAll(token);
