@@ -86,12 +86,12 @@ const router = useRouter();
 // 接收傳入的值
 const data = [
 	{
-		src: '/public/images/shop/banner1.png',
+		src: 'images/shop/banner1.png',
 		text: '我們與ECArtisans合作已有一段時間了，他們專注於細節提供了出色的技術支持。\n\n確保我們的商品在其平台上獲得了充分的曝光。\n\n與ECArtisans的合作為我們的品牌帶來了許多正面的反饋和成功。',
 		name: 'ArtCraft Furnishings',
 	},
 	{
-		src: '/public/images/shop/banner2.png',
+		src: 'images/shop/banner2.png',
 		text: '作為一個小型創業家,我一直在尋找一個方便且價格合理的電商平台。ECArtisans提供了一個完美的解決方案。\n\n他們的技術讓我輕鬆地建立和管理我的線上商店,而且月租制度讓我省去了大筆開支的煩惱。\n\n現在,我可以專注於我的產品和客戶,而不必擔心技術和財務的問題。',
 		name: 'Architectural Product Ltd',
 	},
@@ -101,7 +101,7 @@ const data = [
 		name: 'Artisanal Craft Co.',
 	},
 	{
-		src: '/public/images/shop/banner3.png',
+		src: 'images/shop/banner3.png',
 		text: '作為一個小型創業家,我一直在尋找一個方便且價格合理的電商平台。\n\nECArtisans提供了一個完美的解決方案。\n\n他們的技術讓我輕鬆地建立和管理我的線上商店,而且月租制度讓我省去了大筆開支的煩惱。\n現在,我可以專注於我的產品和客戶,而不必擔心技術和財務的問題。',
 		name: '小創業家的最佳選擇',
 	},
