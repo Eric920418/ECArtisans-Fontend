@@ -31,9 +31,9 @@ import Title from './SellerTitle.vue';
 const whyText =
 	'ECArtisans 採用先進的技術和堅固的硬體配備，\n讓您鬆管理您的商店，關注於增加銷售和滿足客戶需求。\n\n透過 ECArtisans 您可以採用月租制度，無須承擔高昂的開支，即可請鬆啟動您的線上商店。\n這種固定的付款方式讓您更輕鬆地管理財務，並再業務成長時隨時調整您的月租計畫。\n\n讓 ECArtisans 成為您創業上的最佳夥伴。\n立即加入我們，開啟您事業的新篇章！';
 const whyIcon = [
-	{ src: 'public/images/sellerHome/imgWhy01.png', text: '會員人數超過 100 萬' },
-	{ src: 'public/images/sellerHome/imgWhy02.png', text: '持續更新的技術' },
-	{ src: 'public/images/sellerHome/imgWhy03.png', text: '深入亞洲市場' },
+	{ src: 'images/sellerHome/imgWhy01.png', text: '會員人數超過 100 萬' },
+	{ src: 'images/sellerHome/imgWhy02.png', text: '持續更新的技術' },
+	{ src: 'images/sellerHome/imgWhy03.png', text: '深入亞洲市場' },
 ];
 </script>
 

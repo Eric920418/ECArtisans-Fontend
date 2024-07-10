@@ -40,7 +40,7 @@ import Pagenation from '@/components/Pagenation.vue';
 import NoData from '@/components/NoData.vue';
 
 import { useCoupon, useAuthStore, dayAndToDay } from '@/stores/index';
-import { type Coupon2Type, type CouponType } from '@/type/couponType';
+import { type CouponType } from '@/type/couponType';
 import { type ActivityCardType } from '@/type/ActivityCardType';
 
 const route = useRoute();
