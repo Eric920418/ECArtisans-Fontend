@@ -13,7 +13,7 @@
 				<div
 					class="card w-100 h-100 bg-login"
 					:style="{
-						'background-image': 'url(./images/imgLogin.svg)',
+						'background-image': `url(${init.loginImgUrl})`,
 					}"
 				>
 					<div class="position-relativ" style="height: 60vh">
@@ -146,6 +146,7 @@ const userTitleData = {
 	subtitle: '探索無限的購物樂趣',
 	loginTitle: '會員登入',
 	routerLink: 'UserSignUp',
+	loginImgUrl: './images/imgLogin.svg',
 };
 
 const sellerTitleData = {
@@ -154,6 +155,7 @@ const sellerTitleData = {
 	subtitle: '實現銷售，即刻開始',
 	loginTitle: '商家登入',
 	routerLink: 'SellerSignUp',
+	loginImgUrl: './images/imgShopLogin.svg',
 };
 
 const init = ref({}) as any;

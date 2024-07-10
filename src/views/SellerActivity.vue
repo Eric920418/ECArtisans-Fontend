@@ -4,7 +4,7 @@
 			<NavTabs :data="navTabs" />
 			<div class="my-0">
 				<NoData
-					text="快建立活動增加曝光度!"
+					text="快建立活動增加曝光度吧!"
 					v-if="paginatedData.length === 0"
 				/>
 				<div class="row m-0 p-0" v-else>

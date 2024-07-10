@@ -1,5 +1,5 @@
 <template>
-	<div class="container p-0">
+	<div class="p-0" :class="{ container: route.name !== 'SellerHome' }">
 		<div class="row g-3 m-0 p-0 flex-grow-1">
 			<div
 				v-if="route.name !== 'SellerHome'"
@@ -21,7 +21,10 @@
 				</ul>
 			</div>
 			<!-- 右側 -->
-			<router-view class="col p-0 mt-5"></router-view>
+			<router-view
+				class="col p-0 m-0"
+				:class="{ 'mt-5': route.name !== 'SellerHome' }"
+			></router-view>
 			<!-- 右側 -->
 		</div>
 	</div>

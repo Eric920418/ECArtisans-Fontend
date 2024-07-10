@@ -5,6 +5,7 @@ export interface BtnType {
 
 export interface ActivityCardType {
 	go?: Object; // Card 轉跳 to 的內容
+	seller?: String;
 	img?: String;
 	title: string | null;
 	state?: boolean; // 狀態：啟用中

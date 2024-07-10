@@ -33,26 +33,27 @@
 				<div class="mx-0 px-0">
 					<h3 class="title mb-1 p-0">{{ item.productName }}</h3>
 				</div>
-				<!--	<div
+				<div
 					class="d-flex align-items-center justify-content-between mb-1 p-0 neutral-02 text-card-shop"
 				>
 					<p class="text-shop mb-0">
-						{{ item.company }}
+						{{ item.productName }}
 					</p>
 					<p class="text-sold mb-0">&emsp;已售出 {{ item.sold }}</p>
 				</div>
-				<p class="text-card-price p-0">NT${{ item.price }}</p> -->
+				<p class="text-card-price p-0">NT${{ getPrice(item.format) }}</p>
 				<div class="row align-items-center justify-content-between m-0 p-0">
-					<!-- <div class="col-12 col-sm-3 p-0 mb-1 mb-sm-0 d-flex">
+					<div class="col-12 col-sm-3 p-0 mb-1 mb-sm-0 d-flex">
 						<p
 							class="text-card-coupon btn-Bg-active rounded-1 text-primary mb-0"
 						>
 							免運券
 						</p>
-					</div> -->
-					<!-- <div class="col-12 col-sm-9 p-0 d-flex justify-content-sm-end">
-						<Star :stars="item.stars" />
-					</div> -->
+					</div>
+					<div class="col-12 col-sm-9 p-0 d-flex justify-content-sm-end">
+						<!-- <Star :stars="item.stars" /> -->
+						<!-- 缺星星 -->
+					</div>
 				</div>
 				<div class="mt-3 mb-1">
 					<button class="btn btn-outline-primary w-100">加入購物車</button>
@@ -67,7 +68,7 @@ import { computed, ref } from 'vue';
 import { useCollect, useAuthStore, go } from '@/stores/index';
 import { alertStore } from '@/main';
 import Star from './Star.vue';
-import { type collectType } from '../type/collectType';
+import { type collectType, type collectFormatType } from '../type/collectType';
 import Swal from 'sweetalert2';
 const collect = useCollect();
 const emit = defineEmits<{
@@ -88,6 +89,15 @@ const isLoggedIn = computed(() => {
 });
 
 const favorited = ref(true); // 預設為未收藏 -> 待補完整資料
+
+const getPrice = (data: Array<collectFormatType>) => {
+	const maxPrice = data.reduce(
+		(max, item) => (item.price > max ? item.price : max),
+		-Infinity
+	);
+
+	return maxPrice;
+};
 
 const addToFavorites = (products_id: string) => {
 	favorited.value = !favorited.value;

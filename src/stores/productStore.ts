@@ -117,16 +117,6 @@ export const useProduct = defineStore({
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
-	getters: {
-		// // 獲取所有訂單
-		// gettingAllOrders(state) {
-		// 	return state.allOrders;
-		// },
-		// // 獲取單筆訂單
-		// gettingSingleOrder(state) {
-		// 	return state.oneOrder;
-		// },
-	},
 	actions: {
 		async setAccountType(): Promise<void> {
 			const currentPagePath = window.location.hash;
@@ -258,6 +248,7 @@ export const useProduct = defineStore({
 					.then(res => {
 						console.log(res);
 						alertStore.success('renewOK');
+						router.go(-1);
 					})
 					.catch(err => {
 						alertStore.error(err.response.data.message);
@@ -314,14 +305,6 @@ export const useProduct = defineStore({
 				await product(id)
 					.then(res => {
 						this.shopData = res.data;
-						// if (this.shopData.star === null) this.shopData.star = 0;
-
-						// this.shopData.products_images = [];
-						// for (let i = 0; i < res.data.products_images.length; i++) {
-						// 	this.shopData.products_images.push({
-						// 		src: res.data.products_images[i],
-						// 	});
-						// }
 					})
 					.catch(err => {
 						alertStore.error(err.response.data.message);

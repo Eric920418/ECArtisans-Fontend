@@ -1,97 +1,108 @@
 <template>
-	<div class="container">
-		<!-- 进度条 -->
-		<div class="row px-3 m-0 justify-content-center align-items-center">
-			<div class="col-8 my-3">
-				<div class="position-relative m-4">
-					<div
-						class="progress"
-						role="progressbar"
-						aria-label="Progress"
-						:aria-valuenow="progress"
-						aria-valuemin="0"
-						aria-valuemax="100"
-						style="height: 1px"
-					>
-						<div class="progress-bar" :style="{ width: progress + '%' }"></div>
+	<div class="min-h mb-0 row m-0 p-0 flex-column text-center">
+		<div class="col-12 p-0 m-0">
+			<div class="row px-3 m-0 justify-content-center align-items-center">
+				<div class="col-8 my-3">
+					<div class="position-relative m-4">
+						<div
+							class="progress"
+							role="progressbar"
+							aria-label="Progress"
+							:aria-valuenow="progress"
+							aria-valuemin="0"
+							aria-valuemax="100"
+							style="height: 1px"
+						>
+							<div
+								class="progress-bar"
+								:style="{ width: progress + '%' }"
+							></div>
+						</div>
+						<button
+							type="button"
+							class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-circle"
+							style="width: 2rem; height: 2rem"
+						>
+							1
+						</button>
+						<button
+							type="button"
+							class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-circle"
+							style="width: 2rem; height: 2rem"
+						>
+							2
+						</button>
+						<button
+							type="button"
+							class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-circle"
+							style="width: 2rem; height: 2rem"
+						>
+							3
+						</button>
 					</div>
-					<button
-						type="button"
-						class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-circle"
-						style="width: 2rem; height: 2rem"
-					>
-						1
-					</button>
-					<button
-						type="button"
-						class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-circle"
-						style="width: 2rem; height: 2rem"
-					>
-						2
-					</button>
-					<button
-						type="button"
-						class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-circle"
-						style="width: 2rem; height: 2rem"
-					>
-						3
-					</button>
 				</div>
 			</div>
 		</div>
-		<!-- 商品列表 -->
-		<div class="row px-3 m-0 mt-4">
-			<div class="col-12 col-lg-9">
-				<div class="row">
-					<CartCard
-						v-for="(shopItem, shopIndex) in cart"
-						:key="shopItem.seller._id"
-						:data="shopItem"
-						:check="false"
-						@update-items="handleUpdateItems(shopIndex, $event)"
-						@delete-item="handleDeleteItem(shopIndex, $event)"
-					/>
-				</div>
-			</div>
-			<!-- 订单摘要 -->
-			<div class="col-6 col-lg-3 p-0 mb-5 ps-lg-5">
-				<div class="card p-3">
-					<h2 class="mb-3">訂單摘要</h2>
-					<div>
-						<p class="mb-2 fs-6">
-							已選取
-							<span>{{ totalItems }}</span>
-							個商品
-						</p>
+		<div class="col-12 p-0 m-0 position-relative" style="flex-grow: 1">
+			<div class="container">
+				<NoData text="快把商品加入購物車帶回家吧!" v-if="cart.length === 0" />
+				<div v-else class="row px-3 m-0 mt-4">
+					<div class="col-12 col-lg-9">
+						<div class="row">
+							<CartCard
+								v-for="(shopItem, shopIndex) in cart"
+								:key="shopItem.seller._id"
+								:data="shopItem"
+								:check="false"
+								@update-items="handleUpdateItems(shopIndex, $event)"
+								@delete-item="handleDeleteItem(shopIndex, $event)"
+							/>
+						</div>
 					</div>
-					<div>
-						<p class="mb-2 fs-6 d-flex justify-content-between">
-							運費總計
-							<span>${{ highestFare }}</span>
-						</p>
-						<p class="mb-2 fs-6 d-flex justify-content-between">
-							小記
-							<span>${{ totalPrice }}</span>
-						</p>
+					<div class="col-6 col-lg-3 p-0 mb-5 ps-lg-5">
+						<div class="card p-3">
+							<h2 class="mb-3">訂單摘要</h2>
+							<div class="text-start">
+								<p class="mb-2 fs-6">
+									已選取
+									<span>{{ totalItems }}</span>
+									個商品
+								</p>
+							</div>
+							<div>
+								<p class="mb-2 fs-6 d-flex justify-content-between">
+									運費總計
+									<span>${{ highestFare }}</span>
+								</p>
+								<p class="mb-2 fs-6 d-flex justify-content-between">
+									小記
+									<span>${{ totalPrice }}</span>
+								</p>
+							</div>
+							<hr />
+							<p class="d-flex justify-content-between">
+								訂單總金額
+								<span>${{ totalPrice + highestFare }}</span>
+							</p>
+						</div>
 					</div>
-					<hr />
-					<p class="d-flex justify-content-between">
-						訂單總金額
-						<span>${{ totalPrice + highestFare }}</span>
-					</p>
 				</div>
 			</div>
 		</div>
-		<div
-			class="col bg-white p-3 px-sm-5 mx-0 mx-md-3 rounded-0 sticky-bottom d-flex justify-content-end"
-		>
-			<button
-				type="button"
-				class="btn btn-primary px-5 m-0 mx-1 mx-sm-2"
-				@click="checkout"
-			>
-				確認訂單
-			</button>
+		<div v-if="cart.length > 0" class="col-12 sticky-bottom">
+			<div class="container">
+				<div
+					class="col bg-white p-3 px-sm-5 mx-0 mx-md-3 rounded-0 d-flex justify-content-end"
+				>
+					<button
+						type="button"
+						class="btn btn-primary px-5 m-0 mx-1 mx-sm-2"
+						@click="checkout"
+					>
+						確認訂單
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -103,6 +114,7 @@ import CartCard from '@/components/CartCard.vue';
 import { useCartStore, useAuthStore } from '@/stores/index';
 import { alertStore } from '@/main'; // 導入實例
 import Swal from 'sweetalert2';
+import NoData from '@/components/NoData.vue';
 
 const auth = useAuthStore();
 const route = useRoute();
@@ -113,7 +125,8 @@ const cart = computed(() => store.cart); // 獲取選取物件
 
 const progress = computed(() => {
 	// 計算進度條
-	return 50;
+	if (totalItems.value > 0) return 50;
+	return 0;
 });
 
 const totalItems = computed(() => {
@@ -209,3 +222,8 @@ onMounted(async () => {
 	await store.getAllCart();
 });
 </script>
+<style lang="scss">
+.min-h {
+	min-height: calc(100vh - 80px - 312px);
+}
+</style>

@@ -35,12 +35,12 @@ import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 // 組件
 import NavTabs from '@/components/NavTabs.vue';
-import Card from '@/components/ActivityCard.vue';
+import Card from '@/components/CouponCard.vue';
 import Pagenation from '@/components/Pagenation.vue';
 import NoData from '@/components/NoData.vue';
 
 import { useCoupon, useAuthStore, dayAndToDay } from '@/stores/index';
-import { type CouponType } from '@/type/couponType';
+import { type Coupon2Type, type CouponType } from '@/type/couponType';
 import { type ActivityCardType } from '@/type/ActivityCardType';
 
 const route = useRoute();
@@ -112,6 +112,31 @@ function categorized(allData: CouponType[]) {
 // 接收篩選後的結果
 const filteredData = computed(() => categorized(userStore.allData));
 
+// 如果是 user 的 navTabs 資料
+const UserTitleData = {
+	routeName: 'UserCoupon',
+	title: [
+		{
+			title: '全部',
+			path: { name: 'UserCoupon', query: { page: 1, type: '1' } },
+		},
+		{
+			title: '未結束',
+			path: { name: 'UserCoupon', query: { page: 1, type: '2' } },
+		},
+		{
+			title: '結束',
+			path: { name: 'UserCoupon', query: { page: 1, type: '3' } },
+		},
+		{
+			title: '停止',
+			path: { name: 'UserCoupon', query: { page: 1, type: '4' } },
+		},
+	],
+	schedule: computed(() => {
+		return (route.query.type as string) || '1';
+	}),
+};
 // 如果是 seller 的 navTabs 資料
 const sellerTitleData = {
 	routeName: 'SellerCoupon',
@@ -160,6 +185,7 @@ const formatCardData = (item: CouponType) =>
 				go: { name: 'SellerCouponCheck', params: { id: item._id } },
 			},
 		],
+		seller: item.seller,
 	}) as ActivityCardType;
 
 const currentPage = computed(() => parseInt(route.query.page as string) || 1);
@@ -216,6 +242,12 @@ onMounted(async () => {
 			btn: { title: '新增優惠劵', path: { name: 'SellerCouponNew' } },
 		};
 		await userStore.getCouponAll(authStore.token);
+	} else {
+		navTabs.value = {
+			title: UserTitleData.title,
+			schedule: UserTitleData.schedule,
+		};
+		await userStore.getCouponAll(authStore.id);
 	}
 });
 </script>
