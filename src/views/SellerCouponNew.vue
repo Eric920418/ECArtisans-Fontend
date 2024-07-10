@@ -358,7 +358,7 @@
 											class="input-badge w-auto"
 											:class="{ 'bg-neutral-02': addNum, white: addNum }"
 										>
-											<p class="mb-0">{{ item }}</p>
+											<p class="mb-0">{{ getProductName(item) }}</p>
 											<button
 												type="button"
 												class="btn-close"
@@ -369,52 +369,37 @@
 									</div>
 								</button>
 								<ul class="dropdown-menu w-100 scrollbar" ref="dropdown">
-									<li
-										v-for="(stt, sttIndex) in [
-											'只是假資料',
-											'娛樂',
-											'服飾',
-											'3C產品',
-											'食品',
-											'家具',
-											'運動',
-											'寵物',
-											'生活用品',
-											'清潔用品',
-											'其他',
-										]"
-										:key="sttIndex"
-									>
+									<li v-for="(stt, sttIndex) in filteredData" :key="sttIndex">
 										<div class="dropdown-item">
 											<v-field
 												class="form-check-input me-2"
 												type="checkbox"
 												v-model="data.productChoose"
 												:class="{ 'is-invalid': errors['productChoose'] }"
-												:value="stt"
-												:id="stt"
+												:value="stt._id"
+												:id="stt._id"
 												name="productChoose"
 												as="input"
 											></v-field>
 											<label
 												class="form-check-label"
-												:for="stt"
+												:for="stt._id"
 												style="width: 100%"
 											>
-												{{ stt }}
+												{{ stt.productName }}
 											</label>
 										</div>
 									</li>
 								</ul>
 							</div>
 							<span
+								v-if="data.productChoose.length === 0"
 								role="alert"
 								class="text-danger"
 								style="margin-top: 0.25rem; font-size: 0.875em"
 							>
 								商品請最少選擇一項
 							</span>
-							<h1>待接商品api取得商品名稱+id</h1>
 						</div>
 
 						<div class="col-12 p-0 m-0 mb-2">
@@ -463,7 +448,8 @@ import NavTabs from '../components/NavTabs.vue';
 import router from '@/router';
 
 // stores
-import { useCoupon, useAuthStore, useResize } from '@/stores/index';
+import { useCoupon, useAuthStore, useResize, useProduct } from '@/stores/index';
+import type { DetailedOrderProductType } from '@/type/orderType';
 
 const route = useRoute();
 // const router = useRouter();
@@ -612,6 +598,22 @@ router.beforeEach((to, from, next) => {
 	next();
 });
 
+const products = useProduct();
+function getProductName(id: string) {
+	const itme = filteredData.value.find(
+		item => item._id === id
+	) as DetailedOrderProductType;
+	return itme.productName;
+}
+// 封裝分類邏輯的函數，想要入口統一，之後比較好撰寫內容
+function categorized(allData: Array<DetailedOrderProductType>) {
+	let data = allData;
+	data = data.filter(item => item.isOnshelf);
+	return data;
+}
+// 接收篩選後的結果
+const filteredData = computed(() => categorized(products.allData));
+
 onMounted(() => {
 	if (route.matched[0].path === '/seller') {
 		if (
@@ -637,6 +639,7 @@ onMounted(() => {
 				productChoose: [],
 				isEnabled: true,
 			};
+			products.getProductsAll(authStore.token);
 		} else if (route.name === 'SellerCouponCheck') {
 			// 修改/查看狀態
 			init.value = sellerTitleData.init;

@@ -101,7 +101,7 @@
 		<div
 			class="d-flex justify-content-center align-items-center mt-4 mt-md-5 mt-xl-6 mx-eca-12 mx-sm-0 mx-md-5"
 		>
-			<div class="container px-0 m-0 position-relative">
+			<div class="container px-5 m-0 position-relative">
 				<swiper
 					:slidesPerView="
 						resize <= 576 ? 3 : resize <= 768 ? 4 : resize <= 1200 ? 6 : 8
@@ -263,6 +263,9 @@ onMounted(async () => {
 	@media (min-width: 992px) {
 		max-width: 44.5vw;
 	}
+	.swiper-backface-hidden {
+		overflow: initial !important;
+	}
 }
 
 .indexShopCard {
@@ -298,9 +301,6 @@ onMounted(async () => {
 
 .ma-12 {
 	margin: 12px;
-}
-.swiper-backface-hidden {
-	overflow: initial !important;
 }
 
 .indexShopSwiperSlide {

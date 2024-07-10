@@ -677,14 +677,14 @@ function inputBadgeClose(num: number) {
 
 const init2 = ref({
 	shopTypeText: [
-		{ text: '娛樂', value: 1 },
 		{ text: '服飾', value: 2 },
-		{ text: '3C產品', value: 3 },
+		{ text: '運動', value: 6 },
 		{ text: '食品', value: 4 },
-		{ text: '家具', value: 5 },
-		{ text: '運動用品', value: 6 },
-		{ text: '寵物用品', value: 7 },
 		{ text: '生活用品', value: 8 },
+		{ text: '娛樂', value: 1 },
+		{ text: '家具', value: 5 },
+		{ text: '3C產品', value: 3 },
+		{ text: '寵物用品', value: 7 },
 		{ text: '清潔用品', value: 9 },
 		{ text: '其他', value: 10 },
 	],
