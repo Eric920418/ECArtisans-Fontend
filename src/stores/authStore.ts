@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import router from '@/router/index';
 import { sellerLogin, userLogin } from './api';
 import { alertStore } from '@/main'; // 導入實例
-import { useCartStore } from '@/stores/index'
+
 interface UserDataType {
 	mail: string;
 	password: string;
@@ -77,9 +77,6 @@ export const useAuthStore = defineStore({
 				this.accountType === 'seller' ? 'SellerProfile' : 'UserProfile';
 			router.push({ name: nextPage });
 
-			// 登入後直接去取購物車資料，渲染導航列
-			const useCart = useCartStore()
-			await useCart.getAllCart()
 		},
 		checkTokenExpiration() {
 			if (this.expirationTime && Date.now() > this.expirationTime) {

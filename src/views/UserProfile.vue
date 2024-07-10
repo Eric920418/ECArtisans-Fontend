@@ -550,7 +550,9 @@
 											type="text"
 											class="form-control"
 											:class="{ 'is-invalid': errors['地址'] }"
-											:rules="`address${init.type === 'user' ? '|required' : ''}`"
+											:rules="`address${
+												init.type === 'user' ? '|required' : ''
+											}`"
 											v-model="data.address"
 											:placeholder="
 												init.type === 'user' ? '請輸入地址' : '請輸入商家地址'
@@ -609,6 +611,7 @@ import { ref, onMounted, computed, watch, createApp } from 'vue';
 import { VForm, VField, ErrorMessage } from '@/setup/vee-validate';
 import { useUserStore, useAuthStore } from '@/stores/index';
 import { alertStore } from '@/main'; // 導入實例
+import { useCartStore } from '@/stores/index';
 import { useRoute } from 'vue-router';
 import router from '@/router/index';
 // import { type UserDataType } from '@/type/userType';
@@ -781,12 +784,15 @@ const sellerTitleData = {
 
 const init = ref({}) as any;
 
-onMounted(() => {
+onMounted(async () => {
 	// 根據當前路由加載資料
 	if (route && route.name === 'SellerProfile') {
 		init.value = sellerTitleData;
 	} else if (route && route.name === 'UserProfile') {
 		init.value = userTitleData;
+		// 登入後直接去取購物車資料，渲染導航列
+		const useCart = useCartStore();
+		await useCart.getAllCart();
 	}
 	userStore.getUserAccount();
 });

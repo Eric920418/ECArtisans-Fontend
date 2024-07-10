@@ -58,7 +58,7 @@ export const useCartStore = defineStore({
 			// 	return;
 			// }
 
-			if (accountType == 'user') {
+			if (accountType == 'user' && token) {
 				try {
 					this.isLoading = true;
 					const response = await cartAll(token);
