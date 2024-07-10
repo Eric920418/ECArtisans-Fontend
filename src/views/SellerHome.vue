@@ -44,7 +44,7 @@ import Background from '@/components/SellerBackground.vue';
 import Cost from '@/components/SellerCost.vue';
 import Partner from '@/components/SellerPartner.vue';
 
-const shopHomeBanner = 'public/images/sellerHome/Banner.png';
+const shopHomeBanner = '/public/images/sellerHome/Banner.png';
 </script>
 <style lang="scss">
 .shopHomeBanner {

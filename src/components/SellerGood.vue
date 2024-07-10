@@ -4,7 +4,7 @@
 		<div class="row d-flex align-items-center justify-content-center">
 			<div class="col-12 col-md-6 text-end p-5">
 				<img
-					src="/images/sellerHome/image 1.png"
+					src="/public/images/sellerHome/image 1.png"
 					class="goodDiv px-2 m-0 py-0"
 					alt="ECArtisans"
 					title="ECArtisans"
