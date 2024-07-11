@@ -678,16 +678,15 @@ const route = useRoute();
 const router = useRouter();
 
 const menulist = [
-	'娛樂',
 	'服飾',
-	'3C產品',
-	'食品',
-	'家具',
 	'運動',
-	'寵物',
+	'食品',
 	'生活用品',
+	'娛樂',
+	'家具',
+	'3C產品',
+	'寵物用品',
 	'清潔用品',
-	'其他',
 ];
 
 const searchlist = ['找商品']; //暫時拿掉

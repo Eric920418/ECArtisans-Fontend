@@ -41,7 +41,7 @@ const funData = ref([
 		cols_sm: 6,
 		cols_md: 3,
 		cols_lg: 2,
-		name: '娛樂',
+		name: '服飾',
 		url: 'images/index/01-clothing.png',
 	},
 	{
