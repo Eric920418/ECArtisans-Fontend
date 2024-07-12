@@ -15,6 +15,7 @@ import {
 	cartDeleteAll,
 	cartDelete,
 	selectItemsCart,
+	validateCouponCart,
 	userOrderNew, // 52 成立訂單
 	userOrderPay, // 金流
 } from './api';
@@ -30,22 +31,29 @@ export const useCartStore = defineStore({
 	state: () => ({
 		cart: [] as any,
 		selectdata: {} as any,
+		selectCoupons: [] as any,
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
 	getters: {
-    totalItems: (state) => {
-      return state.cart.reduce((total: any, cartGroup: { items: string | any[]; }) => {
-        return total + cartGroup.items.length;
-      }, 0);
-    },
-    cartNum: (state) => {
-      const totalItems = state.cart.reduce((total: any, cartGroup: { items: string | any[]; }) => {
-        return total + cartGroup.items.length;
-      }, 0);
-      return totalItems > 100 ? '99+' : totalItems.toString();
-    }
-  },
+		totalItems: state => {
+			return state.cart.reduce(
+				(total: any, cartGroup: { items: string | any[] }) => {
+					return total + cartGroup.items.length;
+				},
+				0
+			);
+		},
+		cartNum: state => {
+			const totalItems = state.cart.reduce(
+				(total: any, cartGroup: { items: string | any[] }) => {
+					return total + cartGroup.items.length;
+				},
+				0
+			);
+			return totalItems > 100 ? '99+' : totalItems.toString();
+		},
+	},
 	actions: {
 		// 獲取購物車資料
 		async getAllCart(): Promise<void> {
@@ -163,6 +171,33 @@ export const useCartStore = defineStore({
 					});
 			} catch (error) {
 				alertStore.error('商品送去確認訂單頁面失敗');
+			} finally {
+				this.isLoading = false;
+			}
+		},
+		async selectedCouponGet(data: any): Promise<void> {
+			const authStore = useAuthStore();
+			const token = authStore.token;
+
+			if (!token) {
+				alertStore.error('使用者未登入');
+				router.push('/user-login');
+				return;
+			}
+
+			try {
+				this.isLoading = true;
+				validateCouponCart(JSON.stringify(data), token)
+					.then(res => {
+						this.selectCoupons = res.discounts;
+						alertStore.success('篩選折價券送去確認訂單頁面');
+						router.push({ name: 'CartCheck' });
+					})
+					.catch(err => {
+						alertStore.error(err.response.data.message);
+					});
+			} catch (error) {
+				alertStore.error('篩選折價券進確認訂單頁面失敗');
 			} finally {
 				this.isLoading = false;
 			}

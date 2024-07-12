@@ -212,6 +212,13 @@ async function checkout() {
 			});
 		} else {
 			await store.selectedCart(selectedItems.value);
+			// 将 selectedItems.value 转换成 productIds 数组格式
+			const productIds = selectedItems.value.selectedItems.map(
+				(item: { productId: string }) => item.productId
+			);
+			// console.log({ productIds: productIds });
+			// 调用 selectedCouponGet 获取并存储优惠券
+			await store.selectedCouponGet({ productIds: productIds });
 		}
 	} catch (error) {
 		console.error('選擇商品失敗:', error);

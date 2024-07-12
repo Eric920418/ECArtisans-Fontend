@@ -202,6 +202,7 @@ const router = useRouter();
 
 // 解析 orderData
 const orderData = computed(() => store.selectdata);
+const couponData = computed(() => store.selectCoupons);
 // const orderData = ref([
 // 	{
 // 		seller: { _id: '66768265b72f97fbc2b555c1', brand: 'SkyMart' },
@@ -282,9 +283,8 @@ function handleDeleteItem(shopIndex: number, itemIndex: number) {
 const sendNow = ref<null | number>(null);
 const send = [
 	{ text: '宅配', value: 1 },
-	// { text: '宅配', value: 1 },
-	// { text: '宅配', value: 1 },
-	// { text: '宅配', value: 1 },
+	{ text: '黑貓宅急便', value: 2 },
+	{ text: '店到店', value: 3 },
 ];
 const address = ref<null | string>(null);
 
