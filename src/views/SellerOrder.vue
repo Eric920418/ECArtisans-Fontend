@@ -8,7 +8,7 @@
 			/>
 			<div class="row m-0 p-2" v-else>
 				<div
-					v-for="orderItem in filteredData"
+					v-for="orderItem in paginatedData"
 					:key="orderItem._id"
 					class="col-12 col-md-6 p-3 m-0"
 				>
@@ -167,7 +167,7 @@ console.log(filteredData.value);
 // };
 
 const currentPage = computed(() => parseInt(route.query.page as string) || 1);
-const perPage = ref(5); // 一頁要顯示多少的項目數量
+const perPage = ref(6); // 一頁要顯示多少的項目數量
 const totalRows = computed(() => filteredData.value.length); // 總項目數量
 const maxPage = computed(() =>
 	Math.ceil(filteredData.value.length / perPage.value)
