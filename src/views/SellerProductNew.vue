@@ -12,7 +12,9 @@
 							<h3 class="fs-5 p-0 neutral-01 mb-0">
 								{{ init.schedule }}
 							</h3>
-
+							<a class="mb-0 text-neutral03" v-if="isCheck" @click="demod()">
+								Demod快速鍵
+							</a>
 							<div
 								v-if="data._id"
 								class="d-flex justify-content-center align-items-center"
@@ -757,10 +759,69 @@ function closeItem(key: keyof DetailedOrderProductType, index: number) {
 		property.splice(index, 1);
 	}
 }
-// // 選擇圖片更換 使用 vee-會出錯
-// function selectUrl(index: number, imgUrl: string) {
-// 	data.value.format[index].image = imgUrl;
-// }
+function demod() {
+	userStore.data = {
+		...userStore.data,
+		state: false,
+		sellerCategory: [9, 7],
+		category: ['寵物清潔用品'],
+		isOnshelf: true,
+		sold: 0,
+		productName: '【BWR】兔兔貓貓寵物清潔組(含單罐販售)',
+		type: [],
+		sellerType: [],
+		origin: '台灣',
+		ingredient: '神秘魔法藥水',
+		introduction:
+			'【BWR】兔兔貓貓寵物清潔組是一款由台灣品牌Black White Rabbit推出的寵物清潔產品組合。這套清潔組包含三種不同功能的產品，每種產品都是以手工調製而成，使用神秘魔法藥水製成，保證安全無害。\n\n清香綠清香噴霧 300ml：\n\n這款清香噴霧專為寵物的毛髮設計，能有效去除異味並保持毛髮清爽香氣。適合日常使用，讓寵物的毛髮散發宜人的清香。\n魔法紅器皿洗滌劑 300ml：\n\n這款洗滌劑專為寵物的器皿設計，能徹底清潔食物碗和水碗，去除食物殘渣和細菌，保持器皿的衛生乾淨。使用後不留殘留物，安全可靠。\n潔淨藍清潔幕斯 300ml：\n\n這款清潔幕斯適用於寵物的身體和皮膚清潔，能溫和去除污垢和異味，同時保持皮膚健康和毛髮光澤。適合定期使用，維持寵物整潔舒適。\n每一種產品都是精心設計，配方溫和而有效，適合所有類型的寵物使用。無論是清潔毛髮、器皿還是身體，這套寵物清潔組都能提供全面的解決方案，讓您的寵物保持清潔和健康。',
+		format: [
+			{
+				title: '魔法清潔三件組',
+				price: 1100,
+				cost: 450,
+				stock: 5,
+				color: ['彩色'],
+				image: '',
+			},
+			{
+				title: '【清香綠】清香噴霧300ml',
+				price: 450,
+				cost: 150,
+				stock: 50,
+				image: '',
+				color: ['綠色'],
+			},
+			{
+				title: '【魔力紅】器皿洗滌劑300ml',
+				price: 450,
+				cost: 150,
+				stock: 0,
+				image: '',
+				color: ['紅色'],
+			},
+			{
+				title: '【潔淨藍】清潔幕斯300ml',
+				price: 450,
+				cost: 150,
+				stock: 20,
+				image: '',
+				color: ['藍色'],
+			},
+		],
+		introduce: '',
+		production: '手工調製而成',
+		evaluate: [],
+		haveStore: '',
+		fare: 120,
+		pay: [2, 1, 3],
+		image: [
+			'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/a4595339-1353-406e-92d9-9b9b725cfed9.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=bpQd4He5mlLq%2FAi56MHD1GWVaxQ%2FxYsuhzDSb7CcGALUVxgIE%2Bven7csh74VjSMQBOSztp6LasDFUdDWfaAy2eXVvIVv546Vrory%2FbnpKoNaZv%2F1jZ43TsiHKiVDDQJd4Vt1jAlTI3nb9aChG%2FxJfuIiYvaFcHU%2BjTnPOFbsa61LR2U20kHZi1QDlf1NUIyQ4lAJmjL9%2FuPUmt9tgt25Kbu1A2SV7tMs4aTVDHRaTJoqv3SNemQYacyaY660OegMRordW%2FC%2FBtzxgYta1YGgGO26hzrafem2N4C2vuZEMxkorWpShfL4%2Fs0AJXvfxrFIuvX0B9jEy4ObSogDTG2SCw%3D%3D',
+			'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/8824cedd-176b-4446-a478-253e5742ff51.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=KKHQop%2B2NiPWu8vtw6ufEuetvMjxjVwyibZOQ7sCMpE1kgvzTb4ZVhtEXohwqENLm4hcmt6IFB%2BPqEfjOuQl01Tevridlr4xtvVJOHdiHHJ5FVzWTOTrKpUWwB55Ct2al8QR%2B%2Bw6xLPQ0SC0OsE4yoH%2BY1Jgy5Tb6TtZiVwoaqKUVYgX0RQQ6MBSK8GppjtNtcfi9Flbx7i8in1MuEJoQURLj4UImpR1vrOQCwDLOjUgYxMQTzGrv16FfVs0HER7n2vooSfcvsZ7dYqQBK3cHYXZ35CpyrS2RwFa%2B469%2Bf%2BvsHh%2FgVeXIUWFJRJdReSTwIeB8svdSQDLZKNjagSdBw%3D%3D',
+			'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/c69c225f-82c8-4d56-951b-a78c711cb986.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=UOi6t53hca8dmbNKYDgZVuhJzMVuDY1z%2FFZOT4wClqya7XSRbrqFtNJcYFY3tkeKjsnugWdudK9M4linbGuEOCSGPqO4jd48lUpfYTEeX3ApkEwzItI%2Fiz7yWJS%2F%2BfqftwD0hx7soNjy1mkE4bRdJp1KmQoUeV%2BvYyxx2bDjUYTwvn9QSVssa5tXO9LU011JHDAsjhdg2PTKvjIHufDBEWHSTT6AJH4g3Hu1a2AURqmP2ozuGsVeWgmSUBfVUpJBa3AJZGwBgLBpkYN74MHtRwVPGVogLksJk6rEoV0W%2BgEoDwPOXlY%2Fld4x9xI1JhInSQNobWQUkVlbe68duPrq9A%3D%3D',
+			'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/ba3671e1-a510-4a18-9717-c6c3d94ac280.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=gAHurBXD7PXrP26%2FEg%2BM%2FqdS4gbwFJq2IAbigUIJxOMqnPDdmRHUV3W7ZIrfnGB%2Bt%2FDpjlfifnGk1TVAbWAd8WcrzAIDFlBR0FI5MN2C2HN1N%2BaDSnsFQpYLaLh%2FSxQpsIChwCfxf%2FExRlxKen3Xq2WVlZq6CJeXy2uXcaesmEVGFFAZDDp58hY4TgED165Jq5PZBC%2FxrzBVSOYNlqepXBt7OBlRpBtw4GSlPp9nHuwe8R7ie511PfdIRJ9cE8DgK2a17tcAFf6%2Bz53Q82BCWOQpbS2eMaalEuHctwsSWd8ve3nZ0%2FEJN2pmWz3Gi3DvK49hcuAlsRg6rzDaMA7W1A%3D%3D',
+		],
+	};
+}
 const addFormatData = () => {
 	// 新增資料 使用 vee-會出錯
 	const newFormat = {
@@ -936,6 +997,7 @@ function onSubmit(isValue: any | void) {
 		alertStore.error('請輸入正確的資料');
 	}
 }
+const isCheck = computed(() => route.name === 'SellerProductNew');
 const getData = () => {
 	if (route.matched[0].path === '/seller') {
 		if (route.name === 'SellerProductNew') {

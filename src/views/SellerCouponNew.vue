@@ -27,6 +27,13 @@
 								</h3>
 							</div>
 							<a
+								class="col-12 col-sm-2 p-0 mb-0 text-end mb-0 text-neutral03"
+								v-if="isCheck"
+								@click="demod()"
+							>
+								Demod快速鍵
+							</a>
+							<a
 								v-if="
 									route.name !== 'SellerCouponNew' &&
 									data.isEnabled &&
@@ -613,7 +620,20 @@ function categorized(allData: Array<DetailedOrderProductType>) {
 }
 // 接收篩選後的結果
 const filteredData = computed(() => categorized(products.allData));
-
+const isCheck = computed(() => route.name === 'SellerCouponNew');
+function demod() {
+	userStore.data = {
+		...userStore.data,
+		couponName: '一元復始,萬象更新--滿額免運',
+		startDate: '2024-07-14',
+		endDate: '2025-01-31',
+		type: 1,
+		discountConditions: 1,
+		productType: 0,
+		productChoose: [],
+		isEnabled: true,
+	};
+}
 onMounted(() => {
 	if (route.matched[0].path === '/seller') {
 		if (

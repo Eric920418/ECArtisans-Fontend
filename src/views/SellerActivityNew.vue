@@ -19,6 +19,9 @@
 								{{ !isCheck ? '新增活動' : '編號：' + data.coupon_id }}
 								<br />
 							</h3>
+							<a class="mb-0 text-neutral03" v-if="!isCheck" @click="demod()">
+								Demod快速鍵
+							</a>
 							<a class="mb-0" v-if="isCheck" @click="deleteData()">立即刪除</a>
 						</div>
 						<div class="col-12 p-0 m-0 mb-2" style="min-height: 100px">
@@ -351,7 +354,9 @@ function onStop() {
 }
 
 function onDelete() {
-	// userStore.deleteActivity();
+	if (route.params.id) {
+		userStore.deleteActivity(route.params.id as string);
+	}
 }
 
 const isCheck = computed(() => route.name === 'SellerActivityCheck');
@@ -482,6 +487,19 @@ function getTomorrow() {
 	const day = (today.getDate() + 1).toString().padStart(2, '0');
 	const localDate = `${year}-${month}-${day}`;
 	return localDate;
+}
+function demod() {
+	userStore.data = {
+		...data.value,
+		activity_name: '寵物有理',
+		activity_image:
+			'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/3cd9e58d-25b2-4b40-a331-e82e0919df81.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756675200&Signature=VftKG0A5N2dLuAjfPuSF%2FeMu84417KM8hMgYiTJ1uwRgJpL9GjPUei46knnUbAbXFEqW%2FOQk3%2BVRm7GiRLhPO19lDido7s8nSWMajq3QhjUrWO3Y64Kpj99nTKpAJsVUJYRBsUAb5HCbPA7W9wCeGLyMu6PViLCRmtPplG8IyFioiXJr9%2B0R1EzhuYElY%2BB35ig5Xl248IcL%2BLOqB6WXi%2FcCzTYzIqg16DK5b9Ua%2Bx3mrIwD2CWLkgmJ3CuaHvgxFrEm0Bck4gzDE09Aq2b7txbqGT8jeCaLOm%2BlsFdNnbkf%2Bao2VfnTZ4NeYbxIDyrhxGwhQJoBf50%2FWmWGrBw17A%3D%3D',
+		start_date: '2024-07-15',
+		end_date: '2024-07-31',
+		activity_info:
+			'貓貓罐罐限時優惠中：\n精選各種貓貓罐頭，滿足您家愛貓挑剔的味蕾。無論是營養豐富的肉泥罐頭，還是美味可口的海鮮罐頭，我們都應有盡有。參加活動即可享受超值優惠！',
+		coupon_id: null,
+	};
 }
 
 onMounted(() => {

@@ -53,12 +53,21 @@
 				</div>
 			</div>
 		</div>
+
 		<div
 			v-if="init.schedule === 'info' && addUserStatus === false"
 			class="row g-3 py-4 px-4 d-flex justify-content-center"
 		>
-			<div class="col-12 my-3 text-center">
-				<h2 class="fs-3 fw-bold">{{ init.title }}註冊</h2>
+			<div class="col-12 col-md-7 my-3 text-center">
+				<h2 class="fs-3 fw-bold position-relative">
+					{{ init.title }}註冊
+					<a
+						class="fs-6 text-neutral03 position-absolute top-50 end-0 translate-middle-y"
+						@click="demod"
+					>
+						Demod快速鍵
+					</a>
+				</h2>
 				<div class="mt-1 d-flex justify-content-center">
 					<div class="fw-bold d-flex">已經有帳號了?</div>
 					<router-link class="ms-2" :to="{ name: init.goback }">
@@ -572,6 +581,7 @@
 		<div
 			v-if="addUserStatus === true"
 			class="row g-3 py-4 d-flex justify-content-center"
+			:class="{ 'mt-8': init.type === 'user' }"
 		>
 			<div class="col-12 my-3 text-center">
 				<div class="fs-3 fw-bold">註冊完成</div>
@@ -683,6 +693,25 @@ const sellerTitleData = {
 		{ text: '清潔用品', value: 9 },
 	],
 };
+
+function demod() {
+	data.value = {
+		...data.value,
+		name: '黑白兔',
+		gender: '男',
+		phone: '0912345678',
+		mail: 'black@gmail.com',
+		password: 'a12345678',
+		confirmPassword: 'a12345678',
+		address: null,
+		birthday: null,
+		brand: '黑白兔堍兎堍鵵商店',
+		introduce:
+			'　　我們精心挑選了各種優質的寵物食品、玩具、護理用品以及服飾，致力於提供最適合您愛寵的產品。\n\n 　　無論是營養均衡的狗糧、趣味十足的貓玩具，還是舒適的寵物床，我們都一應俱全。每一件商品都經過嚴格把關，只為給您的寵物帶來最好的體驗。\n\n　　快來我們的寵物商店，與您的寵物共度美好時光，讓每一天都充滿愛與快樂！',
+		collection: '0123456789',
+		salesType: [1, 7],
+	};
+}
 
 // 資料同步在這裡
 const data = ref<UserDataType>({
