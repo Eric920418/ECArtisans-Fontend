@@ -216,50 +216,40 @@ const router = useRouter();
 const orderData = computed(() => store.selectdata);
 const couponData = computed(() => store.selectCoupons);
 const selectedCoupon = ref(null);
-// const orderData = ref([
-// 	{
-// 		seller: { _id: '66768265b72f97fbc2b555c1', brand: 'SkyMart' },
-// 		items: [
-// 			{
-// 				product: {
-// 					_id: '66768eb5b72f97fbc2b555f5',
-// 					sellerOwned: { _id: '66768265b72f97fbc2b555c1', brand: 'SkyMart' },
-// 					productName: '舒適寵物床墊',
-// 					fare: 50,
-// 					pay: [1, 2, 3],
-// 					image: [
-// 						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/3ed636cb-2123-49f4-8e0d-01bd9f687cc0.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=StBnszPcIyTOr8yoqYD%2FLmEBcnJN9%2Bcg2ih%2FNVulE3Q2UFtD806UGSpH4eNKZoqomNA%2F%2B%2Bg1d3SKcn47W3Q0Mp8zuwZH0js9Q84TOF7golA3L1SuQzfkmiFFM2ld0n1E9KAjUjwe2%2BWD7zd8IUxnX5S2uZ8l%2FrCcv83dvaAND9Pocf8Pu%2BLUdded0WW4f6t0R1ALiQ98ybncmywEdUg%2BeIOO3vnCuelLWu3dHcmQO9fDTXw%2FuyuZpRtK1ErYgjcEr8BUoKjnF7yVuPSahTlaH2lTy0L%2BsjlPqa%2BUd2mSKRZkmBNJrcatToLr3RMxco5RO1a7bryUbYYMI9e60QWMEg%3D%3D',
-// 					],
-// 				},
-// 				format: {
-// 					title: '中型',
-// 					price: 350,
-// 					cost: 150,
-// 					stock: 500,
-// 					image:
-// 						'https://storage.googleapis.com/ecartisans-50b32.appspot.com/images/3ed636cb-2123-49f4-8e0d-01bd9f687cc0.jpg?GoogleAccessId=firebase-adminsdk-nhwq8%40ecartisans-50b32.iam.gserviceaccount.com&Expires=16756646400&Signature=StBnszPcIyTOr8yoqYD%2FLmEBcnJN9%2Bcg2ih%2FNVulE3Q2UFtD806UGSpH4eNKZoqomNA%2F%2B%2Bg1d3SKcn47W3Q0Mp8zuwZH0js9Q84TOF7golA3L1SuQzfkmiFFM2ld0n1E9KAjUjwe2%2BWD7zd8IUxnX5S2uZ8l%2FrCcv83dvaAND9Pocf8Pu%2BLUdded0WW4f6t0R1ALiQ98ybncmywEdUg%2BeIOO3vnCuelLWu3dHcmQO9fDTXw%2FuyuZpRtK1ErYgjcEr8BUoKjnF7yVuPSahTlaH2lTy0L%2BsjlPqa%2BUd2mSKRZkmBNJrcatToLr3RMxco5RO1a7bryUbYYMI9e60QWMEg%3D%3D',
-// 					color: ['淺灰色'],
-// 					_id: '66768eb5b72f97fbc2b555f6',
-// 				},
-// 				quantity: 1,
-// 				price: 350,
-// 				_id: '6685955a608fb17f931575d0',
-// 				selected: false,
-// 			},
-// 		],
-// 	},
-// ]);
+
+interface Coupon {
+	_id: string;
+	type: number;
+	discountConditions?: number;
+	percentage?: number;
+}
+
+interface Product {
+	fare: number;
+}
+
+interface Item {
+	product: Product;
+	quantity: number;
+	format: {
+		price: number;
+	};
+}
+
+interface Order {
+	items: Item[];
+}
 
 function getFare(): number {
 	if (selectedCoupon.value) {
 		const coupon = couponData.value.find(
-			coupon => coupon._id === selectedCoupon.value
+			(coupon: Coupon) => coupon._id === selectedCoupon.value
 		);
 		if (coupon && coupon.type === 0) {
 			return 0;
 		}
 	}
-	return orderData.value.reduce((max, order) => {
+	return orderData.value.reduce((max: number, order: Order) => {
 		const maxFareInOrder = order.items.reduce((maxFareInItems, item) => {
 			return item.product.fare > maxFareInItems
 				? item.product.fare
@@ -272,7 +262,7 @@ function getFare(): number {
 function getDiscount(): number {
 	if (selectedCoupon.value) {
 		const coupon = couponData.value.find(
-			coupon => coupon._id === selectedCoupon.value
+			(coupon: Coupon) => coupon._id === selectedCoupon.value
 		);
 		if (coupon && coupon.type === 1) {
 			const totalPrice = getTotal('totalPrice');
@@ -289,7 +279,7 @@ function getTotal(text: string): number {
 		return getFare();
 	}
 	if (text === 'totalPrice' && store.selectdata) {
-		const total = orderData.value.reduce((sum, order) => {
+		const total = orderData.value.reduce((sum: number, order: Order) => {
 			return (
 				sum +
 				order.items.reduce((itemSum, item) => {

@@ -22,9 +22,21 @@ import {
 import { useAuthStore } from './authStore';
 import router from '@/router';
 
-// interface Order {
-// 	_id: string;
-// }
+interface PaymentInfo {
+	MerchantID: string;
+	TradeInfo: string;
+	TradeSha: string;
+	Version: string;
+	PayGateWay: string;
+	ReturnUrl: string;
+	NotifyUrl: string;
+}
+
+interface OrderPayResponse {
+	status: boolean;
+	message: string;
+	paymentInfo: PaymentInfo;
+}
 
 export const useCartStore = defineStore({
 	id: 'cart',
@@ -216,7 +228,10 @@ export const useCartStore = defineStore({
 			try {
 				this.isLoading = true;
 				const res = await userOrderNew(data, token);
-				const response = await this.orderPay({ orderId: res.order._id });
+				const orderObject = {
+					orderId: res.order._id,
+				};
+				const response = await this.orderPay(JSON.stringify(orderObject));
 				if (response.status) {
 					this.submitPayment(response.paymentInfo);
 				}
@@ -227,14 +242,11 @@ export const useCartStore = defineStore({
 				this.isLoading = false;
 			}
 		},
-		async orderPay(data: any): Promise<void> {
+		async orderPay(data: any): Promise<OrderPayResponse> {
 			const authStore = useAuthStore();
 			const token = authStore.token;
-			try {
-				await userOrderPay(data, token);
-			} catch (err) {
-				console.log(err);
-			}
+			const res = await userOrderPay(data, token);
+			return res as OrderPayResponse;
 		},
 		submitPayment(paymentInfo: any) {
 			const form = document.createElement('form');
