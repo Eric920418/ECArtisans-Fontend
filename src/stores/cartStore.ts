@@ -190,6 +190,7 @@ export const useCartStore = defineStore({
 				validateCouponCart(JSON.stringify(data), token)
 					.then(res => {
 						this.selectCoupons = res.discounts;
+						console.log(this.selectCoupons);
 						alertStore.success('篩選折價券送去確認訂單頁面');
 						router.push({ name: 'CartCheck' });
 					})
@@ -213,10 +214,13 @@ export const useCartStore = defineStore({
 			}
 
 			try {
-				console.log('資料結果:', data, token);
+				this.isLoading = true;
 				const res = await userOrderNew(data, token);
-				console.log(res);
-				await this.orderPay({ orderId: res.order._id });
+				const response = await this.orderPay({ orderId: res.order._id });
+				if (response.status) {
+					this.submitPayment(response.paymentInfo);
+				}
+				alertStore.success('訂單成立成功');
 			} catch (err) {
 				alertStore.error('訂單成立失敗');
 			} finally {
@@ -231,6 +235,26 @@ export const useCartStore = defineStore({
 			} catch (err) {
 				console.log(err);
 			}
+		},
+		submitPayment(paymentInfo: any) {
+			const form = document.createElement('form');
+			form.method = 'POST';
+			// console.log(paymentInfo)
+			form.action = paymentInfo.PayGateWay;
+
+			Object.keys(paymentInfo).forEach(key => {
+				if (key !== 'PayGateWay') {
+					const input = document.createElement('input');
+					input.type = 'hidden';
+					input.name = key;
+					input.value = paymentInfo[key];
+					form.appendChild(input);
+				}
+			});
+
+			document.body.appendChild(form);
+			// console.log(form);
+			form.submit();
 		},
 	},
 });

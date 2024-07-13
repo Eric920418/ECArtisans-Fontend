@@ -123,13 +123,25 @@
 								id="gender"
 								aria-label="優惠劵"
 								name="優惠劵"
+								v-model="selectedCoupon"
 								:class="{
 									'is-invalid': errors['優惠劵'],
 								}"
 								as="select"
 							>
 								<option value="" disabled>請選擇優惠劵</option>
+								<option
+									v-for="(coupon, index) in couponData"
+									:key="coupon._id"
+									:value="coupon._id"
+								>
+									{{ coupon.couponName }}
+								</option>
 							</v-field>
+							<error-message
+								name="優惠劵"
+								class="invalid-feedback"
+							></error-message>
 						</div>
 						<div class="col-12 text-end pe-3 mt-0">
 							<div class="d-flex">
@@ -140,12 +152,12 @@
 								<div>
 									<div>
 										NT$&nbsp;
-										<span>{{ getTotal('fare') }}</span>
+										<span>{{ getFare() }}</span>
 										<!-- <span>{{ orderData }}</span> -->
 									</div>
 									<div class="mt-2">
 										NT$&nbsp;
-										<span>-300</span>
+										<span>{{ getDiscount() }}</span>
 									</div>
 								</div>
 							</div>
@@ -160,7 +172,7 @@
 									NT$&nbsp;
 									<!-- <span>{{ orderData.totalPrice }}</span> -->
 									<span>
-										{{ getTotal('totalPrice') + getTotal('fare') }} 未減優惠折扣
+										{{ getTotalPrice() }}
 									</span>
 								</div>
 							</div>
@@ -203,6 +215,7 @@ const router = useRouter();
 // 解析 orderData
 const orderData = computed(() => store.selectdata);
 const couponData = computed(() => store.selectCoupons);
+const selectedCoupon = ref(null);
 // const orderData = ref([
 // 	{
 // 		seller: { _id: '66768265b72f97fbc2b555c1', brand: 'SkyMart' },
@@ -237,46 +250,105 @@ const couponData = computed(() => store.selectCoupons);
 // 	},
 // ]);
 
+function getFare(): number {
+	if (selectedCoupon.value) {
+		const coupon = couponData.value.find(
+			coupon => coupon._id === selectedCoupon.value
+		);
+		if (coupon && coupon.type === 0) {
+			return 0;
+		}
+	}
+	return orderData.value.reduce((max, order) => {
+		const maxFareInOrder = order.items.reduce((maxFareInItems, item) => {
+			return item.product.fare > maxFareInItems
+				? item.product.fare
+				: maxFareInItems;
+		}, 0);
+		return maxFareInOrder > max ? maxFareInOrder : max;
+	}, 0);
+}
+
+function getDiscount(): number {
+	if (selectedCoupon.value) {
+		const coupon = couponData.value.find(
+			coupon => coupon._id === selectedCoupon.value
+		);
+		if (coupon && coupon.type === 1) {
+			const totalPrice = getTotal('totalPrice');
+			if (totalPrice >= coupon.discountConditions) {
+				return Math.round(totalPrice * (1 - coupon.percentage / 100));
+			}
+		}
+	}
+	return 0;
+}
+
 function getTotal(text: string): number {
 	if (text === 'fare' && store.selectdata) {
-		const maxFare = orderData.value.reduce(
-			(max: number, order: { items: any[] }) => {
-				const maxFareInOrder = order.items.reduce((maxFareInItems, item) => {
-					return item.product.fare > maxFareInItems
-						? item.product.fare
-						: maxFareInItems;
-				}, 0);
-				return maxFareInOrder > max ? maxFareInOrder : max;
-			},
-			0
-		);
-		return maxFare;
+		return getFare();
 	}
 	if (text === 'totalPrice' && store.selectdata) {
-		const total = orderData.value.reduce(
-			(sum: any, order: { items: any[] }) => {
-				return (
-					sum +
-					order.items.reduce((itemSum, item) => {
-						return itemSum + item.quantity * item.format.price;
-					}, 0)
-				);
-			},
-			0
-		);
+		const total = orderData.value.reduce((sum, order) => {
+			return (
+				sum +
+				order.items.reduce((itemSum, item) => {
+					return itemSum + item.quantity * item.format.price;
+				}, 0)
+			);
+		}, 0);
 		return total;
 	}
 	return 0;
 }
-function handleUpdateItems(shopIndex: number, updatedItems: any) {
-	if (updatedItems && updatedItems.items) {
-		orderData.value[shopIndex].items = updatedItems.items;
-	}
+
+function getTotalPrice(): number {
+	const fare = getFare();
+	const discount = getDiscount();
+	const totalPrice = getTotal('totalPrice');
+	return totalPrice + fare - discount;
 }
 
-function handleDeleteItem(shopIndex: number, itemIndex: number) {
-	orderData.value[shopIndex].items.splice(itemIndex, 1);
-}
+// function getTotal(text: string): number {
+// 	if (text === 'fare' && store.selectdata) {
+// 		const maxFare = orderData.value.reduce(
+// 			(max: number, order: { items: any[] }) => {
+// 				const maxFareInOrder = order.items.reduce((maxFareInItems, item) => {
+// 					return item.product.fare > maxFareInItems
+// 						? item.product.fare
+// 						: maxFareInItems;
+// 				}, 0);
+// 				return maxFareInOrder > max ? maxFareInOrder : max;
+// 			},
+// 			0
+// 		);
+// 		return maxFare;
+// 	}
+// 	if (text === 'totalPrice' && store.selectdata) {
+// 		const total = orderData.value.reduce(
+// 			(sum: any, order: { items: any[] }) => {
+// 				return (
+// 					sum +
+// 					order.items.reduce((itemSum, item) => {
+// 						return itemSum + item.quantity * item.format.price;
+// 					}, 0)
+// 				);
+// 			},
+// 			0
+// 		);
+// 		return total;
+// 	}
+// 	return 0;
+// }
+// function handleUpdateItems(shopIndex: number, updatedItems: any) {
+// 	if (updatedItems && updatedItems.items) {
+// 		orderData.value[shopIndex].items = updatedItems.items;
+// 	}
+// }
+
+// function handleDeleteItem(shopIndex: number, itemIndex: number) {
+// 	orderData.value[shopIndex].items.splice(itemIndex, 1);
+// }
 
 // 宅配方式
 // 未判定目前可以使用的宅配方式
@@ -310,20 +382,21 @@ const form = computed(() => {
 		pay: payNow.value,
 		address: address.value,
 		delivery: sendNow.value,
-		fare: getTotal('fare'),
+		fare: getFare(),
+		couponId: selectedCoupon.value,
 	};
 });
 
 // 送出表單
+
 function onSubmit(): any {
 	if (payNow.value && sendNow.value) {
-		store.orderNew(form.value);
+		store.orderNew({
+			...form.value,
+		});
 	} else {
 		alertStore.error('請填寫訂單資訊');
 	}
-	// console.log('资料填写正常');
-	// console.log('资料', value);
-	// console.log('orderData', orderData);
 }
 if (!orderData) go({ name: 'Cart' });
 </script>
