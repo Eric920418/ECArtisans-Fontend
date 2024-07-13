@@ -15,6 +15,7 @@ import {
 	cartDeleteAll,
 	cartDelete,
 	selectItemsCart,
+	validateCouponCart,
 	userOrderNew, // 52 成立訂單
 	userOrderPay, // 金流
 } from './api';
@@ -30,22 +31,29 @@ export const useCartStore = defineStore({
 	state: () => ({
 		cart: [] as any,
 		selectdata: {} as any,
+		selectCoupons: [] as any,
 		isLoading: false, // 請求狀態
 		accountType: '',
 	}),
 	getters: {
-    totalItems: (state) => {
-      return state.cart.reduce((total: any, cartGroup: { items: string | any[]; }) => {
-        return total + cartGroup.items.length;
-      }, 0);
-    },
-    cartNum: (state) => {
-      const totalItems = state.cart.reduce((total: any, cartGroup: { items: string | any[]; }) => {
-        return total + cartGroup.items.length;
-      }, 0);
-      return totalItems > 100 ? '99+' : totalItems.toString();
-    }
-  },
+		totalItems: state => {
+			return state.cart.reduce(
+				(total: any, cartGroup: { items: string | any[] }) => {
+					return total + cartGroup.items.length;
+				},
+				0
+			);
+		},
+		cartNum: state => {
+			const totalItems = state.cart.reduce(
+				(total: any, cartGroup: { items: string | any[] }) => {
+					return total + cartGroup.items.length;
+				},
+				0
+			);
+			return totalItems > 100 ? '99+' : totalItems.toString();
+		},
+	},
 	actions: {
 		// 獲取購物車資料
 		async getAllCart(): Promise<void> {
@@ -167,6 +175,34 @@ export const useCartStore = defineStore({
 				this.isLoading = false;
 			}
 		},
+		async selectedCouponGet(data: any): Promise<void> {
+			const authStore = useAuthStore();
+			const token = authStore.token;
+
+			if (!token) {
+				alertStore.error('使用者未登入');
+				router.push('/user-login');
+				return;
+			}
+
+			try {
+				this.isLoading = true;
+				validateCouponCart(JSON.stringify(data), token)
+					.then(res => {
+						this.selectCoupons = res.discounts;
+						console.log(this.selectCoupons);
+						alertStore.success('篩選折價券送去確認訂單頁面');
+						router.push({ name: 'CartCheck' });
+					})
+					.catch(err => {
+						alertStore.error(err.response.data.message);
+					});
+			} catch (error) {
+				alertStore.error('篩選折價券進確認訂單頁面失敗');
+			} finally {
+				this.isLoading = false;
+			}
+		},
 		async orderNew(data: any): Promise<void> {
 			const authStore = useAuthStore();
 			const token = authStore.token;
@@ -178,10 +214,13 @@ export const useCartStore = defineStore({
 			}
 
 			try {
-				console.log('資料結果:', data, token);
+				this.isLoading = true;
 				const res = await userOrderNew(data, token);
-				console.log(res);
-				await this.orderPay({ orderId: res.order._id });
+				const response = await this.orderPay({ orderId: res.order._id });
+				if (response.status) {
+					this.submitPayment(response.paymentInfo);
+				}
+				alertStore.success('訂單成立成功');
 			} catch (err) {
 				alertStore.error('訂單成立失敗');
 			} finally {
@@ -196,6 +235,26 @@ export const useCartStore = defineStore({
 			} catch (err) {
 				console.log(err);
 			}
+		},
+		submitPayment(paymentInfo: any) {
+			const form = document.createElement('form');
+			form.method = 'POST';
+			// console.log(paymentInfo)
+			form.action = paymentInfo.PayGateWay;
+
+			Object.keys(paymentInfo).forEach(key => {
+				if (key !== 'PayGateWay') {
+					const input = document.createElement('input');
+					input.type = 'hidden';
+					input.name = key;
+					input.value = paymentInfo[key];
+					form.appendChild(input);
+				}
+			});
+
+			document.body.appendChild(form);
+			// console.log(form);
+			form.submit();
 		},
 	},
 });

@@ -309,6 +309,9 @@ export const cartDelete = (
 export const selectItemsCart = (data: any, token: string) =>
 	handleApiResponse(apiRequest.post('/cart/select', data, headers(token)));
 
+export const validateCouponCart = (data: any, token: string) =>
+	handleApiResponse(apiRequest.post('/cart/coupon', data, headers(token)));
+
 // 訂單相關 ■ 買家繳費至金流
 // 17	get	  /order/${user_id}	 	 查看訂單紀錄	 	 買家端
 export const userOrderAll = (token: string) =>
@@ -322,8 +325,19 @@ export const userOrderNew = (data: any, token: string) =>
 
 // 評價 ■
 // 19	post	  /comment/${user_id}/${order_id}	 	商品評價	 	 買家端
-export const rating = (order_id: string, product_id: string, token: string, rate: any) =>
-	handleApiResponse(apiRequest.post(`/order/${order_id}/products/${product_id}/review`,rate,  headers(token)));
+export const rating = (
+	order_id: string,
+	product_id: string,
+	token: string,
+	rate: any
+) =>
+	handleApiResponse(
+		apiRequest.post(
+			`/order/${order_id}/products/${product_id}/review`,
+			rate,
+			headers(token)
+		)
+	);
 
 // 優惠劵 ■
 // 20	get   /users/${user_id}/discounts	 	 優惠劵紀錄	 	 買家端
