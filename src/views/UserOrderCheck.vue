@@ -70,7 +70,7 @@
 							</span>
 						</p>
 					</div>
-					<div class="btn btn-primary" @click="handleDelivery">點我送貨</div>
+					<!-- <div class="btn btn-primary" @click="handleDelivery">點我送貨</div> -->
 				</div>
 				<div class="m-3 card shadow-sm m-3 p-4 p-sm-5">
 					<!-- 購買者資料 -->
@@ -279,12 +279,12 @@
 					>
 						取消
 					</button>
-					<a
+					<!-- <a
 						class="btn btn-outline-primary px-5 mx-1 mx-sm-2 me-md-4"
 						@click="rate(order._id, order.products[0].product._id)"
 					>
 						評價
-					</a>
+					</a> -->
 					<button type="submit" class="btn btn-primary px-5 m-0 ms-1 ms-sm-2">
 						{{ init.btn }}
 					</button>

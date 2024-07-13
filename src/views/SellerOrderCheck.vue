@@ -70,7 +70,7 @@
 							</span>
 						</p>
 					</div>
-					<div class="btn btn-primary" @click="handleDelivery">點我送貨</div>
+					<!-- <div class="btn btn-primary" @click="handleDelivery">點我送貨</div> -->
 				</div>
 				<div class="m-3 card m-3 p-4 p-sm-5">
 					<!-- 購買者資料 -->

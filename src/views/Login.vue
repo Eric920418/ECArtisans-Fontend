@@ -24,8 +24,8 @@
 									resize < 576
 										? 'translate(0%, -15%)'
 										: resize < 992
-											? 'translate(-10%, 20%)'
-											: 'translate(-50%, 30%)',
+										? 'translate(-10%, 20%)'
+										: 'translate(-50%, 30%)',
 							}"
 						>
 							<h2 class="z-3 fw-bold display-3">
@@ -146,7 +146,7 @@ const userTitleData = {
 	subtitle: '探索無限的購物樂趣',
 	loginTitle: '會員登入',
 	routerLink: 'UserSignUp',
-	loginImgUrl: './images/imgLogin.svg',
+	loginImgUrl: 'images/imgLogin.svg',
 };
 
 const sellerTitleData = {
@@ -155,7 +155,7 @@ const sellerTitleData = {
 	subtitle: '實現銷售，即刻開始',
 	loginTitle: '商家登入',
 	routerLink: 'SellerSignUp',
-	loginImgUrl: './images/imgShopLogin.svg',
+	loginImgUrl: 'images/imgShopLogin.svg',
 };
 
 const init = ref({}) as any;
